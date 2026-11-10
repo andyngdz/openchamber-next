@@ -1,0 +1,18 @@
+{
+  "activeProjectId": "path_L3RtcC9vYy1kZXNrdG9wLXJzLWNhcHR1cmUvcHJvamVjdC10d28",
+  "recentModels": [
+    {
+      "providerID": "perf",
+      "modelID": "stream-600cps"
+    },
+    {
+      "providerID": "perf-second",
+      "modelID": "alt-chat-300cps"
+    }
+  ],
+  "lastSelectedModel": "perf/stream-600cps",
+  "lastUsedEfforts": {
+    "perf/stream-600cps": "high",
+    "perf-second/alt-thinking": null
+  }
+}

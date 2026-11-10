@@ -1,0 +1,11 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "agent": "capture-primary",
+  "model": {
+    "providerID": "perf-second",
+    "id": "alt-thinking",
+    "variant": "medium"
+  }
+}

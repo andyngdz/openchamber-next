@@ -21,7 +21,7 @@
  */
 
 import { spawn } from "node:child_process"
-import { createWriteStream, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
+import { createWriteStream, existsSync, mkdirSync, readdirSync, realpathSync, rmSync, writeFileSync } from "node:fs"
 import { createServer } from "node:net"
 import { homedir, tmpdir, userInfo } from "node:os"
 import { dirname, join, resolve } from "node:path"
@@ -43,8 +43,24 @@ const { ensureProject, isolatedEnv, startFixture } = await importPerf("isolated-
 const { fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
 
 const PROVIDER = "perf"
+// The same fixture provider is registered twice so the model picker has two
+// provider sections. Both ids share one base URL; the fixture answers any model
+// name, so the second id only changes the catalog the app sees.
+const SECOND_PROVIDER = "perf-second"
+// Fixed so the base URL carried in the config, provider and model fixtures is
+// the same in every run. The server keeps its random free port: it never
+// appears in a captured body.
+const FIXTURE_PORT = 4611
 const TURN_TIMEOUT_MS = 180_000
 const SETTLE_MS = 1_500
+// The Chat draft in `packages/ui/src/lib/chatDirectories.ts` names its folder
+// `<chatsRoot>/<local date>/session-<uuid v4>`; the fixture pins both parts so
+// the mkdir path is identical between runs.
+const CHAT_FOLDER_DATE = "2026-01-02"
+const CHAT_SESSION_UUID = "00000000-0000-4000-8000-000000000000"
+// Fixed timestamps for seeded settings and metadata, so only ids and the
+// server's own clocks vary between runs.
+const FIXTURE_EPOCH = 1_800_000_000_000
 
 const parseArgs = (argv) => {
   const options = { out: join(PACKAGE_ROOT, "fixtures"), root: join(tmpdir(), "oc-desktop-rs-capture") }
@@ -56,6 +72,123 @@ const parseArgs = (argv) => {
   return options
 }
 
+/**
+ * The OpenCode config the capture's server runs with. OpenCode 2.x reads the
+ * native `providers` shape (`package`, `settings`), not the 1.x
+ * `provider`/`npm`/`options` one, so the fixture provider's model list is
+ * rebuilt from `fixtureProviderConfig` in the spelling this OpenCode accepts.
+ *
+ * Every model except `stream-600cps` and `alt-thinking` clears its variants:
+ * the OpenAI-compatible package gives a model the `low`/`medium`/`high`
+ * reasoning levels by default, and those two are the only ones the pickers
+ * should show a Thinking menu for.
+ */
+const captureProviderConfig = (fixturePort) => {
+  const models = Object.fromEntries(Object.entries(fixtureProviderConfig(fixturePort).provider[PROVIDER].models)
+    .map(([id, model]) => [id, { ...model, variants: [] }]))
+  models["stream-600cps"] = { ...models["stream-600cps"], variants: [{ id: "low" }, { id: "high" }] }
+  const options = { baseURL: `http://127.0.0.1:${fixturePort}/v1`, apiKey: "unused" }
+  return {
+    providers: {
+      [PROVIDER]: {
+        package: "aisdk:@ai-sdk/openai-compatible",
+        name: "Performance fixture",
+        settings: options,
+        models,
+      },
+      [SECOND_PROVIDER]: {
+        package: "aisdk:@ai-sdk/openai-compatible",
+        name: "Performance fixture, second id",
+        settings: options,
+        models: {
+          "alt-chat-300cps": { name: "Second fixture chat, 300 characters/s", variants: [] },
+          "alt-code-1200cps": { name: "Second fixture code block, 1200 characters/s", variants: [] },
+          "alt-thinking": { name: "Second fixture with variants", variants: [{ id: "low" }, { id: "medium" }, { id: "high" }] },
+        },
+      },
+    },
+    agents: {
+      "capture-primary": { description: "Primary fixture agent", mode: "primary", model: { providerID: PROVIDER, model: "stream-300cps" } },
+      "capture-secondary": { description: "Second primary fixture agent", mode: "primary" },
+      "capture-hidden": { description: "Hidden fixture agent", mode: "primary", hidden: true },
+      "capture-subagent": { description: "Fixture subagent", mode: "subagent" },
+    },
+    model: `${PROVIDER}/stream-300cps`,
+    default_agent: "capture-secondary",
+    small_model: `${PROVIDER}/stream-1200cps`,
+    autoupdate: false,
+    share: "disabled",
+    permission: { glob: "ask" },
+  }
+}
+
+const projectId = (path) => `path_${Buffer.from(path).toString("base64url")}`
+
+/**
+ * The shared settings document the server starts on. React reads the same
+ * keys, so the fixture pins the shapes its pickers and sidebar decode: two
+ * projects (one with a colour and icon), the active project, favourites,
+ * recents, `lastUsedEfforts`, the hidden model and the sidebar sections.
+ */
+const seedSettings = ({ project, secondProject }) => {
+  const firstId = projectId(project)
+  return {
+    projects: [
+      {
+        id: firstId,
+        path: project,
+        label: "Fixture project",
+        color: "#4F46E5",
+        icon: "rocket",
+        iconBackground: "#E0E7FF",
+        addedAt: FIXTURE_EPOCH - 2_000,
+        lastOpenedAt: FIXTURE_EPOCH - 1_000,
+        sidebarCollapsed: false,
+      },
+      {
+        id: projectId(secondProject),
+        path: secondProject,
+        label: "Second fixture project",
+        addedAt: FIXTURE_EPOCH - 4_000,
+        lastOpenedAt: FIXTURE_EPOCH - 3_000,
+        sidebarCollapsed: true,
+      },
+    ],
+    activeProjectId: firstId,
+    defaultModel: `${PROVIDER}/stream-600cps`,
+    defaultVariant: "high",
+    defaultAgent: "capture-primary",
+    lastSelectedModel: `${PROVIDER}/stream-1200cps`,
+    favoriteModels: [
+      { providerID: PROVIDER, modelID: "stream-600cps" },
+      { providerID: SECOND_PROVIDER, modelID: "alt-thinking" },
+    ],
+    recentModels: [
+      { providerID: SECOND_PROVIDER, modelID: "alt-chat-300cps" },
+      { providerID: PROVIDER, modelID: "stream-300cps" },
+    ],
+    hiddenModels: [{ providerID: PROVIDER, modelID: "stream-100cps" }],
+    favoriteAgents: ["capture-primary"],
+    recentAgents: ["capture-secondary", "capture-primary"],
+    lastUsedEfforts: {
+      [`${PROVIDER}/stream-600cps`]: "low",
+      [`${SECOND_PROVIDER}/alt-thinking`]: null,
+    },
+    enterToSend: true,
+    enterToSendConfigured: true,
+    sidebarProjectSortOrder: "a-z",
+    sidebarShowChatsSection: true,
+    sidebarShowWorkSection: true,
+    sidebarShowPinnedSection: true,
+    sidebarSections: [
+      { kind: "builtin", id: "chats" },
+      { kind: "builtin", id: "pinned" },
+      { kind: "builtin", id: "work" },
+      { kind: "builtin", id: "projects" },
+    ],
+  }
+}
+
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms))
 
 const freePort = () => new Promise((resolvePort, reject) => {
@@ -65,6 +198,13 @@ const freePort = () => new Promise((resolvePort, reject) => {
     const { port } = server.address()
     server.close(() => resolvePort(port))
   })
+})
+
+/** Fails instead of reusing a process this run did not start. */
+const assertPortFree = (port) => new Promise((resolvePort, reject) => {
+  const server = createServer()
+  server.once("error", () => reject(new Error(`Port ${port} is already in use; stop that process and run the capture again.`)))
+  server.listen(port, "127.0.0.1", () => server.close(() => resolvePort()))
 })
 
 const alive = (pid) => {
@@ -117,19 +257,15 @@ const assertNoPersonalPaths = () => {
 // ---------------------------------------------------------------------------
 
 /** Starts the CLI as the sidecar does, resolves with its base URL once the port line arrives. */
-const startServer = ({ root, project, fixturePort }) => new Promise((resolveServer, reject) => {
+const startServer = ({ root, project, fixturePort, settings }) => new Promise((resolveServer, reject) => {
   freePort().then((port) => {
     const state = join(root, "state")
     mkdirSync(join(state, "home"), { recursive: true })
     mkdirSync(join(state, "oc-data"), { recursive: true })
-    const config = {
-      ...fixtureProviderConfig(fixturePort),
-      model: `${PROVIDER}/stream-300cps`,
-      small_model: `${PROVIDER}/stream-1200cps`,
-      autoupdate: false,
-      share: "disabled",
-      permission: { glob: "ask" },
-    }
+    // Seeded before the server reads it, so the first settings GET already
+    // carries the projects, favourites and recents the fixture exists for.
+    writeFileSync(join(state, "oc-data", "settings.json"), pretty(settings))
+    const config = captureProviderConfig(fixturePort)
     const env = isolatedEnv({
       HOME: join(state, "home"),
       OPENCHAMBER_DATA_DIR: join(state, "oc-data"),
@@ -285,11 +421,18 @@ const main = async () => {
   const eventsDir = join(options.out, "events")
   rmSync(root, { recursive: true, force: true })
   mkdirSync(root, { recursive: true })
-  const project = join(root, "project")
-  ensureProject(project)
+  const projectPath = join(root, "project")
+  const secondProjectPath = join(root, "project-two")
+  ensureProject(projectPath)
+  ensureProject(secondProjectPath)
+  // Settings store real paths (the server resolves them), so the capture uses
+  // the same identity for every session and for the seeded projects.
+  const project = realpathSync(projectPath)
+  const secondProject = realpathSync(secondProjectPath)
+  const settings = seedSettings({ project, secondProject })
 
-  const fixturePort = await freePort()
-  const fixture = await startFixture({ port: fixturePort, logFile: join(root, "fixture.log") })
+  await assertPortFree(FIXTURE_PORT)
+  const fixture = await startFixture({ port: FIXTURE_PORT, logFile: join(root, "fixture.log") })
   let server
   const shutdown = async () => {
     await server?.stop()
@@ -300,12 +443,26 @@ const main = async () => {
   process.once("SIGTERM", () => { shutdown().finally(() => process.exit(143)) })
 
   try {
-    server = await startServer({ root, project, fixturePort })
-    console.log(`Server ${server.url} (pid ${server.pid}), fixture provider on ${fixturePort}, project ${project}`)
+    server = await startServer({ root, project, fixturePort: FIXTURE_PORT, settings })
+    console.log(`Server ${server.url} (pid ${server.pid}), fixture provider on ${FIXTURE_PORT}, project ${project}`)
     const recorder = createRecorder({ url: server.url, directory: project, apiDir })
     const { call } = recorder
     const eventIndex = {}
     const framing = {}
+
+    /** Waits for the location's plugins, which catalog routes 503 on until then. */
+    const waitForCatalogs = async () => {
+      const deadline = Date.now() + 60_000
+      let status = 0
+      while (Date.now() < deadline) {
+        const response = await fetch(`${server.url}/api/agent`, { headers: { "x-opencode-directory": encodeURIComponent(project) } })
+        status = response.status
+        await response.body?.cancel().catch(() => undefined)
+        if (response.ok) return
+        await sleep(500)
+      }
+      throw new Error(`The catalog for ${project} did not become ready in 60 s (last status ${status}).`)
+    }
 
     const saveEvents = (name, tap, meta) => {
       emit(join(eventsDir, `${name}.json`), pretty(tap.events))
@@ -325,15 +482,49 @@ const main = async () => {
     expectRoute("GET /auth/session", auth)
     if (auth.json?.authenticated !== true) throw new Error(`Auth status is not authenticated: ${auth.text}`)
 
+    // Home and settings: the two reads startup needs before it can pick a
+    // project or a model. Both ignore the directory header.
+    const home = await call("fs-home", "GET", "/api/fs/home", { directoryHeader: false })
+    expectRoute("GET /api/fs/home", home)
+    if (!home.json?.home || !home.json?.chatsRoot) throw new Error(`fs/home answered without home or chatsRoot: ${home.text}`)
+
+    const settingsRead = await call("settings", "GET", "/api/config/settings?surface=desktop")
+    expectRoute("GET /api/config/settings", settingsRead)
+    if (settingsRead.json?.projects?.length !== 2) throw new Error(`Seeded settings did not reach the server: ${settingsRead.text.slice(0, 400)}`)
+
+    // A partial write, as React sends: the response is the whole document.
+    const settingsWrite = await call("settings-update", "PUT", "/api/config/settings?surface=desktop", {
+      body: {
+        activeProjectId: projectId(secondProject),
+        recentModels: [
+          { providerID: PROVIDER, modelID: "stream-600cps" },
+          { providerID: SECOND_PROVIDER, modelID: "alt-chat-300cps" },
+        ],
+        lastSelectedModel: `${PROVIDER}/stream-600cps`,
+        lastUsedEfforts: { [`${PROVIDER}/stream-600cps`]: "high", [`${SECOND_PROVIDER}/alt-thinking`]: null },
+      },
+    })
+    expectRoute("PUT /api/config/settings", settingsWrite)
+    if (settingsWrite.json?.activeProjectId !== projectId(secondProject)) throw new Error(`Settings PUT did not keep the write: ${settingsWrite.text.slice(0, 400)}`)
+
+    // Catalogs wait for the location's plugins; asking too early answers 503.
+    await waitForCatalogs()
+    expectRoute("GET /api/config", await call("config", "GET", "/api/config"))
+    expectRoute("GET /api/provider", await call("providers", "GET", "/api/provider"))
+    expectRoute("GET /api/model", await call("models", "GET", "/api/model?types=chat&types=image"))
+    expectRoute("GET /api/agent", await call("agents", "GET", "/api/agent"))
+
     const emptyList = await call("session-list-empty", "GET", "/api/session")
     expectRoute("GET /api/session", emptyList)
 
     // The list the UI asks for scopes by directory in the query as well as the header.
     await call("session-list-empty-query", "GET", `/api/session?limit=50&directory=${encodeURIComponent(project)}`)
 
-    const createSession = async (name, { allowGlob } = {}) => {
-      const body = { location: { directory: project } }
+    const createSession = async (name, { allowGlob, directory = project, agent, model } = {}) => {
+      const body = { location: { directory } }
       if (allowGlob) body.permissions = [{ action: "glob", resource: "*", effect: "allow" }]
+      if (agent) body.agent = agent
+      if (model) body.model = model
       const created = await call(name, "POST", "/api/session", { body })
       if (created.status !== 200 || !created.json) throw new Error(`Creating a session failed: ${created.status} ${created.text}`)
       return created.json
@@ -449,6 +640,77 @@ const main = async () => {
     await sleep(SETTLE_MS)
     lifecycleTap.close()
     saveEvents("session-lifecycle", lifecycleTap, { model: null, sessions: [lifecycleSession], note: `session created, then deleted (delete answered ${removed.status})` })
+
+    // The picker's session: created with an agent and a model, once with a
+    // variant and once without, matching `POST /api/session` as the composer
+    // sends it (`packages/ui/src/lib/opencode/client.ts:1146-1165`).
+    const variantSession = idOf(await createSession("session-create-agent-model", {
+      agent: "capture-primary",
+      model: { providerID: SECOND_PROVIDER, id: "alt-thinking", variant: "medium" },
+    }))
+    await createSession("session-create-agent-model-default", {
+      agent: "capture-secondary",
+      model: { providerID: PROVIDER, id: "stream-300cps" },
+    })
+    const sessionRecord = await call("session-get", "GET", `/api/session/${variantSession}`)
+    expectRoute("GET /api/session/:id", sessionRecord)
+    if (sessionRecord.json?.data?.model?.variant !== "medium") throw new Error(`The created session lost its variant: ${sessionRecord.text.slice(0, 400)}`)
+
+    // Switching an open session: the variant alone is a change, and Default
+    // sends a model without `variant` (`resolveSendSelection`).
+    expectRoute("POST /api/session/:id/model", await call("switch-model-variant", "POST", `/api/session/${variantSession}/model`, {
+      body: { model: { providerID: PROVIDER, id: "stream-600cps", variant: "high" } },
+    }))
+    expectRoute("POST /api/session/:id/model", await call("switch-model-default", "POST", `/api/session/${variantSession}/model`, {
+      body: { model: { providerID: PROVIDER, id: "stream-300cps" } },
+    }))
+    expectRoute("POST /api/session/:id/agent", await call("switch-agent", "POST", `/api/session/${variantSession}/agent`, {
+      body: { agent: "build" },
+    }))
+
+    // The four session kinds the sidebar split must tell apart. They are
+    // created after the scenario sessions so the newest four are these, and 25
+    // ms apart so the list's `time.updated` order cannot tie.
+    await sleep(25)
+    const archivedSession = idOf(await createSession(null))
+    expectRoute("POST /api/openchamber/sessions/archive", await call("seed-archive", "POST", "/api/openchamber/sessions/archive", {
+      body: { directory: project, ids: [archivedSession], archivedAt: FIXTURE_EPOCH },
+    }))
+    await sleep(25)
+    // `/btw` marker: `packages/ui/src/lib/sessionBtwMetadata.ts:55-57` reads
+    // `openchamber.kind === "btw"` plus its `originalSessionID`.
+    const btwSession = idOf(await createSession(null))
+    expectRoute("POST /api/openchamber/sessions/:id/metadata", await call("seed-metadata-btw", "POST", `/api/openchamber/sessions/${btwSession}/metadata`, {
+      body: { patch: { openchamber: { kind: "btw", originalSessionID: sessionAId, btwBoundaryMessageID: null } } },
+    }))
+    await sleep(25)
+    // Pinned: `openchamber.pinned.at`, as `withSessionPinned` writes it
+    // (`packages/ui/src/lib/sessionPins.ts:47-60`).
+    const pinnedSession = idOf(await createSession(null))
+    expectRoute("POST /api/openchamber/sessions/:id/metadata", await call("seed-metadata-pinned", "POST", `/api/openchamber/sessions/${pinnedSession}/metadata`, {
+      body: { patch: { openchamber: { pinned: { at: FIXTURE_EPOCH } } } },
+    }))
+    await sleep(25)
+
+    // A Chat session under the server's chats root. `mkdir` then create is
+    // what `createChatDirectory` does (`packages/ui/src/lib/chatDirectories.ts:109-118`).
+    const chatDirectory = join(home.json.chatsRoot, CHAT_FOLDER_DATE, `session-${CHAT_SESSION_UUID}`)
+    expectRoute("POST /api/fs/mkdir", await call("fs-mkdir", "POST", "/api/fs/mkdir", { body: { path: chatDirectory } }))
+    const chatSession = idOf(await createSession(null, { directory: chatDirectory }))
+
+    // Global pages: no directory header and no query, the way
+    // `packages/ui/src/stores/globalSessions.ts:51-120` walks `cursor.next`.
+    const globalFirst = await call("session-list-global-page-1", "GET", "/api/session?limit=2", { directoryHeader: false })
+    expectRoute("GET /api/session (global)", globalFirst)
+    const nextCursor = globalFirst.json?.cursor?.next
+    if (!nextCursor) throw new Error(`The first global page has no cursor.next: ${globalFirst.text.slice(0, 400)}`)
+    const globalSecond = await call("session-list-global-page-2", "GET", `/api/session?limit=2&cursor=${encodeURIComponent(nextCursor)}`, { directoryHeader: false })
+    expectRoute("GET /api/session?cursor (global)", globalSecond)
+    const firstTwoPages = [...(globalFirst.json?.data ?? []), ...(globalSecond.json?.data ?? [])]
+    for (const [label, id] of [["archived", archivedSession], ["btw", btwSession], ["pinned", pinnedSession], ["chat", chatSession]]) {
+      if (!firstTwoPages.some((session) => session.id === id)) throw new Error(`The ${label} session is not on the first two global pages.`)
+    }
+    if (!firstTwoPages.find((session) => session.id === archivedSession)?.time?.archived) throw new Error("The archived session carries no time.archived.")
 
     // Summary of every event type seen: count and the keys of `data`.
     const summary = {}

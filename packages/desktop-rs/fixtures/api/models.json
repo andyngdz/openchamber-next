@@ -1,0 +1,1573 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "data": [
+    {
+      "id": "crouton-alpha-free",
+      "modelID": "crouton-alpha-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "name": "Crouton Alpha Free",
+      "package": "@opencode/ai/providers/openai/responses",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image",
+          "video",
+          "pdf"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "minimal",
+          "settings": {
+            "reasoningEffort": "minimal",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        },
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        },
+        {
+          "id": "medium",
+          "settings": {
+            "reasoningEffort": "medium",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        },
+        {
+          "id": "xhigh",
+          "settings": {
+            "reasoningEffort": "xhigh",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max",
+            "reasoningSummary": "auto",
+            "include": [
+              "reasoning.encrypted_content"
+            ]
+          }
+        }
+      ],
+      "time": {
+        "released": 1793664000000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 1048576,
+        "output": 270000
+      }
+    },
+    {
+      "id": "pulse-alpha-free",
+      "modelID": "pulse-alpha-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "name": "Pulse Alpha Free",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max"
+          }
+        }
+      ],
+      "time": {
+        "released": 1793577600000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 1048576,
+        "output": 131072
+      }
+    },
+    {
+      "id": "flint-40b-free",
+      "modelID": "flint-40b-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "flint",
+      "name": "Flint 40B Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "medium",
+          "settings": {
+            "reasoningEffort": "medium"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "xhigh",
+          "settings": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max"
+          }
+        }
+      ],
+      "time": {
+        "released": 1792540800000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 262144,
+        "output": 65536
+      }
+    },
+    {
+      "id": "nemotron-3.5-super-vl-free",
+      "modelID": "nemotron-3.5-super-vl-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "nemotron",
+      "name": "Nemotron 3.5 Super VL Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "none",
+          "settings": {
+            "reasoningEffort": "none"
+          }
+        },
+        {
+          "id": "minimal",
+          "settings": {
+            "reasoningEffort": "minimal"
+          }
+        },
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "medium",
+          "settings": {
+            "reasoningEffort": "medium"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "xhigh",
+          "settings": {
+            "reasoningEffort": "xhigh"
+          }
+        }
+      ],
+      "time": {
+        "released": 1792022400000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 1048576,
+        "input": 1048576,
+        "output": 131072
+      }
+    },
+    {
+      "id": "beam-free",
+      "modelID": "beam-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "beam",
+      "name": "Beam Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "medium",
+          "settings": {
+            "reasoningEffort": "medium"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "xhigh",
+          "settings": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max"
+          }
+        }
+      ],
+      "time": {
+        "released": 1791158400000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 1048576,
+        "output": 131072
+      }
+    },
+    {
+      "id": "mimo-v2.6-flash-free",
+      "modelID": "mimo-v2.6-flash-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "mimo",
+      "name": "MiMo-V2.6-Flash Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image",
+          "audio",
+          "video"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [],
+      "time": {
+        "released": 1790035200000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "deepseek-v4.1-flash-free",
+      "modelID": "deepseek-v4.1-flash-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "deepseek-flash",
+      "name": "DeepSeek V4.1 Flash Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max"
+          }
+        }
+      ],
+      "time": {
+        "released": 1788998400000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "glm-5.3-flash-free",
+      "modelID": "glm-5.3-flash-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "glm-flash",
+      "name": "GLM-5.3-Flash Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image",
+          "video"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [
+        {
+          "id": "low",
+          "settings": {
+            "reasoningEffort": "low"
+          }
+        },
+        {
+          "id": "high",
+          "settings": {
+            "reasoningEffort": "high"
+          }
+        },
+        {
+          "id": "max",
+          "settings": {
+            "reasoningEffort": "max"
+          }
+        }
+      ],
+      "time": {
+        "released": 1787702400000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "nemotron-3.5-lightning-free",
+      "modelID": "nemotron-3.5-lightning-free",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "nemotron",
+      "name": "Nemotron 3.5 Lightning Free",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [],
+      "time": {
+        "released": 1786406400000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      }
+    },
+    {
+      "id": "big-pickle",
+      "modelID": "big-pickle",
+      "providerID": "opencode",
+      "type": "chat",
+      "family": "big-pickle",
+      "name": "Big Pickle",
+      "compatibility": {
+        "reasoningField": "reasoning_content"
+      },
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1",
+        "provider": "opencode"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ],
+        "temperature": true
+      },
+      "variants": [],
+      "time": {
+        "released": 1760659200000
+      },
+      "cost": [
+        {
+          "input": 0,
+          "output": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        }
+      ],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "input": 160000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "stream-100cps",
+      "modelID": "stream-100cps",
+      "providerID": "perf",
+      "name": "Fixture stream, 100 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "stream-300cps",
+      "modelID": "stream-300cps",
+      "providerID": "perf",
+      "name": "Fixture stream, 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "stream-600cps",
+      "modelID": "stream-600cps",
+      "providerID": "perf",
+      "name": "Fixture stream, 600 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [
+        {
+          "id": "low"
+        },
+        {
+          "id": "high"
+        }
+      ],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "stream-1200cps",
+      "modelID": "stream-1200cps",
+      "providerID": "perf",
+      "name": "Fixture stream, 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "code-300cps",
+      "modelID": "code-300cps",
+      "providerID": "perf",
+      "name": "Fixture code block, 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "code-1200cps",
+      "modelID": "code-1200cps",
+      "providerID": "perf",
+      "name": "Fixture code block, 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "unicode-300cps",
+      "modelID": "unicode-300cps",
+      "providerID": "perf",
+      "name": "Fixture non-Latin prose and code, 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "unicode-1200cps",
+      "modelID": "unicode-1200cps",
+      "providerID": "perf",
+      "name": "Fixture non-Latin prose and code, 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "stream-20000cps",
+      "modelID": "stream-20000cps",
+      "providerID": "perf",
+      "name": "Fixture stream, seeding speed",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "code-20000cps",
+      "modelID": "code-20000cps",
+      "providerID": "perf",
+      "name": "Fixture code, seeding speed",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "unicode-20000cps",
+      "modelID": "unicode-20000cps",
+      "providerID": "perf",
+      "name": "Fixture unicode, seeding speed",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "showcase-20000cps",
+      "modelID": "showcase-20000cps",
+      "providerID": "perf",
+      "name": "Fixture showcase, seeding speed",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "think-30s",
+      "modelID": "think-30s",
+      "providerID": "perf",
+      "name": "Fixture silence, 30s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-20tools-300cps",
+      "modelID": "agent-20tools-300cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 20 tool calls then 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-20reads-300cps",
+      "modelID": "agent-20reads-300cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 20 file reads then 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-20tools-20000cps",
+      "modelID": "agent-20tools-20000cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 20 tool calls then 20000 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-20reads-20000cps",
+      "modelID": "agent-20reads-20000cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 20 file reads then 20000 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-40tools-300cps",
+      "modelID": "agent-40tools-300cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 40 tool calls then 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-40reads-300cps",
+      "modelID": "agent-40reads-300cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 40 file reads then 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-40tools-20000cps",
+      "modelID": "agent-40tools-20000cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 40 tool calls then 20000 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-40reads-20000cps",
+      "modelID": "agent-40reads-20000cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 40 file reads then 20000 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-100tools-x5-300cps",
+      "modelID": "agent-100tools-x5-300cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 100 tool calls 5 at a time, then 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "agent-100tools-x5-20000cps",
+      "modelID": "agent-100tools-x5-20000cps",
+      "providerID": "perf",
+      "name": "Fixture agent, 100 tool calls 5 at a time, then 20000 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "alt-chat-300cps",
+      "modelID": "alt-chat-300cps",
+      "providerID": "perf-second",
+      "name": "Second fixture chat, 300 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf-second"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "alt-code-1200cps",
+      "modelID": "alt-code-1200cps",
+      "providerID": "perf-second",
+      "name": "Second fixture code block, 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf-second"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "alt-thinking",
+      "modelID": "alt-thinking",
+      "providerID": "perf-second",
+      "name": "Second fixture with variants",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf-second"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [
+        {
+          "id": "low"
+        },
+        {
+          "id": "medium"
+        },
+        {
+          "id": "high"
+        }
+      ],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "id": "ses_e3b04a284ffeyvPkjKTkm0VwfX",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "cost": 0,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "time": {
+        "created": 1794306170236,
+        "updated": 1794306170242
+      },
+      "metadata": {
+        "openchamber": {
+          "kind": "btw",
+          "originalSessionID": "ses_e3b0624aaffeBKHqVoWmmnSYQc"
+        }
+      }
+    },
+    {
+      "id": "ses_e3b04a2a8ffexjyVRS103t8pau",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "cost": 0,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "time": {
+        "created": 1794306170200,
+        "updated": 1794306170206,
+        "archived": 1794306170206
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjg0ZmZleXZQa2pLVGttMFZ3ZlgiLCJ0aW1lIjoxNzk0MzA2MTcwMjQyLCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMmE4ZmZleGp5VlJTMTAzdDhwYXUiLCJ0aW1lIjoxNzk0MzA2MTcwMjA2LCJkaXJlY3Rpb24iOiJuZXh0In19"
+  }
+}

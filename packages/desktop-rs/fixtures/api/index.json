@@ -7,6 +7,62 @@
     "requestBody": false,
     "responseBody": true
   },
+  "fs-home": {
+    "method": "GET",
+    "path": "/api/fs/home",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "settings": {
+    "method": "GET",
+    "path": "/api/config/settings?surface=desktop",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "settings-update": {
+    "method": "PUT",
+    "path": "/api/config/settings?surface=desktop",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "config": {
+    "method": "GET",
+    "path": "/api/config",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "providers": {
+    "method": "GET",
+    "path": "/api/provider",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "models": {
+    "method": "GET",
+    "path": "/api/model?types=chat&types=image",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "agents": {
+    "method": "GET",
+    "path": "/api/agent",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
   "session-list-empty": {
     "method": "GET",
     "path": "/api/session",
@@ -41,7 +97,7 @@
   },
   "messages-empty": {
     "method": "GET",
-    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/message",
+    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -49,7 +105,7 @@
   },
   "interrupt-idle": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/interrupt",
+    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/interrupt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -57,7 +113,7 @@
   },
   "prompt-text": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/prompt",
+    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -65,7 +121,7 @@
   },
   "messages-text-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/message",
+    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -89,7 +145,7 @@
   },
   "switch-model": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/model",
+    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -97,7 +153,7 @@
   },
   "prompt-agent": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/prompt",
+    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -105,7 +161,7 @@
   },
   "messages-agent-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/message",
+    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -121,7 +177,7 @@
   },
   "switch-model-interrupt": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/model",
+    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -129,7 +185,7 @@
   },
   "prompt-interrupt": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/prompt",
+    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -137,7 +193,7 @@
   },
   "interrupt-running": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/interrupt",
+    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/interrupt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -145,7 +201,7 @@
   },
   "messages-interrupted-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/message",
+    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -161,7 +217,7 @@
   },
   "switch-model-permission": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/model",
+    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -169,7 +225,7 @@
   },
   "prompt-permission": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/prompt",
+    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -177,7 +233,7 @@
   },
   "permission-reply": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/permission/per_1c3a32f95001nQjjl1l98qe2BA/reply",
+    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/permission/per_1c4fa9fbf001E7ruNf9VQkkh0N/reply",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -185,7 +241,7 @@
   },
   "messages-permission-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/message",
+    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -209,7 +265,7 @@
   },
   "prompt-two-a": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5c6cfaffeZts0E9sczvZAMC/prompt",
+    "path": "/api/session/ses_e3b04fdd3ffeIJlQsHTWIaCb4W/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -217,7 +273,7 @@
   },
   "prompt-two-b": {
     "method": "POST",
-    "path": "/api/session/ses_e3c5c6cf3ffeUIFvldfzGnTxDW/prompt",
+    "path": "/api/session/ses_e3b04fdcaffe1eRbGlaE7NGt3C/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -233,10 +289,106 @@
   },
   "session-delete": {
     "method": "DELETE",
-    "path": "/api/session/ses_e3c5c1805ffefPBAdb6WP8jM6y",
+    "path": "/api/session/ses_e3b04a8fdffehF0hG9dzBBmJKX",
     "status": 204,
     "contentType": "",
     "requestBody": false,
     "responseBody": false
+  },
+  "session-create-agent-model": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-create-agent-model-default": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-get": {
+    "method": "GET",
+    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "switch-model-variant": {
+    "method": "POST",
+    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "switch-model-default": {
+    "method": "POST",
+    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "switch-agent": {
+    "method": "POST",
+    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/agent",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "seed-archive": {
+    "method": "POST",
+    "path": "/api/openchamber/sessions/archive",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "seed-metadata-btw": {
+    "method": "POST",
+    "path": "/api/openchamber/sessions/ses_e3b04a284ffeyvPkjKTkm0VwfX/metadata",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "seed-metadata-pinned": {
+    "method": "POST",
+    "path": "/api/openchamber/sessions/ses_e3b04a25effe4WiotPMG015qOZ/metadata",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "fs-mkdir": {
+    "method": "POST",
+    "path": "/api/fs/mkdir",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-list-global-page-1": {
+    "method": "GET",
+    "path": "/api/session?limit=2",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-list-global-page-2": {
+    "method": "GET",
+    "path": "/api/session?limit=2&cursor=eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjVlZmZlNFdpb3RQTUcwMTVxT1oiLCJ0aW1lIjoxNzk0MzA2MTcwMjgyLCJkaXJlY3Rpb24iOiJuZXh0In19",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
   }
 }

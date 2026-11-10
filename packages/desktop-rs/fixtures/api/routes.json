@@ -6,6 +6,48 @@
     "answered": true
   },
   {
+    "route": "GET /api/fs/home",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/config/settings",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "PUT /api/config/settings",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/config",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/provider",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/model",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/agent",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
     "route": "GET /api/session",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
@@ -33,6 +75,66 @@
     "route": "POST /api/session/:id/prompt",
     "status": 200,
     "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/session/:id",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/:id/model",
+    "status": 204,
+    "contentType": "",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/:id/model",
+    "status": 204,
+    "contentType": "",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/:id/agent",
+    "status": 204,
+    "contentType": "",
+    "answered": true
+  },
+  {
+    "route": "POST /api/openchamber/sessions/archive",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "POST /api/openchamber/sessions/:id/metadata",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "POST /api/openchamber/sessions/:id/metadata",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "POST /api/fs/mkdir",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/session (global)",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/session?cursor (global)",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
     "answered": true
   }
 ]
