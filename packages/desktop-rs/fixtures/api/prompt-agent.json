@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1c3a2bf75001KW5OhLtwKFeL4w",
+    "sessionID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+    "time": {
+      "created": 1794283585404
+    },
+    "type": "user",
+    "payload": {
+      "text": "List the files."
+    },
+    "delivery": "steer"
+  }
+}

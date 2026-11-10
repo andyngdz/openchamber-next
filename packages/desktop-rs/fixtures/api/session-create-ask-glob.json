@@ -1,0 +1,23 @@
+{
+  "data": {
+    "id": "ses_e3c5cd35bffews5ugJMR8RIsyu",
+    "projectID": "global",
+    "cost": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "time": {
+      "created": 1794283613349,
+      "updated": 1794283613349
+    },
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    }
+  }
+}

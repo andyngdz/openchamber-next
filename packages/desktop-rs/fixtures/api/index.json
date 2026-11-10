@@ -1,0 +1,242 @@
+{
+  "auth-status": {
+    "method": "GET",
+    "path": "/auth/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-list-empty": {
+    "method": "GET",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-list-empty-query": {
+    "method": "GET",
+    "path": "/api/session?limit=50&directory=%2Ftmp%2Foc-desktop-rs-capture%2Fproject",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-list-nonempty": {
+    "method": "GET",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "messages-empty": {
+    "method": "GET",
+    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "interrupt-idle": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/interrupt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "prompt-text": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "messages-text-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e3c5d9768ffeustSm1lMVapzHJ/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-list-after-turn": {
+    "method": "GET",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-allow-glob": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-agent": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "messages-agent-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e3c5d4292ffefGk1vxdyIb4Kmq/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-interrupt": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-interrupt": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-interrupt": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "interrupt-running": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/interrupt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "messages-interrupted-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e3c5cdc42ffelz0QWoBPzU7Zi8/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-ask-glob": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-permission": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-permission": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-reply": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/permission/per_1c3a32f95001nQjjl1l98qe2BA/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-permission-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e3c5cd35bffews5ugJMR8RIsyu/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-two-a": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-create-two-b": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-two-a": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5c6cfaffeZts0E9sczvZAMC/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-two-b": {
+    "method": "POST",
+    "path": "/api/session/ses_e3c5c6cf3ffeUIFvldfzGnTxDW/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-create-lifecycle": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "session-delete": {
+    "method": "DELETE",
+    "path": "/api/session/ses_e3c5c1805ffefPBAdb6WP8jM6y",
+    "status": 204,
+    "contentType": "",
+    "requestBody": false,
+    "responseBody": false
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "route": "GET /auth/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/session",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/session/:id/message",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/:id/interrupt",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/event",
+    "status": 200,
+    "contentType": "text/event-stream",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/:id/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  }
+]

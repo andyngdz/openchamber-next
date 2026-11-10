@@ -1,0 +1,43 @@
+[
+  {
+    "id": "evt_1c3a3e600001LebYULLdBPWlXp",
+    "type": "server.connected",
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a3e8010019vuYimHhE6REXj",
+    "created": 1794283661313,
+    "type": "session.created",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
+      "slug": "gentle-orchid",
+      "version": "2.2.6",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "subpath": ""
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
+      "seq": 0,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a3e806001wj0zUEeqCOaRLl",
+    "created": 1794283661318,
+    "type": "session.deleted",
+    "data": {
+      "sessionID": "ses_e3c5c1805ffefPBAdb6WP8jM6y"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
+      "seq": 1,
+      "version": 2
+    }
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1c3a325bf001yVaQlJrQRq3VgY",
+    "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+    "time": {
+      "created": 1794283611587
+    },
+    "type": "user",
+    "payload": {
+      "text": "List the files, then I stop you."
+    },
+    "delivery": "steer"
+  }
+}

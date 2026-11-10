@@ -1,0 +1,68 @@
+{
+  "text-reply-stream-300cps": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 227,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a268cf001k19fnLJCMEJwcB\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a26add001y5Dui0qybWnQuX\",\"created\":1794283563741,\"type\":\"project.updated\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"id\":\"global\",\"canonical\":\"/tmp/oc-desktop-rs-capture/project\",\"vcs\":\"git\",\"time\":{\"created\":1794283563178,\"updated\":1794283563178,\"active\":1794283563740},\"sandboxes\":[]}}"
+    ],
+    "lastFrame": "data: {\"id\":\"evt_1c3a2b817002NSUscekSNZGkoS\",\"created\":1794283583511,\"type\":\"plugin.updated\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/state/oc-data/chats\"},\"data\":{}}"
+  },
+  "agent-20tools-300cps": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 448,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a2bd7f001O6a7OnKOUs5XNv\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a2bf7c001v5uj4QtuM6vg9m\",\"created\":1794283585404,\"type\":\"session.inbox.enqueued\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"inboxID\":\"msg_1c3a2bf75001KW5OhLtwKFeL4w\",\"sessionID\":\"ses_e3c5d4292ffefGk1vxdyIb4Kmq\",\"item\":{\"type\":\"user\",\"payload\":{\"text\":\"List the files.\"},\"delivery\":\"steer\"}},\"durable\":{\"aggregateID\":\"ses_e3c5d4292ffefGk1vxdyIb4Kmq\",\"seq\":2,\"version\":1}}"
+    ],
+    "lastFrame": "data: {\"id\":\"evt_1c3a31de2001IrFTWHXtA7BU7H\",\"created\":1794283609570,\"type\":\"session.metadata.updated\",\"data\":{\"sessionID\":\"ses_e3c5d4292ffefGk1vxdyIb4Kmq\",\"metadata\":{\"openchamber\":{\"work\":{\"state\":\"open\",\"openedAt\":1794283585448,\"openedBy\":\"auto\"},\"turn\":{\"endedAt\":1794283609555,\"durationMs\":24149}}}},\"durable\":{\"aggregateID\":\"ses_e3c5d4292ffefGk1vxdyIb4Kmq\",\"seq\":195,\"version\":1}}"
+  },
+  "interrupted-agent-turn": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 21,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a323c9001Ycn0jh7ewdHMvy\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a325c3001yRynrYPy4agJpn\",\"created\":1794283611587,\"type\":\"session.inbox.enqueued\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"inboxID\":\"msg_1c3a325bf001yVaQlJrQRq3VgY\",\"sessionID\":\"ses_e3c5cdc42ffelz0QWoBPzU7Zi8\",\"item\":{\"type\":\"user\",\"payload\":{\"text\":\"List the files, then I stop you.\"},\"delivery\":\"steer\"}},\"durable\":{\"aggregateID\":\"ses_e3c5cdc42ffelz0QWoBPzU7Zi8\",\"seq\":2,\"version\":1}}"
+    ],
+    "lastFrame": "data: {\"id\":\"evt_1c3a326c2001wFwBMk6aN49haE\",\"created\":1794283611842,\"type\":\"session.metadata.updated\",\"data\":{\"sessionID\":\"ses_e3c5cdc42ffelz0QWoBPzU7Zi8\",\"metadata\":{\"openchamber\":{\"work\":{\"state\":\"open\",\"openedAt\":1794283611621,\"openedBy\":\"auto\"},\"turn\":{\"endedAt\":1794283611832,\"durationMs\":244}}}},\"durable\":{\"aggregateID\":\"ses_e3c5cdc42ffelz0QWoBPzU7Zi8\",\"seq\":17,\"version\":1}}"
+  },
+  "permission-asked-agent-turn": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 451,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a32cae001ndX5K174pQUds6\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a32eac0011lfUkL4Xvg0ddC\",\"created\":1794283613868,\"type\":\"session.inbox.enqueued\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"inboxID\":\"msg_1c3a32ea3001llYyEFBTumF1gR\",\"sessionID\":\"ses_e3c5cd35bffews5ugJMR8RIsyu\",\"item\":{\"type\":\"user\",\"payload\":{\"text\":\"List the files, ask first.\"},\"delivery\":\"steer\"}},\"durable\":{\"aggregateID\":\"ses_e3c5cd35bffews5ugJMR8RIsyu\",\"seq\":2,\"version\":1}}"
+    ],
+    "lastFrame": "data: {\"id\":\"evt_1c3a38d27001QHvGLrVrifPdPV\",\"created\":1794283638055,\"type\":\"session.metadata.updated\",\"data\":{\"sessionID\":\"ses_e3c5cd35bffews5ugJMR8RIsyu\",\"metadata\":{\"openchamber\":{\"work\":{\"state\":\"open\",\"openedAt\":1794283613903,\"openedBy\":\"auto\"},\"turn\":{\"endedAt\":1794283638038,\"durationMs\":24168}}}},\"durable\":{\"aggregateID\":\"ses_e3c5cd35bffews5ugJMR8RIsyu\",\"seq\":195,\"version\":1}}"
+  },
+  "two-sessions-stream-300cps": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 419,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a3931300165Pc1BNSjt4u0i\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a3950f001sCabsgN6KA581p\",\"created\":1794283640079,\"type\":\"session.inbox.enqueued\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"inboxID\":\"msg_1c3a39508001rD8VP9qOz0TxfL\",\"sessionID\":\"ses_e3c5c6cfaffeZts0E9sczvZAMC\",\"item\":{\"type\":\"user\",\"payload\":{\"text\":\"First session.\"},\"delivery\":\"steer\"}},\"durable\":{\"aggregateID\":\"ses_e3c5c6cfaffeZts0E9sczvZAMC\",\"seq\":1,\"version\":1}}"
+    ],
+    "lastFrame": ":heartbeat"
+  },
+  "session-lifecycle": {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "frameCount": 4,
+    "firstFrames": [
+      "data: {\"id\":\"evt_1c3a3e600001LebYULLdBPWlXp\",\"type\":\"server.connected\",\"data\":{}}",
+      ": heartbeat",
+      "data: {\"id\":\"evt_1c3a3e8010019vuYimHhE6REXj\",\"created\":1794283661313,\"type\":\"session.created\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"data\":{\"sessionID\":\"ses_e3c5c1805ffefPBAdb6WP8jM6y\",\"slug\":\"gentle-orchid\",\"version\":\"2.2.6\",\"projectID\":\"global\",\"location\":{\"directory\":\"/tmp/oc-desktop-rs-capture/project\"},\"subpath\":\"\"},\"durable\":{\"aggregateID\":\"ses_e3c5c1805ffefPBAdb6WP8jM6y\",\"seq\":0,\"version\":1}}"
+    ],
+    "lastFrame": "data: {\"id\":\"evt_1c3a3e806001wj0zUEeqCOaRLl\",\"created\":1794283661318,\"type\":\"session.deleted\",\"data\":{\"sessionID\":\"ses_e3c5c1805ffefPBAdb6WP8jM6y\"},\"durable\":{\"aggregateID\":\"ses_e3c5c1805ffefPBAdb6WP8jM6y\",\"seq\":1,\"version\":2}}"
+  }
+}

@@ -1,0 +1,395 @@
+[
+  {
+    "id": "evt_1c3a323c9001Ycn0jh7ewdHMvy",
+    "type": "server.connected",
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a325c3001yRynrYPy4agJpn",
+    "created": 1794283611587,
+    "type": "session.inbox.enqueued",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "inboxID": "msg_1c3a325bf001yVaQlJrQRq3VgY",
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "item": {
+        "type": "user",
+        "payload": {
+          "text": "List the files, then I stop you."
+        },
+        "delivery": "steer"
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 2,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a325c4001eo3dWfzRmDb4px",
+    "created": 1794283611588,
+    "type": "session.execution.started",
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 3,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a325c60010aq5z000YqJixT",
+    "created": 1794283611590,
+    "metadata": {
+      "instructions": {
+        "initial": true
+      }
+    },
+    "type": "session.instructions.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "delta": {
+        "core/codemode": "c70549334ff58e5180cbd0dadf89971318a87a65a94306d43b99284fa7a762a3",
+        "core/skill-guidance": "8394362d28c82fa4d13c7a9f5568c05680f6687e07db8f426a0e3c92f3027dc9",
+        "core/date": "9b4c63b67003f693d244434de4080cc42a552c634280bc3f4122cd1f1ed9d38c",
+        "core/environment": "e6f68fa51b6c59b2bc96ec72966c1ea57f9633f5ea8b2455855b2c7218a45c47"
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 4,
+      "version": 2
+    }
+  },
+  {
+    "id": "evt_1c3a325c7001PwZkVZdq9BZKeW",
+    "created": 1794283611591,
+    "type": "session.inbox.delivered",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "inboxID": "msg_1c3a325bf001yVaQlJrQRq3VgY"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 5,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a325e20011oa0nTJ4sTURZH",
+    "created": 1794283611618,
+    "type": "session.step.started",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+      "started": 1794283611607
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 6,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a325e3001Q7FDBKvaUbTqCn",
+    "created": 1794283611619,
+    "type": "session.text.started",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "ordinal": 0
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 7,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a325e6001yb3jqKAWUALpPT",
+    "created": 1794283611622,
+    "type": "session.metadata.updated",
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794283611621,
+            "openedBy": "auto"
+          }
+        }
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 8,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a32648001aUkr9MrohmZKga",
+    "created": 1794283611720,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "ordinal": 0,
+      "delta": "Step 1 of 20: listing files that"
+    }
+  },
+  {
+    "id": "evt_1c3a326a80017wT8P1BGyVk8ee",
+    "created": 1794283611816,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "ordinal": 0,
+      "delta": " the answer should mention.\n\n"
+    }
+  },
+  {
+    "id": "evt_1c3a326a8002TyCsjtKWhrK6Bb",
+    "created": 1794283611816,
+    "type": "session.tool.input.started",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "id": "call_fixture_1",
+      "name": "glob"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 9,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326aa0017p60ml1pHrIH5g",
+    "created": 1794283611818,
+    "type": "session.tool.input.ended",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "id": "call_fixture_1",
+      "text": "{\"pattern\":\"packages/*/package.json\"}"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 10,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326aa002W5bC3PnJYbojxV",
+    "created": 1794283611818,
+    "type": "session.tool.called",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "id": "call_fixture_1",
+      "input": {
+        "pattern": "packages/*/package.json"
+      },
+      "executed": false
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 11,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326ab001YJA1xTslCTveFx",
+    "created": 1794283611819,
+    "type": "session.text.ended",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "ordinal": 0,
+      "text": "Step 1 of 20: listing files that the answer should mention.\n\n"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 12,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326ac0013VyMC4aS9CR0CF",
+    "created": 1794283611820,
+    "type": "session.step.streamed",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 13,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326b1001T2Su7W8Q0rOm2l",
+    "created": 1794283611825,
+    "type": "session.tool.success",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "id": "call_fixture_1",
+      "content": [
+        {
+          "type": "text",
+          "text": "No files found"
+        }
+      ],
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "executed": false
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 14,
+      "version": 2
+    }
+  },
+  {
+    "id": "evt_1c3a326b6001o94mAah3gYkU1C",
+    "created": 1794283611830,
+    "type": "session.step.ended",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "assistantMessageID": "msg_1c3a325d2001iLwcqwDCnz1IqO",
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "cost": 0,
+      "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+      "files": []
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 15,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326b8001V5e6tJ1LxvqjBP",
+    "created": 1794283611832,
+    "type": "session.usage.updated",
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "evt_1c3a326b8002WeUUnRV7toe6MS",
+    "created": 1794283611832,
+    "type": "session.execution.interrupted",
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "reason": "user"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 16,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a326c2001wFwBMk6aN49haE",
+    "created": 1794283611842,
+    "type": "session.metadata.updated",
+    "data": {
+      "sessionID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794283611621,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794283611832,
+            "durationMs": 244
+          }
+        }
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5cdc42ffelz0QWoBPzU7Zi8",
+      "seq": 17,
+      "version": 1
+    }
+  }
+]
