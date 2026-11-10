@@ -77,11 +77,14 @@ pub enum ModelKind {
 /// An agent as `GET /api/agent` reports it.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct Agent {
-    /// Agent name, sent as `agent`.
+    /// Agent name, sent as `agent`; React's projected `name`.
     pub id: String,
-    /// Display name.
+    /// Display name; React's projected `displayName`, from the server's `name`.
+    #[serde(rename = "name", default)]
+    pub display_name: String,
+    /// The description the picker's search ranks.
     #[serde(default)]
-    pub name: String,
+    pub description: String,
     /// What the agent may be picked for; an unset mode counts as `all`.
     #[serde(default)]
     pub mode: AgentMode,

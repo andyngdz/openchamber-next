@@ -1,12 +1,10 @@
 //! The partial settings document a write sends. A key left `None` is not in the body, so
 //! the server keeps the value another client wrote.
 
-use std::collections::BTreeMap;
-
 use serde::{Deserialize, Serialize};
 
 use crate::project::Project;
-use crate::settings::{SettingsModelRef, SidebarSection, SidebarSortOrder};
+use crate::settings::{LastUsedEfforts, SettingsModelRef, SidebarSection, SidebarSortOrder};
 
 /// A partial `PUT /api/config/settings?surface=desktop` body.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize, Serialize)]
@@ -38,7 +36,7 @@ pub struct SettingsPatch {
     pub provider_order: Option<Vec<String>>,
     /// `provider/model` to the variant last used, or `null` for Default.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_used_efforts: Option<BTreeMap<String, Option<String>>>,
+    pub last_used_efforts: Option<LastUsedEfforts>,
     /// The model last picked in a chat.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_selected_model: Option<String>,

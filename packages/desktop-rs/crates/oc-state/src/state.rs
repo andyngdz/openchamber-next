@@ -54,6 +54,8 @@ pub struct State {
     pub(crate) show_more: BTreeMap<crate::sidebar::MoreKey, u32>,
     /// A settings write the app has not sent yet.
     pub(crate) settings_patch: Option<SettingsPatch>,
+    /// The catalogs, draft target and per-session selections.
+    pub(crate) selection: crate::selection::SelectionState,
 }
 
 impl State {
@@ -72,6 +74,7 @@ impl State {
             global: GlobalSessions::default(),
             show_more: BTreeMap::new(),
             settings_patch: None,
+            selection: crate::selection::SelectionState::default(),
         }
     }
 

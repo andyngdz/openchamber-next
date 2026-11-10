@@ -31,6 +31,7 @@ pub use event::{Event, EventData};
 pub use message_id::new_message_id;
 pub use project::{Project, ProjectPatch};
 pub use settings::{
-    Settings, SettingsModelRef, SidebarSection, SidebarSectionKind, SidebarSortOrder,
+    LastUsedEfforts, Settings, SettingsModelRef, SidebarSection, SidebarSectionKind,
+    SidebarSortOrder,
 };
 pub use settings_patch::SettingsPatch;

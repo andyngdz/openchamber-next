@@ -3,11 +3,101 @@
 //! The document is the shared registry React writes; keys this app does not act on are
 //! ignored. Writes are partial [`SettingsPatch`] objects, never a whole document.
 
-use std::collections::BTreeMap;
+use std::fmt;
 
-use serde::{Deserialize, Serialize};
+use serde::de::{MapAccess, Visitor};
+use serde::ser::SerializeMap;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::project::Project;
+
+/// `provider/model` to the Thinking level last used, in the order the user last used them.
+///
+/// React keeps this key as an insertion-ordered JavaScript object and evicts the oldest past
+/// 512 (`useUIStore.ts:3268-3286`), so it decodes and encodes in document order instead of a
+/// sorted map. `None` is an explicit Default.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct LastUsedEfforts(Vec<(String, Option<String>)>);
+
+impl LastUsedEfforts {
+    /// The level recorded for `key`, when the model has one.
+    pub fn get(&self, key: &str) -> Option<&Option<String>> {
+        self.0
+            .iter()
+            .find(|(entry, _)| entry == key)
+            .map(|(_, value)| value)
+    }
+
+    /// How many models have a recorded level.
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    /// Whether no model has a recorded level.
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+
+    /// Writes `key` as the newest entry, moving an existing one to the end.
+    pub fn insert(&mut self, key: impl Into<String>, value: Option<String>) {
+        let key = key.into();
+        self.0.retain(|(entry, _)| *entry != key);
+        self.0.push((key, value));
+    }
+
+    /// Removes `key` and returns its level, when it had one.
+    pub fn remove(&mut self, key: &str) -> Option<Option<String>> {
+        let index = self.0.iter().position(|(entry, _)| entry == key)?;
+        let (_, value) = self.0.remove(index);
+        Some(value)
+    }
+
+    /// Drops the oldest entries so at most `keep` remain.
+    pub fn keep_newest(&mut self, keep: usize) {
+        if self.0.len() > keep {
+            self.0.drain(..self.0.len() - keep);
+        }
+    }
+
+    /// The entries from oldest to newest, as the settings document stores them.
+    pub fn iter(&self) -> impl Iterator<Item = (&str, &Option<String>)> {
+        self.0.iter().map(|(key, value)| (key.as_str(), value))
+    }
+}
+
+impl<'de> Deserialize<'de> for LastUsedEfforts {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        struct EffortsVisitor;
+
+        impl<'de> Visitor<'de> for EffortsVisitor {
+            type Value = LastUsedEfforts;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+                formatter.write_str("a map of provider/model to a Thinking level")
+            }
+
+            fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {
+                let mut efforts = LastUsedEfforts::default();
+                while let Some((key, value)) = map.next_entry::<String, Option<String>>()? {
+                    efforts.insert(key, value);
+                }
+                Ok(efforts)
+            }
+        }
+
+        deserializer.deserialize_map(EffortsVisitor)
+    }
+}
+
+impl Serialize for LastUsedEfforts {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut map = serializer.serialize_map(Some(self.0.len()))?;
+        for (key, value) in &self.0 {
+            map.serialize_entry(key, value)?;
+        }
+        map.end()
+    }
+}
 
 /// How the sidebar orders projects.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize, Serialize)]
@@ -90,7 +180,7 @@ pub struct Settings {
     pub provider_order: Vec<String>,
     /// `provider/model` to the variant last used, or `null` for Default.
     #[serde(default)]
-    pub last_used_efforts: BTreeMap<String, Option<String>>,
+    pub last_used_efforts: LastUsedEfforts,
     /// The model last picked in a chat, as `provider/model`.
     #[serde(default)]
     pub last_selected_model: Option<String>,

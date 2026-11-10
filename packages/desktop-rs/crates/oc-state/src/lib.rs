@@ -17,6 +17,7 @@ mod logging;
 mod message;
 mod message_events;
 pub mod search;
+mod selection;
 mod session_entry;
 mod session_list;
 mod sidebar;
@@ -32,6 +33,12 @@ pub use message::{
 pub use oc_client::filesystem::Home;
 pub use oc_client::types::{ModelRef, ToolStatus, WorkState};
 pub use oc_client::{Project, ProjectPatch, Settings, SettingsPatch};
+pub use selection::{
+    Catalog, DraftState, DraftTarget, EffortChoice, EnterKeys, ModelEntry, ModelKey, ModelSections,
+    ProviderModels, ProviderSection, Selection, SelectionAction, SelectionSource, SendSteps,
+    is_same_model_ref, model_sections, ranked_agents, ranked_projects, resolve_send_selection,
+    should_submit_enter,
+};
 pub use session_entry::{PendingRequest, SessionEntry};
 pub use session_list::SessionList;
 pub use sidebar::{

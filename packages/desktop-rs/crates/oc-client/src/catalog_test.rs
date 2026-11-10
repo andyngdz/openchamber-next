@@ -91,6 +91,14 @@ fn the_captured_agents_decode_with_mode_hidden_and_pin() {
     let model = pinned.model.as_ref().expect("pinned model");
     assert_eq!(model.provider_id, "perf");
     assert_eq!(model.id, "stream-300cps");
+
+    let build = located
+        .data
+        .iter()
+        .find(|agent| agent.id == "build")
+        .expect("build");
+    assert_eq!(build.display_name, "Build");
+    assert!(build.description.starts_with("The default agent"));
 }
 
 #[test]

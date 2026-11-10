@@ -41,6 +41,15 @@ fn the_captured_settings_decode_into_the_typed_keys() {
         settings.last_used_efforts.get("perf-second/alt-thinking"),
         Some(&None)
     );
+    let effort_keys: Vec<&str> = settings
+        .last_used_efforts
+        .iter()
+        .map(|(key, _)| key)
+        .collect();
+    assert_eq!(
+        effort_keys,
+        ["perf/stream-600cps", "perf-second/alt-thinking"]
+    );
     assert_eq!(settings.sidebar_project_sort_order, SidebarSortOrder::AZ);
     assert_eq!(settings.sidebar_sections.len(), 4);
     assert_eq!(
@@ -70,4 +79,23 @@ fn a_settings_document_without_sidebar_keys_takes_the_captured_defaults() {
     assert!(settings.session_work_enabled);
     assert!(settings.sidebar_sections.is_empty());
     assert!(settings.projects.is_empty());
+}
+
+#[test]
+fn last_used_efforts_keep_document_order_through_decode_and_encode() {
+    let settings: Settings = serde_json::from_str(
+        r#"{"lastUsedEfforts":{"z/model":"high","a/model":null,"m/model":"low"}}"#,
+    )
+    .expect("decode");
+    let keys: Vec<&str> = settings
+        .last_used_efforts
+        .iter()
+        .map(|(key, _)| key)
+        .collect();
+    assert_eq!(keys, ["z/model", "a/model", "m/model"]);
+    let encoded = serde_json::to_string(&settings.last_used_efforts).expect("encode");
+    assert_eq!(
+        encoded,
+        r#"{"z/model":"high","a/model":null,"m/model":"low"}"#
+    );
 }

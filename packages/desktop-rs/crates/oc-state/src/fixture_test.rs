@@ -1,8 +1,12 @@
 //! Fixture loading and state builders shared by the tests.
 
+use oc_client::catalog::{
+    Agent, AgentMode, ConfigModel, Model, ModelVariant, OpenCodeConfig, Provider,
+    ProviderActivation,
+};
 use oc_client::filesystem::Home;
 use oc_client::settings::Settings;
-use oc_client::types::{Data, Message, Page, Session};
+use oc_client::types::{Data, Located, Message, Page, Session};
 use oc_client::{Event, EventData};
 use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
@@ -10,6 +14,7 @@ use serde_json::{Value, json};
 use crate::action::Action;
 use crate::ids::SessionId;
 use crate::message::{AssistantMessage, ChatMessage};
+use crate::selection::Catalog;
 use crate::state::State;
 
 const FIXTURES: &str = env!("OC_DESKTOP_FIXTURES");
@@ -74,6 +79,156 @@ pub(crate) fn api_settings() -> Settings {
 /// The captured home info.
 pub(crate) fn api_home() -> Home {
     read_json("api/fs-home.json")
+}
+
+/// The captured provider list, as `GET /api/provider` answered it.
+pub(crate) fn api_providers() -> Vec<Provider> {
+    let located: Located<Vec<Provider>> = read_json("api/providers.json");
+    located.data
+}
+
+/// The captured model list, as `GET /api/model?types=chat&types=image` answered it.
+pub(crate) fn api_models() -> Vec<Model> {
+    let located: Located<Vec<Model>> = read_json("api/models.json");
+    located.data
+}
+
+/// The captured agent list.
+pub(crate) fn api_agents() -> Vec<Agent> {
+    let located: Located<Vec<Agent>> = read_json("api/agents.json");
+    located.data
+}
+
+/// The captured OpenCode config, folded from its sources in order.
+pub(crate) fn api_config() -> OpenCodeConfig {
+    let sources: Vec<oc_client::catalog::ConfigSource> = read_json("api/config.json");
+    let mut folded = serde_json::Map::new();
+    for source in sources {
+        if let Some(Value::Object(info)) = source.info {
+            folded.extend(info);
+        }
+    }
+    serde_json::from_value(Value::Object(folded)).expect("config")
+}
+
+/// The catalog the unit 1 fixtures describe.
+pub(crate) fn api_catalog() -> Catalog {
+    Catalog::from_parts(api_providers(), api_models(), api_agents(), api_config())
+}
+
+/// A provider that is switched on.
+pub(crate) fn provider(id: &str) -> Provider {
+    Provider {
+        id: id.to_owned(),
+        name: id.to_owned(),
+        activation: ProviderActivation::Enabled,
+    }
+}
+
+/// An enabled chat model with the given Thinking levels.
+pub(crate) fn chat_model(provider_id: &str, id: &str, variants: &[&str]) -> Model {
+    model(
+        provider_id,
+        id,
+        variants,
+        true,
+        oc_client::catalog::ModelKind::Chat,
+    )
+}
+
+/// A model with every field the catalog reads spelled out.
+pub(crate) fn model(
+    provider_id: &str,
+    id: &str,
+    variants: &[&str],
+    enabled: bool,
+    kind: oc_client::catalog::ModelKind,
+) -> Model {
+    Model {
+        id: id.to_owned(),
+        provider_id: provider_id.to_owned(),
+        name: id.to_owned(),
+        variants: variants
+            .iter()
+            .map(|variant| ModelVariant {
+                id: (*variant).to_owned(),
+            })
+            .collect(),
+        enabled,
+        kind,
+    }
+}
+
+/// A visible primary agent with no pinned model.
+pub(crate) fn primary_agent(id: &str) -> Agent {
+    agent(id, AgentMode::Primary, false, None)
+}
+
+/// An agent with every field the picker reads spelled out.
+pub(crate) fn agent(
+    id: &str,
+    mode: AgentMode,
+    hidden: bool,
+    model: Option<oc_client::types::ModelRef>,
+) -> Agent {
+    Agent {
+        id: id.to_owned(),
+        display_name: id.to_owned(),
+        description: String::new(),
+        mode,
+        hidden,
+        model,
+    }
+}
+
+/// An agent whose description the picker search can match.
+pub(crate) fn described_agent(id: &str, description: &str) -> Agent {
+    Agent {
+        id: id.to_owned(),
+        display_name: id.to_owned(),
+        description: description.to_owned(),
+        mode: AgentMode::Primary,
+        hidden: false,
+        model: None,
+    }
+}
+
+/// An OpenCode config naming `default_agent` and/or a default model.
+pub(crate) fn config(
+    default_agent: Option<&str>,
+    model: Option<(&str, &str, Option<&str>)>,
+) -> OpenCodeConfig {
+    OpenCodeConfig {
+        model: model.map(|(provider_id, id, variant)| ConfigModel {
+            provider_id: provider_id.to_owned(),
+            model: id.to_owned(),
+            variant: variant.map(str::to_owned),
+        }),
+        default_agent: default_agent.map(str::to_owned),
+    }
+}
+
+/// A catalog from hand-built parts.
+pub(crate) fn catalog_with(
+    providers: Vec<Provider>,
+    models: Vec<Model>,
+    agents: Vec<Agent>,
+    config: OpenCodeConfig,
+) -> Catalog {
+    Catalog::from_parts(providers, models, agents, config)
+}
+
+/// A `provider/id` model reference.
+pub(crate) fn model_ref(
+    provider_id: &str,
+    id: &str,
+    variant: Option<&str>,
+) -> oc_client::types::ModelRef {
+    oc_client::types::ModelRef {
+        id: id.to_owned(),
+        provider_id: provider_id.to_owned(),
+        variant: variant.map(str::to_owned),
+    }
 }
 
 /// Hand-built settings, with every key the test does not name taking its default.

@@ -36,7 +36,7 @@
 - [ ] 5.4 Unit tests for each rule above, from the unit 1 fixtures and small hand-built inputs.
 - [ ] 5.5 Gate as in 2.4.
 
-## 6. Selection state   [depends-on: 2, 4, 5] [writes: packages/desktop-rs/crates/oc-state/src/] [parallel-safe: no]
+## 6. Selection state   [depends-on: 2, 4, 5] [writes: packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-client/src/catalog.rs, packages/desktop-rs/crates/oc-client/src/catalog_test.rs, packages/desktop-rs/crates/oc-client/src/settings.rs, packages/desktop-rs/crates/oc-client/src/settings_test.rs, packages/desktop-rs/crates/oc-client/src/settings_patch.rs, packages/desktop-rs/crates/oc-client/src/settings_patch_test.rs, packages/desktop-rs/crates/oc-client/src/lib.rs] [parallel-safe: no]
 
 - [ ] 6.1 Catalog per directory with the provider, model, `hiddenModels` and `providerOrder` rules (every provider section open); agents filtered and sorted.
 - [ ] 6.2 Draft target (Chat or project) and selection per draft and per session, the open session's record as its start.

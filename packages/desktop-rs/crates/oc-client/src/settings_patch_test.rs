@@ -1,7 +1,7 @@
 use serde_json::json;
 
 use super::SettingsPatch;
-use crate::settings::{SettingsModelRef, SidebarSortOrder};
+use crate::settings::{LastUsedEfforts, SettingsModelRef, SidebarSortOrder};
 
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
 
@@ -22,6 +22,9 @@ fn the_captured_partial_put_decodes_to_only_the_keys_it_names() {
         Some("perf/stream-600cps")
     );
     assert_eq!(patch.last_used_efforts.as_ref().map(|e| e.len()), Some(2));
+    let efforts = patch.last_used_efforts.as_ref().expect("efforts");
+    let keys: Vec<&str> = efforts.iter().map(|(key, _)| key).collect();
+    assert_eq!(keys, ["perf/stream-600cps", "perf-second/alt-thinking"]);
     assert_eq!(patch.projects, None);
     assert_eq!(patch.favorite_models, None);
 }
@@ -52,5 +55,19 @@ fn an_empty_patch_serializes_to_an_empty_object() {
     assert_eq!(
         serde_json::to_value(SettingsPatch::default()).expect("serialize"),
         json!({})
+    );
+}
+
+#[test]
+fn last_used_efforts_serialize_in_their_stored_order() {
+    let efforts: LastUsedEfforts =
+        serde_json::from_str(r#"{"z/model":"high","a/model":null}"#).expect("efforts");
+    let patch = SettingsPatch {
+        last_used_efforts: Some(efforts),
+        ..SettingsPatch::default()
+    };
+    assert_eq!(
+        serde_json::to_string(&patch).expect("serialize"),
+        r#"{"lastUsedEfforts":{"z/model":"high","a/model":null}}"#
     );
 }
