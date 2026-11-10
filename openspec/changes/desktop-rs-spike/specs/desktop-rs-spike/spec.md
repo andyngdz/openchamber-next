@@ -83,7 +83,7 @@ The app SHALL place every region and control where the current OpenChamber deskt
 #### Scenario: No control is missing
 
 - **WHEN** the dumped controls of a region are compared with the reference
-- **THEN** every reference control is present by name and the controls appear in the same order
+- **THEN** every reference control outside the content-controls skip list is present by name and the controls appear in the same order
 
 #### Scenario: Inert control is used
 

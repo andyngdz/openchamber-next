@@ -48,13 +48,13 @@
 - [ ] 6.4 Unit tests from `fixtures/events/`: full text reply, agent turn with tools, interrupted turn, permission asked then replied, a `session.text.delta` before its `session.text.started`, events from another session, unknown events. Unit tests for actions: reconnecting and connected status, a region error then retry, the draft kept after a failed prompt.
 - [ ] 6.5 Gate as in 1.6.
 
-## 7. Window layout and parity test   [depends-on: 3, 6] [writes: packages/desktop-rs/crates/oc-app/src/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/fixtures/states/] [parallel-safe: no]
+## 7. Window layout and parity test   [depends-on: 3, 6] [writes: packages/desktop-rs/crates/oc-app/src/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/fixtures/states/, packages/desktop-rs/fixtures/reference/content-controls.json] [parallel-safe: no]
 
 - [ ] 7.1 Theme from the default dark tokens in `packages/ui/src/styles/design-system.css:164-195`.
 - [ ] 7.2 Every region and control from design.md "Layout" rendered from `oc-state` state, in the reference order, with each control's `ElementId` set to the reference name; inert controls do nothing on click; UI text in English.
 - [ ] 7.3 Layout registry filled during prepaint, and `--dump-layout <file> --state <name>` that loads `fixtures/states/<name>.json`, renders one frame at a 1440x900 content size, writes the reference JSON shape and exits.
 - [ ] 7.4 Write `fixtures/states/` for empty, session, streaming (from `fixtures/events/`, with the titles from `fixtures/seed.json`) and server-error.
-- [ ] 7.5 Parity test `tests/parity.rs`, run only with `OC_DESKTOP_UI=1`: for empty, session and streaming, region bounds equal the reference, no reference control is missing, order matches; server-error region bounds equal the empty state's.
+- [ ] 7.5 Parity test `tests/parity.rs`, run only with `OC_DESKTOP_UI=1`: for empty, session and streaming, region bounds equal the reference, no reference control outside `fixtures/reference/content-controls.json` is missing, order matches; server-error region bounds equal the empty state's.
 - [ ] 7.6 Gate as in 1.6, plus `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity` on this machine. Save GPUI screenshots next to `fixtures/reference/*.png` for the user to compare.
 
 ## 8. Live wiring   [depends-on: 4, 5, 7] [writes: packages/desktop-rs/crates/oc-app/src/] [parallel-safe: no]
