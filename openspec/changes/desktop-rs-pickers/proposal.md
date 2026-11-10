@@ -6,7 +6,7 @@ The Rust + GPUI desktop spike opens one directory and shows a fixed model and ag
 
 - The sidebar lists every project from the shared settings with its sessions, plus the Chats, Pinned (read-only) and In work sections, split from one global session list and ordered, limited and shown or hidden by the same settings as the React sidebar.
 - The empty state's Choose project popover picks Chat or a project and sets the active project.
-- The composer gets a working model picker (search, Favorites, Recent, provider sections that follow `providerOrder`, `hiddenModels` and collapse, star, Thinking variant menu) and agent picker (search, favorites).
+- The composer gets a working model picker (search, Favorites, Recent, provider sections that follow `providerOrder` and `hiddenModels`, star, Thinking variant menu) and agent picker (search, favorites).
 - A new session is created with the picked agent and model; an existing session is switched before the prompt when the pick changed.
 - Enter sends according to the `enterToSend` setting and never during IME composition. Sending stays blocked while a turn runs.
 - Picks are written to the shared settings (`PUT /api/config/settings`), so the Electron app sees the same active project, recents and favorites.

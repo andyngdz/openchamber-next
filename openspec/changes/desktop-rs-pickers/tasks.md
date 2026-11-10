@@ -38,10 +38,10 @@
 
 ## 6. Selection state   [depends-on: 2, 4, 5] [writes: packages/desktop-rs/crates/oc-state/src/] [parallel-safe: no]
 
-- [ ] 6.1 Catalog per directory with the provider, model, `hiddenModels`, `providerOrder` and `collapsedModelProviders` rules; agents filtered and sorted.
+- [ ] 6.1 Catalog per directory with the provider, model, `hiddenModels` and `providerOrder` rules (every provider section open); agents filtered and sorted.
 - [ ] 6.2 Draft target (Chat or project) and selection per draft and per session, the open session's record as its start.
 - [ ] 6.3 Default agent and model cascades including catalog absence, and `setAgent` with its per-session agent memory, ported from the cited lines.
-- [ ] 6.4 Picker rules: Recent, `lastSelectedModel`, `recentAgents`, favorites, provider collapse, `lastUsedEfforts`, project pick (`activeProjectId`, `lastOpenedAt`); each produces the settings patch to write.
+- [ ] 6.4 Picker rules: Recent, `lastSelectedModel`, `recentAgents`, favorites, `lastUsedEfforts`, project pick (`activeProjectId`, `lastOpenedAt`); each produces the settings patch to write.
 - [ ] 6.5 `resolveSendSelection` port (variant counts, Default sends no variant) and the Enter policy port (`shouldSubmitEnter`, desktop not expanded).
 - [ ] 6.6 Unit tests: each cascade step taken; catalog absence; agent switch and back; every picker rule; the desktop cases of `keyboardPolicy.test.ts:25-52`.
 - [ ] 6.7 Gate as in 2.4.
@@ -59,7 +59,7 @@
 ## 8. Views and parity   [depends-on: 3, 7] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/fixture/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/, packages/desktop-rs/fixtures/states/, packages/desktop-rs/fixtures/reference/] [parallel-safe: no]
 
 - [ ] 8.1 Sidebar view: sections, project groups with collapse, Show more, error and incomplete rows, project menu with New session only.
-- [ ] 8.2 Choose project popover, model popover (search, Favorites, Recent, provider sections, star, collapse), Thinking menu, agent menu (search, favorites), each a `popover` layout region; arrow keys, Ctrl+N/P, Enter, Escape returning focus; `mod+shift+m`.
+- [ ] 8.2 Choose project popover, model popover (search, Favorites, Recent, provider sections, star), Thinking menu, agent menu (search, favorites), each a `popover` layout region; arrow keys, Ctrl+N/P, Enter, Escape returning focus; `mod+shift+m`.
 - [ ] 8.3 Composer: model and Thinking triggers from state, agent trigger, Enter by the policy, no send while IME text is marked.
 - [ ] 8.4 `--state` loads the version 2 format; move `fixtures/states/v2/*` into `fixtures/states/` and `fixtures/reference/v2/*` into `fixtures/reference/`, delete the first-format state files, and extend `tests/parity.rs` to every new state with the existing rules.
 - [ ] 8.5 Gate as in 2.4, plus `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity` over all states.
