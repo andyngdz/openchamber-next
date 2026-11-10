@@ -14,6 +14,7 @@ mod load;
 mod logging;
 mod message;
 mod message_events;
+pub mod search;
 mod session_list;
 mod state;
 mod status;
