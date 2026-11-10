@@ -57,14 +57,16 @@
 - [ ] 7.5 Parity test `tests/parity.rs`, run only with `OC_DESKTOP_UI=1`: for empty, session and streaming, region bounds equal the reference, no reference control outside `fixtures/reference/content-controls.json` is missing, order matches; server-error region bounds equal the empty state's.
 - [ ] 7.6 Gate as in 1.6, plus `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity` on this machine. Save GPUI screenshots next to `fixtures/reference/*.png` for the user to compare.
 
-## 8. Live wiring   [depends-on: 4, 5, 7] [writes: packages/desktop-rs/crates/oc-app/src/] [parallel-safe: no]
+## 8. Live wiring   [depends-on: 4, 5, 7] [writes: packages/desktop-rs/crates/oc-app/src/, packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/README.md] [parallel-safe: no]
 
 - [ ] 8.1 Spawn the sidecar on the main thread before `Application::run`, and call `record_opencode_pids()` once the auth check succeeds; start a tokio runtime on a background thread; send results and events over `futures::channel::mpsc` to a `cx.spawn` task that applies them to the state `Entity`.
 - [ ] 8.2 Startup flow: auth check, session list, header server state; New session, open session, send prompt; send disabled while busy or disconnected.
 - [ ] 8.3 Reconnect loop that takes its connect function as a parameter: backoff 500 ms doubling to 10 s, then refetch the session list and open messages and call `record_opencode_pids()` again, since the server may have restarted OpenCode under a new pid. Unit test with a stream that fails twice, checking the delays and the refetch.
 - [ ] 8.4 Failure states from design.md "Failure behavior", including server exit while running, each with its retry action.
 - [ ] 8.5 Window close runs the sidecar shutdown before the process exits.
-- [ ] 8.6 Gate as in 1.6, plus the parity test from 7.6.
+- [ ] 8.6 Move the In work grouping from `oc-app/src/work/` into `oc-state`, read from session metadata in the session list as well as from `session.metadata.updated`, so sessions loaded at startup show in the right group.
+- [ ] 8.7 README usage for `--state <file>` and `--dump-layout`.
+- [ ] 8.8 Gate as in 1.6, plus the parity test from 7.6.
 
 ## 9. Verification   [depends-on: 8] [writes: packages/desktop-rs/crates/oc-app/tests/sidecar_it.rs] [parallel-safe: no]
 
