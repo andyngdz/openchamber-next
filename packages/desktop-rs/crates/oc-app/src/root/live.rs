@@ -93,6 +93,7 @@ impl RootView {
     }
 
     fn connect(&mut self, port: u16, window: &mut Window, cx: &mut Context<Self>) {
+        let overlay = self.state.read(cx).settings_overlay();
         let Some(link) = self.link.as_mut() else {
             return;
         };
@@ -108,7 +109,7 @@ impl RootView {
                 }
             })
         };
-        if let Err(error) = link.connect(port, read_updates) {
+        if let Err(error) = link.connect(port, overlay, read_updates) {
             let failure = ServerFailure {
                 message: format!("Could not create the server client: {error}"),
                 ..ServerFailure::default()

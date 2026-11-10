@@ -68,6 +68,7 @@ impl Request {
 pub(crate) struct FakeServer {
     pub(crate) client: Client,
     pub(crate) worker: JoinHandle<()>,
+    port: u16,
     requests: Arc<Mutex<Vec<Request>>>,
     accepted: Arc<AtomicUsize>,
     stop: Arc<AtomicBool>,
@@ -121,15 +122,26 @@ impl FakeServer {
         Self {
             client,
             worker,
+            port,
             requests,
             accepted,
             stop,
         }
     }
 
+    /// The port a `Client::new` must use to reach this server.
+    pub(crate) fn port(&self) -> u16 {
+        self.port
+    }
+
     /// How many connections the server has accepted so far.
     pub(crate) fn accepted(&self) -> usize {
         self.accepted.load(Ordering::SeqCst)
+    }
+
+    /// The requests recorded so far, without stopping the worker.
+    pub(crate) fn requests(&self) -> Vec<Request> {
+        self.requests.lock().expect("requests").clone()
     }
 
     /// Stops waiting for connections the test will not make, such as the requests

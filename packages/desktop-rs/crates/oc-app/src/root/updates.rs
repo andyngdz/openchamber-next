@@ -5,7 +5,7 @@ use gpui_kit::{Context, Window};
 use oc_state::{Action, ConnectionStatus, SelectionAction, SidebarAction};
 
 use super::RootView;
-use crate::live::Update;
+use crate::live::{Update, WriteOutcome};
 
 impl RootView {
     pub(super) fn on_update(
@@ -93,15 +93,21 @@ impl RootView {
         self.after_change(cx);
     }
 
-    /// Sends the settings patch a change queued, then repaints.
+    /// Sends the settings patch a change queued, then repaints. A write the live queue
+    /// abandons has its keys cleared from the overlay, so the next read is authoritative.
     pub(super) fn after_change(&mut self, cx: &mut Context<Self>) {
         let patch = self
             .state
             .update(cx, |state, _| state.take_settings_patch());
-        if let Some(patch) = patch
-            && let Some(link) = self.link.as_ref()
-        {
-            link.write_settings(patch);
+        if let Some(patch) = patch {
+            let dropped = self
+                .link
+                .as_ref()
+                .is_some_and(|link| link.write_settings(patch.clone()) == WriteOutcome::Dropped);
+            if dropped {
+                self.state
+                    .update(cx, |state, _| state.abandon_settings(&patch));
+            }
         }
         cx.notify();
     }
