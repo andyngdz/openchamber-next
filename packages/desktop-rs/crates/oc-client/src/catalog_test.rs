@@ -57,6 +57,8 @@ fn the_captured_models_decode_with_variants_and_kinds() {
         .find(|model| model.id == "stream-300cps")
         .expect("stream-300cps");
     assert_eq!(fixture.kind, ModelKind::Chat, "an unset type is chat");
+    assert_eq!(fixture.limit.context, Some(200_000));
+    assert_eq!(fixture.limit.output, Some(32_000));
     let pickle = located
         .data
         .iter()

@@ -106,10 +106,13 @@ fn content_controls(state: &str) -> HashSet<(String, String)> {
         .collect()
 }
 
-/// The region whose reference bounds are not on any device-pixel grid: React centers the
+/// The regions whose reference bounds are not on any device-pixel grid: React centers the
 /// composer in the chat column (x 315.75, width 720.5) and the empty state places it at
-/// y 387.6. GPUI snaps every edge to the device grid, so it is compared on that grid.
-const SNAPPED_REGION: &str = "composer";
+/// y 387.6. GPUI snaps every edge to the device grid, so it is compared on that grid. The
+/// open popup has the same property: Base UI places it at CSS offsets such as x 318/y 386
+/// (DraftTargetSelectors.tsx:363-370), and GPUI snaps those to 317.6/385.6 at scale 1.25.
+/// Decision trace, "Popover bounds".
+const SNAPPED_REGIONS: [&str; 2] = ["composer", "popover"];
 
 fn bounds(layout: &Value, region: &str) -> [f64; 4] {
     let side = |name: &str| {
@@ -145,10 +148,11 @@ fn region_differences(expected: &Value, actual: &Value) -> Vec<String> {
     let scale = actual["scaleFactor"].as_f64().unwrap_or(1.);
     REGIONS
         .iter()
+        .filter(|region| expected["regions"].get(*region).is_some())
         .filter_map(|&region| {
             let want = bounds(expected, region);
             let got = bounds(actual, region);
-            let matches = if region == SNAPPED_REGION {
+            let matches = if SNAPPED_REGIONS.contains(&region) {
                 want == got || on_device_grid(want, got, scale)
             } else {
                 want == got
@@ -183,8 +187,33 @@ fn empty_state_matches_the_reference() {
 }
 
 #[test]
+fn projects_sidebar_matches_the_reference() {
+    assert_parity("projects");
+}
+
+#[test]
+fn project_popover_matches_the_reference() {
+    assert_parity("project-popover");
+}
+
+#[test]
+fn model_popover_matches_the_reference() {
+    assert_parity("model-popover");
+}
+
+#[test]
+fn agent_menu_matches_the_reference() {
+    assert_parity("agent-menu");
+}
+
+#[test]
 fn open_session_matches_the_reference() {
     assert_parity("session");
+}
+
+#[test]
+fn thinking_menu_matches_the_reference() {
+    assert_parity("thinking-menu");
 }
 
 #[test]

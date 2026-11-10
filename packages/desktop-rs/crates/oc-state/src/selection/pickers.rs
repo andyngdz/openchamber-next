@@ -29,6 +29,8 @@ pub struct ModelEntry {
     pub provider_name: String,
     /// Thinking levels the model offers, in the server's order.
     pub variants: Vec<String>,
+    /// Context window in tokens; the picker shows it in compact form.
+    pub context: Option<u64>,
 }
 
 /// One provider section of the model list; every section is open.
@@ -154,6 +156,7 @@ fn entry_for(provider_id: &str, provider_name: &str, model: &Model) -> ModelEntr
             .iter()
             .map(|variant| variant.id.clone())
             .collect(),
+        context: model.limit.context,
     }
 }
 

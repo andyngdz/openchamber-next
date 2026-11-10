@@ -6,18 +6,18 @@ use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
-use oc_state::{ConnectionStatus, LoadStatus, Region};
+use oc_state::Region;
 
 use super::sidebar_list::session_list;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
-use crate::layout::{Area, ControlSpec, Reveal, Role, control, region};
+use crate::layout::{Area, ControlSpec, Role, control, region};
 
 /// Title-bar controls, left to right.
 const TITLE_BAR: [(&str, IconName); 2] = [
     ("Open OpenChamber menu", IconName::Menu),
     ("Open sessions", IconName::PanelLeft),
 ];
-const NEW_SESSION: &str = "New session";
+pub(crate) const NEW_SESSION: &str = "New session";
 const RESIZE: &str = "Resize left panel";
 const TOOLBAR: [(&str, IconName); 4] = [
     ("Search sessions", IconName::Search),
@@ -25,8 +25,6 @@ const TOOLBAR: [(&str, IconName); 4] = [
     ("Display mode", IconName::SortAscending),
     ("More", IconName::Ellipsis),
 ];
-const CHATS: &str = "Chats";
-const CHATS_GROUP: &str = "sidebar-chats";
 const SETTINGS: &str = "Settings";
 const INSTANCE: &str = "Open instance, usage and MCP (current: Local)";
 
@@ -54,8 +52,6 @@ pub(crate) fn sidebar(scene: Scene<'_>, cx: &App) -> Div {
         .child(title_bar(scene))
         .child(resize_handle(scene, cx))
         .child(toolbar)
-        .child(chats_row(scene))
-        .children(status_line(scene, cx))
         .children(create_line(scene, cx))
         .child(session_list(scene, cx))
         .child(footer(scene));
@@ -99,61 +95,6 @@ fn resize_handle(scene: Scene<'_>, cx: &App) -> Div {
     .top_0()
     .right_0()
     .h_full()
-}
-
-fn chats_row(scene: Scene<'_>) -> Div {
-    let chats = ControlSpec::named(Area::Sidebar, Role::Button, CHATS);
-    let add = ControlSpec::named(Area::Sidebar, Role::Button, NEW_SESSION)
-        .repeated(2)
-        .revealed(Reveal::OnHover(CHATS_GROUP.into()));
-    div()
-        .group(CHATS_GROUP)
-        .flex()
-        .items_center()
-        .justify_between()
-        .px(px(8.))
-        .child(control(
-            scene.registry,
-            chats.clone(),
-            label_button(&chats, None, CHATS),
-        ))
-        .child(control(
-            scene.registry,
-            add.clone(),
-            icon_button(&add, IconName::Plus).on_click(scene.on_click_intent(Intent::NewSession)),
-        ))
-}
-
-/// What the list shows instead of rows: server down, loading, or a failed load with retry.
-fn status_line(scene: Scene<'_>, cx: &App) -> Option<AnyElement> {
-    let theme = cx.theme();
-    let text = |body: String| {
-        div()
-            .px(px(16.))
-            .py(px(4.))
-            .text_xs()
-            .text_color(theme.muted_foreground)
-            .child(body)
-    };
-    match (scene.state.connection(), scene.state.sidebar()) {
-        (ConnectionStatus::Failed(_) | ConnectionStatus::ServerExited(_), _) => {
-            Some(text("Server not running".to_owned()).into_any_element())
-        }
-        (_, LoadStatus::Failed { message }) => {
-            Some(
-                div()
-                    .flex()
-                    .items_center()
-                    .child(text(message.clone()))
-                    .child(retry_button("sidebar-retry").on_click(
-                        scene.on_click_dispatch(oc_state::Action::Retry(Region::Sidebar)),
-                    ))
-                    .into_any_element(),
-            )
-        }
-        (_, LoadStatus::Loading) => Some(text("Loading sessions".to_owned()).into_any_element()),
-        (_, LoadStatus::Ready) => None,
-    }
 }
 
 /// A failed New session, with a Retry that creates again.

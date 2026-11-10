@@ -156,6 +156,7 @@ pub(crate) fn model(
             .collect(),
         enabled,
         kind,
+        limit: oc_client::catalog::ModelLimit::default(),
     }
 }
 

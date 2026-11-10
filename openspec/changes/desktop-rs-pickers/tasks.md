@@ -56,12 +56,13 @@
 - [ ] 7.6 README: launch without `--directory`, the shared settings note.
 - [ ] 7.7 Gate as in 4.6.
 
-## 8. Views and parity   [depends-on: 3, 7] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/fixture/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/, packages/desktop-rs/fixtures/states/, packages/desktop-rs/fixtures/reference/] [parallel-safe: no]
+## 8. Views and parity   [depends-on: 3, 7] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/fixture/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/, packages/desktop-rs/fixtures/states/, packages/desktop-rs/fixtures/reference/, packages/desktop-rs/crates/oc-app/src/app/mod.rs, packages/desktop-rs/crates/oc-client/src/catalog.rs, packages/desktop-rs/crates/oc-client/src/catalog_test.rs, packages/desktop-rs/crates/oc-state/src/selection/pickers.rs, packages/desktop-rs/crates/oc-state/src/selection/pickers_test.rs, packages/desktop-rs/crates/oc-state/src/fixture_test.rs, packages/desktop-rs/crates/oc-app/src/app/live_start.rs, packages/desktop-rs/tools/capture-reference.mjs] [parallel-safe: no]
 
 - [ ] 8.1 Sidebar view: sections, project groups with collapse, Show more, error and incomplete rows, project menu with New session only.
 - [ ] 8.2 Choose project popover, model popover (search, Favorites, Recent, provider sections, star), Thinking menu, agent menu (search, favorites), each a `popover` layout region; arrow keys, Ctrl+N/P, Enter, Escape returning focus; `mod+shift+m`.
 - [ ] 8.3 Composer: model and Thinking triggers from state, agent trigger, Enter by the policy, no send while IME text is marked.
 - [ ] 8.4 `--state` loads the version 2 format; move `fixtures/states/v2/*` into `fixtures/states/` and `fixtures/reference/v2/*` into `fixtures/reference/`, delete the first-format state files, and extend `tests/parity.rs` to every new state with the existing rules.
+- [ ] 8.6 Popover bounds: the capture records each control's bounds; the composer triggers' positions and widths and the popover rows' heights follow those measurements and React's CSS until every popover region matches under the composer's device-pixel rule, which the parity test applies to `popover`.
 - [ ] 8.5 Gate as in 2.4, plus `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity` over all states.
 
 ## 9. Verification   [depends-on: 8] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]

@@ -16,7 +16,7 @@ use gpui_kit::{
     AnyWindowHandle, App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions,
     application, assets, init, open_window, px, size,
 };
-use oc_state::{Action, State};
+use oc_state::State;
 
 use crate::errors::AppError;
 use crate::fixture::StateScript;
@@ -86,17 +86,15 @@ pub fn run(launch: Launch) -> Result<(), AppError> {
         Launch::Window => live_start::run_live(),
         Launch::Fixture { state } => {
             let script = StateScript::load(&state)?;
-            open(State::new(script.directory), script.actions, Mode::Review)
+            let (state, popover) = script.into_parts();
+            open(state, popover, Mode::Review)
         }
         Launch::DumpLayout { output, state } => {
             let script = StateScript::load(&state)?;
             let name = state_name(&state);
+            let (state, popover) = script.into_parts();
             let target = DumpTarget { output, name };
-            open(
-                State::new(script.directory),
-                script.actions,
-                Mode::Dump(target),
-            )
+            open(state, popover, Mode::Dump(target))
         }
     }
 }
@@ -107,7 +105,11 @@ fn state_name(path: &Path) -> String {
         .unwrap_or_default()
 }
 
-fn open(state: State, actions: Vec<Action>, mode: Mode) -> Result<(), AppError> {
+fn open(
+    state: State,
+    popover: Option<crate::views::PopoverKind>,
+    mode: Mode,
+) -> Result<(), AppError> {
     let (dump, live) = match mode {
         Mode::Review => (None, None),
         Mode::Dump(target) => (Some(target), None),
@@ -134,10 +136,7 @@ fn open(state: State, actions: Vec<Action>, mode: Mode) -> Result<(), AppError> 
         let view_registry = registry.clone();
         let opened = open_window(window_options(cx), cx, move |window, cx| {
             cx.new(|cx| {
-                let mut view = RootView::new(state, view_registry, link, window, cx);
-                for action in actions {
-                    view.dispatch(action, cx);
-                }
+                let mut view = RootView::new(state, popover, view_registry, link, window, cx);
                 if let Some(started) = started {
                     view.await_start(started, window, cx);
                 }

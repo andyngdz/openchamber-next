@@ -23,6 +23,8 @@ pub(crate) enum Area {
     Composer,
     WorkStatusPanel,
     IconRail,
+    /// The open picker popup; absent from a frame with no popup.
+    Popover,
 }
 
 impl Area {
@@ -35,6 +37,7 @@ impl Area {
             Self::Composer => "composer",
             Self::WorkStatusPanel => "workStatusPanel",
             Self::IconRail => "iconRail",
+            Self::Popover => "popover",
         }
     }
 }
@@ -47,6 +50,9 @@ pub(crate) enum Role {
     Separator,
     Textbox,
     Generic,
+    Combobox,
+    Option,
+    Menuitem,
 }
 
 /// When a control is visible; hidden controls stay in the tree and keep their place.
@@ -70,6 +76,9 @@ pub(crate) struct PlacedControl {
 #[derive(Debug, Default)]
 struct Frame {
     content: Option<Bounds<Pixels>>,
+    /// The previous frame's content origin; kept across `begin_frame` so a control can turn
+    /// its window bounds into the dump's content-relative bounds while prepainting.
+    last_content: Option<Bounds<Pixels>>,
     regions: BTreeMap<Area, Bounds<Pixels>>,
     controls: Vec<PlacedControl>,
 }
@@ -83,18 +92,28 @@ pub(crate) struct LayoutRegistry {
 impl LayoutRegistry {
     /// Forgets the previous frame; the root view calls it when it renders.
     pub(crate) fn begin_frame(&self) {
-        self.frame.replace(Frame::default());
+        let mut frame = self.frame.borrow_mut();
+        frame.content = None;
+        frame.regions.clear();
+        frame.controls.clear();
     }
 
     /// Records the bounds of the app's root element: the content area every other bound is
     /// measured from. The window frame GPUI Kit draws around it is not content.
     pub(crate) fn record_content(&self, bounds: Bounds<Pixels>) {
-        self.frame.borrow_mut().content = Some(bounds);
+        let mut frame = self.frame.borrow_mut();
+        frame.content = Some(bounds);
+        frame.last_content = Some(bounds);
     }
 
     /// The content area, if the frame laid it out.
     pub(crate) fn content(&self) -> Option<Bounds<Pixels>> {
         self.frame.borrow().content
+    }
+
+    /// The content area of the previous frame.
+    pub(crate) fn last_content(&self) -> Option<Bounds<Pixels>> {
+        self.frame.borrow().last_content
     }
 
     /// Records a region's bounds.

@@ -51,7 +51,13 @@ fn dump_has_the_reference_shape() {
     assert_eq!(json["regions"]["chatColumn"]["bounds"]["y"], 48.0);
     assert_eq!(
         json["regions"]["sidebar"]["controls"][0],
-        serde_json::json!({"role": "button", "name": "Archive", "key": "sidebar/Projects/Reference: finished turn/Archive", "shown": false})
+        serde_json::json!({
+            "role": "button",
+            "name": "Archive",
+            "key": "sidebar/Projects/Reference: finished turn/Archive",
+            "shown": false,
+            "bounds": {"x": -21.0, "y": -21.0, "width": 0.0, "height": 0.0}
+        })
     );
     assert!(dump.ends_with('\n'));
 }

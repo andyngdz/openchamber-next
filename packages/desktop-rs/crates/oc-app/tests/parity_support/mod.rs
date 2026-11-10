@@ -5,13 +5,14 @@ use std::collections::HashSet;
 
 use serde_json::Value;
 
-pub const REGIONS: [&str; 6] = [
+pub const REGIONS: [&str; 7] = [
     "sidebar",
     "header",
     "chatColumn",
     "composer",
     "workStatusPanel",
     "iconRail",
+    "popover",
 ];
 
 /// The key and role of each control of a region, in order.

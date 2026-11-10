@@ -12,18 +12,25 @@ fn icons_in_views() -> Vec<String> {
         .join("src")
         .join("views");
     let mut found = Vec::new();
-    for entry in std::fs::read_dir(views).expect("views folder reads") {
-        let path = entry.expect("entry reads").path();
-        if path.to_string_lossy().ends_with("_test.rs") {
-            continue;
-        }
-        let source = std::fs::read_to_string(path).expect("source reads");
-        for (index, _) in source.match_indices("IconName::") {
-            let name: String = source[index + "IconName::".len()..]
-                .chars()
-                .take_while(char::is_ascii_alphanumeric)
-                .collect();
-            found.push(name);
+    let mut folders = vec![views];
+    while let Some(folder) = folders.pop() {
+        for entry in std::fs::read_dir(folder).expect("views folder reads") {
+            let path = entry.expect("entry reads").path();
+            if path.is_dir() {
+                folders.push(path);
+                continue;
+            }
+            if path.to_string_lossy().ends_with("_test.rs") {
+                continue;
+            }
+            let source = std::fs::read_to_string(path).expect("source reads");
+            for (index, _) in source.match_indices("IconName::") {
+                let name: String = source[index + "IconName::".len()..]
+                    .chars()
+                    .take_while(char::is_ascii_alphanumeric)
+                    .collect();
+                found.push(name);
+            }
         }
     }
     found.sort();

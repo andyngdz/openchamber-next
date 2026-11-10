@@ -21,9 +21,22 @@ impl RootView {
                 self.request_for(&action, cx);
                 self.dispatch(action, cx);
             }
+            Intent::ApplySidebar(action) => {
+                self.state
+                    .update(cx, |state, _| state.apply_sidebar(action));
+                self.after_change(cx);
+            }
+            Intent::ApplySelection(action) => self.apply_selection(action, cx),
             Intent::NewSession => self.create_session(cx),
             Intent::SendPrompt => self.send_prompt(cx),
             Intent::RestartServer => self.restart_server(window, cx),
+            Intent::OpenPopover(kind) => self.open_popover(kind, window, cx),
+            Intent::ClosePopover => self.close_popover(window, cx),
+            Intent::Pick(pick) => self.pick(pick, window, cx),
+            Intent::LoadCatalog(directory) => {
+                self.catalogs.insert(directory.clone());
+                self.send(Command::LoadCatalog(directory)).ok();
+            }
         }
     }
 

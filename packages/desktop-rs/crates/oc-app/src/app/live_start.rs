@@ -26,7 +26,7 @@ pub(super) fn run_live() -> Result<(), AppError> {
         process: process.clone(),
         started,
     };
-    let outcome = open(State::new(home.as_str()), Vec::new(), Mode::Live(live));
+    let outcome = open(State::new(home.as_str()), None, Mode::Live(live));
     process.stop();
     drop(runtime);
     outcome

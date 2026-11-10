@@ -40,6 +40,7 @@ fn the_fixture_sections_list_favorites_then_recent_then_providers() {
     assert_eq!(favorite.name, "Fixture stream, 600 characters/s");
     assert_eq!(favorite.provider_name, "Performance fixture");
     assert_eq!(favorite.variants, ["low", "high"]);
+    assert_eq!(favorite.context, Some(200_000));
 }
 
 #[test]

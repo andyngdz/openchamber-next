@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * Captures the layout reference the GPUI parity test compares against:
- * `fixtures/reference/v2/<state>.json` and `<state>.png`, taken from the Electron
+ * `fixtures/reference/<state>.json` and `<state>.png`, taken from the Electron
  * dev window at a 1440x900 content area, and writes the same run's server
- * responses as version 2 state fixtures to `fixtures/states/v2/<state>.json`.
- * The new reference set is staged under `reference/v2` until the parity loader
- * reads it; `fixtures/reference/` keeps the set the test reads today.
+ * responses as version 2 state fixtures to `fixtures/states/<state>.json`. Each reference
+ * control carries the bounds of the element its key comes from, the measurement the composer
+ * and popover layout follows.
  *
  * The window runs isolated from the user's own app: its own HOME (and XDG
  * directories, so OpenCode's database lands there too), OPENCHAMBER_DATA_DIR,
@@ -127,7 +127,7 @@
  * the rules applied.
  * Nothing else is normalized or dropped.
  *
- * State fixtures (version 2, `fixtures/states/v2/<state>.json`): `home` is the
+ * State fixtures (version 2, `fixtures/states/<state>.json`): `home` is the
  * `/api/fs/home` response, `settings` the `surface=desktop` settings document,
  * each `directories` entry the config documents and the provider, model, agent
  * and session payloads for that directory, `draft` the composer target, `steps`
@@ -205,13 +205,13 @@ Starts the Electron dev window isolated from the user's app, seeds two projects,
 their sessions, two Chat sessions and an In work session from fixtures/seed.json,
 and writes <state>.json and <state>.png for empty, projects, project-popover,
 model-popover, agent-menu, session, thinking-menu and streaming to --output
-(default fixtures/reference/v2). It also writes the same run's responses as version
-2 state fixtures to fixtures/states/v2, including server-error, which has no
+(default fixtures/reference). It also writes the same run's responses as version
+2 state fixtures to fixtures/states, including server-error, which has no
 Electron reference.
 Needs ports ${CDP_PORT} (CDP) and ${FIXTURE_PORT} (fixture provider) free and a graphical session.`
 
 const parseArgs = (argv) => {
-  const options = { output: join(PACKAGE_ROOT, "fixtures/reference/v2"), statesOutput: join(PACKAGE_ROOT, "fixtures/states/v2") }
+  const options = { output: join(PACKAGE_ROOT, "fixtures/reference"), statesOutput: join(PACKAGE_ROOT, "fixtures/states") }
   for (let index = 0; index < argv.length; index += 1) {
     const value = argv[index]
     if (value === "--help") { console.log(HELP); process.exit(0) }
@@ -825,6 +825,7 @@ const collectInPage = `(() => {
   }
   const controls = elements.map((element) => ({
     region: REGIONS.find((region) => roots[region.name].some((root) => root.contains(element)))?.name ?? null,
+    bounds: bounds(element),
     shown: element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
     text: visibleText(element),
     label: labelOf(element),
@@ -991,14 +992,14 @@ const nameAndKey = async (client, collected, axData, titles) => {
   return controls
 }
 
-const captureState = async (client, state, widths, titles) => {
+const captureState = async (client, state, widths, titles, prelude = "") => {
   await restPointer(client)
-  const collected = await evaluateValue(client, collectInPage)
+  const collected = await evaluateValue(client, `${prelude};\n${collectInPage}`)
   if (!collected) throw new Error(`Collecting ${state} failed in the page`)
   const shot = await client.send("Page.captureScreenshot", { format: "png" })
   const controls = await nameAndKey(client, collected, await accessibilityOf(client, collected.controls.length), titles)
   await client.send("Runtime.evaluate", { expression: "delete window.__ocReferenceControls; delete window.__ocReferenceRoots" })
-  const entry = ({ role, name, key, shown }) => ({ role, name, key, shown })
+  const entry = ({ role, name, key, shown, bounds }) => ({ role, name, key, shown, bounds })
   const regions = Object.fromEntries(REGION_ORDER.flatMap((name) => {
     // A closed popover has no root and no bounds; leave it out of the region
     // list rather than claiming a box at zero.
@@ -1270,6 +1271,29 @@ const run = async ({ client, origin, paths, seed }) => {
     const rendered = (selector) => chat ? [...chat.querySelectorAll(selector)].filter((element) => element.checkVisibility()) : []
     return rendered("h2").some((heading) => heading.textContent.includes("Executing a call")) && rendered("pre").length === 0
   })()`), { timeoutMs: 180_000, intervalMs: 50 })
+  // Pin the scroller to the heading in the same task that collects the bounds: streaming
+  // auto-scroll moves a few pixels between runs, and the recorded control bounds must be
+  // byte-identical.
+  // Pin the scroller to the heading, then freeze its scroll writes: streaming auto-scroll
+  // moves a few pixels between runs, and the recorded control bounds must be identical.
+  await evaluateValue(client, `(() => {
+    const chat = ${chat}
+    const scroller = chat?.querySelector(".chat-scroll")
+    const heading = [...(chat?.querySelectorAll("h2") ?? [])].find((element) => element.textContent.includes("Executing a call"))
+    if (!scroller || !heading) return false
+    const descriptor = Object.getOwnPropertyDescriptor(Element.prototype, "scrollTop")
+    const offset = heading.getBoundingClientRect().top - scroller.getBoundingClientRect().top + descriptor.get.call(scroller)
+    descriptor.set.call(scroller, offset - 80)
+    Object.defineProperty(scroller, "scrollTop", {
+      configurable: true,
+      get() { return descriptor.get.call(this) },
+      set() {},
+    })
+    scroller.scrollTo = () => {}
+    scroller.scrollBy = () => {}
+    return true
+  })()`)
+  await wait(600)
   const capture = await captureState(client, "streaming", streamingWidths, titles)
   if (capture.chatCodeBlocks > 0) throw new Error(`A code block reached the chat column before the streaming capture (${capture.chatCodeBlocks}); rerun`)
   if (!isBusy(await sessionTime(origin, ids.streaming, paths.project))) throw new Error("The streaming turn had ended before the capture")
@@ -1338,7 +1362,7 @@ const main = async () => {
   assertNothingPersonal([
     { name: "seed.json", json: JSON.stringify(seed) },
     ...result.captures.map(({ state, json }) => ({ name: `${state}.json`, json })),
-    ...result.states.map(({ name, json }) => ({ name: `states/v2/${name}.json`, json })),
+    ...result.states.map(({ name, json }) => ({ name: `states/${name}.json`, json })),
   ])
   mkdirSync(options.output, { recursive: true })
   for (const { state, json, png } of result.captures) {

@@ -87,7 +87,7 @@ impl RootView {
     }
 
     /// Applies a selection change; its pick may have queued a settings write.
-    fn apply_selection(&mut self, action: SelectionAction, cx: &mut Context<Self>) {
+    pub(super) fn apply_selection(&mut self, action: SelectionAction, cx: &mut Context<Self>) {
         self.state
             .update(cx, |state, _| state.apply_selection(action));
         self.after_change(cx);

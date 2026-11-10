@@ -51,6 +51,20 @@ pub struct Model {
     /// Chat, image, or something else; an unset type is chat.
     #[serde(rename = "type", default)]
     pub kind: ModelKind,
+    /// Context and output limits the picker shows next to the model.
+    #[serde(default)]
+    pub limit: ModelLimit,
+}
+
+/// The token limits a model reports.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize)]
+pub struct ModelLimit {
+    /// Context window in tokens; absent when the server does not report one.
+    #[serde(default)]
+    pub context: Option<u64>,
+    /// Output cap in tokens; absent when the server does not report one.
+    #[serde(default)]
+    pub output: Option<u64>,
 }
 
 /// One Thinking level of a model.

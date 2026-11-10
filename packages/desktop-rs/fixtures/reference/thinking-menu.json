@@ -1,5 +1,5 @@
 {
-  "state": "session",
+  "state": "thinking-menu",
   "viewport": {
     "width": 1440,
     "height": 900
@@ -54,259 +54,517 @@
           "role": "button",
           "name": "Open OpenChamber menu",
           "key": "sidebar/Open OpenChamber menu",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 12,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Open sessions",
           "key": "sidebar/Open sessions",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 44,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "New session",
           "key": "sidebar/New session#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 72,
+            "y": 12,
+            "width": 115.16,
+            "height": 24
+          }
         },
         {
           "role": "separator",
           "name": "Resize left panel",
           "key": "sidebar/Resize left panel",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 277,
+            "y": 0,
+            "width": 3,
+            "height": 900
+          }
         },
         {
           "role": "button",
           "name": "Search sessions",
           "key": "sidebar/Search sessions",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 13,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Add project",
           "key": "sidebar/Add project",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 43,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Display mode",
           "key": "sidebar/Display mode",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 73,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "More",
           "key": "sidebar/More",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 103,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Chats",
           "key": "sidebar/Chats",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 88,
+            "width": 274,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "New session",
           "key": "sidebar/New session#2",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 90,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "button",
           "key": "sidebar/button",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 88,
+            "width": 256,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Reference: chat two",
           "key": "sidebar/Reference: chat two (draggable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 256,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "Reference: chat two",
           "key": "sidebar/Reference: chat two",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 122,
+            "width": 220,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Archive",
           "key": "sidebar/Reference: chat two/Archive",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 124,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Reference: chat one",
           "key": "sidebar/Reference: chat one (draggable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 149,
+            "width": 256,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "Reference: chat one",
           "key": "sidebar/Reference: chat one",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 154,
+            "width": 220,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Archive",
           "key": "sidebar/Reference: chat one/Archive",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 156,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "In work",
           "key": "sidebar/In work (sortable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 196,
+            "width": 256,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "In work",
           "key": "sidebar/In work",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 196,
+            "width": 274,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Reference: finished turn",
           "key": "sidebar/Reference: finished turn (draggable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 225,
+            "width": 256,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "Reference: finished turn",
           "key": "sidebar/Reference: finished turn",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 230,
+            "width": 220,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Mark done",
           "key": "sidebar/Reference: finished turn/Mark done",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Archive",
           "key": "sidebar/Reference: finished turn/Archive",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Reference: in work",
           "key": "sidebar/Reference: in work (draggable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 257,
+            "width": 256,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "Reference: in work",
           "key": "sidebar/Reference: in work",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 262,
+            "width": 220,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Mark done",
           "key": "sidebar/Reference: in work/Mark done",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 264,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Archive",
           "key": "sidebar/Reference: in work/Archive",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 264,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Projects",
           "key": "sidebar/Projects (sortable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 304,
+            "width": 256,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Projects",
           "key": "sidebar/Projects",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 304,
+            "width": 274,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "desktop-rs-reference",
           "key": "sidebar/desktop-rs-reference (sortable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 332,
+            "width": 274,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "desktop-rs-reference",
           "key": "sidebar/desktop-rs-reference",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 336,
+            "width": 244,
+            "height": 22
+          }
         },
         {
           "role": "button",
           "name": "New worktree",
           "key": "sidebar/desktop-rs-reference/New worktree",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 335,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "New draft session",
           "key": "sidebar/desktop-rs-reference/New draft session",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 333.8,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Reference: streaming turn",
           "key": "sidebar/Reference: streaming turn (draggable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 363,
+            "width": 256,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "Reference: streaming turn",
           "key": "sidebar/Reference: streaming turn",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 368,
+            "width": 220,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Track as in work",
           "key": "sidebar/Reference: streaming turn/Track as in work",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "Archive",
           "key": "sidebar/Reference: streaming turn/Archive",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          }
         },
         {
           "role": "button",
           "name": "desktop-rs-reference-second",
           "key": "sidebar/desktop-rs-reference-second (sortable)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 406,
+            "width": 274,
+            "height": 30
+          }
         },
         {
           "role": "button",
           "name": "desktop-rs-reference-second",
           "key": "sidebar/desktop-rs-reference-second",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 410,
+            "width": 244,
+            "height": 22
+          }
         },
         {
           "role": "button",
           "name": "New worktree",
           "key": "sidebar/desktop-rs-reference-second/New worktree",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 409,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "New draft session",
           "key": "sidebar/desktop-rs-reference-second/New draft session",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 407.8,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Settings",
           "key": "sidebar/Settings",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 868,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Open instance, usage and MCP (current: Local)",
           "key": "sidebar/Open instance, usage and MCP (current: Local)",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 197.15,
+            "y": 868,
+            "width": 72.85,
+            "height": 24
+          }
         }
       ]
     },
@@ -322,55 +580,109 @@
           "role": "button",
           "name": "Open session actions",
           "key": "header/Main navigation/Open session actions",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 460.7,
+            "y": 15,
+            "width": 24,
+            "height": 18
+          }
         },
         {
           "role": "button",
           "name": "Context usage",
           "key": "header/Main navigation/Context usage",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1106.05,
+            "y": 12,
+            "width": 61.95,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Open in File Manager",
           "key": "header/Main navigation/Open in File Manager",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1176,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Run Auto-discover dev server",
           "key": "header/Main navigation/Run Auto-discover dev server",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1208,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Open current session in Mini Chat",
           "key": "header/Main navigation/Open current session in Mini Chat",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1240,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Toggle work-status panel",
           "key": "header/Main navigation/Toggle work-status panel",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1272,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Minimize window",
           "key": "header/Main navigation/Window controls/Minimize window",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1308,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
         },
         {
           "role": "button",
           "name": "Maximize window",
           "key": "header/Main navigation/Window controls/Maximize window",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
         },
         {
           "role": "button",
           "name": "Close window",
           "key": "header/Main navigation/Window controls/Close window",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1396,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
         }
       ]
     },
@@ -386,271 +698,541 @@
           "role": "generic",
           "name": "generic",
           "key": "chatColumn/generic",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 280,
+            "y": 48,
+            "width": 792,
+            "height": 852
+          }
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
           "key": "chatColumn/Find Files packages/*/package.json#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3678.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
           "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3611.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files *.md",
           "key": "chatColumn/Find Files *.md#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3544.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
           "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3477.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
           "key": "chatColumn/Find Files packages/*/package.json#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3410.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
           "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3343.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files *.md",
           "key": "chatColumn/Find Files *.md#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3276.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
           "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3209.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
           "key": "chatColumn/Find Files packages/*/package.json#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3142.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
           "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3075.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files *.md",
           "key": "chatColumn/Find Files *.md#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -3008.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
           "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -2941.4,
+            "width": 720.5,
+            "height": 36
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -2631,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -2631,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -2452,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -2452,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -2227,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -2227,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable cell wrap",
           "key": "chatColumn/Disable cell wrap#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 853.35,
+            "y": -2029.8,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy table",
           "key": "chatColumn/Copy table#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 883.35,
+            "y": -2029.8,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Download table",
           "key": "chatColumn/Download table#1",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 913.35,
+            "y": -2029.8,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#4",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -1446.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#4",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -1446.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#5",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -1267.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#5",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -1267.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#6",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -1042.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#6",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -1042.2,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable cell wrap",
           "key": "chatColumn/Disable cell wrap#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 853.35,
+            "y": -845,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy table",
           "key": "chatColumn/Copy table#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 883.35,
+            "y": -845,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Download table",
           "key": "chatColumn/Download table#2",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 913.35,
+            "y": -845,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#7",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -261.6,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#7",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -261.6,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#8",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": -82.6,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#8",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": -82.6,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable line wrap",
           "key": "chatColumn/Disable line wrap#9",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 979.45,
+            "y": 142.4,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy code",
           "key": "chatColumn/Copy code#9",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1005.45,
+            "y": 142.4,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Disable cell wrap",
           "key": "chatColumn/Disable cell wrap#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 853.35,
+            "y": 339.6,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy table",
           "key": "chatColumn/Copy table#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 883.35,
+            "y": 339.6,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Download table",
           "key": "chatColumn/Download table#3",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 913.35,
+            "y": 339.6,
+            "width": 26,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Copy message text",
           "key": "chatColumn/Copy message text",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 732.66,
+            "y": 659.8,
+            "width": 26,
+            "height": 26
+          }
         },
         {
           "role": "button",
           "name": "Continue from this answer",
           "key": "chatColumn/Continue from this answer",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 764.66,
+            "y": 659.8,
+            "width": 26,
+            "height": 26
+          }
         },
         {
           "role": "button",
           "name": "Pin into context (survives compaction)",
           "key": "chatColumn/Pin into context (survives compaction)",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 796.66,
+            "y": 659.8,
+            "width": 26,
+            "height": 26
+          }
         },
         {
           "role": "button",
           "name": "More actions",
           "key": "chatColumn/More actions",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 828.66,
+            "y": 659.8,
+            "width": 26,
+            "height": 26
+          }
         },
         {
           "role": "button",
           "name": "Scroll to bottom",
           "key": "chatColumn/Scroll to bottom",
-          "shown": false
+          "shown": false,
+          "bounds": {
+            "x": 316.55,
+            "y": 748.6,
+            "width": 28,
+            "height": 26
+          }
         }
       ]
     },
@@ -666,55 +1248,109 @@
           "role": "textbox",
           "name": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
           "key": "composer/Plan, build, or ask. @ to mention, $ for skills, / for commands",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 804,
+            "width": 696.5,
+            "height": 21
+          }
         },
         {
           "role": "button",
           "name": "Add attachment",
           "key": "composer/Add attachment",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 325.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Permissions: ask every time",
           "key": "composer/Permissions: ask every time",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 355.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Start a goal with the next message",
           "key": "composer/Start a goal with the next message",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 385.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "perf logo Fixture agent, 20 tool calls then 300...",
           "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 600.21,
+            "y": 846,
+            "width": 250.39,
+            "height": 32
+          }
         },
         {
           "role": "button",
           "name": "Thinking: High",
           "key": "composer/Thinking: High",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 854.6,
+            "y": 846,
+            "width": 35.69,
+            "height": 32
+          }
         },
         {
           "role": "button",
           "name": "Build",
           "key": "composer/Build",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 902.29,
+            "y": 846,
+            "width": 51.96,
+            "height": 32
+          }
         },
         {
           "role": "button",
           "name": "Start dictation",
           "key": "composer/Start dictation",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 966.25,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          }
         },
         {
           "role": "button",
           "name": "Send message",
           "key": "composer/Send message",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1002.25,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          }
         }
       ]
     },
@@ -730,97 +1366,193 @@
           "role": "button",
           "name": "Choose sections",
           "key": "workStatusPanel/Work status/Choose sections",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 70,
+            "width": 20,
+            "height": 20
+          }
         },
         {
           "role": "button",
           "name": "Open context panel",
           "key": "workStatusPanel/Work status/Open context panel",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 89.99,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Open Git panel",
           "key": "workStatusPanel/Work status/Open Git panel",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 191.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Open changes",
           "key": "workStatusPanel/Work status/Open changes",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 219.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Context sources 3 skills",
           "key": "workStatusPanel/Work status/Context sources 3 skills",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 271.98,
+            "width": 284,
+            "height": 15.99
+          }
         },
         {
           "role": "button",
           "name": "Turn stats <rate> tok/s",
           "key": "workStatusPanel/Work status/Turn stats <rate> tok/s",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 317.98,
+            "width": 284,
+            "height": 15.99
+          }
         },
         {
           "role": "generic",
           "name": "Response",
           "key": "workStatusPanel/Work status/Response",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 339.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Whole turn",
           "key": "workStatusPanel/Work status/Whole turn",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 367.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Elapsed",
           "key": "workStatusPanel/Work status/Elapsed",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 395.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Model time",
           "key": "workStatusPanel/Work status/Model time",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 423.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Tool time",
           "key": "workStatusPanel/Work status/Tool time",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 451.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Average TTFT",
           "key": "workStatusPanel/Work status/Average TTFT",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 479.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Steps",
           "key": "workStatusPanel/Work status/Steps",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 507.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Tokens",
           "key": "workStatusPanel/Work status/Tokens",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 535.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Cache",
           "key": "workStatusPanel/Work status/Cache",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 563.98,
+            "width": 284,
+            "height": 28
+          }
         },
         {
           "role": "generic",
           "name": "Cost",
           "key": "workStatusPanel/Work status/Cost",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 591.98,
+            "width": 284,
+            "height": 28
+          }
         }
       ]
     },
@@ -836,55 +1568,155 @@
           "role": "button",
           "name": "Context",
           "key": "iconRail/Context",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 56,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Git",
           "key": "iconRail/Git",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 101,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Changes",
           "key": "iconRail/Changes",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 137,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Walkthrough",
           "key": "iconRail/Walkthrough",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 173,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Files",
           "key": "iconRail/Files",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 218,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Terminal",
           "key": "iconRail/Terminal",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 254,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Browser",
           "key": "iconRail/Browser",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 290,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Project knowledge",
           "key": "iconRail/Project knowledge",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 335,
+            "width": 28,
+            "height": 28
+          }
         },
         {
           "role": "button",
           "name": "Configure panels",
           "key": "iconRail/Configure panels",
-          "shown": true
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 371,
+            "width": 28,
+            "height": 28
+          }
+        }
+      ]
+    },
+    "popover": {
+      "bounds": {
+        "x": 703,
+        "y": 699,
+        "width": 227.29,
+        "height": 142.8
+      },
+      "controls": [
+        {
+          "role": "menuitem",
+          "name": "default",
+          "key": "popover/default",
+          "shown": true,
+          "bounds": {
+            "x": 707,
+            "y": 732,
+            "width": 219.29,
+            "height": 26
+          }
+        },
+        {
+          "role": "menuitem",
+          "name": "high",
+          "key": "popover/high",
+          "shown": true,
+          "bounds": {
+            "x": 707,
+            "y": 758,
+            "width": 219.29,
+            "height": 26
+          }
+        },
+        {
+          "role": "menuitem",
+          "name": "low",
+          "key": "popover/low",
+          "shown": true,
+          "bounds": {
+            "x": 707,
+            "y": 784,
+            "width": 219.29,
+            "height": 26
+          }
         }
       ]
     }
