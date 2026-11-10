@@ -1,5 +1,6 @@
-//! What the sidecar integration cases share: the opt-in switch, an isolated temp root with
-//! a git project and a fixture model provider, and waits on processes.
+//! What the integration cases share: the opt-in switch, an isolated temp root with a git
+//! project, seeded settings and a fixture model provider under two provider ids, and waits
+//! on processes.
 
 use std::ffi::OsString;
 use std::fs;
@@ -13,10 +14,22 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use oc_sidecar::{Sidecar, SidecarConfig, locate_cli, pick_free_port};
-use serde_json::{Value, json};
+use serde_json::{Map, Value, json};
 
 pub const FIXTURE_SCRIPT: &str = "scripts/perf/fixture-provider.mjs";
 pub const MODEL: &str = "perf/stream-1200cps";
+/// The package the fixture provider is registered with in the native OpenCode config.
+const PROVIDER_PACKAGE: &str = "aisdk:@ai-sdk/openai-compatible";
+/// The fixture model the pickers' variant cases use, with the Thinking levels below.
+const VARIANT_MODEL: &str = "stream-600cps";
+/// The model the model-switch cases pick in the second provider.
+const SECOND_MODEL: &str = "stream-1200cps";
+/// The one primary agent the sessions of the pickers' cases start on.
+const FIXTURE_AGENT: &str = "it-primary";
+const PROJECT_COLOR: &str = "#4F46E5";
+const PROJECT_ICON: &str = "rocket";
+/// Lowercase, because the server lowercases a project's `iconBackground` on read.
+const PROJECT_ICON_BACKGROUND: &str = "#e0e7ff";
 pub const PROVIDER_START_LIMIT: Duration = Duration::from_secs(15);
 pub const OPENCODE_START_LIMIT: Duration = Duration::from_secs(30);
 pub const GONE_LIMIT: Duration = Duration::from_secs(15);
@@ -28,11 +41,7 @@ pub static CASES: AtomicUsize = AtomicUsize::new(0);
 pub fn enabled() -> bool {
     let on = std::env::var("OC_DESKTOP_IT").is_ok_and(|value| value == "1");
     if !on {
-        writeln!(
-            std::io::stderr(),
-            "sidecar_it: skipped, set OC_DESKTOP_IT=1"
-        )
-        .ok();
+        writeln!(std::io::stderr(), "IT: skipped, set OC_DESKTOP_IT=1").ok();
     }
     on
 }
@@ -70,9 +79,18 @@ impl Env {
         let root =
             std::env::temp_dir().join(format!("oc-app-sidecar-it-{}-{index}", std::process::id()));
         let project = root.join("project");
-        for dir in [&project, &root.join("home"), &root.join("data")] {
+        let second_project = root.join("second-project");
+        for dir in [
+            &project,
+            &second_project,
+            &root.join("home"),
+            &root.join("data"),
+        ] {
             fs::create_dir_all(dir).unwrap_or_else(|error| fail("create dir", error));
         }
+        let seeded = settings_seed(&project, &second_project);
+        fs::write(root.join("data").join("settings.json"), seeded.to_string())
+            .unwrap_or_else(|error| fail("seed settings", error));
         let port = pick_free_port().unwrap_or_else(|error| fail("free port", error));
         let provider = start_provider(port);
         let config = opencode_config(port);
@@ -138,6 +156,52 @@ pub fn start_provider(port: u16) -> Child {
     child
 }
 
+/// The settings document the server starts on. React reads the same keys, so the seed pins
+/// the shapes the pickers and the sidebar decode: two projects (the first carrying the
+/// fields this app only round-trips, `color`, `icon` and `iconBackground`), the active
+/// project, and the pickers' defaults on the fixture catalog.
+fn settings_seed(project: &Path, second_project: &Path) -> Value {
+    json!({
+        "projects": [
+            {
+                "id": "path-fixture-project",
+                "path": project.to_string_lossy(),
+                "label": "Fixture project",
+                "color": PROJECT_COLOR,
+                "icon": PROJECT_ICON,
+                "iconBackground": PROJECT_ICON_BACKGROUND,
+                "addedAt": 1_800_000_000_000u64,
+                "lastOpenedAt": 1_800_000_001_000u64,
+                "sidebarCollapsed": false,
+            },
+            {
+                "id": "path-second-project",
+                "path": second_project.to_string_lossy(),
+                "label": "Second fixture project",
+                "addedAt": 1_800_000_002_000u64,
+                "lastOpenedAt": 1_800_000_003_000u64,
+                "sidebarCollapsed": true,
+            },
+        ],
+        "activeProjectId": "path-fixture-project",
+        "defaultModel": format!("perf/{VARIANT_MODEL}"),
+        "defaultVariant": "high",
+        "defaultAgent": FIXTURE_AGENT,
+        "lastSelectedModel": MODEL,
+        "favoriteModels": [
+            { "providerID": "perf", "modelID": VARIANT_MODEL },
+            { "providerID": "perf-alt", "modelID": SECOND_MODEL },
+        ],
+        "recentModels": [{ "providerID": "perf", "modelID": MODEL }],
+        "favoriteAgents": [FIXTURE_AGENT],
+        "lastUsedEfforts": { "perf/stream-600cps": "high" },
+        "sidebarProjectSortOrder": "a-z",
+        "sidebarShowChatsSection": true,
+        "sidebarShowWorkSection": true,
+        "sidebarShowPinnedSection": true,
+    })
+}
+
 pub fn opencode_config(port: u16) -> String {
     let output = Command::new("node")
         .arg(repo_root().join(FIXTURE_SCRIPT))
@@ -145,13 +209,80 @@ pub fn opencode_config(port: u16) -> String {
         .arg("--print-config")
         .output()
         .unwrap_or_else(|error| fail("provider config", error));
-    let mut config: Value = serde_json::from_slice(&output.stdout)
+    let fixture: Value = serde_json::from_slice(&output.stdout)
         .unwrap_or_else(|error| fail("provider config JSON", error));
-    config["model"] = json!(MODEL);
-    config["small_model"] = json!(MODEL);
-    config["autoupdate"] = json!(false);
-    config["share"] = json!("disabled");
-    config.to_string()
+    let mut models = fixture_models(&fixture);
+    set_variants(&mut models, VARIANT_MODEL, &["low", "high"]);
+    set_variants(&mut models, SECOND_MODEL, &["low", "medium", "high"]);
+    let second_models: Map<String, Value> = [SECOND_MODEL, "stream-300cps"]
+        .iter()
+        .filter_map(|id| {
+            models
+                .get(*id)
+                .map(|model| ((*id).to_owned(), model.clone()))
+        })
+        .collect();
+    let options = json!({
+        "baseURL": format!("http://127.0.0.1:{port}/v1"),
+        "apiKey": "unused",
+    });
+    // The same fixture provider under a second id, so the pickers see two provider
+    // sections; the fixture answers any model name, so the id only changes the catalog.
+    let mut providers = Map::new();
+    for (id, name, catalog) in [
+        ("perf", "Performance fixture", models),
+        ("perf-alt", "Performance fixture, second id", second_models),
+    ] {
+        providers.insert(
+            id.to_owned(),
+            json!({
+                "package": PROVIDER_PACKAGE,
+                "name": name,
+                "settings": options,
+                "models": catalog,
+            }),
+        );
+    }
+    let mut agents = Map::new();
+    agents.insert(
+        FIXTURE_AGENT.to_owned(),
+        json!({ "description": "Primary fixture agent", "mode": "primary" }),
+    );
+    json!({
+        "providers": providers,
+        "agents": agents,
+        "model": MODEL,
+        "small_model": MODEL,
+        "autoupdate": false,
+        "share": "disabled",
+    })
+    .to_string()
+}
+
+/// The fixture's models with their variants cleared: the OpenAI-compatible package gives
+/// every model the low/medium/high reasoning levels by default, and only
+/// [`VARIANT_MODEL`] and [`SECOND_MODEL`] should carry any.
+fn fixture_models(fixture: &Value) -> Map<String, Value> {
+    let models = fixture["provider"]["perf"]["models"]
+        .as_object()
+        .unwrap_or_else(|| fail("provider config", "the fixture has no model list"));
+    models
+        .iter()
+        .map(|(id, model)| {
+            let mut fields = model.as_object().cloned().unwrap_or_default();
+            fields.insert("variants".to_owned(), json!([]));
+            (id.clone(), Value::Object(fields))
+        })
+        .collect()
+}
+
+fn set_variants(models: &mut Map<String, Value>, id: &str, variants: &[&str]) {
+    let fields = models
+        .get_mut(id)
+        .and_then(Value::as_object_mut)
+        .unwrap_or_else(|| fail("provider config", format!("the fixture has no {id}")));
+    let variants = variants.iter().map(|id| json!({ "id": id })).collect();
+    fields.insert("variants".to_owned(), Value::Array(variants));
 }
 
 pub fn is_gone(pid: i32) -> bool {
