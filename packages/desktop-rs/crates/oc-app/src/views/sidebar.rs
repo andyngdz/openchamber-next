@@ -9,7 +9,7 @@ use gpui_kit::{
 use oc_state::{ConnectionStatus, LoadStatus, Region};
 
 use super::sidebar_list::session_list;
-use super::{Scene, icon_button, label_button, retry_button};
+use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::layout::{Area, ControlSpec, Reveal, Role, control, region};
 
 /// Title-bar controls, left to right.
@@ -75,7 +75,8 @@ fn title_bar(scene: Scene<'_>) -> Div {
         .child(control(
             scene.registry,
             new_session.clone(),
-            label_button(&new_session, Some(IconName::Plus), NEW_SESSION),
+            label_button(&new_session, Some(IconName::Plus), NEW_SESSION)
+                .on_click(scene.on_click_intent(Intent::NewSession)),
         ))
 }
 
@@ -118,7 +119,7 @@ fn chats_row(scene: Scene<'_>) -> Div {
         .child(control(
             scene.registry,
             add.clone(),
-            icon_button(&add, IconName::Plus),
+            icon_button(&add, IconName::Plus).on_click(scene.on_click_intent(Intent::NewSession)),
         ))
 }
 

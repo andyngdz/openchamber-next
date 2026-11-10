@@ -42,7 +42,7 @@ pub(crate) fn session_list(scene: Scene<'_>, cx: &App) -> Div {
             .w_full(),
         )
         .children(
-            sidebar_groups(scene.state, scene.work)
+            sidebar_groups(scene.state)
                 .into_iter()
                 .map(|group| render_group(scene, group, cx)),
         );

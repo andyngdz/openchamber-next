@@ -9,7 +9,7 @@ use gpui_kit::{
 };
 use oc_state::SessionStatus;
 
-use super::{Scene, icon_button, label_button};
+use super::{Intent, Scene, icon_button, label_button};
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control, region};
 use crate::theme::{DARK, card};
 
@@ -106,7 +106,9 @@ fn render_tool(tool: Tool, scene: Scene<'_>, registry: &LayoutRegistry) -> AnyEl
     let button = match tool {
         Tool::Icon(_, icon) => icon_button(&spec, icon),
         Tool::Labeled(_, icon, label) => label_button(&spec, Some(icon), label),
-        Tool::Send => icon_button(&spec, IconName::ArrowUp).disabled(!scene.state.can_send()),
+        Tool::Send => icon_button(&spec, IconName::ArrowUp)
+            .disabled(!scene.state.can_send())
+            .on_click(scene.on_click_intent(Intent::SendPrompt)),
         Tool::Stop => icon_button(&spec, IconName::Square),
         Tool::Spacer => return div().into_any_element(),
     };

@@ -12,6 +12,7 @@ use serde::Deserialize;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 
+pub use crate::metadata::MetadataUpdated;
 pub use crate::payload::*;
 
 /// One decoded frame.
@@ -43,6 +44,7 @@ pub enum EventData {
     SessionCreated(SessionCreated),
     SessionRenamed(SessionRenamed),
     SessionDeleted(SessionRef),
+    SessionMetadataUpdated(MetadataUpdated),
     InboxEnqueued(InboxEnqueued),
     InboxDelivered(InboxDelivered),
     /// The queued user message was withdrawn; same shape as [`InboxDelivered`].
@@ -98,6 +100,7 @@ impl EventData {
             "session.created" => Self::SessionCreated(payload(data)?),
             "session.renamed" => Self::SessionRenamed(payload(data)?),
             "session.deleted" => Self::SessionDeleted(payload(data)?),
+            "session.metadata.updated" => Self::SessionMetadataUpdated(payload(data)?),
             "session.inbox.enqueued" => Self::InboxEnqueued(payload(data)?),
             "session.inbox.delivered" => Self::InboxDelivered(payload(data)?),
             "session.inbox.cancelled" => Self::InboxCancelled(payload(data)?),

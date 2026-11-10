@@ -34,10 +34,54 @@ a spike: it does not replace `packages/electron`.
 
 ```bash
 cd packages/desktop-rs
-cargo run -p oc-app
+cargo run -p oc-app -- --directory /path/to/project
 ```
 
+`--directory` defaults to the current directory. The app starts
+`openchamber serve` for that directory before it opens the window, lists its
+sessions, and stops the server, and the `opencode serve` process it runs, when
+the window closes. The CLI is `OPENCHAMBER_CLI` when set, otherwise
+`packages/web/bin/cli.js` found by walking up from the executable and the
+current directory.
+
+The server inherits the app's environment, so `HOME`,
+`OPENCHAMBER_DATA_DIR` and `OPENCODE_CONFIG_CONTENT` choose its data and its
+model provider. To run against the deterministic fixture provider instead of a
+real model, start `node scripts/perf/fixture-provider.mjs <port>` from the
+repository root and pass the config `fixtureProviderConfig(<port>)` in that
+file returns:
+
+```bash
+env -i PATH="$PATH" HOME=/tmp/oc-home OPENCHAMBER_DATA_DIR=/tmp/oc-data \
+  OPENCODE_CONFIG_CONTENT="$(cat /tmp/oc-fixture-config.json)" \
+  WAYLAND_DISPLAY="$WAYLAND_DISPLAY" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+  cargo run -p oc-app -- --directory /tmp/oc-project
+```
+
+When the server does not start, the window shows the error with the server's
+stderr and log tails and a Retry button. When it exits while the app runs, the
+header shows its exit code or signal and offers Retry, which starts a new
+server.
+
 The directory has no `package.json`, so Bun ignores it.
+
+### Fixture states
+
+`--state <file>` opens the window on a state fixture instead of a server: the
+file's steps (session lists, events, connection changes) run through the same
+reducer live data takes, and server-bound controls do nothing.
+
+```bash
+cargo run -p oc-app -- --state fixtures/states/streaming.json
+```
+
+With `--dump-layout <file>` the app renders that state at 1440x900, writes the
+bounds of every region and the controls of each, in order, to `<file>` as JSON,
+and exits. The parity test compares these dumps with `fixtures/reference/`.
+
+```bash
+cargo run -p oc-app -- --state fixtures/states/empty.json --dump-layout /tmp/empty.json
+```
 
 ## Tests
 

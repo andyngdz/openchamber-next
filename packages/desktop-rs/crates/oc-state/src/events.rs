@@ -6,7 +6,8 @@
 //! row; message events change the chat column and apply only to the open session.
 
 use oc_client::event::{
-    ExecutionInterrupted, SessionCreated, SessionRenamed, SessionStatus as StatusEvent, StatusKind,
+    ExecutionInterrupted, MetadataUpdated, SessionCreated, SessionRenamed,
+    SessionStatus as StatusEvent, StatusKind,
 };
 use oc_client::{Event, EventData};
 
@@ -33,6 +34,7 @@ pub(crate) fn reduce_event(state: &mut State, event: &Event) {
         EventData::SessionCreated(created) => add_session(state, created, at),
         EventData::SessionRenamed(renamed) => rename_session(state, renamed),
         EventData::SessionDeleted(deleted) => remove_session(state, &deleted.session_id),
+        EventData::SessionMetadataUpdated(updated) => update_metadata(state, updated),
         EventData::ExecutionStarted(started) => {
             set_status(state, &started.session_id, SessionStatus::Busy, at);
         }
@@ -86,6 +88,7 @@ fn session_of(data: &EventData) -> Option<&str> {
             return None;
         }
         EventData::SessionRenamed(renamed) => &renamed.session_id,
+        EventData::SessionMetadataUpdated(updated) => &updated.session_id,
         EventData::SessionDeleted(only)
         | EventData::ExecutionStarted(only)
         | EventData::ExecutionSucceeded(only)
@@ -133,6 +136,14 @@ fn add_session(state: &mut State, created: &SessionCreated, at: u64) {
 fn rename_session(state: &mut State, renamed: &SessionRenamed) {
     if let Some(entry) = state.sessions.get_mut(&renamed.session_id) {
         entry.title = Some(renamed.title.clone());
+    }
+}
+
+/// The event carries the whole metadata, so it replaces the work state, as `events.ts` does
+/// for `session.metadata.updated`: metadata without a work state takes the session out of work.
+fn update_metadata(state: &mut State, updated: &MetadataUpdated) {
+    if let Some(entry) = state.sessions.get_mut(&updated.session_id) {
+        entry.work = updated.metadata.work_state();
     }
 }
 

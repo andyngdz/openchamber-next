@@ -23,7 +23,7 @@ pub use ids::{CallId, MessageId, RequestId, SessionId};
 pub use message::{
     AssistantMessage, ChatMessage, Delivery, Item, StepTiming, TextItem, ToolItem, UserMessage,
 };
-pub use oc_client::types::{ModelRef, ToolStatus};
+pub use oc_client::types::{ModelRef, ToolStatus, WorkState};
 pub use session_list::{PendingRequest, SessionEntry, SessionList};
 pub use state::{Composer, OpenSession, State};
 pub use status::{

@@ -34,6 +34,7 @@ pub(crate) fn reduce_message_event(state: &mut State, event: &Event) {
         | EventData::SessionCreated(_)
         | EventData::SessionRenamed(_)
         | EventData::SessionDeleted(_)
+        | EventData::SessionMetadataUpdated(_)
         | EventData::ExecutionStarted(_)
         | EventData::ExecutionSucceeded(_)
         | EventData::ExecutionInterrupted(_)

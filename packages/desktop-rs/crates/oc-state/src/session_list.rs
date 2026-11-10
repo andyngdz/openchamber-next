@@ -10,6 +10,8 @@
 
 use std::cmp::Reverse;
 
+use oc_client::types::WorkState;
+
 use crate::ids::{RequestId, SessionId};
 use crate::status::SessionStatus;
 
@@ -33,6 +35,8 @@ pub struct SessionEntry {
     pub status: SessionStatus,
     /// Unanswered permission requests and forms, oldest first.
     pub pending: Vec<PendingRequest>,
+    /// `metadata.openchamber.work.state`, from the list or the latest metadata event.
+    pub work: Option<WorkState>,
     activity: u64,
     created: u64,
     /// When `status` was last set (ms): an event's time, or the newest turn stamp of a list.
@@ -47,6 +51,7 @@ impl SessionEntry {
             title,
             status: SessionStatus::Idle,
             pending: Vec::new(),
+            work: None,
             activity,
             created,
             status_at: 0,
@@ -64,6 +69,18 @@ impl SessionEntry {
     pub(crate) fn record_status(&mut self, status: SessionStatus, at: u64) {
         self.status = status;
         self.status_at = self.status_at.max(at);
+    }
+
+    /// Sets the work state the listed metadata reports.
+    pub(crate) fn with_work(mut self, work: Option<WorkState>) -> Self {
+        self.work = work;
+        self
+    }
+
+    /// The sidebar lists the session under "In work": its work state is open, as
+    /// `isSessionInWork` in `packages/ui/src/lib/sessionWorkMetadata.ts` decides.
+    pub fn is_in_work(&self) -> bool {
+        self.work == Some(WorkState::Open)
     }
 
     /// The busy indicator.
@@ -166,3 +183,7 @@ impl SessionList {
             .sort_by(|left, right| left.order_key().cmp(&right.order_key()));
     }
 }
+
+#[cfg(test)]
+#[path = "work_test.rs"]
+mod work_test;

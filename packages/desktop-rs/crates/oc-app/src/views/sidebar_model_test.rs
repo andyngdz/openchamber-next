@@ -3,7 +3,6 @@ use oc_state::State;
 use super::{GroupKind, GroupModel, sidebar_groups};
 use crate::fixture::StateScript;
 use crate::fixture::fixture_test::state_path;
-use crate::work::WorkTracker;
 
 const FINISHED: &str = "Reference: finished turn";
 const STREAMING: &str = "Reference: streaming turn";
@@ -11,12 +10,10 @@ const STREAMING: &str = "Reference: streaming turn";
 fn groups_of(name: &str) -> Vec<GroupModel> {
     let script = StateScript::load(&state_path(name)).expect("state fixture loads");
     let mut state = State::new(script.directory);
-    let mut work = WorkTracker::default();
     for action in script.actions {
-        work.observe(&action);
         state.apply(action);
     }
-    sidebar_groups(&state, &work)
+    sidebar_groups(&state)
 }
 
 fn titles(group: &GroupModel) -> Vec<&str> {

@@ -87,8 +87,22 @@ fn notices_the_spike_does_not_handle_decode_to_raw() {
         .collect();
     assert!(raw.contains(&"provider.updated"));
     assert!(raw.contains(&"session.usage.updated"));
-    assert!(raw.contains(&"session.metadata.updated"));
     assert!(raw.contains(&"session.step.streamed"));
+    assert!(!raw.contains(&"session.metadata.updated"));
+}
+
+#[test]
+fn metadata_updates_carry_the_work_state() {
+    let events = load("agent-20tools-300cps");
+    let states: Vec<_> = events
+        .iter()
+        .filter_map(|e| match &e.data {
+            EventData::SessionMetadataUpdated(update) => Some(update.metadata.work_state()),
+            _ => None,
+        })
+        .collect();
+    assert!(!states.is_empty());
+    assert!(states.contains(&Some(crate::types::WorkState::Open)));
 }
 
 #[test]

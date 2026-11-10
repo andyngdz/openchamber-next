@@ -38,28 +38,47 @@ pub(crate) use sidebar::sidebar;
 pub(crate) use work_status::work_status;
 
 use crate::layout::{ControlSpec, LayoutRegistry};
-use crate::work::WorkTracker;
 
-/// Hands an action to the root view, which applies it to the state.
-pub(crate) type Dispatch = Rc<dyn Fn(&Action, &mut Window, &mut App)>;
+/// What a control asks the root view to do.
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) enum Intent {
+    /// Apply this action; opening a session or retrying a region also sends its request.
+    Apply(Action),
+    /// Create a session in the directory and open it.
+    NewSession,
+    /// Send the composer text to the open session.
+    SendPrompt,
+    /// Stop the server if it still runs and start it again.
+    RestartServer,
+}
+
+/// Hands an intent to the root view.
+pub(crate) type Dispatch = Rc<dyn Fn(&Intent, &mut Window, &mut App)>;
 
 /// What every region reads while it renders.
 #[derive(Clone, Copy)]
 pub(crate) struct Scene<'a> {
     pub(crate) state: &'a State,
-    pub(crate) work: &'a WorkTracker,
     pub(crate) registry: &'a LayoutRegistry,
     pub(crate) dispatch: &'a Dispatch,
 }
 
 impl Scene<'_> {
-    /// A click handler that dispatches `action`.
+    /// A click handler that applies `action`.
     fn on_click_dispatch(
         &self,
         action: Action,
     ) -> impl Fn(&ClickEvent, &mut Window, &mut App) + 'static {
+        self.on_click_intent(Intent::Apply(action))
+    }
+
+    /// A click handler that dispatches `intent`.
+    fn on_click_intent(
+        &self,
+        intent: Intent,
+    ) -> impl Fn(&ClickEvent, &mut Window, &mut App) + 'static {
         let dispatch = self.dispatch.clone();
-        move |_, window, cx| dispatch(&action, window, cx)
+        move |_, window, cx| dispatch(&intent, window, cx)
     }
 }
 

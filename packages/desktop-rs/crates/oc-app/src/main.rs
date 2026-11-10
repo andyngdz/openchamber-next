@@ -36,7 +36,7 @@ fn main() -> ExitCode {
     match oc_app::run(launch) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
-            tracing::error!(target: "APP", %error, "[APP] oc-app stopped");
+            oc_app::log_failure(&error);
             ExitCode::FAILURE
         }
     }

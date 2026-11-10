@@ -1,5 +1,8 @@
 //! The window's root view: holds the [`State`] entity and applies every action through
-//! [`State::apply`], so a fixture replay and live events take the same path.
+//! [`State::apply`], so a fixture replay and live events take the same path. With a live
+//! server it also turns intents into requests and applies what the server sends back.
+
+mod live;
 
 use std::rc::Rc;
 
@@ -12,19 +15,20 @@ use gpui_kit::{
 use oc_state::{Action, State};
 
 use crate::layout::{LayoutRegistry, content};
+use crate::live::ServerLink;
 use crate::views::{
     Dispatch, PLACEHOLDER, Scene, chat_column, header, icon_rail, sidebar, work_status,
 };
-use crate::work::WorkTracker;
 
 /// The whole window.
 pub(crate) struct RootView {
     state: Entity<State>,
-    work: WorkTracker,
     registry: LayoutRegistry,
     draft: Entity<TextareaState>,
     scroll: ScrollHandle,
     dispatch: Dispatch,
+    /// The live server; `None` for a fixture, whose server-bound controls do nothing.
+    link: Option<ServerLink>,
     _draft_events: Subscription,
 }
 
@@ -33,6 +37,7 @@ impl RootView {
     pub(crate) fn new(
         state: State,
         registry: LayoutRegistry,
+        link: Option<ServerLink>,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Self {
@@ -45,24 +50,23 @@ impl RootView {
                 }
             });
         let root = cx.entity().downgrade();
-        let dispatch: Dispatch = Rc::new(move |action, _, cx| {
-            root.update(cx, |this, cx| this.dispatch(action.clone(), cx))
+        let dispatch: Dispatch = Rc::new(move |intent, window, cx| {
+            root.update(cx, |this, cx| this.handle(intent.clone(), window, cx))
                 .ok();
         });
         Self {
             state: cx.new(|_| state),
-            work: WorkTracker::default(),
             registry,
             draft,
             scroll: ScrollHandle::new(),
             dispatch,
+            link,
             _draft_events: draft_events,
         }
     }
 
     /// Applies one action; the message list follows new content while it sits at the bottom.
     pub(crate) fn dispatch(&mut self, action: Action, cx: &mut Context<Self>) {
-        self.work.observe(&action);
         self.state.update(cx, |state, _| state.apply(action));
         if self.scroll.offset().y <= -self.scroll.max_offset().y + px(1.) {
             self.scroll.scroll_to_bottom();
@@ -77,7 +81,6 @@ impl Render for RootView {
         let state = self.state.read(cx);
         let scene = Scene {
             state,
-            work: &self.work,
             registry: &self.registry,
             dispatch: &self.dispatch,
         };

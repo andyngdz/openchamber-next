@@ -34,6 +34,7 @@ pub(crate) fn session_entry(session: &Session) -> SessionEntry {
         activity,
     )
     .with_listed_status(status, busy.max(idle))
+    .with_work(session.metadata.work_state())
 }
 
 /// The chat column from a message list, which the server sends newest first. Turn markers

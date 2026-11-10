@@ -9,7 +9,7 @@ use gpui_kit::{
 };
 use oc_state::{ConnectionStatus, ServerExit};
 
-use super::{Scene, icon_button, label_button};
+use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control, region};
 
 /// What the header shows: the empty state's tools, or the open session's.
@@ -82,7 +82,7 @@ fn items(mode: HeaderMode) -> Vec<HeaderItem> {
 }
 
 /// The server state in words.
-fn server_label(status: &ConnectionStatus) -> String {
+pub(crate) fn server_label(status: &ConnectionStatus) -> String {
     match status {
         ConnectionStatus::Starting => "Starting server".to_owned(),
         ConnectionStatus::Connected => "Connected".to_owned(),
@@ -151,9 +151,29 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
             let spec = ControlSpec::named(Area::Header, Role::Button, CONTEXT_USAGE)
                 .under(&[MAIN_NAVIGATION]);
             let button = label_button(&spec, Some(IconName::LoaderCircle), server);
-            control(registry, spec, button).into_any_element()
+            div()
+                .flex()
+                .items_center()
+                .gap(px(4.))
+                .child(control(registry, spec, button))
+                .children(restart_button(scene))
+                .into_any_element()
         }
         HeaderItem::Window(name, icon, action) => window_control(registry, name, icon, action),
+    }
+}
+
+/// Restarts a server that exited or failed; the empty state shows its own Retry instead.
+fn restart_button(scene: Scene<'_>) -> Option<AnyElement> {
+    match scene.state.connection() {
+        ConnectionStatus::Failed(_) | ConnectionStatus::ServerExited(_) => Some(
+            retry_button("server-restart")
+                .on_click(scene.on_click_intent(Intent::RestartServer))
+                .into_any_element(),
+        ),
+        ConnectionStatus::Starting
+        | ConnectionStatus::Connected
+        | ConnectionStatus::Reconnecting { .. } => None,
     }
 }
 

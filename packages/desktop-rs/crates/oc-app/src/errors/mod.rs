@@ -38,6 +38,20 @@ pub enum AppError {
     /// The platform refused to open the window.
     #[error("cannot open the window: {0}")]
     OpenWindow(String),
+    /// The I/O runtime or its thread could not start.
+    #[error("cannot start the I/O runtime: {0}")]
+    StartRuntime(std::io::Error),
+    /// The I/O thread ended before it built its runtime.
+    #[error("the I/O thread exited before its runtime started")]
+    RuntimeThreadExited,
+    /// The project directory could not be made absolute.
+    #[error("cannot resolve the directory {path}: {source}")]
+    ResolveDirectory {
+        /// The directory as given.
+        path: PathBuf,
+        /// What the file system said.
+        source: std::io::Error,
+    },
     /// The window closed before the layout dump was written.
     #[error("the window closed before the layout was dumped")]
     DumpNotWritten,

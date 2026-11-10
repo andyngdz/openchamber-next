@@ -2,7 +2,7 @@ use serde::de::DeserializeOwned;
 
 use super::{
     AssistantContent, AuthStatus, CreateSessionRequest, Data, Location, Message, Page,
-    PromptAccepted, PromptRequest, Session, ToolStatus,
+    PromptAccepted, PromptRequest, Session, ToolStatus, WorkState,
 };
 
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
@@ -68,6 +68,14 @@ fn listed_session_has_no_title_until_a_turn_is_titled() {
             .is_some_and(|t| !t.is_empty())
     );
     assert!(after.data[0].location.directory.ends_with("/project"));
+}
+
+#[test]
+fn listed_session_carries_its_work_state() {
+    let after: Page<Session> = decode("session-list-after-turn.json");
+    assert_eq!(after.data[0].metadata.work_state(), Some(WorkState::Open));
+    let fresh: Page<Session> = decode("session-list-nonempty.json");
+    assert_eq!(fresh.data[0].metadata.work_state(), None);
 }
 
 #[test]

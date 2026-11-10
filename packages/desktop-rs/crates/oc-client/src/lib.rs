@@ -8,6 +8,7 @@ mod client;
 mod error;
 pub mod event;
 mod message_id;
+mod metadata;
 mod payload;
 pub mod types;
 mod uri_component;

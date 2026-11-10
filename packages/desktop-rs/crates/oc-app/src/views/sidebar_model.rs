@@ -1,9 +1,7 @@
-//! The sidebar's session groups, as data: which sessions sit In work, which under Projects,
-//! and the names each row's controls carry.
+//! The sidebar's session groups, as data: which sessions sit In work (`oc-state` reads it from
+//! the session metadata), which under Projects, and the names each row's controls carry.
 
 use oc_state::{SessionEntry, SessionId, State};
-
-use crate::work::WorkTracker;
 
 const ARCHIVE: &str = "Archive";
 const UNTITLED: &str = "Untitled session";
@@ -52,11 +50,11 @@ pub(crate) struct GroupModel {
 }
 
 /// Groups in sidebar order: In work when it has rows, then Projects.
-pub(crate) fn sidebar_groups(state: &State, work: &WorkTracker) -> Vec<GroupModel> {
+pub(crate) fn sidebar_groups(state: &State) -> Vec<GroupModel> {
     let (in_work, rest): (Vec<&SessionEntry>, Vec<&SessionEntry>) = state
         .sessions()
         .iter()
-        .partition(|entry| work.is_in_work(&entry.id));
+        .partition(|entry| entry.is_in_work());
     let group = |kind: GroupKind, entries: Vec<&SessionEntry>| GroupModel {
         kind,
         rows: entries

@@ -1,6 +1,6 @@
 //! The chat column with no session open: heading, Choose project, the composer and the
-//! quick-action chips, placed as the reference measures them. A server that failed to start
-//! shows its error above, without moving the composer.
+//! quick-action chips, placed as the reference measures them. A server that failed to start or
+//! exited shows its error and a Retry that restarts it above, without moving the composer.
 
 use gpui_kit::assets::IconName;
 use gpui_kit::component::input::TextareaState;
@@ -11,8 +11,10 @@ use gpui_kit::{
 };
 use oc_state::{ConnectionStatus, ServerFailure};
 
+use super::header::server_label;
+
 use super::composer::{WIDTH, composer};
-use super::{Scene, icon_button, label_button, retry_button};
+use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::layout::{Area, ControlSpec, Role, control};
 
 /// Chat column width minus the composer width, halved: the composer's left edge.
@@ -94,35 +96,52 @@ pub(crate) fn empty_state(scene: Scene<'_>, draft: &Entity<TextareaState>, cx: &
                     icon_button(&starter, IconName::Plus),
                 )),
         );
-    let failure = match scene.state.connection() {
-        ConnectionStatus::Failed(failure) => Some(server_error(failure, cx)),
-        ConnectionStatus::Starting
-        | ConnectionStatus::Connected
-        | ConnectionStatus::Reconnecting { .. }
-        | ConnectionStatus::ServerExited(_) => None,
-    };
-    div().size_full().children(failure).child(block)
+    div()
+        .size_full()
+        .children(server_down(scene, cx))
+        .child(block)
 }
 
-/// The server failure with the output that explains it. Retry is wired with the sidecar.
-fn server_error(failure: &ServerFailure, cx: &App) -> AnyElement {
+/// The error card of a server that failed to start or exited.
+fn server_down(scene: Scene<'_>, cx: &App) -> Option<AnyElement> {
+    let connection = scene.state.connection();
+    match connection {
+        ConnectionStatus::Failed(failure) => Some(server_error(scene, failure, cx)),
+        ConnectionStatus::ServerExited(_) => {
+            let exited = ServerFailure {
+                message: server_label(connection),
+                ..ServerFailure::default()
+            };
+            Some(server_error(scene, &exited, cx))
+        }
+        ConnectionStatus::Starting
+        | ConnectionStatus::Connected
+        | ConnectionStatus::Reconnecting { .. } => None,
+    }
+}
+
+/// The server failure with the output that explains it; Retry restarts the server. A tail the
+/// failure has no lines for is left out.
+fn server_error(scene: Scene<'_>, failure: &ServerFailure, cx: &App) -> AnyElement {
     let theme = cx.theme();
     let tail = |title: &'static str, lines: &[String]| {
-        div()
-            .flex()
-            .flex_col()
-            .child(
-                div()
-                    .text_xs()
-                    .text_color(theme.muted_foreground)
-                    .child(title),
-            )
-            .children(lines.iter().map(|line| {
-                div()
-                    .font_family(theme.mono_font_family.clone())
-                    .text_xs()
-                    .child(line.clone())
-            }))
+        (!lines.is_empty()).then(|| {
+            div()
+                .flex()
+                .flex_col()
+                .child(
+                    div()
+                        .text_xs()
+                        .text_color(theme.muted_foreground)
+                        .child(title),
+                )
+                .children(lines.iter().map(|line| {
+                    div()
+                        .font_family(theme.mono_font_family.clone())
+                        .text_xs()
+                        .child(line.clone())
+                }))
+        })
     };
     div()
         .absolute()
@@ -145,9 +164,9 @@ fn server_error(failure: &ServerFailure, cx: &App) -> AnyElement {
                 .text_color(theme.danger)
                 .child(failure.message.clone()),
         )
-        .child(retry_button("server-retry"))
-        .child(tail("Server output", &failure.stderr_tail))
-        .child(tail("Server log", &failure.log_tail))
+        .child(retry_button("server-retry").on_click(scene.on_click_intent(Intent::RestartServer)))
+        .children(tail("Server output", &failure.stderr_tail))
+        .children(tail("Server log", &failure.log_tail))
         .into_any_element()
 }
 

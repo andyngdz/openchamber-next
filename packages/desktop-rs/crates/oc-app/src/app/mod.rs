@@ -1,4 +1,10 @@
 //! Opens the window, and in dump mode writes the layout registry after the first frames.
+//!
+//! On a directory it first starts the sidecar on this thread, the main thread, before
+//! `Application::run` takes it over, and the I/O runtime on its own thread. Closing the last
+//! window stops the sidecar before the app quits.
+
+mod live_start;
 
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
@@ -8,12 +14,14 @@ use gpui_kit::{
     AnyWindowHandle, App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions,
     application, assets, init, open_window, px, size,
 };
-use oc_state::{Action, State};
+use oc_state::{Action, ServerFailure, State};
 
 use crate::errors::AppError;
 use crate::fixture::StateScript;
 use crate::layout::{LayoutDump, LayoutRegistry};
+use crate::live::ServerLink;
 use crate::root::RootView;
+use crate::server::ServerProcess;
 use crate::theme::{self, DARK};
 
 /// The content size the parity reference was measured at.
@@ -51,19 +59,45 @@ struct DumpTarget {
     name: String,
 }
 
+/// The server a live window talks to, and how its start went.
+struct LiveWindow {
+    link: ServerLink,
+    process: ServerProcess,
+    started: Result<u16, ServerFailure>,
+}
+
+/// What the window is opened for.
+enum Mode {
+    /// A fixture's state for review; no server.
+    Review,
+    /// A fixture's state, dumped after the first frames.
+    Dump(DumpTarget),
+    /// The directory's sessions from the sidecar.
+    Live(LiveWindow),
+}
+
+/// Logs why the app stopped, for `main`.
+pub fn log_failure(error: &AppError) {
+    tracing::error!(target: crate::logging::APP, %error, "[APP] oc-app stopped");
+}
+
 /// Runs the app until its window closes; in dump mode, until the layout is written.
 pub fn run(launch: Launch) -> Result<(), AppError> {
     match launch {
-        Launch::Window { directory } => open(State::new(directory), Vec::new(), None),
+        Launch::Window { directory } => live_start::run_live(&directory),
         Launch::Fixture { state } => {
             let script = StateScript::load(&state)?;
-            open(State::new(script.directory), script.actions, None)
+            open(State::new(script.directory), script.actions, Mode::Review)
         }
         Launch::DumpLayout { output, state } => {
             let script = StateScript::load(&state)?;
             let name = state_name(&state);
             let target = DumpTarget { output, name };
-            open(State::new(script.directory), script.actions, Some(target))
+            open(
+                State::new(script.directory),
+                script.actions,
+                Mode::Dump(target),
+            )
         }
     }
 }
@@ -74,10 +108,20 @@ fn state_name(path: &Path) -> String {
         .unwrap_or_default()
 }
 
-fn open(state: State, actions: Vec<Action>, dump: Option<DumpTarget>) -> Result<(), AppError> {
+fn open(state: State, actions: Vec<Action>, mode: Mode) -> Result<(), AppError> {
+    let (dump, live) = match mode {
+        Mode::Review => (None, None),
+        Mode::Dump(target) => (Some(target), None),
+        Mode::Live(live) => (None, Some(live)),
+    };
     let initial = match dump {
         Some(_) => Err(AppError::DumpNotWritten),
         None => Ok(()),
+    };
+    let process = live.as_ref().map(|live| live.process.clone());
+    let (link, started) = match live {
+        Some(live) => (Some(live.link), Some(live.started)),
+        None => (None, None),
     };
     let outcome = Rc::new(RefCell::new(initial));
     let final_outcome = outcome.clone();
@@ -88,9 +132,12 @@ fn open(state: State, actions: Vec<Action>, dump: Option<DumpTarget>) -> Result<
         let view_registry = registry.clone();
         let opened = open_window(window_options(cx), cx, move |window, cx| {
             cx.new(|cx| {
-                let mut view = RootView::new(state, view_registry, window, cx);
+                let mut view = RootView::new(state, view_registry, link, window, cx);
                 for action in actions {
                     view.dispatch(action, cx);
+                }
+                if let Some(started) = started {
+                    view.begin(started, window, cx);
                 }
                 view
             })
@@ -104,14 +151,22 @@ fn open(state: State, actions: Vec<Action>, dump: Option<DumpTarget>) -> Result<
             (Ok((window, _)), Some(target)) => schedule_dump(window, target, registry, outcome, cx),
             (Ok(_), None) => {}
         }
-        cx.on_window_closed(|cx, _| {
-            if cx.windows().is_empty() {
-                cx.quit();
-            }
-        })
-        .detach();
+        quit_after_last_window(process, cx);
     });
     final_outcome.replace(Ok(()))
+}
+
+/// Closing the last window stops the sidecar, then quits.
+fn quit_after_last_window(process: Option<ServerProcess>, cx: &mut App) {
+    cx.on_window_closed(move |cx, _| {
+        if cx.windows().is_empty() {
+            if let Some(process) = process.as_ref() {
+                process.shutdown();
+            }
+            cx.quit();
+        }
+    })
+    .detach();
 }
 
 fn window_options(cx: &App) -> WindowOptions {

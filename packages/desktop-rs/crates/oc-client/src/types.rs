@@ -5,6 +5,8 @@
 
 use serde::{Deserialize, Serialize};
 
+pub use crate::metadata::{SessionMetadata, WorkState};
+
 /// `GET /auth/session`.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct AuthStatus {
@@ -67,6 +69,9 @@ pub struct Session {
     /// Created and updated times.
     #[serde(default)]
     pub time: SessionTime,
+    /// Metadata the server and clients attach; the spike reads the work state.
+    #[serde(default)]
+    pub metadata: SessionMetadata,
 }
 
 /// Body of `POST /api/session`.
