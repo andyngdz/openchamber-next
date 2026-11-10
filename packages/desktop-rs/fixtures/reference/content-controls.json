@@ -1,0 +1,337 @@
+{
+  "description": "Reference controls inside message content that the parity test skips. A later stage that renders markdown and tool rows empties this list.",
+  "controls": [
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#4",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#5",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#6",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#7",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#8",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#9",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#4",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#5",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#6",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#7",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#8",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#9",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#1",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#2",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#3",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
+      "states": [
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#1",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#2",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#3",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
+      "states": [
+        "session",
+        "streaming"
+      ],
+      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
+    }
+  ]
+}

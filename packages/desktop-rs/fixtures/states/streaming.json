@@ -1,0 +1,5535 @@
+{
+  "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference",
+  "steps": [
+    {
+      "type": "connection",
+      "status": {
+        "state": "connected"
+      }
+    },
+    {
+      "type": "sessionsLoaded",
+      "sessions": [
+        {
+          "id": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+          "title": "Reference: finished turn",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "time": {
+            "created": 1794283563183,
+            "updated": 1794283609555,
+            "busy": 1794283585448,
+            "idle": 1794283609555
+          }
+        },
+        {
+          "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+          "title": "Reference: streaming turn",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "time": {
+            "created": 1794283564183,
+            "updated": 1794283564183
+          }
+        }
+      ]
+    },
+    {
+      "type": "events",
+      "events": [
+        {
+          "id": "evt_1c3a31de2001IrFTWHXtA7BU7H",
+          "created": 1794283609570,
+          "type": "session.metadata.updated",
+          "data": {
+            "sessionID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "metadata": {
+              "openchamber": {
+                "work": {
+                  "state": "open",
+                  "openedAt": 1794283585448,
+                  "openedBy": "auto"
+                },
+                "turn": {
+                  "endedAt": 1794283609555,
+                  "durationMs": 24149
+                }
+              }
+            }
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 195,
+            "version": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "openSession",
+      "session": "ses_e3c5d9768ffeustSm1lMVapzHJ"
+    },
+    {
+      "type": "messagesLoaded",
+      "session": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "messages": []
+    },
+    {
+      "type": "events",
+      "events": [
+        {
+          "id": "evt_1c3a2bd7f001O6a7OnKOUs5XNv",
+          "type": "server.connected",
+          "data": {}
+        },
+        {
+          "id": "evt_1c3a2bf7c001v5uj4QtuM6vg9m",
+          "created": 1794283645404,
+          "type": "session.inbox.enqueued",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "inboxID": "msg_1c3a2bf75001KW5OhLtwKFeL4w",
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "item": {
+              "type": "user",
+              "payload": {
+                "text": "List the files."
+              },
+              "delivery": "steer"
+            }
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 2,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2bf7e001BJhcuQibpdyyH2",
+          "created": 1794283645406,
+          "type": "session.execution.started",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 3,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2bf820013FEsHR5Iv3Udxv",
+          "created": 1794283645410,
+          "metadata": {
+            "instructions": {
+              "initial": true
+            }
+          },
+          "type": "session.instructions.updated",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "delta": {
+              "core/codemode": "c70549334ff58e5180cbd0dadf89971318a87a65a94306d43b99284fa7a762a3",
+              "core/skill-guidance": "8394362d28c82fa4d13c7a9f5568c05680f6687e07db8f426a0e3c92f3027dc9",
+              "core/date": "9b4c63b67003f693d244434de4080cc42a552c634280bc3f4122cd1f1ed9d38c",
+              "core/environment": "e6f68fa51b6c59b2bc96ec72966c1ea57f9633f5ea8b2455855b2c7218a45c47"
+            }
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 4,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2bf830017WkP1NqmMDJT1u",
+          "created": 1794283645411,
+          "type": "session.inbox.delivered",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "inboxID": "msg_1c3a2bf75001KW5OhLtwKFeL4w"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 5,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2bfa20016kAewfTf6bGs9V",
+          "created": 1794283645442,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283585426
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 6,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2bfa40019XDvuFFNRuB6k0",
+          "created": 1794283645444,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 7,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2bfab0014SKMgrzhCqmJ9c",
+          "created": 1794283645451,
+          "type": "session.metadata.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "metadata": {
+              "openchamber": {
+                "work": {
+                  "state": "open",
+                  "openedAt": 1794283585448,
+                  "openedBy": "auto"
+                }
+              }
+            }
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 8,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c009001obBnGT72zORCrP",
+          "created": 1794283645545,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "ordinal": 0,
+            "delta": "Step 1 of 20: listing files that "
+          }
+        },
+        {
+          "id": "evt_1c3a2c065001U9Ba4L68XKH0Xk",
+          "created": 1794283645637,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "ordinal": 0,
+            "delta": "the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c065002fk2sF2wFaWW5K6",
+          "created": 1794283645637,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "id": "call_fixture_1",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 9,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c068001ziJk2LoKq5jIJG",
+          "created": 1794283645640,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "id": "call_fixture_1",
+            "text": "{\"pattern\":\"packages/*/package.json\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 10,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c069001yOjhZLyJ3RFcTQ",
+          "created": 1794283645641,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "id": "call_fixture_1",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 11,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c06b001mOh9i06Et7yQW8",
+          "created": 1794283645643,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "ordinal": 0,
+            "text": "Step 1 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 12,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c06c001ZnjThiJTBTdYDC",
+          "created": 1794283645644,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 13,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c078001Xh1NiJ0w8Xtcwo",
+          "created": 1794283645656,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "id": "call_fixture_1",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 14,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c07e001kyftAJscJGB5bL",
+          "created": 1794283645662,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 15,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c081001t9DZsn6vW2EyEF",
+          "created": 1794283645665,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c091001Jxa2CKI0uQrMUD",
+          "created": 1794283645681,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283585674
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 16,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c093001qazu0RAbqk2REr",
+          "created": 1794283645683,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 17,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c0f8001Ymc0FwpoQQqphJ",
+          "created": 1794283645784,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "ordinal": 0,
+            "delta": "Step 2 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2c159001AUGW8Z6n3O2Tio",
+          "created": 1794283645881,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c1590028KjWWbXPflxpQJ",
+          "created": 1794283645881,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "id": "call_fixture_2",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 18,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c15f001wVYpPcuou3Aaez",
+          "created": 1794283645888,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "id": "call_fixture_2",
+            "text": "{\"pattern\":\"scripts/perf/*.mjs\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 19,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c163001YvRlCdrcPTB8QA",
+          "created": 1794283645891,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "id": "call_fixture_2",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 20,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c166001kz1x26CkoyhxYo",
+          "created": 1794283645894,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "ordinal": 0,
+            "text": "Step 2 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 21,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c169001RsUsVWPV474ayy",
+          "created": 1794283645897,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 22,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c17a001aKnBaI6N4q5hPx",
+          "created": 1794283645914,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "id": "call_fixture_2",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 23,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c18a001oclSQx229UWfb4",
+          "created": 1794283645930,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c086001OPaMDqGnG77uih",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 24,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c18d001FFj5LOJvuz8ygp",
+          "created": 1794283645933,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 2,
+              "output": 32,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c19d001ZthlPE9NuNnRSu",
+          "created": 1794283645949,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283585941
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 25,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c19f001SNJ6vZOHqMYdBY",
+          "created": 1794283645951,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 26,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c2040016pZniG4KZsdNdK",
+          "created": 1794283646052,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "ordinal": 0,
+            "delta": "Step 3 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2c264001tIed6aOB1gyzhj",
+          "created": 1794283646148,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c264002L5vIb7buAHi743",
+          "created": 1794283646148,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "id": "call_fixture_3",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 27,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c267001Xq0GHO43whc6Kt",
+          "created": 1794283646151,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "id": "call_fixture_3",
+            "text": "{\"pattern\":\"*.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 28,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c26b001jVQDIeHdG4hQW7",
+          "created": 1794283646155,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "id": "call_fixture_3",
+            "input": {
+              "pattern": "*.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 29,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c272001xTu5FHMshhNEZu",
+          "created": 1794283646162,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "ordinal": 0,
+            "text": "Step 3 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 30,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c277001FfFW2QDlm4L8UG",
+          "created": 1794283646167,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 31,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c290001fWwouoOcYdWrtb",
+          "created": 1794283646192,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "id": "call_fixture_3",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 32,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c2a6001PJG97rkvGW11f1",
+          "created": 1794283646214,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c192001nvr68ti5412IMl",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 33,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c2ab001hRZX9b8ZOg46WB",
+          "created": 1794283646219,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 3,
+              "output": 48,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c2c5001glYMJtQ5ZlfemL",
+          "created": 1794283646245,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283586233
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 34,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c2c70012PgX6xqFLHuJ1d",
+          "created": 1794283646247,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 35,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c32c001H63U7sLpwYmjIn",
+          "created": 1794283646348,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "ordinal": 0,
+            "delta": "Step 4 of 20: listing files that"
+          }
+        },
+        {
+          "id": "evt_1c3a2c3880016FVTc5tPnN46q4",
+          "created": 1794283646440,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "ordinal": 0,
+            "delta": " the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c388002m21w9qQZk3Srz9",
+          "created": 1794283646440,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "id": "call_fixture_4",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 36,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c38a001hPgav3KKUCwhal",
+          "created": 1794283646442,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "id": "call_fixture_4",
+            "text": "{\"pattern\":\".agents/skills/*/SKILL.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 37,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c38b001o4uJqsa6F15zF1",
+          "created": 1794283646443,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "id": "call_fixture_4",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 38,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c38c001WFLJGAWHhFYlO0",
+          "created": 1794283646444,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "ordinal": 0,
+            "text": "Step 4 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 39,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c38d001XyngllLkcgkPyj",
+          "created": 1794283646445,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 40,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c397001bqQX3rwa05QnD3",
+          "created": 1794283646455,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "id": "call_fixture_4",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 41,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c3a00018Vk19aLfL29VGQ",
+          "created": 1794283646464,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 42,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c3a2001bJwfgd6evm5j3Z",
+          "created": 1794283646466,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 4,
+              "output": 64,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c3b4001pnpK0cnjuWSrOP",
+          "created": 1794283646484,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283586475
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 43,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c3b6001zRvE87i85z2Hrl",
+          "created": 1794283646486,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 44,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c41b001R1Lkf1DWHfohMS",
+          "created": 1794283646587,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "ordinal": 0,
+            "delta": "Step 5 of 20: listing files that "
+          }
+        },
+        {
+          "id": "evt_1c3a2c47c001HU8HGt1VGDvwdc",
+          "created": 1794283646685,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "ordinal": 0,
+            "delta": "the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c47d001curvqENL5NaID6",
+          "created": 1794283646685,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "id": "call_fixture_5",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 45,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c47f001UeFDMihzwJ885j",
+          "created": 1794283646687,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "id": "call_fixture_5",
+            "text": "{\"pattern\":\"packages/*/package.json\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 46,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c480001e7WRtTia9ARWzm",
+          "created": 1794283646688,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "id": "call_fixture_5",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 47,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c4810010NI6i7BpY421Ye",
+          "created": 1794283646689,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "ordinal": 0,
+            "text": "Step 5 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 48,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c482001TIFXeyDZ8BLsSu",
+          "created": 1794283646690,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 49,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c48a001QUG2ilcVfc10Hp",
+          "created": 1794283646698,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "id": "call_fixture_5",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 50,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c491001FMopXcSG845jeH",
+          "created": 1794283646705,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 51,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c493001YPVYgl7P1jF3UH",
+          "created": 1794283646707,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 5,
+              "output": 80,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c4a2001Un90GDZ1ByP23A",
+          "created": 1794283646722,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283586714
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 52,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c4a3001aLJ4fa8CJjT9hD",
+          "created": 1794283646723,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 53,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c509001vVhSklOBUkb1hP",
+          "created": 1794283646825,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "ordinal": 0,
+            "delta": "Step 6 of 20: listing files that"
+          }
+        },
+        {
+          "id": "evt_1c3a2c56e001P1Ah7SCD4089sc",
+          "created": 1794283646926,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "ordinal": 0,
+            "delta": " the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c56e002v9khu6Qlm6oGgC",
+          "created": 1794283646926,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "id": "call_fixture_6",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 54,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c575001x8PFrqM8ZitmVA",
+          "created": 1794283646933,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "id": "call_fixture_6",
+            "text": "{\"pattern\":\"scripts/perf/*.mjs\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 55,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c578001e4E2pQe3MOFheW",
+          "created": 1794283646936,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "id": "call_fixture_6",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 56,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c57b001ZLr4TmY1cPKRt4",
+          "created": 1794283646939,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "ordinal": 0,
+            "text": "Step 6 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 57,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c57e001eiuAxean1mFKpE",
+          "created": 1794283646942,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 58,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c587001raCas4zkGGSm5O",
+          "created": 1794283646951,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "id": "call_fixture_6",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 59,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c58c001ILNeEq8mlxnggL",
+          "created": 1794283646957,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 60,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c58f001LsBm18MFMW5MV9",
+          "created": 1794283646959,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 6,
+              "output": 96,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c5a0001M78Ld62rUoaOn6",
+          "created": 1794283646976,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283586967
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 61,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c5a10018pjcfpMODvdQ2J",
+          "created": 1794283646977,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 62,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c607001cuISgarJ3shhZb",
+          "created": 1794283647079,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "ordinal": 0,
+            "delta": "Step 7 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2c669001O4G1FBWSseQdm8",
+          "created": 1794283647177,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c669002V1m3li3HBNhNYd",
+          "created": 1794283647177,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "id": "call_fixture_7",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 63,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c66a001KXi6aIkRDcuSZf",
+          "created": 1794283647178,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "id": "call_fixture_7",
+            "text": "{\"pattern\":\"*.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 64,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c66b001qpb5FFatneYfZe",
+          "created": 1794283647179,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "id": "call_fixture_7",
+            "input": {
+              "pattern": "*.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 65,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c66c001ruwc9pixyLuHGd",
+          "created": 1794283647180,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "ordinal": 0,
+            "text": "Step 7 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 66,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c66d0011trz7wS00Or9xJ",
+          "created": 1794283647181,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 67,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c675001zwMV43xQoTBPc8",
+          "created": 1794283647189,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "id": "call_fixture_7",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 68,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c67b001j0k6cvxmk6nEZx",
+          "created": 1794283647195,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 69,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c67c001GDZWdOEF7o0Pbz",
+          "created": 1794283647196,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 7,
+              "output": 112,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c68b001dBDFgNrK563hvh",
+          "created": 1794283647211,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283587203
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 70,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c68d001r0FlFHnpsLxpzS",
+          "created": 1794283647213,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 71,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c6f2001VEJ27DO4hroZ9C",
+          "created": 1794283647314,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "ordinal": 0,
+            "delta": "Step 8 of 20: listing files that"
+          }
+        },
+        {
+          "id": "evt_1c3a2c752001EQDLPs3loQzNpj",
+          "created": 1794283647410,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "ordinal": 0,
+            "delta": " the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c752002h4Wer4lqZn0Tcr",
+          "created": 1794283647410,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "id": "call_fixture_8",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 72,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c758001xIIQ679koKV6k0",
+          "created": 1794283647416,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "id": "call_fixture_8",
+            "text": "{\"pattern\":\".agents/skills/*/SKILL.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 73,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c75a001oosIE5NVK4H4du",
+          "created": 1794283647418,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "id": "call_fixture_8",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 74,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c75c001MytomJ2UJf1iPk",
+          "created": 1794283647420,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "ordinal": 0,
+            "text": "Step 8 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 75,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c75e001sGW7RtJGhQPSNP",
+          "created": 1794283647422,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 76,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c7650011j53JNH2hLrotL",
+          "created": 1794283647429,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "id": "call_fixture_8",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 77,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c76a0014AtSh5YL4NIsVN",
+          "created": 1794283647434,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c680001BpU6at9W4X2Te1",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 78,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c76c001RsfQfjI7qz9Fqc",
+          "created": 1794283647436,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 8,
+              "output": 128,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c77a0016Ie7aa43jOvJTy",
+          "created": 1794283647450,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283587443
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 79,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c77b0019BUI06CHVxDeN0",
+          "created": 1794283647451,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 80,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c7e1001JQsar9N5eOWpng",
+          "created": 1794283647553,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "ordinal": 0,
+            "delta": "Step 9 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2c84400100HO7AYE0f3h57",
+          "created": 1794283647652,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c844002ZYkjGFMvvtDnVs",
+          "created": 1794283647652,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "id": "call_fixture_9",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 81,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c846001DGyg2h1vHOnlhg",
+          "created": 1794283647654,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "id": "call_fixture_9",
+            "text": "{\"pattern\":\"packages/*/package.json\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 82,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c847001C1BbbPH46GL7qC",
+          "created": 1794283647655,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "id": "call_fixture_9",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 83,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c848001z2U18tjZjpfjV4",
+          "created": 1794283647656,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "ordinal": 0,
+            "text": "Step 9 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 84,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c849001rEm63qpgfIE3Mb",
+          "created": 1794283647657,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 85,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c84f0018RkiEADWVm24kj",
+          "created": 1794283647663,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "id": "call_fixture_9",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 86,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c85300102GYTnbp1grXnK",
+          "created": 1794283647667,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 87,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c8550011hWP01118751XF",
+          "created": 1794283647669,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 9,
+              "output": 144,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c865001o2KTZDdj8mCS51",
+          "created": 1794283647685,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283587677
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 88,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c867001gxrJCM3KS2Hc1D",
+          "created": 1794283647687,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 89,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c8cd001RgPVVp80jYZGC4",
+          "created": 1794283647789,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "ordinal": 0,
+            "delta": "Step 10 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2c931001lXUqbmadVWFBrf",
+          "created": 1794283647889,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2c931002M01x2t2mjwNIZv",
+          "created": 1794283647889,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "id": "call_fixture_10",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 90,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c933001zQfbkUsbTh5GP3",
+          "created": 1794283647891,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "id": "call_fixture_10",
+            "text": "{\"pattern\":\"scripts/perf/*.mjs\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 91,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c933002SthGQ33r7tmN0Y",
+          "created": 1794283647891,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "id": "call_fixture_10",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 92,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c935001Hzr1X7eB85731l",
+          "created": 1794283647893,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "ordinal": 0,
+            "text": "Step 10 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 93,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c936001fpEI2bKD4hkVYr",
+          "created": 1794283647894,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 94,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c93e001GuVENzhdOTnpj5",
+          "created": 1794283647902,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "id": "call_fixture_10",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 95,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2c94400177qY01c9u68Nhv",
+          "created": 1794283647908,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 96,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c947001m2KyelOHmzmVeg",
+          "created": 1794283647911,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 10,
+              "output": 160,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2c957001FZm93eHhSFX8OH",
+          "created": 1794283647927,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283587919
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 97,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c959001xlUmh7uDQGYrqe",
+          "created": 1794283647929,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 98,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2c9bf001LcL7nVoCOPY9zC",
+          "created": 1794283648031,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "ordinal": 0,
+            "delta": "Step 11 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2ca20001va2xgEIuQsKqHW",
+          "created": 1794283648129,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2ca21001EFYpcUlxNt1x81",
+          "created": 1794283648129,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "id": "call_fixture_11",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 99,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca22001IeYfuYghWCOzWC",
+          "created": 1794283648130,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "id": "call_fixture_11",
+            "text": "{\"pattern\":\"*.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 100,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca23001kKgKsPhiT7gqWe",
+          "created": 1794283648131,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "id": "call_fixture_11",
+            "input": {
+              "pattern": "*.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 101,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca24001Du132Fepm81DLr",
+          "created": 1794283648132,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "ordinal": 0,
+            "text": "Step 11 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 102,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca25001RpZDJM6rJ7luy2",
+          "created": 1794283648133,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 103,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca2a001v0KAfxPAFxmemc",
+          "created": 1794283648138,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "id": "call_fixture_11",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 104,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2ca37001qFZEKbnVD8w6ai",
+          "created": 1794283648151,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2c94a001wgGLaXbJHESki8",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 105,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca38001Heir7Wf0AS9gLx",
+          "created": 1794283648152,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 11,
+              "output": 176,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2ca47001lnBSslKVhRDXsL",
+          "created": 1794283648167,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283588159
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 106,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ca48001yQIyfsN6VDOqvG",
+          "created": 1794283648168,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 107,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2caad001P8VVeK5i1wQyET",
+          "created": 1794283648269,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "ordinal": 0,
+            "delta": "Step 12 of 20: listing files th"
+          }
+        },
+        {
+          "id": "evt_1c3a2cb130015XEjJM9uYbip6q",
+          "created": 1794283648371,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "ordinal": 0,
+            "delta": "at the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2cb13002EtmYgwNbFeMeck",
+          "created": 1794283648371,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "id": "call_fixture_12",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 108,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb1a0011Pr9jCvnj1PgEI",
+          "created": 1794283648378,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "id": "call_fixture_12",
+            "text": "{\"pattern\":\".agents/skills/*/SKILL.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 109,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb1d001k2QYeGbkWPl87G",
+          "created": 1794283648381,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "id": "call_fixture_12",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 110,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb2000126P6K1L4v6ect9",
+          "created": 1794283648384,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "ordinal": 0,
+            "text": "Step 12 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 111,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb240017m8hitj0VxkV3M",
+          "created": 1794283648388,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 112,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb35001w2n80u5WD5bEtU",
+          "created": 1794283648405,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "id": "call_fixture_12",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 113,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2cb3d001Dvegs1JHvhN1xy",
+          "created": 1794283648413,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 114,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb3f001a0ATlrWujs3eTa",
+          "created": 1794283648415,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 12,
+              "output": 192,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2cb50001UeLX5aaCTKCpDV",
+          "created": 1794283648432,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283588423
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 115,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cb51001so84qhNw5h53Jo",
+          "created": 1794283648433,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 116,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cbb6001hUtIagcK38P6eX",
+          "created": 1794283648534,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "ordinal": 0,
+            "delta": "Step 13 of 20: listing files th"
+          }
+        },
+        {
+          "id": "evt_1c3a2cc19001V93zyUFohH55cK",
+          "created": 1794283648633,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "ordinal": 0,
+            "delta": "at the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2cc19002Qm9IUUO2mCVg76",
+          "created": 1794283648633,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "id": "call_fixture_13",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 117,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc1c0015z0adn80H0tqMP",
+          "created": 1794283648636,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "id": "call_fixture_13",
+            "text": "{\"pattern\":\"packages/*/package.json\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 118,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc1d001TUUmUFywawrQLm",
+          "created": 1794283648637,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "id": "call_fixture_13",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 119,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc1e001NGxj8NwNArhlxo",
+          "created": 1794283648638,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "ordinal": 0,
+            "text": "Step 13 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 120,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc20001D4vKVbCKZHE0BM",
+          "created": 1794283648640,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 121,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc2a001T3TPXYfWVbvnwd",
+          "created": 1794283648650,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "id": "call_fixture_13",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 122,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2cc30001QEaRB1lJiEjg47",
+          "created": 1794283648656,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 123,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc33001hxhmE4kfzuaJwB",
+          "created": 1794283648659,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 13,
+              "output": 208,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2cc46001QNoHGUbIl0AF0V",
+          "created": 1794283648678,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283588668
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 124,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cc48001J7cliN01cOgzie",
+          "created": 1794283648680,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 125,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ccad0010hBGenDwBp0TYZ",
+          "created": 1794283648781,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "ordinal": 0,
+            "delta": "Step 14 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2cd12001VtF167jN4FY4IC",
+          "created": 1794283648882,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2cd120025XAvu6XigdzyMW",
+          "created": 1794283648882,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "id": "call_fixture_14",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 126,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd14001g9yoTKMwM0AkHT",
+          "created": 1794283648884,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "id": "call_fixture_14",
+            "text": "{\"pattern\":\"scripts/perf/*.mjs\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 127,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd16001Pn3iKG064mM4pK",
+          "created": 1794283648886,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "id": "call_fixture_14",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 128,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd17001F6NGnStfVQqShs",
+          "created": 1794283648887,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "ordinal": 0,
+            "text": "Step 14 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 129,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd190015BBlzHMpiB5lRN",
+          "created": 1794283648889,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 130,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd28001zJ51524kV5hH9V",
+          "created": 1794283648904,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "id": "call_fixture_14",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 131,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2cd30001cOdpCpfeReoYV1",
+          "created": 1794283648912,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 132,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd33001Mp2IEPqRpJFuBW",
+          "created": 1794283648915,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 14,
+              "output": 224,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2cd44001As2UO0Le9RWy0m",
+          "created": 1794283648932,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283588923
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 133,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cd450016Osx3Y0JDrLp7V",
+          "created": 1794283648933,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 134,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cdaa001d2EqI5GHGsfWdU",
+          "created": 1794283649034,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "ordinal": 0,
+            "delta": "Step 15 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2ce0e001V7cwZ7ia2VhnYF",
+          "created": 1794283649134,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2ce0e002LTiwIo8PE3hwRh",
+          "created": 1794283649134,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "id": "call_fixture_15",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 135,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce0f001kTP1Bzg6Zy2SoX",
+          "created": 1794283649135,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "id": "call_fixture_15",
+            "text": "{\"pattern\":\"*.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 136,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce11001lBbLwMY3KIqz9T",
+          "created": 1794283649137,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "id": "call_fixture_15",
+            "input": {
+              "pattern": "*.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 137,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce12001EcKuAb4M5yGFeI",
+          "created": 1794283649138,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "ordinal": 0,
+            "text": "Step 15 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 138,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce15001rCJks7njW5aEtI",
+          "created": 1794283649141,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 139,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce1f0010ReVCJXixI7L3a",
+          "created": 1794283649151,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "id": "call_fixture_15",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 140,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2ce27001JaBvhfbYiJTALn",
+          "created": 1794283649159,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 141,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce28001gawBIxKp9FMmHK",
+          "created": 1794283649160,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 15,
+              "output": 240,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2ce37001cHEWY14DoGzUg4",
+          "created": 1794283649175,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283589167
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 142,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce380017julLfCzeLGv4s",
+          "created": 1794283649176,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 143,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2ce9d0018jZ8BN78uVK6XI",
+          "created": 1794283649277,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "ordinal": 0,
+            "delta": "Step 16 of 20: listing files t"
+          }
+        },
+        {
+          "id": "evt_1c3a2cf01001vLfCqQhddA6Szs",
+          "created": 1794283649377,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "ordinal": 0,
+            "delta": "hat the answer should mention."
+          }
+        },
+        {
+          "id": "evt_1c3a2cf020013LudpGfoh87Yc9",
+          "created": 1794283649378,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "ordinal": 0,
+            "delta": "\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2cf02002G30TTR4pJyV9DO",
+          "created": 1794283649378,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "id": "call_fixture_16",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 144,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf04001vyST8sJTvsdiHx",
+          "created": 1794283649380,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "id": "call_fixture_16",
+            "text": "{\"pattern\":\".agents/skills/*/SKILL.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 145,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf05001XjGxTuDNx4K1ca",
+          "created": 1794283649381,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "id": "call_fixture_16",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 146,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf06001f5ytJXw0dVTlgv",
+          "created": 1794283649382,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "ordinal": 0,
+            "text": "Step 16 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 147,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf07001K59c4PCRSSRgr8",
+          "created": 1794283649383,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 148,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf0e001Y5xOmnmA8FJxT9",
+          "created": 1794283649390,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "id": "call_fixture_16",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 149,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2cf14001aOleZkdB5dAaO4",
+          "created": 1794283649396,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 150,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf150014XBSDJ0py5wk6r",
+          "created": 1794283649398,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 16,
+              "output": 256,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2cf26001H8A8hOc33S3GHH",
+          "created": 1794283649414,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283589405
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 151,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf270017r7PbWJRZ97Pfy",
+          "created": 1794283649415,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 152,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cf8c00170BJR0OOO3DawW",
+          "created": 1794283649517,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "ordinal": 0,
+            "delta": "Step 17 of 20: listing files th"
+          }
+        },
+        {
+          "id": "evt_1c3a2cff00014Sda2gbv3HIxDN",
+          "created": 1794283649616,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "ordinal": 0,
+            "delta": "at the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2cff0002eW8XJ8oTnhjQN9",
+          "created": 1794283649616,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "id": "call_fixture_17",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 153,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cff5001ATFjnu86nLWH77",
+          "created": 1794283649621,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "id": "call_fixture_17",
+            "text": "{\"pattern\":\"packages/*/package.json\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 154,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cff8001EuAm0uqMrqvNhm",
+          "created": 1794283649624,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "id": "call_fixture_17",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 155,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cffb0015VmsO4bt1ivSm7",
+          "created": 1794283649627,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "ordinal": 0,
+            "text": "Step 17 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 156,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2cffd001H5ScrDzeTdbnzj",
+          "created": 1794283649629,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 157,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d008001mBMoHjNNNcJDZL",
+          "created": 1794283649640,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "id": "call_fixture_17",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 158,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2d00d001WvgIR6VaJzgBUb",
+          "created": 1794283649645,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 159,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d00e001mweVcLR6HOuIO7",
+          "created": 1794283649646,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 17,
+              "output": 272,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2d01a0016kngZpg800ilp6",
+          "created": 1794283649658,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283589652
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 160,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d01b001VgN215UslFrqm7",
+          "created": 1794283649659,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 161,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d080001vC23uJPI00YhWF",
+          "created": 1794283649761,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "ordinal": 0,
+            "delta": "Step 18 of 20: listing files tha"
+          }
+        },
+        {
+          "id": "evt_1c3a2d0e7001oljmIRshIP7rai",
+          "created": 1794283649863,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "ordinal": 0,
+            "delta": "t the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2d0e7002DKoVDHhNgZ3l79",
+          "created": 1794283649863,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "id": "call_fixture_18",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 162,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d0ec001vsebP5UvfDT7d0",
+          "created": 1794283649868,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "id": "call_fixture_18",
+            "text": "{\"pattern\":\"scripts/perf/*.mjs\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 163,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d0ef001bi1zZPeElZ3Qfm",
+          "created": 1794283649871,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "id": "call_fixture_18",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 164,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d0f2001J00ZlePibAXeRE",
+          "created": 1794283649874,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "ordinal": 0,
+            "text": "Step 18 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 165,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d0f4001G125hSN8r08qc3",
+          "created": 1794283649876,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 166,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d0fe001SdTMfgWLw65XbY",
+          "created": 1794283649886,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "id": "call_fixture_18",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 167,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2d1030010wj1n95JwQx5jf",
+          "created": 1794283649891,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d011001cZu5UPgIdff7K3",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 168,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d104001U7sGlfT0DqsSCZ",
+          "created": 1794283649892,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 18,
+              "output": 288,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2d11c001HsZDdIpeRiGXoN",
+          "created": 1794283649916,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283589900
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 169,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d11e001Y9e5rQt0V7VDk7",
+          "created": 1794283649918,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 170,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d184001fg0SzPoSk57VZk",
+          "created": 1794283650020,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "ordinal": 0,
+            "delta": "Step 19 of 20: listing files that "
+          }
+        },
+        {
+          "id": "evt_1c3a2d1e0001K1MrynqfsHpAZ9",
+          "created": 1794283650112,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "ordinal": 0,
+            "delta": "the answer should mention.\n\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2d1e0002KYeUJO5XiU8K7A",
+          "created": 1794283650112,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "id": "call_fixture_19",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 171,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d1e5001dOmN72KdZTOspJ",
+          "created": 1794283650117,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "id": "call_fixture_19",
+            "text": "{\"pattern\":\"*.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 172,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d1e80012Sq6zvueZXQuqv",
+          "created": 1794283650120,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "id": "call_fixture_19",
+            "input": {
+              "pattern": "*.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 173,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d1eb001VXckA16yaRjW9k",
+          "created": 1794283650124,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "ordinal": 0,
+            "text": "Step 19 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 174,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d1ee001z1DAGgSuNMKswp",
+          "created": 1794283650126,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 175,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d1fa0016ocnKKsM2vozze",
+          "created": 1794283650138,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "id": "call_fixture_19",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 176,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2d200001JSiI57av1ZGWgl",
+          "created": 1794283650144,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d109001lPfZkDZSB6umJt",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 177,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2010010hz6bfv01odeMU",
+          "created": 1794283650145,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 19,
+              "output": 304,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2d20e001ahmLDQpCqP6372",
+          "created": 1794283650158,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283590152
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 178,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d20f001wcniH66NQu7Sev",
+          "created": 1794283650159,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 179,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d24e001tdSoX6BN70n1a9",
+          "created": 1794283650222,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 20,
+              "output": 1740,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2d24f001czbMrcdk0lIZkP",
+          "created": 1794283650223,
+          "type": "session.renamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "title": "Reference: streaming turn"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 181,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d274001R8D9A9zONbpyp2",
+          "created": 1794283650260,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "ordinal": 0,
+            "delta": "Step 20 of 20: listing files t"
+          }
+        },
+        {
+          "id": "evt_1c3a2d2d9001GY42wVe27gNzlJ",
+          "created": 1794283650361,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "ordinal": 0,
+            "delta": "hat the answer should mention.\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2d2dd00115IWavPSP5bPAK",
+          "created": 1794283650365,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "ordinal": 0,
+            "delta": "\n"
+          }
+        },
+        {
+          "id": "evt_1c3a2d2dd002mpBznqKMidRtiP",
+          "created": 1794283650365,
+          "type": "session.tool.input.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "id": "call_fixture_20",
+            "name": "glob"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 182,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2e3001es0rlggoMLmB0E",
+          "created": 1794283650371,
+          "type": "session.tool.input.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "id": "call_fixture_20",
+            "text": "{\"pattern\":\".agents/skills/*/SKILL.md\"}"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 183,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2e5001qYiqxxap6wX3Hw",
+          "created": 1794283650373,
+          "type": "session.tool.called",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "id": "call_fixture_20",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 184,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2e7001KnYcK3LUl6K0Xp",
+          "created": 1794283650375,
+          "type": "session.text.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "ordinal": 0,
+            "text": "Step 20 of 20: listing files that the answer should mention.\n\n"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 185,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2e90012owGHLB1VfT5ws",
+          "created": 1794283650377,
+          "type": "session.step.streamed",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj"
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 186,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2f0001S4Ss0K6j5bvwdL",
+          "created": 1794283650384,
+          "type": "session.tool.success",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "id": "call_fixture_20",
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            },
+            "executed": false
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 187,
+            "version": 2
+          }
+        },
+        {
+          "id": "evt_1c3a2d2f6001S313vy6Aqwz8qD",
+          "created": 1794283650390,
+          "type": "session.step.ended",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+            "finish": "tool-calls",
+            "rawFinish": "tool_calls",
+            "tokens": {
+              "input": 1,
+              "output": 16,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "cost": 0,
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "files": []
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 188,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d2f80010Qh7ewpecxAX1k",
+          "created": 1794283650392,
+          "type": "session.usage.updated",
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "cost": 0,
+            "tokens": {
+              "input": 21,
+              "output": 1756,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          }
+        },
+        {
+          "id": "evt_1c3a2d30b001LrUMKByV6Sx4v9",
+          "created": 1794283650411,
+          "type": "session.step.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "agent": "build",
+            "model": {
+              "id": "agent-20tools-300cps",
+              "providerID": "perf",
+              "variant": "default"
+            },
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+            "started": 1794283590404
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 189,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d30c001kJF1khvHwFGqWy",
+          "created": 1794283650412,
+          "type": "session.text.started",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0
+          },
+          "durable": {
+            "aggregateID": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+            "seq": 190,
+            "version": 1
+          }
+        },
+        {
+          "id": "evt_1c3a2d372001lzI0L10plN1s54",
+          "created": 1794283650514,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "## 1. Executing a call in a byte"
+          }
+        },
+        {
+          "id": "evt_1c3a2d3db001CyTGmlQrJus98H",
+          "created": 1794283650619,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "code virtual machine\n\nA byteco"
+          }
+        },
+        {
+          "id": "evt_1c3a2d4400014Z51tKKS7YuIXb",
+          "created": 1794283650720,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "de virtual machine executes a f"
+          }
+        },
+        {
+          "id": "evt_1c3a2d4a600125VOfH6kxXWdVv",
+          "created": 1794283650822,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "unction call by creating a new"
+          }
+        },
+        {
+          "id": "evt_1c3a2d50b001s0liVHM08ymBAZ",
+          "created": 1794283650923,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": " **activation record**, bindin"
+          }
+        },
+        {
+          "id": "evt_1c3a2d571001hSw2vud6neF8PC",
+          "created": 1794283651025,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "g the\narguments, and transferri"
+          }
+        },
+        {
+          "id": "evt_1c3a2d5d8001UH3f9jguxwjP4Z",
+          "created": 1794283651128,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "ng control to the callee's firs"
+          }
+        },
+        {
+          "id": "evt_1c3a2d63e001pJjHx6k6CtLc2U",
+          "created": 1794283651230,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "t instruction. The caller's st"
+          }
+        },
+        {
+          "id": "evt_1c3a2d6a2001bee0q9xQDPF1Vr",
+          "created": 1794283651331,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "ate is preserved so that\nexecu"
+          }
+        },
+        {
+          "id": "evt_1c3a2d709001KiF35qNGIgntP1",
+          "created": 1794283651433,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "tion resumes at the instruction"
+          }
+        },
+        {
+          "id": "evt_1c3a2d76e001xTP5Sy7DTkHhqt",
+          "created": 1794283651534,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": " after the call once the callee"
+          }
+        },
+        {
+          "id": "evt_1c3a2d7d3001LosviBM60jLip3",
+          "created": 1794283651635,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": " returns. Round 1 of this docu"
+          }
+        },
+        {
+          "id": "evt_1c3a2d83a001HKe3QhLH0h1Q6B",
+          "created": 1794283651738,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "ment\nrepeats the explanation so"
+          }
+        },
+        {
+          "id": "evt_1c3a2d89f001N9RRapLmyZ6Ry8",
+          "created": 1794283651839,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": " that the response is long enou"
+          }
+        },
+        {
+          "id": "evt_1c3a2d906001rblQgmE7nqWRDy",
+          "created": 1794283651942,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "gh to measure.\n\n1. The compiler"
+          }
+        },
+        {
+          "id": "evt_1c3a2d96f0017lybsHyboOGwSy",
+          "created": 1794283652047,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": " emits a `CALL` instruction ca"
+          }
+        },
+        {
+          "id": "evt_1c3a2d9d40011BEzyFBuSZRo47",
+          "created": 1794283652148,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "rrying the argument count.\n2. T"
+          }
+        },
+        {
+          "id": "evt_1c3a2da390017SHHgkSoDPacOk",
+          "created": 1794283652249,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "he interpreter pops the callee "
+          }
+        },
+        {
+          "id": "evt_1c3a2daa0001KgmBENyMy3Kb4a",
+          "created": 1794283652352,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "and its arguments from the ope"
+          }
+        },
+        {
+          "id": "evt_1c3a2db06001F6wR7rk5QrSMqS",
+          "created": 1794283652454,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "rand stack.\n3. A frame is pushe"
+          }
+        },
+        {
+          "id": "evt_1c3a2db6c0013CWLF8GrgtxxWq",
+          "created": 1794283652556,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "d holding the return address, t"
+          }
+        },
+        {
+          "id": "evt_1c3a2dbd2001iI5aXOLzmPo7cr",
+          "created": 1794283652658,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "he base pointer and the locals"
+          }
+        },
+        {
+          "id": "evt_1c3a2dc38001NS48dcFwE4ENdp",
+          "created": 1794283652760,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": ".\n4. The dispatch loop continu"
+          }
+        },
+        {
+          "id": "evt_1c3a2dc9e001pYaheV6JDQW9RC",
+          "created": 1794283652862,
+          "type": "session.text.delta",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "data": {
+            "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+            "assistantMessageID": "msg_1c3a2d300001QE9EW0OXegcKTp",
+            "ordinal": 0,
+            "delta": "es at the callee's entry point.\n"
+          }
+        }
+      ]
+    }
+  ]
+}
