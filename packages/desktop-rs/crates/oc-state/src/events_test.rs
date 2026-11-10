@@ -7,7 +7,7 @@ use crate::fixture_test::{
     messages, opened, replay, session, session_of, sessions_of,
 };
 use crate::ids::{RequestId, SessionId};
-use crate::session_list::PendingRequest;
+use crate::session_entry::PendingRequest;
 use crate::state::State;
 use crate::status::SessionStatus;
 

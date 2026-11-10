@@ -80,6 +80,9 @@ pub struct SessionTime {
     /// When the last turn ended; missing until the first turn ends.
     #[serde(default)]
     pub idle: Option<u64>,
+    /// When the session was archived; absent while it is active.
+    #[serde(default)]
+    pub archived: Option<u64>,
 }
 
 /// One session of the list or of a create answer. `title` is missing until the first
@@ -96,10 +99,13 @@ pub struct Session {
     pub location: Location,
     /// Created and updated times.
     #[serde(default)]
-    pub time: SessionTime,
+    pub time: Box<SessionTime>,
     /// Metadata the server and clients attach; the spike reads the work state.
     #[serde(default)]
     pub metadata: SessionMetadata,
+    /// The session this one nests under, when it is a subagent or a side conversation.
+    #[serde(default, rename = "parentID")]
+    pub parent_id: Option<String>,
 }
 
 /// Body of `POST /api/session/:id/prompt`; the plain composer send carries nothing else.

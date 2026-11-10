@@ -9,6 +9,11 @@ use serde::Deserialize;
 use serde_json::Value;
 
 const WORK_STATE: &str = "/openchamber/work/state";
+const PINNED_AT: &str = "/openchamber/pinned/at";
+const PINNED_LIST: &str = "/openchamber/pinned/list";
+const KIND: &str = "/openchamber/kind";
+const ORIGINAL_SESSION: &str = "/openchamber/originalSessionID";
+const BTW_KIND: &str = "btw";
 
 /// Whether a session is tracked as work, `metadata.openchamber.work.state`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -42,6 +47,34 @@ impl SessionMetadata {
             "done" => Some(WorkState::Done),
             _ => None,
         }
+    }
+
+    /// `openchamber.pinned.at` is a number and a present `list` is a non-empty string;
+    /// the pin schema rejects the whole pin otherwise
+    /// (`packages/ui/src/lib/sessionPins.ts:26-31`).
+    pub fn pinned(&self) -> bool {
+        if !self.0.pointer(PINNED_AT).is_some_and(Value::is_number) {
+            return false;
+        }
+        match self.0.pointer(PINNED_LIST) {
+            Some(Value::String(list)) => !list.is_empty(),
+            Some(_) => false,
+            None => true,
+        }
+    }
+
+    /// `openchamber.pinned.list`, when the pin is filed in one of the user's lists
+    /// (`packages/ui/src/lib/sessionPins.ts:33-38`).
+    pub fn pin_list(&self) -> Option<&str> {
+        self.0.pointer(PINNED_LIST).and_then(Value::as_str)
+    }
+
+    /// `openchamber.kind` is `btw` and `originalSessionID` is a non-empty string
+    /// (`packages/ui/src/lib/sessionBtwMetadata.ts:55-62`).
+    pub fn btw(&self) -> bool {
+        let kind = self.0.pointer(KIND).and_then(Value::as_str);
+        let original = self.0.pointer(ORIGINAL_SESSION).and_then(Value::as_str);
+        kind == Some(BTW_KIND) && original.is_some_and(|id| !id.trim().is_empty())
     }
 }
 

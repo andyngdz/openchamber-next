@@ -8,7 +8,7 @@ use crate::ids::{CallId, MessageId, SessionId};
 use crate::message::{
     AssistantMessage, ChatMessage, Delivery, Item, StepTiming, TextItem, ToolItem, UserMessage,
 };
-use crate::session_list::SessionEntry;
+use crate::session_entry::SessionEntry;
 use crate::status::SessionStatus;
 
 /// A sidebar row from a listed or created session.
@@ -32,6 +32,15 @@ pub(crate) fn session_entry(session: &Session) -> SessionEntry {
         session.title.clone(),
         time.created,
         activity,
+    )
+    .with_directory(session.location.directory.as_str())
+    .with_updated(time.updated)
+    .with_split_facts(
+        time.archived.is_some_and(|archived| archived > 0),
+        session.metadata.pinned(),
+        session.metadata.pin_list().map(str::to_owned),
+        session.metadata.btw(),
+        session.parent_id.clone(),
     )
     .with_listed_status(status, busy.max(idle))
     .with_work(session.metadata.work_state())

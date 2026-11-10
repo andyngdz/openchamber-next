@@ -97,7 +97,13 @@ impl State {
 
     fn add_created_session(&mut self, session: &Session) {
         self.create_error = None;
-        self.sessions.insert(session_entry(session));
+        let entry = session_entry(session);
+        if session.location.directory == self.directory {
+            self.sessions.insert(entry.clone());
+        }
+        if self.sidebar_admits(&session.location.directory) {
+            self.global.list.insert(entry);
+        }
         let id = SessionId::from(session.id.as_str());
         self.open_session(id, LoadStatus::Ready);
     }

@@ -1,5 +1,7 @@
 //! Fixture loading and state builders shared by the tests.
 
+use oc_client::filesystem::Home;
+use oc_client::settings::Settings;
 use oc_client::types::{Data, Message, Page, Session};
 use oc_client::{Event, EventData};
 use serde::de::DeserializeOwned;
@@ -62,6 +64,40 @@ pub(crate) fn api_messages(name: &str) -> Vec<Message> {
 pub(crate) fn api_sessions(name: &str) -> Vec<Session> {
     let page: Page<Session> = read_json(&format!("api/{name}.json"));
     page.data
+}
+
+/// The captured settings document.
+pub(crate) fn api_settings() -> Settings {
+    read_json("api/settings.json")
+}
+
+/// The captured home info.
+pub(crate) fn api_home() -> Home {
+    read_json("api/fs-home.json")
+}
+
+/// Hand-built settings, with every key the test does not name taking its default.
+pub(crate) fn settings(value: Value) -> Settings {
+    serde_json::from_value(value).unwrap_or_else(|err| panic!("settings: {err}"))
+}
+
+/// Hand-built home info.
+pub(crate) fn home(value: Value) -> Home {
+    serde_json::from_value(value).unwrap_or_else(|err| panic!("home: {err}"))
+}
+
+/// A global-list session in `directory`, last updated at `updated` ms.
+pub(crate) fn sidebar_session(id: &str, directory: &str, updated: u64) -> Session {
+    sidebar_from(json!({
+        "id": id,
+        "location": {"directory": directory},
+        "time": {"created": updated, "updated": updated},
+    }))
+}
+
+/// A global-list session from a hand-built JSON object.
+pub(crate) fn sidebar_from(value: Value) -> Session {
+    serde_json::from_value(value).unwrap_or_else(|err| panic!("sidebar session: {err}"))
 }
 
 /// The project directory every capture ran in.

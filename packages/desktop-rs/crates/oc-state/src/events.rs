@@ -13,7 +13,8 @@ use oc_client::{Event, EventData};
 
 use crate::ids::{RequestId, SessionId};
 use crate::message_events::reduce_message_event;
-use crate::session_list::{PendingRequest, SessionEntry};
+use crate::session_entry::{PendingRequest, SessionEntry};
+use crate::session_list::SessionList;
 use crate::state::State;
 use crate::status::SessionStatus;
 
@@ -75,7 +76,7 @@ fn is_foreign(state: &State, event: &Event) -> bool {
         target: crate::logging::STATE,
         session = session_id,
         event = %event.id,
-        "[STATE] Dropped event of a session outside the directory"
+        "[STATE] Dropped event of a session outside every shown group"
     );
     true
 }
@@ -125,31 +126,46 @@ fn drop_unhandled(event: &Event, kind: &str) {
     );
 }
 
-/// `session.created` carries no title; it arrives with `session.renamed`.
+/// `session.created` carries no title; it arrives with `session.renamed`. The session joins
+/// the scoped list when its directory is the scoped one, and the shared sidebar when the split
+/// below puts its directory in a group (design, State).
 fn add_session(state: &mut State, created: &SessionCreated, at: u64) {
-    if created.location.directory != state.directory {
-        return;
+    let directory = created.location.directory.as_str();
+    let entry = SessionEntry::new(SessionId::from(created.session_id.as_str()), None, at, at)
+        .with_directory(directory);
+    if directory == state.directory {
+        state.sessions.insert(entry.clone());
     }
-    let id = SessionId::from(created.session_id.as_str());
-    state.sessions.insert(SessionEntry::new(id, None, at, at));
+    if state.sidebar_admits(directory) {
+        state.global.list.insert(entry);
+    }
 }
 
 fn rename_session(state: &mut State, renamed: &SessionRenamed) {
-    if let Some(entry) = state.sessions.get_mut(&renamed.session_id) {
-        entry.title = Some(renamed.title.clone());
+    for list in [&mut state.sessions, &mut state.global.list] {
+        if let Some(entry) = list.get_mut(&renamed.session_id) {
+            entry.title = Some(renamed.title.clone());
+        }
     }
 }
 
-/// The event carries the whole metadata, so it replaces the work state, as `events.ts` does
-/// for `session.metadata.updated`: metadata without a work state takes the session out of work.
+/// The event carries the whole metadata, so it replaces the work state, the pin and the `/btw`
+/// marker, as `events.ts` does for `session.metadata.updated`: metadata without a work state
+/// takes the session out of work, and metadata without a pin takes it out of Pinned.
 fn update_metadata(state: &mut State, updated: &MetadataUpdated) {
-    if let Some(entry) = state.sessions.get_mut(&updated.session_id) {
-        entry.work = updated.metadata.work_state();
+    for list in [&mut state.sessions, &mut state.global.list] {
+        if let Some(entry) = list.get_mut(&updated.session_id) {
+            entry.work = updated.metadata.work_state();
+            entry.pinned = updated.metadata.pinned();
+            entry.pin_list = updated.metadata.pin_list().map(str::to_owned);
+            entry.btw = updated.metadata.btw();
+        }
     }
 }
 
 fn remove_session(state: &mut State, session_id: &str) {
     state.sessions.remove(session_id);
+    state.global.list.remove(session_id);
     if state.is_open(session_id) {
         state.open = None;
     }
@@ -173,27 +189,36 @@ fn apply_status_event(state: &mut State, event: &Event, status: &StatusEvent, at
 /// A change between busy and settled moves the session to the top, as in React; a repeat of
 /// the same phase does not.
 fn set_status(state: &mut State, session_id: &str, status: SessionStatus, at: u64) {
-    let Some(entry) = state.sessions.get_mut(session_id) else {
+    apply_status(&mut state.sessions, session_id, status, at);
+    apply_status(&mut state.global.list, session_id, status, at);
+}
+
+fn apply_status(list: &mut SessionList, session_id: &str, status: SessionStatus, at: u64) {
+    let Some(entry) = list.get_mut(session_id) else {
         return;
     };
     let was_busy = entry.is_busy();
     entry.record_status(status, at);
     if was_busy != entry.is_busy() {
-        state.sessions.touch(session_id, at);
+        list.touch(session_id, at);
     }
 }
 
 fn add_pending(state: &mut State, session_id: &str, request: PendingRequest) {
-    if let Some(entry) = state.sessions.get_mut(session_id)
-        && !entry.pending.contains(&request)
-    {
-        entry.pending.push(request);
+    for list in [&mut state.sessions, &mut state.global.list] {
+        if let Some(entry) = list.get_mut(session_id)
+            && !entry.pending.contains(&request)
+        {
+            entry.pending.push(request.clone());
+        }
     }
 }
 
 fn remove_pending(state: &mut State, session_id: &str, request: &PendingRequest) {
-    if let Some(entry) = state.sessions.get_mut(session_id) {
-        entry.pending.retain(|pending| pending != request);
+    for list in [&mut state.sessions, &mut state.global.list] {
+        if let Some(entry) = list.get_mut(session_id) {
+            entry.pending.retain(|pending| pending != request);
+        }
     }
 }
 

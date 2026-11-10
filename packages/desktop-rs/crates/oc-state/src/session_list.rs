@@ -1,104 +1,13 @@
-//! The directory's sessions in the order the sidebar shows them.
+//! The sessions of one view, always in sidebar order.
 //!
-//! The React sidebar orders a directory's sessions newest activity first
-//! (`compareSessionsByLifecycleOrder` in `packages/ui/src/sync/session-ordering.ts`): a session
-//! moves to the top when it starts or ends a turn, and otherwise sits at its last activity time,
-//! ties broken by newer creation, then by id. Here a turn start or end stamps the event's
-//! `created`, and a loaded session starts at `time.idle`, else `time.updated`, else
-//! `time.created`, as `getSessionActivityTime` does; a rename does not move a session in either.
-//! Pinned sessions, which React lists first, do not exist in the spike.
+//! Ordering is [`SessionEntry`]'s: pinned first, then newest activity, newer creation, id
+//! (`packages/ui/src/sync/session-ordering.ts:205-228`).
 
-use std::cmp::Reverse;
-
-use oc_client::types::WorkState;
-
-use crate::ids::{RequestId, SessionId};
+use crate::ids::SessionId;
+use crate::session_entry::SessionEntry;
 use crate::status::SessionStatus;
 
-/// A request from the agent the user has not answered.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum PendingRequest {
-    /// A `permission.asked` request.
-    Permission(RequestId),
-    /// A `form.created` form.
-    Form(RequestId),
-}
-
-/// One sidebar row.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SessionEntry {
-    /// Session id.
-    pub id: SessionId,
-    /// `None` until the first turn has been titled.
-    pub title: Option<String>,
-    /// Whether a turn runs; drives the busy indicator.
-    pub status: SessionStatus,
-    /// Unanswered permission requests and forms, oldest first.
-    pub pending: Vec<PendingRequest>,
-    /// `metadata.openchamber.work.state`, from the list or the latest metadata event.
-    pub work: Option<WorkState>,
-    activity: u64,
-    created: u64,
-    /// When `status` was last set (ms): an event's time, or the newest turn stamp of a list.
-    status_at: u64,
-}
-
-impl SessionEntry {
-    /// A row created at `created` (ms) and last active at `activity` (ms).
-    pub(crate) fn new(id: SessionId, title: Option<String>, created: u64, activity: u64) -> Self {
-        Self {
-            id,
-            title,
-            status: SessionStatus::Idle,
-            pending: Vec::new(),
-            work: None,
-            activity,
-            created,
-            status_at: 0,
-        }
-    }
-
-    /// Sets the status the list reports, stamped with the turn time it was read from.
-    pub(crate) fn with_listed_status(mut self, status: SessionStatus, at: u64) -> Self {
-        self.status = status;
-        self.status_at = at;
-        self
-    }
-
-    /// Sets the status an event reports at `at` (ms).
-    pub(crate) fn record_status(&mut self, status: SessionStatus, at: u64) {
-        self.status = status;
-        self.status_at = self.status_at.max(at);
-    }
-
-    /// Sets the work state the listed metadata reports.
-    pub(crate) fn with_work(mut self, work: Option<WorkState>) -> Self {
-        self.work = work;
-        self
-    }
-
-    /// The sidebar lists the session under "In work": its work state is open, as
-    /// `isSessionInWork` in `packages/ui/src/lib/sessionWorkMetadata.ts` decides.
-    pub fn is_in_work(&self) -> bool {
-        self.work == Some(WorkState::Open)
-    }
-
-    /// The busy indicator.
-    pub fn is_busy(&self) -> bool {
-        self.status == SessionStatus::Busy
-    }
-
-    /// The agent is waiting for an answer.
-    pub fn is_waiting(&self) -> bool {
-        !self.pending.is_empty()
-    }
-
-    fn order_key(&self) -> (Reverse<u64>, Reverse<u64>, &SessionId) {
-        (Reverse(self.activity), Reverse(self.created), &self.id)
-    }
-}
-
-/// The sessions of the directory, always in sidebar order.
+/// The sessions of one view, always in sidebar order.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct SessionList {
     entries: Vec<SessionEntry>,
@@ -115,7 +24,7 @@ impl SessionList {
         self.entries.len()
     }
 
-    /// The directory has no session.
+    /// The view has no session.
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }
@@ -190,5 +99,5 @@ impl SessionList {
 }
 
 #[cfg(test)]
-#[path = "work_test.rs"]
-mod work_test;
+#[path = "session_list_test.rs"]
+mod session_list_test;
