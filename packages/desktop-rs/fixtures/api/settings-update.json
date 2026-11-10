@@ -1,0 +1,128 @@
+{
+  "lightThemeId": "openchamber-light",
+  "darkThemeId": "openchamber-dark",
+  "projects": [
+    {
+      "id": "path_L3RtcC9vYy1kZXNrdG9wLXJzLWNhcHR1cmUvcHJvamVjdA",
+      "path": "/tmp/oc-desktop-rs-capture/project",
+      "label": "Fixture project",
+      "icon": "rocket",
+      "iconBackground": "#e0e7ff",
+      "color": "#4F46E5",
+      "addedAt": 1799999998000,
+      "lastOpenedAt": 1799999999000,
+      "sidebarCollapsed": false
+    },
+    {
+      "id": "path_L3RtcC9vYy1kZXNrdG9wLXJzLWNhcHR1cmUvcHJvamVjdC10d28",
+      "path": "/tmp/oc-desktop-rs-capture/project-two",
+      "label": "Second fixture project",
+      "addedAt": 1799999996000,
+      "lastOpenedAt": 1799999997000,
+      "sidebarCollapsed": true
+    }
+  ],
+  "activeProjectId": "path_L3RtcC9vYy1kZXNrdG9wLXJzLWNhcHR1cmUvcHJvamVjdC10d28",
+  "sidebarProjectSortOrder": "a-z",
+  "sidebarShowChatsSection": true,
+  "sidebarShowWorkSection": true,
+  "sidebarShowPinnedSection": true,
+  "sidebarSections": [
+    {
+      "kind": "builtin",
+      "id": "chats"
+    },
+    {
+      "kind": "builtin",
+      "id": "pinned"
+    },
+    {
+      "kind": "builtin",
+      "id": "work"
+    },
+    {
+      "kind": "builtin",
+      "id": "projects"
+    }
+  ],
+  "securityScopedBookmarks": [],
+  "notifyOnSubtasks": true,
+  "notifyOnCompletion": true,
+  "notifyOnPullRequests": true,
+  "notifyOnError": true,
+  "notifyOnQuestion": true,
+  "notificationTemplates": {
+    "completion": {
+      "title": "",
+      "message": ""
+    },
+    "error": {
+      "title": "",
+      "message": ""
+    },
+    "question": {
+      "title": "",
+      "message": ""
+    },
+    "subtask": {
+      "title": "",
+      "message": ""
+    }
+  },
+  "defaultModel": "perf/stream-600cps",
+  "lastSelectedModel": "perf/stream-600cps",
+  "defaultVariant": "high",
+  "defaultAgent": "capture-primary",
+  "enterToSend": true,
+  "enterToSendConfigured": true,
+  "favoriteModels": [
+    {
+      "providerID": "perf",
+      "modelID": "stream-600cps"
+    },
+    {
+      "providerID": "perf-second",
+      "modelID": "alt-thinking"
+    }
+  ],
+  "recentModels": [
+    {
+      "providerID": "perf",
+      "modelID": "stream-600cps"
+    },
+    {
+      "providerID": "perf-second",
+      "modelID": "alt-chat-300cps"
+    }
+  ],
+  "hiddenModels": [
+    {
+      "providerID": "perf",
+      "modelID": "stream-100cps"
+    }
+  ],
+  "recentAgents": [
+    "capture-secondary",
+    "capture-primary"
+  ],
+  "favoriteAgents": [
+    "capture-primary"
+  ],
+  "lastUsedEfforts": {
+    "perf/stream-600cps": "high",
+    "perf-second/alt-thinking": null
+  },
+  "hasManagedRemoteTunnelToken": false,
+  "hasDesktopUiPassword": false,
+  "agentMemoryFeatureAvailable": true,
+  "agentWorkflowFeatureAvailable": true,
+  "overviewFeatureAvailable": false,
+  "routingFeatureAvailable": true,
+  "pwaOrientation": "system",
+  "mobileKeyboardMode": "native",
+  "inputHistoryScope": "session",
+  "inputHistoryLimit": 40,
+  "pinnedDirectories": [],
+  "showReasoningTraces": false,
+  "collapsibleThinkingBlocks": true
+}

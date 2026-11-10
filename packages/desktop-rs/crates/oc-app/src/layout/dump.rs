@@ -32,6 +32,9 @@ struct RegionDumps {
     composer: RegionDump,
     work_status_panel: RegionDump,
     icon_rail: RegionDump,
+    /// The open picker popup; a frame with no popup omits it, like the reference.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    popover: Option<RegionDump>,
 }
 
 #[derive(Debug, Serialize)]
@@ -54,6 +57,7 @@ struct ControlDump {
     name: String,
     key: String,
     shown: bool,
+    bounds: BoundsDump,
 }
 
 impl LayoutDump {
@@ -83,6 +87,10 @@ impl LayoutDump {
                 composer: region(Area::Composer)?,
                 work_status_panel: region(Area::WorkStatusPanel)?,
                 icon_rail: region(Area::IconRail)?,
+                popover: match registry.region(Area::Popover) {
+                    Some(_) => Some(region(Area::Popover)?),
+                    None => None,
+                },
             },
         })
     }
@@ -108,7 +116,7 @@ fn region_dump(
         controls: registry
             .controls_in(area)
             .into_iter()
-            .map(control_dump)
+            .map(|placed| control_dump(placed, origin))
             .collect(),
     })
 }
@@ -128,7 +136,7 @@ fn hundredths(value: Pixels) -> f64 {
     (f64::from(f32::from(value)) * 100.).round() / 100.
 }
 
-fn control_dump(placed: PlacedControl) -> ControlDump {
+fn control_dump(placed: PlacedControl, origin: Point<Pixels>) -> ControlDump {
     let shown = match placed.spec.reveal {
         Reveal::Always => true,
         Reveal::OnHover(_) | Reveal::Hidden => false,
@@ -138,6 +146,7 @@ fn control_dump(placed: PlacedControl) -> ControlDump {
         name: placed.spec.name.to_string(),
         key: placed.spec.key.to_string(),
         shown,
+        bounds: bounds_dump(placed.bounds, origin),
     }
 }
 

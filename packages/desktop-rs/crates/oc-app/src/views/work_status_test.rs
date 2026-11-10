@@ -5,12 +5,9 @@ use crate::fixture::StateScript;
 use crate::fixture::fixture_test::state_path;
 
 fn replay(name: &str) -> State {
-    let script = StateScript::load(&state_path(name)).expect("state fixture loads");
-    let mut state = State::new(script.directory);
-    for action in script.actions {
-        state.apply(action);
-    }
-    state
+    StateScript::load(&state_path(name))
+        .expect("state fixture loads")
+        .state()
 }
 
 #[test]

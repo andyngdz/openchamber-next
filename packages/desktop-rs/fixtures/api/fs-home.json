@@ -1,0 +1,6 @@
+{
+  "home": "/tmp/oc-desktop-rs-capture/state/home",
+  "chatsRoot": "/tmp/oc-desktop-rs-capture/state/oc-data/chats",
+  "canonicalChatsRoot": "/tmp/oc-desktop-rs-capture/state/oc-data/chats",
+  "canonicalLegacyChatsRoot": "/tmp/oc-desktop-rs-capture/state/home/.config/openchamber/chats"
+}

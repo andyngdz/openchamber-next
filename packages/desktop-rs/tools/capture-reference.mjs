@@ -1,27 +1,45 @@
 #!/usr/bin/env node
 /**
  * Captures the layout reference the GPUI parity test compares against:
- * `fixtures/reference/<state>.json` and `<state>.png` for the states empty,
- * session and streaming, taken from the Electron dev window at a 1440x900
- * content area.
+ * `fixtures/reference/<state>.json` and `<state>.png`, taken from the Electron
+ * dev window at a 1440x900 content area, and writes the same run's server
+ * responses as version 2 state fixtures to `fixtures/states/<state>.json`. Each reference
+ * control carries the bounds of the element its key comes from, the measurement the composer
+ * and popover layout follows.
  *
  * The window runs isolated from the user's own app: its own HOME (and XDG
  * directories, so OpenCode's database lands there too), OPENCHAMBER_DATA_DIR,
  * Electron profile (OPENCHAMBER_DESKTOP_USER_DATA_DIR, which also avoids the
  * dev profile's single-instance lock), HMR ports, and an OpenCode config that
- * registers the fixture provider (`scripts/perf/fixture-provider.mjs`) as the
- * default model. Display variables (DISPLAY, WAYLAND_DISPLAY, XDG_RUNTIME_DIR,
- * DBUS_SESSION_BUS_ADDRESS) pass through, so the window opens on the user's
- * session. Stub `gh`, `glab` and `gt` executables come first on PATH, since
- * `gh auth token` reads the system keyring even with an empty HOME. Everything
- * lives under one temporary root, removed at the end (kept, with its logs,
- * when a run fails). A fresh Electron profile relaunches the app once shortly
- * after its first start; the script waits for a page that stays mounted.
+ * registers the fixture provider (`scripts/perf/fixture-provider.mjs`) twice,
+ * under `perf` and `perf-alt`, with several models each. `perf`'s agent model
+ * carries two variants so the Thinking menu has content. Display variables
+ * (DISPLAY, WAYLAND_DISPLAY, XDG_RUNTIME_DIR, DBUS_SESSION_BUS_ADDRESS) pass
+ * through, so the window opens on the user's session. Stub `gh`, `glab` and
+ * `gt` executables come first on PATH, since `gh auth token` reads the system
+ * keyring even with an empty HOME. Everything lives under one fixed temporary
+ * root, removed at the end (kept, with its logs, when a run fails). A fresh
+ * Electron profile relaunches the app once shortly after its first start; the
+ * script waits for a page that stays mounted.
  *
- * States: `empty` with both seed sessions in the sidebar and none open;
- * `session` after one finished turn, scrolled to its end with the mouse
- * wheel; `streaming` when every tool call has run and the document's first
- * heading is on screen, before its first code block.
+ * Seed (`fixtures/seed.json`): two projects from a settings PUT, one collapsed
+ * and one with a colour and an icon; two project sessions; one In work session
+ * (metadata `openchamber.work.state=open` through the server's metadata route);
+ * one session in the second project; two Chat sessions created under
+ * `chatsRoot` with `POST /api/fs/mkdir` and `POST /api/session`, as React
+ * creates them. The settings also seed favourites, recents and `lastUsedEfforts`.
+ *
+ * States: `empty` with no session open; `projects` with the same sidebar (the
+ * page does not change between the two captures); `project-popover`,
+ * `model-popover` and `agent-menu` opened from the empty state by clicking
+ * their trigger through CDP; `session` after one finished turn, scrolled to its
+ * end with the mouse wheel; `thinking-menu` from that open session;
+ * `streaming` when every tool call has run and the document's first heading is
+ * on screen, before its first code block. `server-error` has a state fixture
+ * but no reference: Electron runs the server in its own process and replaces
+ * the window with its connection screen when the data routes fail, so the
+ * shell has no regions to capture. The spike design says the same (archived
+ * design.md, "Parity reference").
  *
  * Regions and the selectors that find them (REGIONS; language independent,
  * and written to every JSON under `selectors`, the only place a selector
@@ -38,11 +56,18 @@
  *   workStatusPanel  [data-right-slot]  (the slot that holds the Work status
  *                    card; 300 px card plus its 24 px gutter)
  *   iconRail         nav:has([data-context-surface])
+ *   popover          the open Base UI popup: the rendered element with role
+ *                    `dialog` or `menu` that is inside none of the other
+ *                    regions. Both pickers use `@base-ui/react`, which portals
+ *                    the popup under body, so no other selector can find it
+ *                    without also matching closed menus. One of the first six
+ *                    regions is found before a popup is looked for, so the
+ *                    rule is "inside no other region", not a fixed ancestor.
  *
  * A control belongs to the first region in the order composer,
- * workStatusPanel, iconRail, header, sidebar, chatColumn that contains it, so
- * the composer's controls are not listed again under chatColumn. A control in
- * no region goes to `outside`, never dropped.
+ * workStatusPanel, iconRail, header, sidebar, chatColumn, popover that contains
+ * it, so the composer's controls are not listed again under chatColumn. A
+ * control in no region goes to `outside`, never dropped.
  *
  * A control is an element matched by CONTROL_SELECTOR that is rendered
  * (`checkVisibility` with visibility; not display:none, visibility:hidden or
@@ -102,15 +127,26 @@
  * the rules applied.
  * Nothing else is normalized or dropped.
  *
+ * State fixtures (version 2, `fixtures/states/<state>.json`): `home` is the
+ * `/api/fs/home` response, `settings` the `surface=desktop` settings document,
+ * each `directories` entry the config documents and the provider, model, agent
+ * and session payloads for that directory, `draft` the composer target, `steps`
+ * the reducer steps (connection, the open session and its messages), and `open`
+ * the popup a state shows, when it shows one. Session and message ids and every
+ * timestamp are rewritten to stable values, and instance paths and durations
+ * to fixed ones, so two runs produce byte-identical JSON while the records keep
+ * their shape and order.
+ *
  * The fixtures are committed, so no JSON may name the user: the run fails and
  * writes nothing when one contains the home directory, the repository path or
- * the user name.
+ * the user name. No path carries a `../` segment.
  *
  * Usage: node packages/desktop-rs/tools/capture-reference.mjs [--output <dir>]
  */
 
 import { spawn } from "node:child_process"
 import { createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from "node:fs"
+import { connect } from "node:net"
 import { homedir, tmpdir, userInfo } from "node:os"
 import { basename, dirname, join, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
@@ -129,10 +165,12 @@ const importPerf = (name) => import(pathToFileURL(join(REPO_ROOT, "scripts/perf"
 const { CdpClient, findPageTarget, reservePort, wait } = await importPerf("cdp.mjs")
 const { fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
 const { ensureProject, isolatedEnv, startFixture } = await importPerf("isolated-server.mjs")
-// A fixed root, so paths the UI shows are the same on every run. The CDP port
-// is fixed too, so two runs cannot overlap anyway.
+// A fixed root, so paths the UI shows are the same on every run. The CDP and
+// fixture ports are fixed too, so two runs cannot overlap and provider
+// settings do not carry a new port each time; both must be free before a run.
 const ROOT = join(tmpdir(), "oc-desktop-rs-reference")
 const CDP_PORT = 9222
+const FIXTURE_PORT = 4601
 const VIEWPORT = { width: 1440, height: 900 }
 const SIDEBAR_WIDTH = 280
 // WORK_STATUS_COLUMN_WIDTH in packages/ui/src/components/chat/work-status/useWorkStatusVisibility.ts:
@@ -141,23 +179,44 @@ const WORK_STATUS_CARD_WIDTH = 300
 const WORK_STATUS_COLUMN_WIDTH = 324
 // Over the right slot, under the Work status card: no control, no hover reveal.
 const POINTER_REST = { x: 1230, y: 820 }
+// Long enough past the heading to show its first paragraph, short of the
+// first code fence; the text is cut here so two runs write the same state.
+const STREAMING_TEXT_CHARACTERS = 400
+// A failed run still has a server error card; the reasons are fixed so the
+// fixture does not depend on an actual crash.
+const SERVER_ERROR = {
+  message: "The server exited before printing its port (exit status 1)",
+  stderrTail: [
+    "node:internal/modules/cjs/loader:1228",
+    "Error: Cannot find module 'express'",
+  ],
+  logTail: [
+    "[openchamber] Starting OpenChamber server",
+    "[openchamber] Failed to load the server module",
+  ],
+}
 
 // The forge CLIs the server asks for credentials (packages/web/server/lib/github, gitlab, gitea).
 const FORGE_CLIS = ["gh", "glab", "gt"]
 
 const HELP = `Usage: node packages/desktop-rs/tools/capture-reference.mjs [--output <dir>]
 
-Starts the Electron dev window isolated from the user's app, seeds the project
-and sessions from fixtures/seed.json, and writes <state>.json and <state>.png
-for empty, session and streaming to --output (default fixtures/reference).
-Needs port ${CDP_PORT} free and a graphical session.`
+Starts the Electron dev window isolated from the user's app, seeds two projects,
+their sessions, two Chat sessions and an In work session from fixtures/seed.json,
+and writes <state>.json and <state>.png for empty, projects, project-popover,
+model-popover, agent-menu, session, thinking-menu and streaming to --output
+(default fixtures/reference). It also writes the same run's responses as version
+2 state fixtures to fixtures/states, including server-error, which has no
+Electron reference.
+Needs ports ${CDP_PORT} (CDP) and ${FIXTURE_PORT} (fixture provider) free and a graphical session.`
 
 const parseArgs = (argv) => {
-  const options = { output: join(PACKAGE_ROOT, "fixtures/reference") }
+  const options = { output: join(PACKAGE_ROOT, "fixtures/reference"), statesOutput: join(PACKAGE_ROOT, "fixtures/states") }
   for (let index = 0; index < argv.length; index += 1) {
     const value = argv[index]
     if (value === "--help") { console.log(HELP); process.exit(0) }
     else if (value === "--output") options.output = resolve(argv[++index])
+    else if (value === "--states-output") options.statesOutput = resolve(argv[++index])
     else throw new Error(`Unknown option: ${value}`)
   }
   return options
@@ -182,9 +241,41 @@ const waitFor = async (label, check, { timeoutMs = 60_000, intervalMs = 250 } = 
   throw new Error(`Timed out after ${timeoutMs / 1000}s waiting for ${label}`)
 }
 
+const portInUse = (port) => new Promise((resolvePort) => {
+  const socket = connect({ port, host: "127.0.0.1" })
+  socket.once("connect", () => { socket.destroy(); resolvePort(true) })
+  socket.once("error", () => resolvePort(false))
+})
+
 // ---------------------------------------------------------------------------
 // Isolated window
 // ---------------------------------------------------------------------------
+
+/** The fixture provider registered under two ids, as the capture's OpenCode config. */
+const referenceProviderConfig = (port) => {
+  const base = fixtureProviderConfig(port).provider.perf
+  const models = (ids) => Object.fromEntries(ids.map((id) => [id, base.models[id]]))
+  return {
+    provider: {
+      perf: {
+        ...base,
+        models: {
+          ...models(["stream-300cps", "code-1200cps"]),
+          // v1 spelling: a keyed map. An array drops the whole provider in OpenCode v2.
+          "agent-20tools-300cps": {
+            ...base.models["agent-20tools-300cps"],
+            variants: { high: { reasoningEffort: "high" }, low: { reasoningEffort: "low" } },
+          },
+        },
+      },
+      "perf-alt": {
+        ...base,
+        name: "Performance fixture (second)",
+        models: models(["stream-1200cps", "unicode-300cps"]),
+      },
+    },
+  }
+}
 
 const prepareRoot = (seed) => {
   rmSync(ROOT, { recursive: true, force: true })
@@ -193,6 +284,7 @@ const prepareRoot = (seed) => {
     dataDir: join(ROOT, "oc-data"),
     userData: join(ROOT, "electron-userdata"),
     project: join(ROOT, seed.project.name),
+    project2: join(ROOT, seed.secondProject.name),
     bin: join(ROOT, "bin"),
   }
   for (const dir of [paths.home, paths.dataDir, paths.userData, paths.bin]) mkdirSync(dir, { recursive: true })
@@ -201,16 +293,7 @@ const prepareRoot = (seed) => {
   // on PATH keep every forge account out of the window.
   for (const cli of FORGE_CLIS) writeFileSync(join(paths.bin, cli), "#!/bin/sh\nexit 1\n", { mode: 0o755 })
   ensureProject(paths.project)
-  // The same project record isolated-server.mjs writes, with fixed times so
-  // nothing in the sidebar depends on when the run happened.
-  const id = `path_${Buffer.from(paths.project).toString("base64url")}`
-  writeFileSync(join(paths.dataDir, "settings.json"), JSON.stringify({
-    homeDirectory: paths.home,
-    projects: [{ id, path: paths.project, label: basename(paths.project), addedAt: 1, lastOpenedAt: 1, sidebarCollapsed: false }],
-    activeProjectId: id,
-    lastDirectory: paths.project,
-    defaultModel: seed.model,
-  }, null, 2))
+  ensureProject(paths.project2)
   return paths
 }
 
@@ -227,7 +310,7 @@ const windowEnv = ({ paths, seed, fixturePort, uiPort, apiPort }) => isolatedEnv
   OPENCHAMBER_HMR_UI_PORT: String(uiPort),
   OPENCHAMBER_HMR_API_PORT: String(apiPort),
   OPENCODE_CONFIG_CONTENT: JSON.stringify({
-    ...fixtureProviderConfig(fixturePort),
+    ...referenceProviderConfig(fixturePort),
     model: seed.model,
     small_model: "perf/stream-1200cps",
     autoupdate: false,
@@ -342,6 +425,11 @@ const click = (client, { x, y }) => sendInput(client, [
   ["Input.dispatchMouseEvent", { type: "mouseReleased", x, y, button: "left", clickCount: 1 }],
 ])
 
+const pressEscape = (client) => sendInput(client, ["keyDown", "keyUp"].map((type) => [
+  "Input.dispatchKeyEvent",
+  { type, key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 },
+]))
+
 const restPointer = (client) => sendInput(client, [["Input.dispatchMouseEvent", { type: "mouseMoved", ...POINTER_REST, button: "none" }]])
 
 const centerOf = (client, expression) => evaluateValue(client, `(() => {
@@ -407,30 +495,162 @@ const checkWidths = async (client) => {
 // Seeding
 // ---------------------------------------------------------------------------
 
-const api = async (origin, path, init = {}) => {
-  const response = await fetch(`${origin}${path}`, { ...init, headers: { "content-type": "application/json", ...init.headers } })
+const api = async (origin, path, init = {}, directory = null) => {
+  const headers = { "content-type": "application/json", ...init.headers }
+  if (directory) headers["x-opencode-directory"] = encodeURIComponent(directory)
+  const response = await fetch(`${origin}${path}`, { ...init, headers })
   const body = await response.text()
   if (!response.ok) throw new Error(`${init.method ?? "GET"} ${path} answered ${response.status}: ${body.slice(0, 300)}`)
   return JSON.parse(body)
 }
 
-/** Creates the seed's sessions in the project, in seed order, through the server the page uses. */
-const createSessions = async (origin, seed, project) => {
-  const ids = {}
-  for (const session of seed.sessions) {
-    const created = await api(origin, "/api/session", {
-      method: "POST",
-      body: JSON.stringify({ title: session.title, location: { directory: project } }),
-    })
-    if (created.data?.location?.directory !== project) throw new Error(`Session "${session.title}" landed in ${created.data?.location?.directory}, not ${project}`)
-    ids[session.state] = created.data.id
+const retryApi = async (origin, path, init = {}, directory = null, label = path) => {
+  const deadline = Date.now() + 120_000
+  let lastError
+  while (Date.now() < deadline) {
+    try {
+      return await api(origin, path, init, directory)
+    } catch (error) {
+      lastError = error
+      await wait(1000)
+    }
   }
-  return ids
+  throw new Error(`${label} did not answer within 120s: ${lastError?.message ?? lastError}`)
 }
 
-const sessionTime = async (origin, id, project) => (await api(origin, `/api/session/${id}`, {
-  headers: { "x-opencode-directory": encodeURIComponent(project) },
-})).data?.time ?? {}
+const projectId = (path) => `path_${Buffer.from(path).toString("base64url")}`
+
+/** The settings React writes for the seed: two projects, favourites, recents and the picker order. */
+const seedSettings = (paths, seed) => ({
+  homeDirectory: paths.home,
+  projects: [
+    {
+      id: projectId(paths.project),
+      path: paths.project,
+      label: basename(paths.project),
+      addedAt: 1,
+      lastOpenedAt: 1,
+      sidebarCollapsed: false,
+    },
+    {
+      id: projectId(paths.project2),
+      path: paths.project2,
+      label: basename(paths.project2),
+      addedAt: 2,
+      lastOpenedAt: 2,
+      sidebarCollapsed: seed.secondProject.sidebarCollapsed,
+      color: seed.secondProject.color,
+      icon: seed.secondProject.icon,
+    },
+  ],
+  activeProjectId: projectId(paths.project),
+  lastDirectory: paths.project,
+  defaultModel: seed.model,
+  lastSelectedModel: seed.model,
+  lastUsedEfforts: { [seed.model]: seed.variant },
+  favoriteModels: seed.favoriteModels,
+  recentModels: seed.recentModels,
+  favoriteAgents: seed.favoriteAgents,
+  recentAgents: seed.recentAgents,
+  providerOrder: ["perf", "perf-alt"],
+  collapsedModelProviders: ["perf-alt"],
+  // The OpenCode update check runs a few seconds after mount and its toast
+  // sits outside every region; a disabled check keeps the reference to the
+  // window's own controls.
+  showOpenCodeUpdateNotifications: false,
+})
+
+const createSession = async (origin, { title, directory }) => {
+  const created = await api(origin, "/api/session", {
+    method: "POST",
+    body: JSON.stringify({ title, location: { directory } }),
+  })
+  const landed = created.data?.location?.directory
+  if (landed !== directory) throw new Error(`Session "${title}" landed in ${landed}, not ${directory}`)
+  return created.data.id
+}
+
+/** Creates a Chat session's folder under `chatsRoot` and its session, as React does. */
+const createChatSession = async (origin, { title, directory }) => {
+  await api(origin, "/api/fs/mkdir", { method: "POST", body: JSON.stringify({ path: directory }) })
+  return createSession(origin, { title, directory })
+}
+
+/**
+ * Seeds the two projects through a settings PUT (React writes the whole
+ * document the same way), then the sessions through the API: project
+ * sessions, the In work session's metadata through the server's route, the
+ * second project's session and two Chat sessions in their own folders.
+ */
+const seedFixtures = async (origin, paths, seed) => {
+  const settingsBody = seedSettings(paths, seed)
+  await api(origin, "/api/config/settings?surface=desktop", { method: "PUT", body: JSON.stringify(settingsBody) })
+  const home = await api(origin, "/api/fs/home")
+  const settings = await api(origin, "/api/config/settings?surface=desktop")
+
+  const ids = {}
+  for (const session of seed.sessions) {
+    ids[session.state] = await createSession(origin, { title: session.title, directory: paths.project })
+  }
+  ids.work = await createSession(origin, { title: seed.workSession.title, directory: paths.project })
+  await api(origin, `/api/openchamber/sessions/${ids.work}/metadata`, {
+    method: "POST",
+    body: JSON.stringify({ patch: { openchamber: { work: { state: "open", openedAt: 1, openedBy: "user" } } } }),
+  }, paths.project)
+  ids.second = await createSession(origin, { title: seed.secondProjectSession.title, directory: paths.project2 })
+
+  const chatDirectories = seed.chats.map((chat) => join(home.chatsRoot, seed.chatDate, `session-${chat.folder}`))
+  for (const [index, chat] of seed.chats.entries()) {
+    ids[`chat-${index}`] = await createChatSession(origin, { title: chat.title, directory: chatDirectories[index] })
+  }
+  return { home, settings, ids, chatDirectories }
+}
+
+/**
+ * Every directory the state fixtures describe: the two projects and each Chat
+ * session's folder. `catalogs` is read once because config, providers, models
+ * and agents do not change during the run; the sessions are read again at each
+ * state because a turn changes their times, status and metadata. The list
+ * endpoints' `data` payloads are stored, the same arrays the app holds after
+ * decoding; the HTTP envelopes live in `fixtures/api/`.
+ */
+const readDirectoryState = async (origin, directory, { catalogs = true } = {}) => {
+  const [config, providers, models, agents, sessions] = await Promise.all([
+    catalogs ? retryApi(origin, "/api/config", {}, directory, `config for ${directory}`) : null,
+    catalogs ? retryApi(origin, "/api/provider", {}, directory, `providers for ${directory}`) : null,
+    catalogs ? retryApi(origin, "/api/model?types=chat&types=image", {}, directory, `models for ${directory}`) : null,
+    catalogs ? retryApi(origin, "/api/agent", {}, directory, `agents for ${directory}`) : null,
+    retryApi(origin, `/api/session?limit=500&directory=${encodeURIComponent(directory)}`, {}, directory, `sessions for ${directory}`),
+  ])
+  const payload = (response) => Array.isArray(response) ? response : response.data ?? response
+  const entry = {}
+  if (catalogs) {
+    entry.config = config
+    entry.providers = payload(providers)
+    entry.models = payload(models)
+    entry.agents = payload(agents)
+  }
+  entry.sessions = Array.isArray(sessions) ? sessions : sessions.data ?? []
+  return entry
+}
+
+const readDirectories = async (origin, directories) => {
+  const entries = {}
+  for (const directory of directories) {
+    entries[directory] = await readDirectoryState(origin, directory)
+  }
+  return entries
+}
+
+/** Re-reads only the session lists, keeping the catalogs captured once. */
+const refreshSessions = async (origin, directories) => {
+  for (const [directory, entry] of Object.entries(directories)) {
+    const current = await readDirectoryState(origin, directory, { catalogs: false })
+    entry.sessions = current.sessions
+  }
+}
+
+const sessionTime = async (origin, id, project) => (await api(origin, `/api/session/${id}`, {}, project)).data?.time ?? {}
 
 const isBusy = (time) => Boolean(time.busy) && !(time.idle >= time.busy)
 
@@ -441,7 +661,9 @@ const isBusy = (time) => Boolean(time.busy) && !(time.idle >= time.busy)
  * a capture of an idle session.
  */
 const sendFromComposer = async (client, { origin, project, id, title, prompt }) => {
-  const row = await waitFor(`the sidebar row "${title}"`, () => centerOf(client, sidebarRowExpression(title)))
+  const rowExpression = `(() => { const element = ${sidebarRowExpression(title)}; element?.scrollIntoView({ block: "center", behavior: "instant" }); return element })()`
+  const row = await waitFor(`the sidebar row "${title}"`, () => centerOf(client, rowExpression))
+  await wait(300)
   await click(client, row)
   await waitFor(`"${title}" in the header`, () => evaluateValue(client, `document.querySelector("[data-page-scroll-lock] > header")?.textContent.includes(${JSON.stringify(title)})`))
   // The session view finishes switching before the editor takes input.
@@ -450,9 +672,20 @@ const sendFromComposer = async (client, { origin, project, id, title, prompt }) 
   const editor = await waitFor("the composer", () => centerOf(client, editorExpression))
   await click(client, editor)
   await sendInput(client, [["Input.insertText", { text: prompt }]])
-  await waitFor("the prompt in the composer", () => evaluateValue(client, `${editorExpression}?.textContent.includes(${JSON.stringify(prompt)})`), { timeoutMs: 5000 })
-  await sendInput(client, ["keyDown", "keyUp"].map((type) => ["Input.dispatchKeyEvent", { type, key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 }]))
-  await waitFor(`the turn in "${title}" to start`, async () => isBusy(await sessionTime(origin, id, project)), { timeoutMs: 20_000, intervalMs: 200 })
+  const promptInComposer = () => evaluateValue(client, `${editorExpression}?.textContent.includes(${JSON.stringify(prompt)})`)
+  await waitFor("the prompt in the composer", promptInComposer, { timeoutMs: 5000 })
+  const pressEnter = () => sendInput(client, ["keyDown", "keyUp"].map((type) => ["Input.dispatchKeyEvent", { type, key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 }]))
+  const waitForStart = () => waitFor(`the turn in "${title}" to start`, async () => isBusy(await sessionTime(origin, id, project)), { timeoutMs: 15_000, intervalMs: 200 })
+  await pressEnter()
+  // A click on a row that moved during the finished turn's In work relocation
+  // can leave the editor unfocused; one refocused retry proves the prompt is
+  // still the one in the composer rather than silently capturing an idle one.
+  const started = await waitForStart().then(() => true, () => false)
+  if (started) return
+  if (!await promptInComposer()) throw new Error(`The prompt left the composer but "${title}" did not start; session ${JSON.stringify((await api(origin, `/api/session/${id}`, {}, project)).data?.time)}`)
+  await click(client, editor)
+  await pressEnter()
+  await waitForStart()
 }
 
 /** Scrolls the chat column to its end with the mouse wheel, as a reader does. */
@@ -462,6 +695,36 @@ const scrollChatToEnd = async (client) => {
     await sendInput(client, [["Input.dispatchMouseEvent", { type: "mouseWheel", ...center, deltaX: 0, deltaY: 100_000, button: "none" }]])
     await wait(1500)
   }
+}
+
+/** Reloads and waits for the new document's load event, not the old page's evaluate. */
+const reloadPage = async (client) => {
+  await client.send("Page.enable")
+  const loaded = client.once("Page.loadEventFired", 120_000)
+  await client.send("Page.reload", { ignoreCache: true })
+  await loaded
+}
+
+/** Reloads the page after seeding so it reads the settings and sessions the run wrote. */
+const reloadSeededApp = async (client) => {
+  await reloadPage(client)
+  await waitFor("the reloaded app", () => evaluateValue(client, MOUNTED), { timeoutMs: 120_000, intervalMs: 500 })
+  await client.send("Emulation.setDeviceMetricsOverride", { ...VIEWPORT, deviceScaleFactor: 1, mobile: false })
+  await client.send("Emulation.setFocusEmulationEnabled", { enabled: true })
+  await client.send("Accessibility.enable")
+  await client.send("Input.setIgnoreInputEvents", { ignore: true })
+  await waitFor("the seeded sidebar", () => evaluateValue(client, `[...document.querySelectorAll("[data-left-sidebar] *")]
+    .some((element) => element.children.length === 0 && element.textContent.trim() === "Reference: finished turn")`), { timeoutMs: 120_000, intervalMs: 500 })
+  // The catalog and agents are fetched per directory after the reload; the
+  // model label and the Thinking trigger appear only once they arrived.
+  await waitFor("the model catalog", () => evaluateValue(client, `(() => {
+    const label = document.querySelector(".model-controls__model-label")?.textContent?.trim() ?? ""
+    const agent = document.querySelector(".model-controls__agent-label")?.textContent?.trim() ?? ""
+    return Boolean(label) && !label.includes("Select model") && !label.includes("Unavailable")
+      && Boolean(agent) && !agent.includes("Select agent")
+  })()`), { timeoutMs: 120_000, intervalMs: 500 })
+  await waitFor("the Thinking trigger", () => evaluateValue(client, `Boolean(document.querySelector(".model-controls__variant-trigger"))`), { timeoutMs: 120_000, intervalMs: 500 })
+  await wait(1000)
 }
 
 // ---------------------------------------------------------------------------
@@ -482,8 +745,10 @@ const CONTROL_SELECTOR = [
 /**
  * The regions, in assignment order: a control belongs to the first region
  * whose root contains it. `also` adds a second root to a region, `parent`
- * takes the matched element's parent as the root. Written to every JSON
- * under `selectors`; these are the only selectors in the output.
+ * takes the matched element's parent as the root, and `popup` marks the one
+ * optional region: an open Base UI popup (role dialog or menu) that no other
+ * region contains. Written to every JSON under `selectors`; these are the
+ * only selectors in the output.
  */
 const REGIONS = [
   { name: "composer", selector: "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])", parent: true },
@@ -492,9 +757,12 @@ const REGIONS = [
   { name: "header", selector: "[data-page-scroll-lock] > header" },
   { name: "sidebar", selector: "[data-left-sidebar]", also: "[data-titlebar-left-controls]" },
   { name: "chatColumn", selector: "[data-workspace-chat]" },
+  // The open popup only: a portaled dialog or menu outside every region
+  // above. It is optional, so a closed popover contributes no bounds.
+  { name: "popover", selector: "[role=dialog], [role=menu]", popup: true },
 ]
 // The order regions appear in each JSON.
-const REGION_ORDER = ["sidebar", "header", "chatColumn", "composer", "workStatusPanel", "iconRail"]
+const REGION_ORDER = ["sidebar", "header", "chatColumn", "composer", "workStatusPanel", "iconRail", "popover"]
 
 /**
  * Runs in the page in one task, so the regions and the control list come from
@@ -514,9 +782,19 @@ const collectInPage = `(() => {
   }
   const roots = {}
   for (const region of REGIONS) {
+    if (region.popup) continue
     const found = exactlyOne(region.selector)
     roots[region.name] = [region.parent ? found.parentElement : found, region.also ? document.querySelector(region.also) : null].filter(Boolean)
   }
+  // A popup is the one rendered dialog or menu that no other region contains.
+  // Closed menus unmount, and a portaled popup sits under body, so this finds
+  // the open popup without a selector for its portal.
+  const regionRoots = Object.values(roots).flat()
+  const popups = [...document.querySelectorAll("[role=dialog], [role=menu]")]
+    .filter(rendered)
+    .filter((element) => !regionRoots.some((root) => root.contains(element)))
+  if (popups.length > 1) throw new Error("More than one open popup: " + popups.map((element) => element.getAttribute("role") + " " + (element.getAttribute("aria-label") ?? "")).join(", "))
+  roots.popover = popups
   const round = (value) => Math.round(value * 100) / 100
   const bounds = (element) => {
     const rect = element.getBoundingClientRect()
@@ -547,6 +825,7 @@ const collectInPage = `(() => {
   }
   const controls = elements.map((element) => ({
     region: REGIONS.find((region) => roots[region.name].some((root) => root.contains(element)))?.name ?? null,
+    bounds: bounds(element),
     shown: element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
     text: visibleText(element),
     label: labelOf(element),
@@ -556,7 +835,7 @@ const collectInPage = `(() => {
   window.__ocReferenceControls = elements
   window.__ocReferenceRoots = roots
   return {
-    regions: Object.fromEntries(Object.entries(roots).map(([name, [root]]) => [name, bounds(root)])),
+    regions: Object.fromEntries(Object.entries(roots).flatMap(([name, [root]]) => root ? [[name, bounds(root)]] : [])),
     controls,
     chatCodeBlocks: [...roots.chatColumn[0].querySelectorAll("pre")].filter((element) => element.checkVisibility()).length,
   }
@@ -589,7 +868,7 @@ const regionMembership = (client) => {
       const { object } = await client.send("DOM.resolveNode", { backendNodeId })
       const { result } = await client.send("Runtime.callFunctionOn", {
         objectId: object.objectId,
-        functionDeclaration: "function (region) { return window.__ocReferenceRoots[region].some((root) => root !== this && root.contains(this)) }",
+        functionDeclaration: "function (region) { return (window.__ocReferenceRoots[region] ?? []).some((root) => root !== this && root.contains(this)) }",
         arguments: [{ value: region }],
         returnByValue: true,
       })
@@ -713,18 +992,23 @@ const nameAndKey = async (client, collected, axData, titles) => {
   return controls
 }
 
-const captureState = async (client, state, widths, titles) => {
+const captureState = async (client, state, widths, titles, prelude = "") => {
   await restPointer(client)
-  const collected = await evaluateValue(client, collectInPage)
+  const collected = await evaluateValue(client, `${prelude};\n${collectInPage}`)
   if (!collected) throw new Error(`Collecting ${state} failed in the page`)
   const shot = await client.send("Page.captureScreenshot", { format: "png" })
   const controls = await nameAndKey(client, collected, await accessibilityOf(client, collected.controls.length), titles)
   await client.send("Runtime.evaluate", { expression: "delete window.__ocReferenceControls; delete window.__ocReferenceRoots" })
-  const entry = ({ role, name, key, shown }) => ({ role, name, key, shown })
-  const regions = Object.fromEntries(REGION_ORDER.map((name) => [name, {
-    bounds: collected.regions[name],
-    controls: controls.filter((control) => control.region === name).map(entry),
-  }]))
+  const entry = ({ role, name, key, shown, bounds }) => ({ role, name, key, shown, bounds })
+  const regions = Object.fromEntries(REGION_ORDER.flatMap((name) => {
+    // A closed popover has no root and no bounds; leave it out of the region
+    // list rather than claiming a box at zero.
+    if (!collected.regions[name]) return []
+    return [[name, {
+      bounds: collected.regions[name],
+      controls: controls.filter((control) => control.region === name).map(entry),
+    }]]
+  }))
   const reference = {
     state,
     viewport: VIEWPORT,
@@ -747,16 +1031,158 @@ const captureState = async (client, state, widths, titles) => {
   return { state, json: `${JSON.stringify(reference, null, 2)}\n`, png: Buffer.from(shot.data, "base64"), chatCodeBlocks: collected.chatCodeBlocks }
 }
 
-/**
- * The fixtures are committed: no output may name the user. Checked on every
- * JSON before any file is written; the PNGs are checked by eye (the seeded
- * project, HOME and data dir all live under ROOT, which holds no user name).
- */
-const personalStrings = () => [homedir(), REPO_ROOT, userInfo().username].filter((value) => value && value.length > 0)
+// ---------------------------------------------------------------------------
+// Popup states
+// ---------------------------------------------------------------------------
 
-const assertNothingPersonal = (captures) => {
-  const found = captures.flatMap(({ state, json }) => personalStrings().filter((value) => json.includes(value)).map((value) => `${state}.json contains ${JSON.stringify(value)}`))
-  if (found.length > 0) throw new Error(`Refusing to write the reference: ${found.join("; ")}`)
+const POPUP_TRIGGERS = {
+  "project-popover": { selector: "button[aria-haspopup=dialog]", popup: "[role=dialog]" },
+  "model-popover": { selector: ".model-controls__model-trigger", popup: "[role=menu]" },
+  "agent-menu": { selector: ".model-controls__agent-label", popup: "[role=menu]" },
+  "thinking-menu": { selector: ".model-controls__variant-trigger", popup: "[role=menu]" },
+}
+
+/** Opens a popup by clicking its trigger through CDP, captures it, then closes it with Escape. */
+const capturePopup = async (client, name, widths, titles) => {
+  const trigger = POPUP_TRIGGERS[name]
+  const center = await waitFor(`the ${name} trigger`, () => centerOf(client, renderedExpression(trigger.selector)))
+  await click(client, center)
+  await waitFor(`the ${name} popup`, () => evaluateValue(client, `(() => {
+    const roots = ${JSON.stringify(REGIONS.filter((region) => !region.popup).map((region) => region.selector))}
+      .flatMap((selector) => [...document.querySelectorAll(selector)])
+    return [...document.querySelectorAll(${JSON.stringify(trigger.popup)})]
+      .some((element) => element.checkVisibility({ visibilityProperty: true })
+        && element.getBoundingClientRect().width > 0
+        && !roots.some((root) => root !== element && root.contains(element)))
+  })()`), { timeoutMs: 10_000 })
+  await wait(500)
+  const capture = await captureState(client, name, widths, titles)
+  await pressEscape(client)
+  await waitFor(`the ${name} popup to close`, () => evaluateValue(client, `![...document.querySelectorAll(${JSON.stringify(trigger.popup)})]
+    .some((element) => element.checkVisibility({ visibilityProperty: true }) && element.getBoundingClientRect().width > 0)`), { timeoutMs: 10_000 })
+  await wait(300)
+  return capture
+}
+
+// ---------------------------------------------------------------------------
+// State fixtures (version 2)
+// ---------------------------------------------------------------------------
+
+const MESSAGE_PAGE = (id) => `/api/session/${id}/message`
+
+const fetchMessages = async (origin, id, directory) => {
+  const response = await retryApi(origin, MESSAGE_PAGE(id), {}, directory, `messages for ${id}`)
+  return Array.isArray(response) ? response : response.data ?? []
+}
+
+/**
+ * The streaming state's messages: the run's response, with the final text
+ * part cut after the heading so its size does not depend on when the poll
+ * landed. The other parts are complete once the heading appears.
+ */
+const streamingMessages = async (origin, id, directory) => {
+  const deadline = Date.now() + 120_000
+  while (Date.now() < deadline) {
+    const messages = await fetchMessages(origin, id, directory)
+    const part = messages.flatMap((message) => message.content ?? []).find((entry) => entry.type === "text"
+      && entry.text?.includes("Executing a call"))
+    if (part && part.text.length >= STREAMING_TEXT_CHARACTERS) {
+      let cut = false
+      return messages.map((message) => ({
+        ...message,
+        content: (message.content ?? []).map((entry) => {
+          if (cut || entry !== part) return entry
+          cut = true
+          return { ...entry, text: entry.text.slice(0, STREAMING_TEXT_CHARACTERS) }
+        }),
+      }))
+    }
+    await wait(250)
+  }
+  throw new Error(`The streaming session never produced ${STREAMING_TEXT_CHARACTERS} characters of its document`)
+}
+
+const CONNECTED_STEP = { type: "connection", status: { state: "connected" } }
+const FAILED_STEP = { type: "connection", status: { state: "failed", ...SERVER_ERROR } }
+
+const stateOf = ({ steps, open, base }) => {
+  const state = {
+    version: 2,
+    home: base.home,
+    settings: base.settings,
+    directories: structuredClone(base.directories),
+    draft: base.draft,
+    steps,
+  }
+  if (open) state.open = open
+  return state
+}
+
+const ID_PATTERN = /\b(?:ses|msg|evt|prt)_[A-Za-z0-9]+/g
+const TIME_KEYS = new Set(["created", "updated", "busy", "idle", "viewed", "archived", "completed", "streamed", "started", "ended", "ran", "openedAt", "doneAt", "suggestDoneAt", "endedAt"])
+const FIXED_TIME = 1_794_300_000_000
+const FIXED_DURATION_MS = 2_500
+
+/** JSON has six kinds; name them once so the tree walk branches on a kind, not on a runtime type. */
+const jsonKind = (value) => {
+  if (value === null) return "null"
+  if (Array.isArray(value)) return "array"
+  const tag = Object.prototype.toString.call(value)
+  if (tag === "[object String]") return "string"
+  if (tag === "[object Number]") return "number"
+  if (tag === "[object Object]") return "object"
+  return "other"
+}
+
+/**
+ * Rewrites the values that differ between two runs of the same seed: session,
+ * message, event and part ids to first-appearance ordinals, timestamps to
+ * their rank in the run, durations to a fixed value, and the server's
+ * pid-named instance folder to one name. Everything else is the response.
+ */
+const stabilize = (value) => {
+  const ids = new Map()
+  const counters = new Map()
+  const id = (match) => {
+    if (!ids.has(match)) {
+      const prefix = match.slice(0, match.indexOf("_"))
+      const next = (counters.get(prefix) ?? 0) + 1
+      counters.set(prefix, next)
+      ids.set(match, `${prefix}_reference_${next}`)
+    }
+    return ids.get(match)
+  }
+
+  const times = []
+  const collectTimes = (node, key) => {
+    const kind = jsonKind(node)
+    if (kind === "array") { for (const item of node) collectTimes(item, key); return }
+    if (kind === "object") {
+      for (const [childKey, child] of Object.entries(node)) collectTimes(child, childKey)
+      return
+    }
+    if (kind === "number" && TIME_KEYS.has(key)) times.push(node)
+  }
+  collectTimes(value, "")
+  const uniqueTimes = [...new Set(times)].sort((left, right) => left - right)
+  const time = new Map(uniqueTimes.map((entry, index) => [entry, FIXED_TIME + index * 1000]))
+
+  const rewrite = (node, key) => {
+    const kind = jsonKind(node)
+    if (kind === "string") {
+      return node
+        .replace(/\/run\/instances\/\d+\//g, "/run/instances/reference/")
+        .replace(ID_PATTERN, (match) => id(match))
+    }
+    if (kind === "array") return node.map((item) => rewrite(item, key))
+    if (kind === "object") {
+      return Object.fromEntries(Object.entries(node).map(([childKey, child]) => [childKey, rewrite(child, childKey)]))
+    }
+    if (kind === "number" && TIME_KEYS.has(key)) return time.get(node)
+    if (kind === "number" && key === "durationMs") return FIXED_DURATION_MS
+    return node
+  }
+  return rewrite(value, "")
 }
 
 // ---------------------------------------------------------------------------
@@ -765,6 +1191,7 @@ const assertNothingPersonal = (captures) => {
 
 const run = async ({ client, origin, paths, seed }) => {
   const captures = []
+  const states = []
   await client.send("Emulation.setDeviceMetricsOverride", { ...VIEWPORT, deviceScaleFactor: 1, mobile: false })
   // The window may sit behind others; focus emulation keeps the composer
   // focusable and typing working.
@@ -773,15 +1200,45 @@ const run = async ({ client, origin, paths, seed }) => {
   await client.send("Input.setIgnoreInputEvents", { ignore: true })
   // The layout settles at the new viewport.
   await wait(1500)
+
+  const { home, settings, ids, chatDirectories } = await seedFixtures(origin, paths, seed)
+  await reloadSeededApp(client)
   const widths = await resetWidths(client)
 
-  const titles = seed.sessions.map((session) => session.title)
-  const ids = await createSessions(origin, seed, paths.project)
+  const titles = [
+    ...seed.sessions.map((session) => session.title),
+    seed.workSession.title,
+    seed.secondProjectSession.title,
+    ...seed.chats.map((chat) => chat.title),
+  ]
+
+  const directories = await readDirectories(origin, [paths.project, paths.project2, ...chatDirectories])
+  const base = { home, settings, directories, draft: { target: "chat" } }
+  const connected = [CONNECTED_STEP]
+
+  const save = (capture, { steps = connected, open } = {}) => {
+    captures.push(capture)
+    states.push({ name: capture.state, json: `${JSON.stringify(stabilize(stateOf({ steps, open, base })), null, 2)}\n` })
+  }
+
   for (const session of seed.sessions) {
     await waitFor(`the sidebar row "${session.title}"`, () => centerOf(client, sidebarRowExpression(session.title)))
   }
   await wait(1500)
-  captures.push(await captureState(client, "empty", widths, titles))
+  save(await captureState(client, "empty", widths, titles))
+  save(await captureState(client, "projects", widths, titles))
+
+  for (const name of ["project-popover", "model-popover", "agent-menu"]) {
+    save(await capturePopup(client, name, widths, titles), { open: name })
+  }
+
+  // Electron runs the server in its own process, so it has no shell in which
+  // the sidecar is down: with every data route aborted, the React app replaces
+  // the window with its connection screen and none of the regions exist. The
+  // spike design therefore gives server-error a state fixture but no
+  // reference (design.md "Parity reference", archived spike). The fixture
+  // still carries the seeded setup and the fixed failure the Rust app shows.
+  states.push({ name: "server-error", json: `${JSON.stringify(stabilize(stateOf({ steps: [FAILED_STEP], base })), null, 2)}\n` })
 
   const finished = seed.sessions.find((session) => session.state === "session")
   await sendFromComposer(client, { origin, project: paths.project, id: ids.session, title: finished.title, prompt: seed.prompt })
@@ -791,7 +1248,15 @@ const run = async ({ client, origin, paths, seed }) => {
   // turn's meta row and the sidebar's busy indicator settled.
   await scrollChatToEnd(client)
   await wait(2000)
-  captures.push(await captureState(client, "session", await checkWidths(client), titles))
+  // The Work status telemetry arrives after the turn's stats settle; its
+  // Average TTFT row appears a moment later than the rest, and a capture on
+  // either side of it changes the control list.
+  await waitFor("the Work status telemetry", () => evaluateValue(client, `document.querySelector("[data-right-slot]")?.innerText.includes("Average TTFT")`), { timeoutMs: 30_000 })
+  await refreshSessions(origin, directories)
+  const finishedMessages = await fetchMessages(origin, ids.session, paths.project)
+  const sessionSteps = [CONNECTED_STEP, { type: "openSession", session: ids.session }, { type: "messagesLoaded", session: ids.session, messages: finishedMessages }]
+  save(await captureState(client, "session", await checkWidths(client), titles), { steps: sessionSteps })
+  save(await capturePopup(client, "thinking-menu", await checkWidths(client), titles), { steps: sessionSteps, open: "thinking-menu" })
 
   const streaming = seed.sessions.find((session) => session.state === "streaming")
   await sendFromComposer(client, { origin, project: paths.project, id: ids.streaming, title: streaming.title, prompt: seed.prompt })
@@ -806,35 +1271,82 @@ const run = async ({ client, origin, paths, seed }) => {
     const rendered = (selector) => chat ? [...chat.querySelectorAll(selector)].filter((element) => element.checkVisibility()) : []
     return rendered("h2").some((heading) => heading.textContent.includes("Executing a call")) && rendered("pre").length === 0
   })()`), { timeoutMs: 180_000, intervalMs: 50 })
+  // Pin the scroller to the heading in the same task that collects the bounds: streaming
+  // auto-scroll moves a few pixels between runs, and the recorded control bounds must be
+  // byte-identical.
+  // Pin the scroller to the heading, then freeze its scroll writes: streaming auto-scroll
+  // moves a few pixels between runs, and the recorded control bounds must be identical.
+  await evaluateValue(client, `(() => {
+    const chat = ${chat}
+    const scroller = chat?.querySelector(".chat-scroll")
+    const heading = [...(chat?.querySelectorAll("h2") ?? [])].find((element) => element.textContent.includes("Executing a call"))
+    if (!scroller || !heading) return false
+    const descriptor = Object.getOwnPropertyDescriptor(Element.prototype, "scrollTop")
+    const offset = heading.getBoundingClientRect().top - scroller.getBoundingClientRect().top + descriptor.get.call(scroller)
+    descriptor.set.call(scroller, offset - 80)
+    Object.defineProperty(scroller, "scrollTop", {
+      configurable: true,
+      get() { return descriptor.get.call(this) },
+      set() {},
+    })
+    scroller.scrollTo = () => {}
+    scroller.scrollBy = () => {}
+    return true
+  })()`)
+  await wait(600)
   const capture = await captureState(client, "streaming", streamingWidths, titles)
   if (capture.chatCodeBlocks > 0) throw new Error(`A code block reached the chat column before the streaming capture (${capture.chatCodeBlocks}); rerun`)
   if (!isBusy(await sessionTime(origin, ids.streaming, paths.project))) throw new Error("The streaming turn had ended before the capture")
-  captures.push(capture)
-  return captures
+  await refreshSessions(origin, directories)
+  const partialMessages = await streamingMessages(origin, ids.streaming, paths.project)
+  save(capture, {
+    steps: [CONNECTED_STEP, { type: "openSession", session: ids.streaming }, { type: "messagesLoaded", session: ids.streaming, messages: partialMessages }],
+  })
+
+  return { captures, states }
+}
+
+// ---------------------------------------------------------------------------
+// Output checks
+// ---------------------------------------------------------------------------
+
+/**
+ * The fixtures are committed: no output may name the user. Checked on every
+ * JSON before any file is written; the PNGs are checked by eye (the seeded
+ * project, HOME and data dir all live under ROOT, which holds no user name).
+ */
+const personalStrings = () => [homedir(), REPO_ROOT, userInfo().username].filter((value) => value && value.length > 0)
+
+const assertNothingPersonal = (outputs) => {
+  const found = outputs.flatMap(({ name, json }) => [
+    ...personalStrings().filter((value) => json.includes(value)).map((value) => `${name} contains ${JSON.stringify(value)}`),
+    ...(json.includes("/../") || json.includes('"../') ? [`${name} contains a ../ path segment`] : []),
+  ])
+  if (found.length > 0) throw new Error(`Refusing to write the fixtures: ${found.join("; ")}`)
 }
 
 const main = async () => {
   const options = parseArgs(process.argv.slice(2))
   const seed = JSON.parse(readFileSync(join(PACKAGE_ROOT, "fixtures/seed.json"), "utf8"))
-  const cdpBusy = await fetch(`http://127.0.0.1:${CDP_PORT}/json/version`).then(() => true, () => false)
-  if (cdpBusy) throw new Error(`Port ${CDP_PORT} already answers CDP; stop that window first`)
+  for (const [label, port] of [["CDP", CDP_PORT], ["fixture provider", FIXTURE_PORT]]) {
+    if (await portInUse(port)) throw new Error(`Port ${port} (${label}) is already in use; stop that process first`)
+  }
   const personalInRoot = personalStrings().filter((value) => ROOT.includes(value))
   if (personalInRoot.length > 0) throw new Error(`The temporary root ${ROOT} names the user; set TMPDIR to a neutral directory`)
 
   const paths = prepareRoot(seed)
-  const fixturePort = await reservePort()
-  const fixture = await startFixture({ port: fixturePort, logFile: join(ROOT, "fixture.log") })
+  const fixture = await startFixture({ port: FIXTURE_PORT, logFile: join(ROOT, "fixture.log") })
   let child = null
   let client = null
   let completed = false
-  let captures = []
+  let result = { captures: [], states: [] }
   try {
     const [uiPort, apiPort] = [await reservePort(), await reservePort()]
-    child = startWindow(windowEnv({ paths, seed, fixturePort, uiPort, apiPort }))
+    child = startWindow(windowEnv({ paths, seed, fixturePort: FIXTURE_PORT, uiPort, apiPort }))
     log(`electron-dev.mjs pid ${child.pid}, UI port ${uiPort}, API port ${apiPort}, root ${ROOT}`)
     const page = await connectPage(uiPort, child)
     client = page.client
-    captures = await run({ client, origin: page.origin, paths, seed })
+    result = await run({ client, origin: page.origin, paths, seed })
     completed = true
   } finally {
     client?.close()
@@ -847,13 +1359,19 @@ const main = async () => {
     if (completed) rmSync(ROOT, { recursive: true, force: true })
     else log(`kept ${ROOT} with electron-dev.log and fixture.log`)
   }
-  assertNothingPersonal([{ state: "seed", json: JSON.stringify(seed) }, ...captures])
+  assertNothingPersonal([
+    { name: "seed.json", json: JSON.stringify(seed) },
+    ...result.captures.map(({ state, json }) => ({ name: `${state}.json`, json })),
+    ...result.states.map(({ name, json }) => ({ name: `states/${name}.json`, json })),
+  ])
   mkdirSync(options.output, { recursive: true })
-  for (const { state, json, png } of captures) {
+  for (const { state, json, png } of result.captures) {
     writeFileSync(join(options.output, `${state}.json`), json)
     writeFileSync(join(options.output, `${state}.png`), png)
   }
-  log(`wrote ${captures.length} states to ${options.output}; no JSON names ${personalStrings().length} personal strings (home, repo path, user name)`)
+  mkdirSync(options.statesOutput, { recursive: true })
+  for (const { name, json } of result.states) writeFileSync(join(options.statesOutput, `${name}.json`), json)
+  log(`wrote ${result.captures.length} reference states to ${options.output} and ${result.states.length} state fixtures to ${options.statesOutput}; no JSON names ${personalStrings().length} personal strings (home, repo path, user name)`)
 }
 
 main().catch((error) => {

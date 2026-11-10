@@ -8,6 +8,7 @@ use futures::StreamExt;
 
 use super::Client;
 use crate::ClientError;
+use crate::Directory;
 use crate::event::EventData;
 
 const FIXTURES: &str = env!("OC_DESKTOP_FIXTURES");
@@ -16,13 +17,17 @@ const ENCODED_DIRECTORY: &str = "%2Ftmp%2Fmy%20project";
 const CRLF: &str = "\r\n";
 const LF: &str = "\n";
 
-struct Reply {
-    status: &'static str,
-    content_type: &'static str,
-    body: String,
+pub(crate) fn directory() -> Directory {
+    Directory::new(DIRECTORY)
 }
 
-fn ok_json(body: String) -> Reply {
+pub(crate) struct Reply {
+    pub(crate) status: &'static str,
+    pub(crate) content_type: &'static str,
+    pub(crate) body: String,
+}
+
+pub(crate) fn ok_json(body: String) -> Reply {
     Reply {
         status: "200 OK",
         content_type: "application/json",
@@ -30,20 +35,20 @@ fn ok_json(body: String) -> Reply {
     }
 }
 
-fn fixture(path: &str) -> String {
+pub(crate) fn fixture(path: &str) -> String {
     std::fs::read_to_string(format!("{FIXTURES}/{path}")).expect("fixture")
 }
 
-struct Server {
-    client: Client,
-    requests: Receiver<String>,
+pub(crate) struct Server {
+    pub(crate) client: Client,
+    pub(crate) requests: Receiver<String>,
     // Held so the worker is owned by the test; it ends after the last reply.
-    _worker: JoinHandle<()>,
+    pub(crate) _worker: JoinHandle<()>,
 }
 
 /// One-shot HTTP server on a free port: answers each connection with the next reply and
 /// sends the raw request (head and body) of each on `requests`.
-fn serve(replies: Vec<Reply>) -> Server {
+pub(crate) fn serve(replies: Vec<Reply>) -> Server {
     let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
     let port = listener.local_addr().expect("addr").port();
     let (sent, requests) = mpsc::channel();
@@ -64,7 +69,7 @@ fn serve(replies: Vec<Reply>) -> Server {
             stream.write_all(reply.body.as_bytes()).expect("write body");
         }
     });
-    let client = Client::new(port, DIRECTORY).expect("client");
+    let client = Client::new(port).expect("client");
     Server {
         client,
         requests,
@@ -72,7 +77,7 @@ fn serve(replies: Vec<Reply>) -> Server {
     }
 }
 
-fn head_end() -> String {
+pub(crate) fn head_end() -> String {
     CRLF.repeat(2)
 }
 
@@ -130,7 +135,7 @@ async fn list_sessions_sends_the_directory_and_decodes() {
     let Server {
         client, requests, ..
     } = serve(vec![ok_json(fixture("api/session-list-after-turn.json"))]);
-    let sessions = client.list_sessions().await.expect("list");
+    let sessions = client.list_sessions(&directory()).await.expect("list");
     assert_eq!(sessions.len(), 1);
     let request = requests.recv().expect("request");
     assert!(request.starts_with(&format!(
@@ -144,7 +149,10 @@ async fn create_session_posts_the_location() {
     let Server {
         client, requests, ..
     } = serve(vec![ok_json(fixture("api/session-create.json"))]);
-    let session = client.create_session().await.expect("create");
+    let session = client
+        .create_session(&directory(), None, None)
+        .await
+        .expect("create");
     assert!(session.id.starts_with("ses_"));
     let request = requests.recv().expect("request");
     assert!(request.starts_with("POST /api/session HTTP/1.1"));
@@ -156,7 +164,10 @@ async fn list_messages_decodes_a_turn() {
     let Server {
         client, requests, ..
     } = serve(vec![ok_json(fixture("api/messages-agent-turn.json"))]);
-    let messages = client.list_messages("ses_1").await.expect("messages");
+    let messages = client
+        .list_messages(&directory(), "ses_1")
+        .await
+        .expect("messages");
     assert!(messages.len() > 21);
     assert!(
         requests
@@ -171,7 +182,10 @@ async fn send_prompt_posts_a_minted_id_and_the_text() {
     let Server {
         client, requests, ..
     } = serve(vec![ok_json(fixture("api/prompt-text.json"))]);
-    let accepted = client.send_prompt("ses_1", "hello").await.expect("prompt");
+    let accepted = client
+        .send_prompt(&directory(), "ses_1", "hello")
+        .await
+        .expect("prompt");
     assert!(accepted.id.starts_with("msg_"));
     let request = requests.recv().expect("request");
     assert!(request.starts_with("POST /api/session/ses_1/prompt HTTP/1.1"));
@@ -191,7 +205,7 @@ async fn non_2xx_is_a_status_error_with_the_body() {
         body: "boom".into(),
     }]);
     let client = &server.client;
-    match client.list_sessions().await {
+    match client.list_sessions(&directory()).await {
         Err(ClientError::Status { status, body }) => {
             assert_eq!(status, 500);
             assert_eq!(body, "boom");
@@ -205,7 +219,7 @@ async fn undecodable_body_is_a_decode_error_not_an_empty_list() {
     let server = serve(vec![ok_json("<html>not the api</html>".into())]);
     let client = &server.client;
     assert!(matches!(
-        client.list_sessions().await,
+        client.list_sessions(&directory()).await,
         Err(ClientError::Decode(_))
     ));
 }
@@ -217,9 +231,9 @@ async fn refused_connection_is_a_transport_error() {
         .local_addr()
         .expect("addr")
         .port();
-    let client = Client::new(port, DIRECTORY).expect("client");
+    let client = Client::new(port).expect("client");
     assert!(matches!(
-        client.list_sessions().await,
+        client.list_sessions(&directory()).await,
         Err(ClientError::Transport(_))
     ));
 }
@@ -230,7 +244,6 @@ async fn silent_server_hits_the_call_timeout() {
     let port = listener.local_addr().expect("addr").port();
     let client = Client::with_base_url(
         format!("http://127.0.0.1:{port}"),
-        DIRECTORY,
         Duration::from_millis(200),
     )
     .expect("client");
@@ -274,7 +287,12 @@ async fn event_stream_decodes_frames_and_skips_heartbeats() {
     let request = requests.recv().expect("request");
     assert!(request.starts_with("GET /api/event HTTP/1.1"));
     assert!(request.contains("accept: text/event-stream"));
-    assert!(request.contains(&format!("x-opencode-directory: {ENCODED_DIRECTORY}")));
+    assert!(
+        !request
+            .to_ascii_lowercase()
+            .contains("x-opencode-directory"),
+        "the event stream must be global: {request}"
+    );
 }
 
 #[tokio::test]
@@ -316,7 +334,7 @@ async fn event_stream_open_failure_is_a_status_error() {
 /// An event stream that writes `chunks` with `gap` between them, then holds the connection
 /// open without a byte for up to five seconds. The handle is only held, never joined: the
 /// client's connection task runs on the test's one runtime thread.
-fn trickle(chunks: Vec<String>, gap: Duration) -> (Client, JoinHandle<()>) {
+fn trickle(chunks: Vec<String>, gap: Duration, timeout: Duration) -> (Client, JoinHandle<()>) {
     let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
     let port = listener.local_addr().expect("addr").port();
     let worker = thread::spawn(move || {
@@ -336,7 +354,8 @@ fn trickle(chunks: Vec<String>, gap: Duration) -> (Client, JoinHandle<()>) {
         let mut rest = Vec::new();
         stream.read_to_end(&mut rest).ok();
     });
-    let client = Client::new(port, DIRECTORY).expect("client");
+    let client =
+        Client::with_base_url(format!("http://127.0.0.1:{port}"), timeout).expect("client");
     (client, worker)
 }
 
@@ -346,7 +365,7 @@ async fn a_silent_event_stream_ends_with_an_idle_error() {
         r#"data: {{"id":"e1","type":"server.connected","data":{{}}}}{}"#,
         LF.repeat(2)
     );
-    let (client, _worker) = trickle(vec![connected], Duration::ZERO);
+    let (client, _worker) = trickle(vec![connected], Duration::ZERO, Duration::from_secs(5));
     let client = client.with_event_idle_timeout(Duration::from_millis(300));
 
     let items: Vec<_> = client.events().await.expect("open").collect().await;
@@ -357,13 +376,18 @@ async fn a_silent_event_stream_ends_with_an_idle_error() {
 }
 
 #[tokio::test]
-async fn heartbeats_keep_a_quiet_event_stream_open() {
+async fn heartbeats_keep_the_stream_past_the_call_timeout() {
+    // Heartbeats every 100 ms outlast a 300 ms call timeout only because the body is not
+    // bounded by it; with the old request-level timeout this failed at 300 ms.
     let heartbeats = vec![format!(": heartbeat{}", LF.repeat(2)); 5];
-    let (client, _worker) = trickle(heartbeats, Duration::from_millis(150));
+    let (client, _worker) = trickle(
+        heartbeats,
+        Duration::from_millis(100),
+        Duration::from_millis(300),
+    );
     let client = client.with_event_idle_timeout(Duration::from_millis(400));
     let mut stream = client.events().await.expect("open");
-
-    // Five heartbeats 150 ms apart outlast the 400 ms limit only because each one counts.
+    // Five heartbeats 100 ms apart outlast the 400 ms limit only because each one counts.
     let first = tokio::time::timeout(Duration::from_millis(700), stream.next()).await;
 
     assert!(first.is_err(), "no item while heartbeats arrive: {first:?}");

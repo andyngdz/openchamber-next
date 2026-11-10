@@ -79,6 +79,61 @@ fn listed_session_carries_its_work_state() {
 }
 
 #[test]
+fn the_global_pages_carry_archived_pinned_and_btw_facts() {
+    let first: Page<Session> = decode("session-list-global-page-1.json");
+    let second: Page<Session> = decode("session-list-global-page-2.json");
+
+    assert!(first.data[0].location.directory.contains("/chats/"));
+    assert!(first.data[1].metadata.pinned());
+    assert_eq!(first.data[1].metadata.pin_list(), None);
+    assert!(second.data[0].metadata.btw());
+    assert!(second.data[1].time.archived.is_some());
+    assert!(first.data[1].time.archived.is_none());
+}
+
+#[test]
+fn parent_id_decodes_from_the_camel_case_key() {
+    let session: Session = serde_json::from_value(serde_json::json!({
+        "id": "ses_child",
+        "parentID": "ses_parent",
+        "time": {"created": 1, "updated": 2},
+    }))
+    .expect("session with a parent");
+
+    assert_eq!(session.parent_id.as_deref(), Some("ses_parent"));
+}
+
+#[test]
+fn pinned_and_btw_need_their_full_markers() {
+    let filed: Session = serde_json::from_value(serde_json::json!({
+        "id": "ses_a",
+        "metadata": {"openchamber": {"pinned": {"at": 3, "list": "mine"}}},
+    }))
+    .expect("filed pin");
+    let empty_list: Session = serde_json::from_value(serde_json::json!({
+        "id": "ses_b",
+        "metadata": {"openchamber": {"pinned": {"at": 3, "list": ""}}},
+    }))
+    .expect("empty list");
+    let kind_only: Session = serde_json::from_value(serde_json::json!({
+        "id": "ses_c",
+        "metadata": {"openchamber": {"kind": "btw"}},
+    }))
+    .expect("kind only");
+    let fork: Session = serde_json::from_value(serde_json::json!({
+        "id": "ses_d",
+        "metadata": {"openchamber": {"kind": "btw", "originalSessionID": "ses_parent"}},
+    }))
+    .expect("btw fork");
+
+    assert!(filed.metadata.pinned());
+    assert_eq!(filed.metadata.pin_list(), Some("mine"));
+    assert!(!empty_list.metadata.pinned());
+    assert!(!kind_only.metadata.btw());
+    assert!(fork.metadata.btw());
+}
+
+#[test]
 fn every_created_session_decodes() {
     let created = names("session-create", ".json");
     assert!(created.len() >= 6, "{created:?}");
@@ -180,6 +235,8 @@ fn create_session_request_serializes_to_the_captured_body() {
                 .expect("directory")
                 .to_owned(),
         },
+        agent: None,
+        model: None,
     };
     assert_eq!(serde_json::to_value(&request).expect("serialize"), captured);
 }

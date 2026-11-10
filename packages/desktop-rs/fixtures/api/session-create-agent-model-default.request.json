@@ -1,0 +1,10 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "agent": "capture-secondary",
+  "model": {
+    "providerID": "perf",
+    "id": "stream-300cps"
+  }
+}

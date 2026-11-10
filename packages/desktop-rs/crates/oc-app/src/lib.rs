@@ -18,3 +18,4 @@ mod views;
 
 pub use app::{Launch, log_failure, run};
 pub use errors::AppError;
+pub use live::chat_folder_for;

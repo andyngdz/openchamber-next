@@ -1,0 +1,217 @@
+[
+  {
+    "type": "directory",
+    "path": "/tmp/oc-desktop-rs-capture/state/home/.config/opencode"
+  },
+  {
+    "type": "document",
+    "path": "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/opencode.managed.json",
+    "info": {
+      "skills": [
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/skills"
+      ],
+      "commands": {
+        "new-extension": {
+          "template": "Read /tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/skills/openchamber-extensions/SKILL.md and follow it to build this extension:\n\n$ARGUMENTS",
+          "description": "Build an OpenChamber extension"
+        }
+      },
+      "plugins": [
+        "-opencode.browser",
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/agent-tool/openchamber-agent-tool",
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/session-title/openchamber-session-title"
+      ]
+    }
+  },
+  {
+    "type": "document",
+    "info": {
+      "model": {
+        "providerID": "perf",
+        "model": "stream-300cps"
+      },
+      "default_agent": "capture-secondary",
+      "update": "disable",
+      "share": "disabled",
+      "permissions": [
+        {
+          "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        }
+      ],
+      "agents": {
+        "title": {
+          "model": {
+            "providerID": "perf",
+            "model": "stream-1200cps"
+          }
+        },
+        "capture-primary": {
+          "model": {
+            "providerID": "perf",
+            "model": "stream-300cps"
+          },
+          "description": "Primary fixture agent",
+          "mode": "primary"
+        },
+        "capture-secondary": {
+          "description": "Second primary fixture agent",
+          "mode": "primary"
+        },
+        "capture-hidden": {
+          "description": "Hidden fixture agent",
+          "mode": "primary",
+          "hidden": true
+        },
+        "capture-subagent": {
+          "description": "Fixture subagent",
+          "mode": "subagent"
+        }
+      },
+      "providers": {
+        "perf": {
+          "name": "Performance fixture",
+          "package": "aisdk:@ai-sdk/openai-compatible",
+          "settings": {
+            "baseURL": "http://127.0.0.1:4611/v1",
+            "apiKey": "unused"
+          },
+          "models": {
+            "stream-100cps": {
+              "name": "Fixture stream, 100 characters/s",
+              "variants": []
+            },
+            "stream-300cps": {
+              "name": "Fixture stream, 300 characters/s",
+              "variants": []
+            },
+            "stream-600cps": {
+              "name": "Fixture stream, 600 characters/s",
+              "variants": [
+                {
+                  "id": "low"
+                },
+                {
+                  "id": "high"
+                }
+              ]
+            },
+            "stream-1200cps": {
+              "name": "Fixture stream, 1200 characters/s",
+              "variants": []
+            },
+            "code-300cps": {
+              "name": "Fixture code block, 300 characters/s",
+              "variants": []
+            },
+            "code-1200cps": {
+              "name": "Fixture code block, 1200 characters/s",
+              "variants": []
+            },
+            "unicode-300cps": {
+              "name": "Fixture non-Latin prose and code, 300 characters/s",
+              "variants": []
+            },
+            "unicode-1200cps": {
+              "name": "Fixture non-Latin prose and code, 1200 characters/s",
+              "variants": []
+            },
+            "stream-20000cps": {
+              "name": "Fixture stream, seeding speed",
+              "variants": []
+            },
+            "code-20000cps": {
+              "name": "Fixture code, seeding speed",
+              "variants": []
+            },
+            "unicode-20000cps": {
+              "name": "Fixture unicode, seeding speed",
+              "variants": []
+            },
+            "showcase-20000cps": {
+              "name": "Fixture showcase, seeding speed",
+              "variants": []
+            },
+            "think-30s": {
+              "name": "Fixture silence, 30s",
+              "variants": []
+            },
+            "agent-20tools-300cps": {
+              "name": "Fixture agent, 20 tool calls then 300 characters/s",
+              "variants": []
+            },
+            "agent-20reads-300cps": {
+              "name": "Fixture agent, 20 file reads then 300 characters/s",
+              "variants": []
+            },
+            "agent-20tools-20000cps": {
+              "name": "Fixture agent, 20 tool calls then 20000 characters/s",
+              "variants": []
+            },
+            "agent-20reads-20000cps": {
+              "name": "Fixture agent, 20 file reads then 20000 characters/s",
+              "variants": []
+            },
+            "agent-40tools-300cps": {
+              "name": "Fixture agent, 40 tool calls then 300 characters/s",
+              "variants": []
+            },
+            "agent-40reads-300cps": {
+              "name": "Fixture agent, 40 file reads then 300 characters/s",
+              "variants": []
+            },
+            "agent-40tools-20000cps": {
+              "name": "Fixture agent, 40 tool calls then 20000 characters/s",
+              "variants": []
+            },
+            "agent-40reads-20000cps": {
+              "name": "Fixture agent, 40 file reads then 20000 characters/s",
+              "variants": []
+            },
+            "agent-100tools-x5-300cps": {
+              "name": "Fixture agent, 100 tool calls 5 at a time, then 300 characters/s",
+              "variants": []
+            },
+            "agent-100tools-x5-20000cps": {
+              "name": "Fixture agent, 100 tool calls 5 at a time, then 20000 characters/s",
+              "variants": []
+            }
+          }
+        },
+        "perf-second": {
+          "name": "Performance fixture, second id",
+          "package": "aisdk:@ai-sdk/openai-compatible",
+          "settings": {
+            "baseURL": "http://127.0.0.1:4611/v1",
+            "apiKey": "unused"
+          },
+          "models": {
+            "alt-chat-300cps": {
+              "name": "Second fixture chat, 300 characters/s",
+              "variants": []
+            },
+            "alt-code-1200cps": {
+              "name": "Second fixture code block, 1200 characters/s",
+              "variants": []
+            },
+            "alt-thinking": {
+              "name": "Second fixture with variants",
+              "variants": [
+                {
+                  "id": "low"
+                },
+                {
+                  "id": "medium"
+                },
+                {
+                  "id": "high"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+]

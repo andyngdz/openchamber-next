@@ -1,0 +1,1129 @@
+{
+  "state": "projects",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "widths": {
+    "sidebar": {
+      "set": 280,
+      "measured": 280
+    },
+    "workStatusPanel": {
+      "default": 324,
+      "measured": 324,
+      "card": 300
+    }
+  },
+  "selectors": {
+    "composer": {
+      "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
+      "parent": true
+    },
+    "workStatusPanel": {
+      "selector": "[data-right-slot]"
+    },
+    "iconRail": {
+      "selector": "nav:has([data-context-surface])"
+    },
+    "header": {
+      "selector": "[data-page-scroll-lock] > header"
+    },
+    "sidebar": {
+      "selector": "[data-left-sidebar]",
+      "also": "[data-titlebar-left-controls]"
+    },
+    "chatColumn": {
+      "selector": "[data-workspace-chat]"
+    },
+    "popover": {
+      "selector": "[role=dialog], [role=menu]",
+      "popup": true
+    }
+  },
+  "regions": {
+    "sidebar": {
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open OpenChamber menu",
+          "key": "sidebar/Open OpenChamber menu",
+          "shown": true,
+          "bounds": {
+            "x": 12,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Open sessions",
+          "key": "sidebar/Open sessions",
+          "shown": true,
+          "bounds": {
+            "x": 44,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#1",
+          "shown": true,
+          "bounds": {
+            "x": 72,
+            "y": 12,
+            "width": 115.16,
+            "height": 24
+          }
+        },
+        {
+          "role": "separator",
+          "name": "Resize left panel",
+          "key": "sidebar/Resize left panel",
+          "shown": true,
+          "bounds": {
+            "x": 277,
+            "y": 0,
+            "width": 3,
+            "height": 900
+          }
+        },
+        {
+          "role": "button",
+          "name": "Search sessions",
+          "key": "sidebar/Search sessions",
+          "shown": true,
+          "bounds": {
+            "x": 13,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Add project",
+          "key": "sidebar/Add project",
+          "shown": true,
+          "bounds": {
+            "x": 43,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Display mode",
+          "key": "sidebar/Display mode",
+          "shown": true,
+          "bounds": {
+            "x": 73,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "More",
+          "key": "sidebar/More",
+          "shown": true,
+          "bounds": {
+            "x": 103,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Chats",
+          "key": "sidebar/Chats",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 88,
+            "width": 274,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#2",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 90,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "button",
+          "key": "sidebar/button",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 88,
+            "width": 256,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat two",
+          "key": "sidebar/Reference: chat two (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 256,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat two",
+          "key": "sidebar/Reference: chat two",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 122,
+            "width": 220,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: chat two/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 124,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat one",
+          "key": "sidebar/Reference: chat one (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 149,
+            "width": 256,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat one",
+          "key": "sidebar/Reference: chat one",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 154,
+            "width": 220,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: chat one/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 156,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 196,
+            "width": 256,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 196,
+            "width": 274,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: in work",
+          "key": "sidebar/Reference: in work (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 225,
+            "width": 256,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: in work",
+          "key": "sidebar/Reference: in work",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 230,
+            "width": 220,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Mark done",
+          "key": "sidebar/Reference: in work/Mark done",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: in work/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 272,
+            "width": 256,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 272,
+            "width": 274,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 300,
+            "width": 274,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference",
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 304,
+            "width": 244,
+            "height": 22
+          }
+        },
+        {
+          "role": "button",
+          "name": "New worktree",
+          "key": "sidebar/desktop-rs-reference/New worktree",
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 303,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "New draft session",
+          "key": "sidebar/desktop-rs-reference/New draft session",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 301.8,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 331,
+            "width": 256,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 336,
+            "width": 220,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Track as in work",
+          "key": "sidebar/Reference: streaming turn/Track as in work",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 338,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: streaming turn/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 338,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 363,
+            "width": 256,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 368,
+            "width": 220,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Track as in work",
+          "key": "sidebar/Reference: finished turn/Track as in work",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: finished turn/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          }
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference-second",
+          "key": "sidebar/desktop-rs-reference-second (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 406,
+            "width": 274,
+            "height": 30
+          }
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference-second",
+          "key": "sidebar/desktop-rs-reference-second",
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 410,
+            "width": 244,
+            "height": 22
+          }
+        },
+        {
+          "role": "button",
+          "name": "New worktree",
+          "key": "sidebar/desktop-rs-reference-second/New worktree",
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 409,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "New draft session",
+          "key": "sidebar/desktop-rs-reference-second/New draft session",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 407.8,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Settings",
+          "key": "sidebar/Settings",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 868,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Open instance, usage and MCP (current: Local)",
+          "key": "sidebar/Open instance, usage and MCP (current: Local)",
+          "shown": true,
+          "bounds": {
+            "x": 197.15,
+            "y": 868,
+            "width": 72.85,
+            "height": 24
+          }
+        }
+      ]
+    },
+    "header": {
+      "bounds": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 48
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open a new Mini Chat window",
+          "key": "header/Main navigation/Open a new Mini Chat window",
+          "shown": true,
+          "bounds": {
+            "x": 1240,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Toggle work-status panel",
+          "key": "header/Main navigation/Toggle work-status panel",
+          "shown": true,
+          "bounds": {
+            "x": 1272,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Minimize window",
+          "key": "header/Main navigation/Window controls/Minimize window",
+          "shown": true,
+          "bounds": {
+            "x": 1308,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
+        },
+        {
+          "role": "button",
+          "name": "Maximize window",
+          "key": "header/Main navigation/Window controls/Maximize window",
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
+        },
+        {
+          "role": "button",
+          "name": "Close window",
+          "key": "header/Main navigation/Window controls/Close window",
+          "shown": true,
+          "bounds": {
+            "x": 1396,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          }
+        }
+      ]
+    },
+    "chatColumn": {
+      "bounds": {
+        "x": 280,
+        "y": 48,
+        "width": 792,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Choose project",
+          "key": "chatColumn/Choose project",
+          "shown": true,
+          "bounds": {
+            "x": 317.75,
+            "y": 353.6,
+            "width": 132.23,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Explore the codebase",
+          "key": "chatColumn/Explore the codebase",
+          "shown": true,
+          "bounds": {
+            "x": 369.35,
+            "y": 503.6,
+            "width": 168.06,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Catch me up",
+          "key": "chatColumn/Catch me up",
+          "shown": true,
+          "bounds": {
+            "x": 543.41,
+            "y": 503.6,
+            "width": 114.5,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Weigh my options",
+          "key": "chatColumn/Weigh my options",
+          "shown": true,
+          "bounds": {
+            "x": 663.91,
+            "y": 503.6,
+            "width": 145.13,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Start feature planning",
+          "key": "chatColumn/Start feature planning",
+          "shown": true,
+          "bounds": {
+            "x": 815.04,
+            "y": 503.6,
+            "width": 167.61,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Craft a Goal",
+          "key": "chatColumn/Craft a Goal",
+          "shown": true,
+          "bounds": {
+            "x": 322.83,
+            "y": 534,
+            "width": 110.14,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Schedule a Task",
+          "key": "chatColumn/Schedule a Task",
+          "shown": true,
+          "bounds": {
+            "x": 438.96,
+            "y": 534,
+            "width": 136.63,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Debug an issue",
+          "key": "chatColumn/Debug an issue",
+          "shown": true,
+          "bounds": {
+            "x": 581.59,
+            "y": 534,
+            "width": 130.88,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Review my changes",
+          "key": "chatColumn/Review my changes",
+          "shown": true,
+          "bounds": {
+            "x": 718.46,
+            "y": 534,
+            "width": 157.05,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Build an extension",
+          "key": "chatColumn/Build an extension",
+          "shown": true,
+          "bounds": {
+            "x": 881.51,
+            "y": 534,
+            "width": 147.66,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Add a starter",
+          "key": "chatColumn/Add a starter",
+          "shown": true,
+          "bounds": {
+            "x": 664,
+            "y": 564.4,
+            "width": 24,
+            "height": 24
+          }
+        }
+      ]
+    },
+    "composer": {
+      "bounds": {
+        "x": 315.75,
+        "y": 387.6,
+        "width": 720.5,
+        "height": 100
+      },
+      "controls": [
+        {
+          "role": "textbox",
+          "name": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "key": "composer/Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 407.6,
+            "width": 696.5,
+            "height": 21
+          }
+        },
+        {
+          "role": "button",
+          "name": "Add attachment",
+          "key": "composer/Add attachment",
+          "shown": true,
+          "bounds": {
+            "x": 325.75,
+            "y": 453.6,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Permissions: ask every time",
+          "key": "composer/Permissions: ask every time",
+          "shown": true,
+          "bounds": {
+            "x": 355.75,
+            "y": 453.6,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Start a goal with the next message",
+          "key": "composer/Start a goal with the next message",
+          "shown": true,
+          "bounds": {
+            "x": 385.75,
+            "y": 453.6,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "perf logo Fixture agent, 20 tool calls then 300...",
+          "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
+          "shown": true,
+          "bounds": {
+            "x": 600.21,
+            "y": 449.6,
+            "width": 250.39,
+            "height": 32
+          }
+        },
+        {
+          "role": "button",
+          "name": "Thinking: High, last used with this model",
+          "key": "composer/Thinking: High, last used with this model",
+          "shown": true,
+          "bounds": {
+            "x": 854.6,
+            "y": 449.6,
+            "width": 35.69,
+            "height": 32
+          }
+        },
+        {
+          "role": "button",
+          "name": "Build",
+          "key": "composer/Build",
+          "shown": true,
+          "bounds": {
+            "x": 902.29,
+            "y": 449.6,
+            "width": 51.96,
+            "height": 32
+          }
+        },
+        {
+          "role": "button",
+          "name": "Start dictation",
+          "key": "composer/Start dictation",
+          "shown": true,
+          "bounds": {
+            "x": 966.25,
+            "y": 453.6,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "role": "button",
+          "name": "Send message",
+          "key": "composer/Send message",
+          "shown": true,
+          "bounds": {
+            "x": 1002.25,
+            "y": 453.6,
+            "width": 24,
+            "height": 24
+          }
+        }
+      ]
+    },
+    "workStatusPanel": {
+      "bounds": {
+        "x": 1072,
+        "y": 48,
+        "width": 324,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Choose sections",
+          "key": "workStatusPanel/Work status/Choose sections",
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 70,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "role": "button",
+          "name": "Context sources 3 skills",
+          "key": "workStatusPanel/Work status/Context sources 3 skills",
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 113.99,
+            "width": 284,
+            "height": 15.99
+          }
+        }
+      ]
+    },
+    "iconRail": {
+      "bounds": {
+        "x": 1396,
+        "y": 48,
+        "width": 44,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Context",
+          "key": "iconRail/Context",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 56,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Git",
+          "key": "iconRail/Git",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 101,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Changes",
+          "key": "iconRail/Changes",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 137,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Walkthrough",
+          "key": "iconRail/Walkthrough",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 173,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Files",
+          "key": "iconRail/Files",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 218,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Terminal",
+          "key": "iconRail/Terminal",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 254,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Browser",
+          "key": "iconRail/Browser",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 290,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Project knowledge",
+          "key": "iconRail/Project knowledge",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 335,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "role": "button",
+          "name": "Configure panels",
+          "key": "iconRail/Configure panels",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 371,
+            "width": 28,
+            "height": 28
+          }
+        }
+      ]
+    }
+  },
+  "outside": [],
+  "accessibility": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/button",
+      "role": "button",
+      "problem": "missing-name",
+      "nameSource": "role"
+    }
+  ],
+  "normalized": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: chat two (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: chat one (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: in work (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference (sortable)",
+      "rules": [
+        "container-name"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: streaming turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: finished turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference-second (sortable)",
+      "rules": [
+        "container-name"
+      ]
+    }
+  ]
+}

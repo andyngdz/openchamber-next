@@ -3,7 +3,7 @@
 
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::input::TextareaState;
-use gpui_kit::{App, Div, Entity, ParentElement, ScrollHandle, Styled, div, px};
+use gpui_kit::{App, Div, Entity, ParentElement, ScrollHandle, Styled, Window, div, px};
 use oc_state::Region;
 
 use super::Scene;
@@ -20,11 +20,12 @@ pub(crate) fn chat_column(
     scene: Scene<'_>,
     draft: &Entity<TextareaState>,
     scroll: &ScrollHandle,
+    window: &mut Window,
     cx: &App,
 ) -> Div {
     let column = div().flex_1().min_w_0().h_full();
     let content = match scene.state.open() {
-        None => column.child(empty_state(scene, draft, cx)),
+        None => column.child(empty_state(scene, draft, window, cx)),
         Some(_) => column
             .flex()
             .flex_col()
@@ -35,7 +36,7 @@ pub(crate) fn chat_column(
                     .flex()
                     .justify_center()
                     .pb(px(COMPOSER_BOTTOM))
-                    .child(composer(scene, draft, cx)),
+                    .child(composer(scene, draft, window, cx)),
             ),
     };
     region(scene.registry, Area::ChatColumn, content)

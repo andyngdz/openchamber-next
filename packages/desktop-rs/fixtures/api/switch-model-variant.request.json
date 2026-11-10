@@ -1,0 +1,7 @@
+{
+  "model": {
+    "providerID": "perf",
+    "id": "stream-600cps",
+    "variant": "high"
+  }
+}

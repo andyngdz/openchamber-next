@@ -6,5 +6,5 @@ mod element;
 mod registry;
 
 pub(crate) use dump::LayoutDump;
-pub(crate) use element::{content, control, region};
+pub(crate) use element::{anchored_control, content, control, region};
 pub(crate) use registry::{Area, ControlSpec, LayoutRegistry, Reveal, Role};

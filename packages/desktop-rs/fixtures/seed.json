@@ -2,8 +2,16 @@
   "project": {
     "name": "desktop-rs-reference"
   },
+  "secondProject": {
+    "name": "desktop-rs-reference-second",
+    "color": "#3e63dd",
+    "icon": "code",
+    "sidebarCollapsed": true
+  },
   "model": "perf/agent-20tools-300cps",
+  "variant": "high",
   "prompt": "List the files the answer should mention.",
+  "chatDate": "2026-01-01",
   "sessions": [
     {
       "state": "session",
@@ -13,5 +21,48 @@
       "state": "streaming",
       "title": "Reference: streaming turn"
     }
+  ],
+  "workSession": {
+    "title": "Reference: in work"
+  },
+  "secondProjectSession": {
+    "title": "Reference: second project"
+  },
+  "chats": [
+    {
+      "title": "Reference: chat one",
+      "folder": "00000000-0000-4000-8000-000000000001"
+    },
+    {
+      "title": "Reference: chat two",
+      "folder": "00000000-0000-4000-8000-000000000002"
+    }
+  ],
+  "favoriteModels": [
+    {
+      "providerID": "perf",
+      "modelID": "agent-20tools-300cps"
+    },
+    {
+      "providerID": "perf-alt",
+      "modelID": "stream-1200cps"
+    }
+  ],
+  "recentModels": [
+    {
+      "providerID": "perf-alt",
+      "modelID": "unicode-300cps"
+    },
+    {
+      "providerID": "perf",
+      "modelID": "stream-300cps"
+    }
+  ],
+  "favoriteAgents": [
+    "Build",
+    "Plan"
+  ],
+  "recentAgents": [
+    "Build"
   ]
 }

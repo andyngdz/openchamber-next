@@ -1,0 +1,40 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "data": [
+    {
+      "id": "opencode",
+      "integrationID": "opencode",
+      "name": "OpenCode",
+      "activation": "enabled",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "public",
+        "baseURL": "https://opencode.ai/inference/openai/v1"
+      }
+    },
+    {
+      "id": "perf",
+      "name": "Performance fixture",
+      "activation": "enabled",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      }
+    },
+    {
+      "id": "perf-second",
+      "name": "Performance fixture, second id",
+      "activation": "enabled",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf-second"
+      }
+    }
+  ]
+}

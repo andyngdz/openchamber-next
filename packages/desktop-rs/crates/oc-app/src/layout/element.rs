@@ -1,7 +1,12 @@
 //! Elements that report their bounds to the [`LayoutRegistry`] while the frame is prepainted.
 
+use std::cell::Cell;
+use std::rc::Rc;
+
 use gpui_kit::base::ElementExt;
-use gpui_kit::{Div, InteractiveElement, IntoElement, ParentElement, Styled, canvas, div};
+use gpui_kit::{
+    Bounds, Div, InteractiveElement, IntoElement, ParentElement, Pixels, Styled, canvas, div,
+};
 
 use super::registry::{Area, ControlSpec, LayoutRegistry, Reveal};
 
@@ -28,10 +33,35 @@ pub(crate) fn control(
     spec: ControlSpec,
     content: impl IntoElement,
 ) -> Div {
+    recorded_control(registry, spec, content, None)
+}
+
+/// A control that also hands its bounds to a picker trigger cell: the same root-relative
+/// coordinates [`control`] writes to the dump.
+pub(crate) fn anchored_control(
+    registry: &LayoutRegistry,
+    spec: ControlSpec,
+    content: impl IntoElement,
+    anchor: Rc<Cell<Option<Bounds<Pixels>>>>,
+) -> Div {
+    recorded_control(registry, spec, content, Some(anchor))
+}
+
+fn recorded_control(
+    registry: &LayoutRegistry,
+    spec: ControlSpec,
+    content: impl IntoElement,
+    anchor: Option<Rc<Cell<Option<Bounds<Pixels>>>>>,
+) -> Div {
     let registry = registry.clone();
     let reveal = spec.reveal.clone();
     let probe = canvas(
-        move |bounds, _, _| registry.record_control(spec, bounds),
+        move |bounds, _, _| {
+            registry.record_control(spec, bounds);
+            if let Some(anchor) = &anchor {
+                anchor.set(Some(bounds));
+            }
+        },
         |_, _, _, _| {},
     )
     .absolute()

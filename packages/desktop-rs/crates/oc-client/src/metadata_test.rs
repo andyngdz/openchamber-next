@@ -32,6 +32,32 @@ fn missing_or_unknown_work_has_no_state() {
 }
 
 #[test]
+fn pinned_reads_the_at_stamp_and_rejects_a_bad_list() {
+    assert!(!metadata(json!({})).pinned());
+    assert!(metadata(json!({"openchamber": {"pinned": {"at": 3}}})).pinned());
+    assert!(metadata(json!({"openchamber": {"pinned": {"at": 3, "list": "mine"}}})).pinned());
+    assert!(!metadata(json!({"openchamber": {"pinned": {"at": 3, "list": ""}}})).pinned());
+    assert!(!metadata(json!({"openchamber": {"pinned": {"at": "3"}}})).pinned());
+    assert_eq!(
+        metadata(json!({"openchamber": {"pinned": {"at": 3, "list": "mine"}}})).pin_list(),
+        Some("mine")
+    );
+}
+
+#[test]
+fn btw_needs_the_kind_and_an_original_session() {
+    assert!(!metadata(json!({"openchamber": {"kind": "btw"}})).btw());
+    assert!(!metadata(json!({"openchamber": {"kind": "btw", "originalSessionID": " "}})).btw());
+    assert!(
+        metadata(json!({"openchamber": {"kind": "btw", "originalSessionID": "ses_parent"}})).btw()
+    );
+    assert!(
+        !metadata(json!({"openchamber": {"kind": "review", "originalSessionID": "ses_parent"}}))
+            .btw()
+    );
+}
+
+#[test]
 fn metadata_update_decodes_with_and_without_metadata() {
     let update: MetadataUpdated = serde_json::from_value(json!({
         "sessionID": "ses_a",

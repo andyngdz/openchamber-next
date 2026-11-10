@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "id": "ses_e3b04a234ffefPTwC7fKiBtlJR",
+      "projectID": "8fae59928829872cf3fa20b67387f5ef5b835ef0",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats/2026-01-02/session-00000000-0000-4000-8000-000000000000"
+      },
+      "cost": 0,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "time": {
+        "created": 1794306170316,
+        "updated": 1794306170316
+      }
+    },
+    {
+      "id": "ses_e3b04a25effe4WiotPMG015qOZ",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "cost": 0,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "time": {
+        "created": 1794306170274,
+        "updated": 1794306170282
+      },
+      "metadata": {
+        "openchamber": {
+          "pinned": {
+            "at": 1800000000000
+          }
+        }
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjM0ZmZlZlBUd0M3ZktpQnRsSlIiLCJ0aW1lIjoxNzk0MzA2MTcwMzE2LCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjVlZmZlNFdpb3RQTUcwMTVxT1oiLCJ0aW1lIjoxNzk0MzA2MTcwMjgyLCJkaXJlY3Rpb24iOiJuZXh0In19"
+  }
+}

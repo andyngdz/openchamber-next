@@ -7,6 +7,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub use crate::metadata::{SessionMetadata, WorkState};
+pub use crate::requests::{
+    CreateSessionRequest, SessionRecord, SwitchAgentRequest, SwitchModelRequest,
+};
 
 /// `GET /auth/session`.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -23,11 +26,35 @@ pub struct Data<T> {
     pub data: T,
 }
 
-/// `{"data": […], "cursor": {…}}`; the spike does not page, so the cursor is dropped.
-#[derive(Debug, Clone, Deserialize)]
+/// `{"data": […], "cursor": {…}}` around a list.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct Page<T> {
     /// The entries of this page.
     pub data: Vec<T>,
+    /// Where the next and previous pages are; absent on an unpaged answer.
+    #[serde(default)]
+    pub cursor: PageCursor,
+}
+
+/// The opaque page anchors of a list answer.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize)]
+pub struct PageCursor {
+    /// The cursor of the page before this one.
+    #[serde(default)]
+    pub previous: Option<String>,
+    /// The cursor to request next; the last page still carries one.
+    #[serde(default)]
+    pub next: Option<String>,
+}
+
+/// `{"location": {"directory"}, "data": …}` around a directory-scoped list.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct Located<T> {
+    /// The directory the answer belongs to.
+    #[serde(default)]
+    pub location: Location,
+    /// The list.
+    pub data: T,
 }
 
 /// Where a session or event lives; only the directory is read.
@@ -53,6 +80,9 @@ pub struct SessionTime {
     /// When the last turn ended; missing until the first turn ends.
     #[serde(default)]
     pub idle: Option<u64>,
+    /// When the session was archived; absent while it is active.
+    #[serde(default)]
+    pub archived: Option<u64>,
 }
 
 /// One session of the list or of a create answer. `title` is missing until the first
@@ -69,17 +99,13 @@ pub struct Session {
     pub location: Location,
     /// Created and updated times.
     #[serde(default)]
-    pub time: SessionTime,
+    pub time: Box<SessionTime>,
     /// Metadata the server and clients attach; the spike reads the work state.
     #[serde(default)]
     pub metadata: SessionMetadata,
-}
-
-/// Body of `POST /api/session`.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct CreateSessionRequest {
-    /// Directory the new session is created in.
-    pub location: Location,
+    /// The session this one nests under, when it is a subagent or a side conversation.
+    #[serde(default, rename = "parentID")]
+    pub parent_id: Option<String>,
 }
 
 /// Body of `POST /api/session/:id/prompt`; the plain composer send carries nothing else.
@@ -101,17 +127,17 @@ pub struct PromptAccepted {
     pub session_id: String,
 }
 
-/// The model a step or message ran on; an object on the wire, never a string.
-#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize)]
+/// The model a step, message or request names; a catalog `id` plus its provider.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize, Serialize)]
 pub struct ModelRef {
-    /// Model id.
+    /// Catalog model id.
     #[serde(default)]
     pub id: String,
     /// Provider id.
     #[serde(rename = "providerID", default)]
     pub provider_id: String,
-    /// Variant, when the model has one.
-    #[serde(default)]
+    /// Variant, when the model has one; left out of a request for Default.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub variant: Option<String>,
 }
 

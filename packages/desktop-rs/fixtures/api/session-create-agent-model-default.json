@@ -1,0 +1,29 @@
+{
+  "data": {
+    "id": "ses_e3b04a2f9ffeQrJf0RFcl2ain9",
+    "projectID": "global",
+    "agent": "capture-secondary",
+    "model": {
+      "id": "stream-300cps",
+      "providerID": "perf",
+      "variant": "default"
+    },
+    "cost": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "time": {
+      "created": 1794306170122,
+      "updated": 1794306170122
+    },
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    }
+  }
+}

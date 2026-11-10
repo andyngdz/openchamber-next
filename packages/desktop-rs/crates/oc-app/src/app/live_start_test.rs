@@ -27,16 +27,16 @@ fn a_symlinked_directory_resolves_to_its_real_path() {
 
     let resolved = real_directory(&scratch.0.join("link/")).expect("resolves");
 
-    assert_eq!(resolved, real.to_string_lossy());
-    assert!(!resolved.ends_with('/'));
+    assert_eq!(resolved.as_str(), real.to_string_lossy());
+    assert!(!resolved.as_str().ends_with('/'));
 }
 
 #[test]
 fn relative_and_root_directories_resolve() {
-    assert_eq!(real_directory(Path::new("/")).expect("root"), "/");
+    assert_eq!(real_directory(Path::new("/")).expect("root").as_str(), "/");
     let current = std::fs::canonicalize(".").expect("cwd");
     let relative = real_directory(Path::new("src")).expect("relative");
-    assert_eq!(relative, current.join("src").to_string_lossy());
+    assert_eq!(relative.as_str(), current.join("src").to_string_lossy());
 }
 
 #[test]
