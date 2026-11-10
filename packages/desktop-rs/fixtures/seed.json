@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "desktop-rs-reference"
+  },
+  "model": "perf/agent-20tools-300cps",
+  "prompt": "List the files the answer should mention.",
+  "sessions": [
+    {
+      "state": "session",
+      "title": "Reference: finished turn"
+    },
+    {
+      "state": "streaming",
+      "title": "Reference: streaming turn"
+    }
+  ]
+}

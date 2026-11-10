@@ -1,0 +1,718 @@
+{
+  "state": "streaming",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "widths": {
+    "sidebar": {
+      "set": 280,
+      "measured": 280
+    },
+    "workStatusPanel": {
+      "default": 324,
+      "measured": 324,
+      "card": 300
+    }
+  },
+  "selectors": {
+    "composer": {
+      "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
+      "parent": true
+    },
+    "workStatusPanel": {
+      "selector": "[data-right-slot]"
+    },
+    "iconRail": {
+      "selector": "nav:has([data-context-surface])"
+    },
+    "header": {
+      "selector": "[data-page-scroll-lock] > header"
+    },
+    "sidebar": {
+      "selector": "[data-left-sidebar]",
+      "also": "[data-titlebar-left-controls]"
+    },
+    "chatColumn": {
+      "selector": "[data-workspace-chat]"
+    }
+  },
+  "regions": {
+    "sidebar": {
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open OpenChamber menu",
+          "key": "sidebar/Open OpenChamber menu",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open sessions",
+          "key": "sidebar/Open sessions",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#1",
+          "shown": true
+        },
+        {
+          "role": "separator",
+          "name": "Resize left panel",
+          "key": "sidebar/Resize left panel",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Search sessions",
+          "key": "sidebar/Search sessions",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Add project",
+          "key": "sidebar/Add project",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Display mode",
+          "key": "sidebar/Display mode",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "More",
+          "key": "sidebar/More",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Chats",
+          "key": "sidebar/Chats",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#2",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "button",
+          "key": "sidebar/button",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work (sortable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn (draggable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Mark done",
+          "key": "sidebar/Reference: streaming turn/Mark done",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: streaming turn/Archive",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn (draggable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Mark done",
+          "key": "sidebar/Reference: finished turn/Mark done",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: finished turn/Archive",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects (sortable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference (sortable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "New worktree",
+          "key": "sidebar/desktop-rs-reference/New worktree",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "New draft session",
+          "key": "sidebar/desktop-rs-reference/New draft session",
+          "shown": false
+        },
+        {
+          "role": "button",
+          "name": "Settings",
+          "key": "sidebar/Settings",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open instance, usage and MCP (current: Local)",
+          "key": "sidebar/Open instance, usage and MCP (current: Local)",
+          "shown": true
+        }
+      ]
+    },
+    "header": {
+      "bounds": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 48
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open session actions",
+          "key": "header/Main navigation/Open session actions",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Context usage",
+          "key": "header/Main navigation/Context usage",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open in File Manager",
+          "key": "header/Main navigation/Open in File Manager",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Run Auto-discover dev server",
+          "key": "header/Main navigation/Run Auto-discover dev server",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open current session in Mini Chat",
+          "key": "header/Main navigation/Open current session in Mini Chat",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Toggle work-status panel",
+          "key": "header/Main navigation/Toggle work-status panel",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Minimize window",
+          "key": "header/Main navigation/Window controls/Minimize window",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Maximize window",
+          "key": "header/Main navigation/Window controls/Maximize window",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Close window",
+          "key": "header/Main navigation/Window controls/Close window",
+          "shown": true
+        }
+      ]
+    },
+    "chatColumn": {
+      "bounds": {
+        "x": 280,
+        "y": 48,
+        "width": 792,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "generic",
+          "name": "generic",
+          "key": "chatColumn/generic",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files packages/*/package.json",
+          "key": "chatColumn/Find Files packages/*/package.json#1",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files scripts/perf/*.mjs",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files *.md",
+          "key": "chatColumn/Find Files *.md#1",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files packages/*/package.json",
+          "key": "chatColumn/Find Files packages/*/package.json#2",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files scripts/perf/*.mjs",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files *.md",
+          "key": "chatColumn/Find Files *.md#2",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files packages/*/package.json",
+          "key": "chatColumn/Find Files packages/*/package.json#3",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files scripts/perf/*.mjs",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files *.md",
+          "key": "chatColumn/Find Files *.md#3",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Scroll to bottom",
+          "key": "chatColumn/Scroll to bottom",
+          "shown": false
+        }
+      ]
+    },
+    "composer": {
+      "bounds": {
+        "x": 315.75,
+        "y": 784,
+        "width": 720.5,
+        "height": 100
+      },
+      "controls": [
+        {
+          "role": "textbox",
+          "name": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "key": "composer/Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Add attachment",
+          "key": "composer/Add attachment",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Permissions: ask every time",
+          "key": "composer/Permissions: ask every time",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Start a goal with the next message",
+          "key": "composer/Start a goal with the next message",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "perf logo Fixture agent, 20 tool calls then 300...",
+          "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Thinking: Default",
+          "key": "composer/Thinking: Default",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Build",
+          "key": "composer/Build",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Start dictation",
+          "key": "composer/Start dictation",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Stop generating",
+          "key": "composer/Stop generating",
+          "shown": true
+        }
+      ]
+    },
+    "workStatusPanel": {
+      "bounds": {
+        "x": 1072,
+        "y": 48,
+        "width": 324,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Choose sections",
+          "key": "workStatusPanel/Work status/Choose sections",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open context panel",
+          "key": "workStatusPanel/Work status/Open context panel",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open Git panel",
+          "key": "workStatusPanel/Work status/Open Git panel",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Open changes",
+          "key": "workStatusPanel/Work status/Open changes",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Context sources 3 skills",
+          "key": "workStatusPanel/Work status/Context sources 3 skills",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Turn stats",
+          "key": "workStatusPanel/Work status/Turn stats",
+          "shown": true
+        }
+      ]
+    },
+    "iconRail": {
+      "bounds": {
+        "x": 1396,
+        "y": 48,
+        "width": 44,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Context",
+          "key": "iconRail/Context",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Git",
+          "key": "iconRail/Git",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Changes",
+          "key": "iconRail/Changes",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Walkthrough",
+          "key": "iconRail/Walkthrough",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Files",
+          "key": "iconRail/Files",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Terminal",
+          "key": "iconRail/Terminal",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Browser",
+          "key": "iconRail/Browser",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Project knowledge",
+          "key": "iconRail/Project knowledge",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "Configure panels",
+          "key": "iconRail/Configure panels",
+          "shown": true
+        }
+      ]
+    }
+  },
+  "outside": [],
+  "accessibility": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/button",
+      "role": "button",
+      "problem": "missing-name",
+      "nameSource": "role"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/generic",
+      "role": "generic",
+      "problem": "missing-name",
+      "nameSource": "role"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    }
+  ],
+  "normalized": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: streaming turn (draggable)",
+      "rules": [
+        "duration",
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: streaming turn",
+      "rules": [
+        "duration",
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: finished turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference (sortable)",
+      "rules": [
+        "container-name"
+      ]
+    }
+  ]
+}

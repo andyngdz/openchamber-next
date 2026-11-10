@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1c3a32ea3001llYyEFBTumF1gR",
+    "sessionID": "ses_e3c5cd35bffews5ugJMR8RIsyu",
+    "time": {
+      "created": 1794283613868
+    },
+    "type": "user",
+    "payload": {
+      "text": "List the files, ask first."
+    },
+    "delivery": "steer"
+  }
+}

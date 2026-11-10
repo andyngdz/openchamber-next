@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1c3a39509001Azfzw2kjhLFQnb",
+    "sessionID": "ses_e3c5c6cf3ffeUIFvldfzGnTxDW",
+    "time": {
+      "created": 1794283640109
+    },
+    "type": "user",
+    "payload": {
+      "text": "Second session."
+    },
+    "delivery": "steer"
+  }
+}

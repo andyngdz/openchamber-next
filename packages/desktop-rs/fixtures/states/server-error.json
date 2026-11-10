@@ -1,0 +1,20 @@
+{
+  "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference",
+  "steps": [
+    {
+      "type": "connection",
+      "status": {
+        "state": "failed",
+        "message": "The server exited before printing its port (exit status 1)",
+        "stderrTail": [
+          "node:internal/modules/cjs/loader:1228",
+          "Error: Cannot find module 'express'"
+        ],
+        "logTail": [
+          "[openchamber] Starting OpenChamber server",
+          "[openchamber] Failed to load the server module"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,3121 @@
+[
+  {
+    "id": "evt_1c3a268cf001k19fnLJCMEJwcB",
+    "type": "server.connected",
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26add001y5Dui0qybWnQuX",
+    "created": 1794283563741,
+    "type": "project.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "id": "global",
+      "canonical": "/tmp/oc-desktop-rs-capture/project",
+      "vcs": "git",
+      "time": {
+        "created": 1794283563178,
+        "updated": 1794283563178,
+        "active": 1794283563740
+      },
+      "sandboxes": []
+    }
+  },
+  {
+    "id": "evt_1c3a26c4a001OncpAwje1wAt6c",
+    "created": 1794283564106,
+    "type": "integration.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c4e001h61ghzTzt8ClJ4",
+    "created": 1794283564110,
+    "type": "provider.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c55001bliJQcc3WBoipD",
+    "created": 1794283564117,
+    "type": "model.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c5f001Lhl6RfvfZkasZ7",
+    "created": 1794283564127,
+    "type": "vcs.branch.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "branch": "master"
+    }
+  },
+  {
+    "id": "evt_1c3a26c5f002Aj5bblvWNzvPul",
+    "created": 1794283564127,
+    "type": "agent.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c60001P7zfWxu7BUBcZN",
+    "created": 1794283564128,
+    "type": "command.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c60002qyTePcSoEdjDKD",
+    "created": 1794283564128,
+    "type": "skill.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c62001BTMVb9J6qFxgbN",
+    "created": 1794283564130,
+    "type": "websearch.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c69001Iz0QwknQuBjc8u",
+    "created": 1794283564137,
+    "type": "reference.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c6c00133eSQ2gakbf3dT",
+    "created": 1794283564140,
+    "type": "plugin.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a26c6d001Mj8WKSc65oflYU",
+    "created": 1794283564141,
+    "type": "session.inbox.enqueued",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "inboxID": "msg_1c3a26ac6001vZsrMu25Y5Yz7r",
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "item": {
+        "type": "user",
+        "payload": {
+          "text": "Reply with the fixture text."
+        },
+        "delivery": "steer"
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 1,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26c6f001hodzCsEMKZlqmP",
+    "created": 1794283564143,
+    "type": "session.execution.started",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 2,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26c760015E1VnPv1A7qva4",
+    "created": 1794283564150,
+    "metadata": {
+      "instructions": {
+        "initial": true
+      }
+    },
+    "type": "session.instructions.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "delta": {
+        "core/codemode": "c70549334ff58e5180cbd0dadf89971318a87a65a94306d43b99284fa7a762a3",
+        "core/skill-guidance": "8394362d28c82fa4d13c7a9f5568c05680f6687e07db8f426a0e3c92f3027dc9",
+        "core/date": "9b4c63b67003f693d244434de4080cc42a552c634280bc3f4122cd1f1ed9d38c",
+        "core/environment": "e6f68fa51b6c59b2bc96ec72966c1ea57f9633f5ea8b2455855b2c7218a45c47"
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 3,
+      "version": 2
+    }
+  },
+  {
+    "id": "evt_1c3a26c77001eGOA2hUaFxiGwm",
+    "created": 1794283564151,
+    "type": "session.inbox.delivered",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "inboxID": "msg_1c3a26ac6001vZsrMu25Y5Yz7r"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 4,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26ca30010PGLC7WMZXBFpt",
+    "created": 1794283564195,
+    "type": "session.metadata.updated",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794283564191,
+            "openedBy": "auto"
+          }
+        }
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 5,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26cbd001Skg3c81hoFk9oi",
+    "created": 1794283564221,
+    "type": "session.step.started",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "agent": "build",
+      "model": {
+        "id": "stream-300cps",
+        "providerID": "perf"
+      },
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+      "started": 1794283564170
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 6,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26cbf001ty7ZQjTLKDEU1E",
+    "created": 1794283564223,
+    "type": "session.text.started",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 7,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a26d26001CpbdtYE1WToQXT",
+    "created": 1794283564326,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "## 1. Executing a call in a bytecode virtua"
+    }
+  },
+  {
+    "id": "evt_1c3a26d8b001lz3NDYymM202Gm",
+    "created": 1794283564427,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "l machine\n\nA bytecode virtual m"
+    }
+  },
+  {
+    "id": "evt_1c3a26def001g6n9KRJr6zpUzM",
+    "created": 1794283564527,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "achine executes a function cal"
+    }
+  },
+  {
+    "id": "evt_1c3a26e54001vShjHmimVZC4dM",
+    "created": 1794283564628,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "l by creating a new **activati"
+    }
+  },
+  {
+    "id": "evt_1c3a26eb9001RjkqEk0UOG6Ff5",
+    "created": 1794283564729,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "on record**, binding the\nargume"
+    }
+  },
+  {
+    "id": "evt_1c3a26f1f001BAbLuv5Yup2v81",
+    "created": 1794283564831,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nts, and transferring control "
+    }
+  },
+  {
+    "id": "evt_1c3a26f85001JsftHlUlbyHugN",
+    "created": 1794283564934,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "to the callee's first instructio"
+    }
+  },
+  {
+    "id": "evt_1c3a26fef001n604tQqhU45gI9",
+    "created": 1794283565039,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "n. The caller's state is preser"
+    }
+  },
+  {
+    "id": "evt_1c3a27055001u5ZxvFUiOFMXAc",
+    "created": 1794283565141,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ved so that\nexecution resumes "
+    }
+  },
+  {
+    "id": "evt_1c3a270ba001wWT8OFSVA3lv1C",
+    "created": 1794283565242,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "at the instruction after the ca"
+    }
+  },
+  {
+    "id": "evt_1c3a27120001aiKXfUAmtxdYgk",
+    "created": 1794283565344,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ll once the callee returns. Ro"
+    }
+  },
+  {
+    "id": "evt_1c3a27186001rKkaAK4MQK61zX",
+    "created": 1794283565446,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "und 1 of this document\nrepeats "
+    }
+  },
+  {
+    "id": "evt_1c3a271ec001mSmxvy0zupUwH9",
+    "created": 1794283565548,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "the explanation so that the res"
+    }
+  },
+  {
+    "id": "evt_1c3a27253001IFMRbjnk3Gyc9I",
+    "created": 1794283565651,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ponse is long enough to measur"
+    }
+  },
+  {
+    "id": "evt_1c3a272b9001ymUO8L2y2ZSbu6",
+    "created": 1794283565754,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e.\n\n1. The compiler emits a `CA"
+    }
+  },
+  {
+    "id": "evt_1c3a27320001VVSo3C47oA1u5H",
+    "created": 1794283565856,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "LL` instruction carrying the a"
+    }
+  },
+  {
+    "id": "evt_1c3a273c60013tBP02EhX3wMIY",
+    "created": 1794283566022,
+    "type": "models-dev.refreshed",
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a274b9001V24qJf9iY5rD3z",
+    "created": 1794283566265,
+    "type": "provider.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a274c0001oF2sFolt5dAKXo",
+    "created": 1794283566272,
+    "type": "model.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a274ce001n65TlOuklA2CcL",
+    "created": 1794283566286,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "rgument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A "
+    }
+  },
+  {
+    "id": "evt_1c3a2753b0016iHXREf7smXngF",
+    "created": 1794283566395,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "frame is pushed holding the return address, the base pointer a"
+    }
+  },
+  {
+    "id": "evt_1c3a275a1001mmuepLVgXv2i6V",
+    "created": 1794283566497,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nd the locals.\n4. The dispatch lo"
+    }
+  },
+  {
+    "id": "evt_1c3a276060019TL53ipP7Sb0XK",
+    "created": 1794283566599,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "op continues at the callee's ent"
+    }
+  },
+  {
+    "id": "evt_1c3a27670001iQTPdM2TK7xdYt",
+    "created": 1794283566704,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ry point.\n\n```python\ndef call(v"
+    }
+  },
+  {
+    "id": "evt_1c3a276d7001DHD9BqrrjWfN5k",
+    "created": 1794283566807,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "m, argc):\n    callee = vm.stack"
+    }
+  },
+  {
+    "id": "evt_1c3a2773c001lqheR94bbPdJEw",
+    "created": 1794283566908,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "[-argc - 1]\n    frame = Frame(c"
+    }
+  },
+  {
+    "id": "evt_1c3a277a4001pW6zdc6Ps63YRE",
+    "created": 1794283567012,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "allee, base=len(vm.stack) - argc"
+    }
+  },
+  {
+    "id": "evt_1c3a2780d001VPwm81Pf1wsZ5M",
+    "created": 1794283567117,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ", return_ip=vm.ip)\n    vm.fram"
+    }
+  },
+  {
+    "id": "evt_1c3a2787400138AFk6W0zMhrja",
+    "created": 1794283567220,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "es.append(frame)\n    vm.ip = ca"
+    }
+  },
+  {
+    "id": "evt_1c3a278da001ra50iCHpfHeXDi",
+    "created": 1794283567322,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "llee.entry\n```\n\n```rust\nfn cal"
+    }
+  },
+  {
+    "id": "evt_1c3a2793f001TzT6DTRVJb1TkH",
+    "created": 1794283567423,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "l(&mut self, argc: usize) -> R"
+    }
+  },
+  {
+    "id": "evt_1c3a279a4001ThKjLIOfvmNSAi",
+    "created": 1794283567524,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "esult<(), VmError> {\n    let ba"
+    }
+  },
+  {
+    "id": "evt_1c3a27a09001D20wgdE4qNT4IM",
+    "created": 1794283567626,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "se = self.stack.len() - argc;\n  "
+    }
+  },
+  {
+    "id": "evt_1c3a27a74001Fxflh3vCBg1rTR",
+    "created": 1794283567732,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "  let callee = self.stack[base"
+    }
+  },
+  {
+    "id": "evt_1c3a27adc001mKgKlCzah6xVlZ",
+    "created": 1794283567836,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " - 1].as_function()?;\n    self."
+    }
+  },
+  {
+    "id": "evt_1c3a27b410017ql0SmOPsQqsvi",
+    "created": 1794283567937,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "frames.push(Frame { base, return"
+    }
+  },
+  {
+    "id": "evt_1c3a27bab001qBgg1hwaCq3n8S",
+    "created": 1794283568043,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "_ip: self.ip, function: callee.c"
+    }
+  },
+  {
+    "id": "evt_1c3a27c13001bEy25nIAVG3hq7",
+    "created": 1794283568147,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "lone() });\n    self.ip = callee"
+    }
+  },
+  {
+    "id": "evt_1c3a27c7d0019A54X16oLnKds4",
+    "created": 1794283568253,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ".entry;\n    Ok(())\n}\n```\n\n```ty"
+    }
+  },
+  {
+    "id": "evt_1c3a27ce2001H5Up91rHzdxOWT",
+    "created": 1794283568354,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "pescript\nfunction call(vm: Vm, "
+    }
+  },
+  {
+    "id": "evt_1c3a27d4a001l8gHX6MrJKop4W",
+    "created": 1794283568458,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "argc: number): void {\n  const "
+    }
+  },
+  {
+    "id": "evt_1c3a27db0001LWfLgZyXugpQzQ",
+    "created": 1794283568560,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "base = vm.stack.length - argc\n "
+    }
+  },
+  {
+    "id": "evt_1c3a27e19001xcCDB615tuyf3U",
+    "created": 1794283568665,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " const callee = asFunction(vm.s"
+    }
+  },
+  {
+    "id": "evt_1c3a27e7f001UW27K887q5dlR2",
+    "created": 1794283568767,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "tack[base - 1])\n  vm.frames.pu"
+    }
+  },
+  {
+    "id": "evt_1c3a27ee5001LymPnbmya0b6Ey",
+    "created": 1794283568869,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "sh({ base, returnIp: vm.ip, fn: "
+    }
+  },
+  {
+    "id": "evt_1c3a27f4d001Hl9G2wsOfMY7Bh",
+    "created": 1794283568974,
+    "type": "session.usage.updated",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 1436,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "evt_1c3a27f50001ibQ53Lcl0HImEM",
+    "created": 1794283568976,
+    "type": "session.renamed",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "title": "## 1. Executing a call in a bytecode virtual machine"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 9,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a27f54001qFfBMSHR8XSC0i",
+    "created": 1794283568980,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "callee })\n  vm.ip = callee.entry\n"
+    }
+  },
+  {
+    "id": "evt_1c3a27fbb001fy6k2PU1qc2JL5",
+    "created": 1794283569083,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "}\n```\n\n| Aspect | Stack machine"
+    }
+  },
+  {
+    "id": "evt_1c3a28020001JgzzsoeNw6xE4S",
+    "created": 1794283569184,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " | Register machine |\n|---|---"
+    }
+  },
+  {
+    "id": "evt_1c3a2808b001yeBEHCQsL8tECo",
+    "created": 1794283569291,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "|---|\n| Operands | implicit, o"
+    }
+  },
+  {
+    "id": "evt_1c3a280f00018u5hlvLuXNh05n",
+    "created": 1794283569392,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "n the operand stack | explicit r"
+    }
+  },
+  {
+    "id": "evt_1c3a281550013MM4rKR343nyRN",
+    "created": 1794283569493,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "egister indices |\n| Instruction"
+    }
+  },
+  {
+    "id": "evt_1c3a281bb001NLyk9TlJH9m0qk",
+    "created": 1794283569595,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " size | small | larger |\n| Ins"
+    }
+  },
+  {
+    "id": "evt_1c3a28220001hSDZAnC9wbD1UY",
+    "created": 1794283569696,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "truction count | higher | lower"
+    }
+  },
+  {
+    "id": "evt_1c3a28286001MSQqx78ejrnVjp",
+    "created": 1794283569798,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " |\n| Call setup | arguments alr"
+    }
+  },
+  {
+    "id": "evt_1c3a282ed001K6Z9L0BXpLpZqC",
+    "created": 1794283569901,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "eady in place | arguments copi"
+    }
+  },
+  {
+    "id": "evt_1c3a28352001LjRp5kzKjeEz9H",
+    "created": 1794283570002,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ed into a window |\n\nReturning "
+    }
+  },
+  {
+    "id": "evt_1c3a283b8001aKMeyenAuoY11n",
+    "created": 1794283570104,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "reverses the sequence: the resul"
+    }
+  },
+  {
+    "id": "evt_1c3a28421001FWaoifgz7xApDz",
+    "created": 1794283570209,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "t is moved to where the caller"
+    }
+  },
+  {
+    "id": "evt_1c3a28486001zlnKfo5nZ4PIWv",
+    "created": 1794283570310,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " expects it, the frame is poppe"
+    }
+  },
+  {
+    "id": "evt_1c3a284eb001HrYzxMARYOJASx",
+    "created": 1794283570411,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "d, and\nthe instruction pointer"
+    }
+  },
+  {
+    "id": "evt_1c3a28551001hhewIHBUxh47cE",
+    "created": 1794283570513,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " is restored from the saved ret"
+    }
+  },
+  {
+    "id": "evt_1c3a285b8001kZUXulQpjJCPUr",
+    "created": 1794283570616,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "urn address.\n\n## 2. Executing a "
+    }
+  },
+  {
+    "id": "evt_1c3a28621001ymThq2qupH2Ywq",
+    "created": 1794283570722,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "call in a bytecode virtual mac"
+    }
+  },
+  {
+    "id": "evt_1c3a28687001oIM84bixoAV125",
+    "created": 1794283570823,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "hine\n\nA bytecode virtual machine"
+    }
+  },
+  {
+    "id": "evt_1c3a286f0001Ja1DRn3wKdkvVg",
+    "created": 1794283570928,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " executes a function call by c"
+    }
+  },
+  {
+    "id": "evt_1c3a28756001ndKAyt7xtJ36vb",
+    "created": 1794283571030,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "reating a new **activation reco"
+    }
+  },
+  {
+    "id": "evt_1c3a287bd001YDVjimvA1koY88",
+    "created": 1794283571133,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "rd**, binding the\narguments, a"
+    }
+  },
+  {
+    "id": "evt_1c3a28822001TMQ7i930cYnYQ4",
+    "created": 1794283571234,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nd transferring control to the "
+    }
+  },
+  {
+    "id": "evt_1c3a28887001opHqDkLNLy1tq1",
+    "created": 1794283571335,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "callee's first instruction. Th"
+    }
+  },
+  {
+    "id": "evt_1c3a288ee001lgtrS3qMGhMchG",
+    "created": 1794283571438,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e caller's state is preserved s"
+    }
+  },
+  {
+    "id": "evt_1c3a2895a001rFiD8ll9f15wqV",
+    "created": 1794283571547,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "o that\nexecution resumes at the i"
+    }
+  },
+  {
+    "id": "evt_1c3a289c2001IDT8u1EcpDX5pW",
+    "created": 1794283571651,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nstruction after the call once t"
+    }
+  },
+  {
+    "id": "evt_1c3a28a2b00113AyXIakTU2mRI",
+    "created": 1794283571755,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "he callee returns. Round 2 of "
+    }
+  },
+  {
+    "id": "evt_1c3a28a900016MracXE264gvS9",
+    "created": 1794283571856,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "this document\nrepeats the expla"
+    }
+  },
+  {
+    "id": "evt_1c3a28af50010TPYdaPsbN5fEP",
+    "created": 1794283571957,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nation so that the response is"
+    }
+  },
+  {
+    "id": "evt_1c3a28b5a001CgxDA5T3MJBDLN",
+    "created": 1794283572058,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " long enough to measure.\n\n1. T"
+    }
+  },
+  {
+    "id": "evt_1c3a28bc7001dUiHz3aso7yg1K",
+    "created": 1794283572167,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "he compiler emits a `CALL` instruc"
+    }
+  },
+  {
+    "id": "evt_1c3a28c30001ttKAs4j8vvzysi",
+    "created": 1794283572272,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "tion carrying the argument coun"
+    }
+  },
+  {
+    "id": "evt_1c3a28c990012C1HzvRPaveTC5",
+    "created": 1794283572377,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "t.\n2. The interpreter pops the "
+    }
+  },
+  {
+    "id": "evt_1c3a28d00001lZiIOAd4o5B0rI",
+    "created": 1794283572480,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "callee and its arguments from t"
+    }
+  },
+  {
+    "id": "evt_1c3a28d65001kZU9Ne2CMDCK3q",
+    "created": 1794283572581,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "he operand stack.\n3. A frame i"
+    }
+  },
+  {
+    "id": "evt_1c3a28dca001TCgryhPkHrsQeW",
+    "created": 1794283572682,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "s pushed holding the return add"
+    }
+  },
+  {
+    "id": "evt_1c3a28e31001kNMBUfXehCYlNH",
+    "created": 1794283572785,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ress, the base pointer and the "
+    }
+  },
+  {
+    "id": "evt_1c3a28e98001HRON423t9xwt0Z",
+    "created": 1794283572888,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "locals.\n4. The dispatch loop c"
+    }
+  },
+  {
+    "id": "evt_1c3a28efc001GgkSJCH5F9CFaG",
+    "created": 1794283572988,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ontinues at the callee's entry "
+    }
+  },
+  {
+    "id": "evt_1c3a28f65001Y1qvrZhUiovPT6",
+    "created": 1794283573094,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "point.\n\n```python\ndef call(vm, "
+    }
+  },
+  {
+    "id": "evt_1c3a28fcc001lr0sxEAe2pcM2B",
+    "created": 1794283573196,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "argc):\n    callee = vm.stack[-"
+    }
+  },
+  {
+    "id": "evt_1c3a290310015nWXp82Y4yOWBq",
+    "created": 1794283573297,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "argc - 1]\n    frame = Frame(cal"
+    }
+  },
+  {
+    "id": "evt_1c3a29098001rwvN7ts2afN766",
+    "created": 1794283573400,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "lee, base=len(vm.stack) - argc,"
+    }
+  },
+  {
+    "id": "evt_1c3a290fd001BQ6iNUGNnK0Lh3",
+    "created": 1794283573501,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " return_ip=vm.ip)\n    vm.frame"
+    }
+  },
+  {
+    "id": "evt_1c3a29163001mm3HDL3P66OfLH",
+    "created": 1794283573603,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "s.append(frame)\n    vm.ip = cal"
+    }
+  },
+  {
+    "id": "evt_1c3a291c80018WjaDFakztkytJ",
+    "created": 1794283573704,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "lee.entry\n```\n\n```rust\nfn call"
+    }
+  },
+  {
+    "id": "evt_1c3a2922e001xbPa4Sazs6J4zJ",
+    "created": 1794283573806,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "(&mut self, argc: usize) -> Res"
+    }
+  },
+  {
+    "id": "evt_1c3a29294001wMg4vx6OGdjXkk",
+    "created": 1794283573908,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ult<(), VmError> {\n    let base"
+    }
+  },
+  {
+    "id": "evt_1c3a292fb0010m58g5p5dk8Eyl",
+    "created": 1794283574011,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " = self.stack.len() - argc;\n  "
+    }
+  },
+  {
+    "id": "evt_1c3a29360001PfyUsL4Lxd4VQa",
+    "created": 1794283574113,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "  let callee = self.stack[base"
+    }
+  },
+  {
+    "id": "evt_1c3a293c5001YbAf1xcCy11b82",
+    "created": 1794283574213,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " - 1].as_function()?;\n    self."
+    }
+  },
+  {
+    "id": "evt_1c3a2942b001HcLArrB60vQou9",
+    "created": 1794283574315,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "frames.push(Frame { base, return"
+    }
+  },
+  {
+    "id": "evt_1c3a29495001lmXWDMsRZwujXp",
+    "created": 1794283574421,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "_ip: self.ip, function: callee."
+    }
+  },
+  {
+    "id": "evt_1c3a294fe001PVuTT96KpDS1Ch",
+    "created": 1794283574526,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "clone() });\n    self.ip = calle"
+    }
+  },
+  {
+    "id": "evt_1c3a29564001h0VnPR95GMjBiR",
+    "created": 1794283574628,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e.entry;\n    Ok(())\n}\n```\n\n```t"
+    }
+  },
+  {
+    "id": "evt_1c3a295ca001jOJVWaUNBZhVFL",
+    "created": 1794283574730,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ypescript\nfunction call(vm: Vm"
+    }
+  },
+  {
+    "id": "evt_1c3a29630001W8sqQMS6HuFij6",
+    "created": 1794283574832,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ", argc: number): void {\n  cons"
+    }
+  },
+  {
+    "id": "evt_1c3a29696001PLsgPivv1uaEkW",
+    "created": 1794283574934,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "t base = vm.stack.length - argc"
+    }
+  },
+  {
+    "id": "evt_1c3a296fb001XSvAF25uQfhhsr",
+    "created": 1794283575035,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "\n  const callee = asFunction(v"
+    }
+  },
+  {
+    "id": "evt_1c3a29760001s1KsPlxBvXbVqX",
+    "created": 1794283575137,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "m.stack[base - 1])\n  vm.frames."
+    }
+  },
+  {
+    "id": "evt_1c3a297c8001I5VyFtv19SM4my",
+    "created": 1794283575240,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "push({ base, returnIp: vm.ip, f"
+    }
+  },
+  {
+    "id": "evt_1c3a2982e0018UxxxSKgO64orv",
+    "created": 1794283575342,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "n: callee })\n  vm.ip = callee."
+    }
+  },
+  {
+    "id": "evt_1c3a29892001ctElIQygdlwjLM",
+    "created": 1794283575442,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "entry\n}\n```\n\n| Aspect | Stack m"
+    }
+  },
+  {
+    "id": "evt_1c3a298f80016iCamsjw15O3mi",
+    "created": 1794283575545,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "achine | Register machine |\n|-"
+    }
+  },
+  {
+    "id": "evt_1c3a2995d001gynbrHhVIE0fYo",
+    "created": 1794283575645,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "--|---|---|\n| Operands | impli"
+    }
+  },
+  {
+    "id": "evt_1c3a299c3001lkYMYsKMGrcf73",
+    "created": 1794283575747,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "cit, on the operand stack | expl"
+    }
+  },
+  {
+    "id": "evt_1c3a29a2c001s05Y60nWvst95P",
+    "created": 1794283575852,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "icit register indices |\n| Inst"
+    }
+  },
+  {
+    "id": "evt_1c3a29a920018QlADhm2GmWLR4",
+    "created": 1794283575954,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ruction size | small | larger |"
+    }
+  },
+  {
+    "id": "evt_1c3a29af7001OqW6AcXqkmJl4H",
+    "created": 1794283576055,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "\n| Instruction count | higher "
+    }
+  },
+  {
+    "id": "evt_1c3a29b5c001P60yKlDsdLzzDU",
+    "created": 1794283576156,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "| lower |\n| Call setup | argum"
+    }
+  },
+  {
+    "id": "evt_1c3a29bc1001fouH7RkllrMN2Z",
+    "created": 1794283576257,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ents already in place | argumen"
+    }
+  },
+  {
+    "id": "evt_1c3a29c27001xHNJjlGzMSY7PI",
+    "created": 1794283576359,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ts copied into a window |\n\nRetu"
+    }
+  },
+  {
+    "id": "evt_1c3a29c8d001a3CltPwvARyhNi",
+    "created": 1794283576461,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "rning reverses the sequence: th"
+    }
+  },
+  {
+    "id": "evt_1c3a29cf4001ps5gmc2Aj1iGZd",
+    "created": 1794283576565,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e result is moved to where the"
+    }
+  },
+  {
+    "id": "evt_1c3a29d5a001fnPRPnK1RNBcCZ",
+    "created": 1794283576666,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " caller expects it, the frame i"
+    }
+  },
+  {
+    "id": "evt_1c3a29dc2001dhsdGXbwZB30d0",
+    "created": 1794283576770,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "s popped, and\nthe instruction p"
+    }
+  },
+  {
+    "id": "evt_1c3a29e270013I1ArbYibIlfQi",
+    "created": 1794283576871,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ointer is restored from the sa"
+    }
+  },
+  {
+    "id": "evt_1c3a29e8e001BWEOr8wU38bH1l",
+    "created": 1794283576974,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ved return address.\n\n## 3. Exec"
+    }
+  },
+  {
+    "id": "evt_1c3a29ef4001UKzS0A0kqplg6P",
+    "created": 1794283577076,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "uting a call in a bytecode virtu"
+    }
+  },
+  {
+    "id": "evt_1c3a29f5d001xllmfP7NbS7R9h",
+    "created": 1794283577181,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "al machine\n\nA bytecode virtual"
+    }
+  },
+  {
+    "id": "evt_1c3a29fc3001D7wwRAiODh6pve",
+    "created": 1794283577283,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " machine executes a function c"
+    }
+  },
+  {
+    "id": "evt_1c3a2a02b001zW6AiFgm2zGmFY",
+    "created": 1794283577387,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "all by creating a new **activati"
+    }
+  },
+  {
+    "id": "evt_1c3a2a092001wXd6qYQh0BIgfM",
+    "created": 1794283577490,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "on record**, binding the\nargume"
+    }
+  },
+  {
+    "id": "evt_1c3a2a0f7001PhaUU23UzUo2Pp",
+    "created": 1794283577591,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nts, and transferring control "
+    }
+  },
+  {
+    "id": "evt_1c3a2a15d001qbmomDIkTEnjT2",
+    "created": 1794283577693,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "to the callee's first instructi"
+    }
+  },
+  {
+    "id": "evt_1c3a2a1c3001Kpst2EHdS8IILx",
+    "created": 1794283577795,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "on. The caller's state is pres"
+    }
+  },
+  {
+    "id": "evt_1c3a2a228001UWAu5EYxUTJyp0",
+    "created": 1794283577896,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "erved so that\nexecution resumes "
+    }
+  },
+  {
+    "id": "evt_1c3a2a291001eBoH1cOrn5Ipuh",
+    "created": 1794283578001,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "at the instruction after the c"
+    }
+  },
+  {
+    "id": "evt_1c3a2a2f6001nmbPmtgL67clAT",
+    "created": 1794283578102,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "all once the callee returns. Ro"
+    }
+  },
+  {
+    "id": "evt_1c3a2a35f00173VZ3eL8hPjQt7",
+    "created": 1794283578207,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "und 3 of this document\nrepeats "
+    }
+  },
+  {
+    "id": "evt_1c3a2a3c5001RmfTDCzP5l4ffj",
+    "created": 1794283578309,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "the explanation so that the res"
+    }
+  },
+  {
+    "id": "evt_1c3a2a42c001wL6ZyBI0oBmpGy",
+    "created": 1794283578412,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ponse is long enough to measure"
+    }
+  },
+  {
+    "id": "evt_1c3a2a493001uqYkHDfKcM40Mx",
+    "created": 1794283578515,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ".\n\n1. The compiler emits a `CAL"
+    }
+  },
+  {
+    "id": "evt_1c3a2a4fb001hBOh5zPOEwvO3s",
+    "created": 1794283578619,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "L` instruction carrying the arg"
+    }
+  },
+  {
+    "id": "evt_1c3a2a5600016HjSDEf3LzWR10",
+    "created": 1794283578720,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ument count.\n2. The interprete"
+    }
+  },
+  {
+    "id": "evt_1c3a2a5c6001oTKshvjUz4wQyx",
+    "created": 1794283578822,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "r pops the callee and its argu"
+    }
+  },
+  {
+    "id": "evt_1c3a2a62b0017ZfNoj78ngeRD1",
+    "created": 1794283578923,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ments from the operand stack.\n3"
+    }
+  },
+  {
+    "id": "evt_1c3a2a691001yVZA6O9ggZXS4p",
+    "created": 1794283579025,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ". A frame is pushed holding th"
+    }
+  },
+  {
+    "id": "evt_1c3a2a6f7001Bpen85JsHOdS7R",
+    "created": 1794283579127,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e return address, the base poin"
+    }
+  },
+  {
+    "id": "evt_1c3a2a75d001lygXrdS77J0lj7",
+    "created": 1794283579230,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ter and the locals.\n4. The disp"
+    }
+  },
+  {
+    "id": "evt_1c3a2a7c3001t2W8X53hfwABKS",
+    "created": 1794283579331,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "atch loop continues at the call"
+    }
+  },
+  {
+    "id": "evt_1c3a2a82c001L0GkvLD6f2QHBq",
+    "created": 1794283579436,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ee's entry point.\n\n```python\ndef"
+    }
+  },
+  {
+    "id": "evt_1c3a2a895001fpoRYkSyPGAZvG",
+    "created": 1794283579541,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " call(vm, argc):\n    callee = "
+    }
+  },
+  {
+    "id": "evt_1c3a2a8fb001iQa0Vpc3VjM3er",
+    "created": 1794283579643,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "vm.stack[-argc - 1]\n    frame ="
+    }
+  },
+  {
+    "id": "evt_1c3a2a9600011QILWDBXOESHrf",
+    "created": 1794283579745,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " Frame(callee, base=len(vm.sta"
+    }
+  },
+  {
+    "id": "evt_1c3a2a9c50018tUd8kRngQvX7u",
+    "created": 1794283579845,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ck) - argc, return_ip=vm.ip)\n  "
+    }
+  },
+  {
+    "id": "evt_1c3a2aa2c001rn05mJCFDflk3I",
+    "created": 1794283579948,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "  vm.frames.append(frame)\n    v"
+    }
+  },
+  {
+    "id": "evt_1c3a2aa93001c6m89nOr4NVGjs",
+    "created": 1794283580051,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "m.ip = callee.entry\n```\n\n```ru"
+    }
+  },
+  {
+    "id": "evt_1c3a2aaf80011RBvfBanwr5FIt",
+    "created": 1794283580152,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "st\nfn call(&mut self, argc: us"
+    }
+  },
+  {
+    "id": "evt_1c3a2ab5d001OOzrdXfEWkgo05",
+    "created": 1794283580253,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ize) -> Result<(), VmError> {\n "
+    }
+  },
+  {
+    "id": "evt_1c3a2abc3001aqxwMhVfiZ5aXR",
+    "created": 1794283580355,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "   let base = self.stack.len()"
+    }
+  },
+  {
+    "id": "evt_1c3a2ac29001pXs0MEAgqmR2NG",
+    "created": 1794283580457,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " - argc;\n    let callee = self."
+    }
+  },
+  {
+    "id": "evt_1c3a2ac8e001TWd2ME4rmsB42y",
+    "created": 1794283580558,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "stack[base - 1].as_function()?"
+    }
+  },
+  {
+    "id": "evt_1c3a2acf4001ZVb6Gs3k1oREtf",
+    "created": 1794283580660,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": ";\n    self.frames.push(Frame { "
+    }
+  },
+  {
+    "id": "evt_1c3a2ad59001bVTsvHREVb4Iyx",
+    "created": 1794283580761,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "base, return_ip: self.ip, func"
+    }
+  },
+  {
+    "id": "evt_1c3a2adbe001KjfTPg0q12WfQx",
+    "created": 1794283580862,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "tion: callee.clone() });\n    s"
+    }
+  },
+  {
+    "id": "evt_1c3a2ae24001BASUWr51g206GO",
+    "created": 1794283580964,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "elf.ip = callee.entry;\n    Ok(("
+    }
+  },
+  {
+    "id": "evt_1c3a2ae8a001sOu6122tf0VtCo",
+    "created": 1794283581066,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "))\n}\n```\n\n```typescript\nfunctio"
+    }
+  },
+  {
+    "id": "evt_1c3a2aef0001zq2ORKRfxpDjZp",
+    "created": 1794283581168,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "n call(vm: Vm, argc: number): "
+    }
+  },
+  {
+    "id": "evt_1c3a2af56001aWgo0r6Ql031CJ",
+    "created": 1794283581270,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "void {\n  const base = vm.stack."
+    }
+  },
+  {
+    "id": "evt_1c3a2afbd001M1nTNjYoyVbN5U",
+    "created": 1794283581373,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "length - argc\n  const callee = "
+    }
+  },
+  {
+    "id": "evt_1c3a2b024001FETsCdaCxJY0Wm",
+    "created": 1794283581476,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "asFunction(vm.stack[base - 1])"
+    }
+  },
+  {
+    "id": "evt_1c3a2b089001WPmIG574a4XYvG",
+    "created": 1794283581577,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "\n  vm.frames.push({ base, retur"
+    }
+  },
+  {
+    "id": "evt_1c3a2b0ef001hrxMvTGTA88gdX",
+    "created": 1794283581679,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nIp: vm.ip, fn: callee })\n  vm."
+    }
+  },
+  {
+    "id": "evt_1c3a2b155001v4DkXuq9if74oX",
+    "created": 1794283581781,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ip = callee.entry\n}\n```\n\n| Asp"
+    }
+  },
+  {
+    "id": "evt_1c3a2b1bb001VzevGDo37i181u",
+    "created": 1794283581883,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ect | Stack machine | Register "
+    }
+  },
+  {
+    "id": "evt_1c3a2b222001BWRKzJSHj0ocwG",
+    "created": 1794283581986,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "machine |\n|---|---|---|\n| Opera"
+    }
+  },
+  {
+    "id": "evt_1c3a2b2880017z0GfrEhY5AuyP",
+    "created": 1794283582088,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nds | implicit, on the operand "
+    }
+  },
+  {
+    "id": "evt_1c3a2b2ef001ubHxgDk5tqkKdW",
+    "created": 1794283582191,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "stack | explicit register indi"
+    }
+  },
+  {
+    "id": "evt_1c3a2b355001vZuTy8PHX2KlXl",
+    "created": 1794283582293,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ces |\n| Instruction size | small"
+    }
+  },
+  {
+    "id": "evt_1c3a2b3be001UbWO7NPbHxsd03",
+    "created": 1794283582398,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " | larger |\n| Instruction coun"
+    }
+  },
+  {
+    "id": "evt_1c3a2b424001ViqsQU7elhRiOQ",
+    "created": 1794283582500,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "t | higher | lower |\n| Call set"
+    }
+  },
+  {
+    "id": "evt_1c3a2b48900195LxjH2mbTPl2Y",
+    "created": 1794283582602,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "up | arguments already in plac"
+    }
+  },
+  {
+    "id": "evt_1c3a2b4ef001zJAJhVYIAumDNK",
+    "created": 1794283582703,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "e | arguments copied into a wind"
+    }
+  },
+  {
+    "id": "evt_1c3a2b558001ua5cb639QOMnFH",
+    "created": 1794283582808,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "ow |\n\nReturning reverses the s"
+    }
+  },
+  {
+    "id": "evt_1c3a2b5be001VDg3dYPi2K1SL2",
+    "created": 1794283582910,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "equence: the result is moved to"
+    }
+  },
+  {
+    "id": "evt_1c3a2b624001iURtPa309I5lu8",
+    "created": 1794283583012,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": " where the caller expects it, "
+    }
+  },
+  {
+    "id": "evt_1c3a2b6890011KGuPf5W4GjVuC",
+    "created": 1794283583113,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "the frame is popped, and\nthe i"
+    }
+  },
+  {
+    "id": "evt_1c3a2b6ee001K3xuKvH8nmRl9U",
+    "created": 1794283583214,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "nstruction pointer is restored "
+    }
+  },
+  {
+    "id": "evt_1c3a2b753001Q8Ag2C5XMLyemB",
+    "created": 1794283583315,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "from the saved return address.\n"
+    }
+  },
+  {
+    "id": "evt_1c3a2b75a001CNqE73dMsTOx3f",
+    "created": 1794283583322,
+    "type": "session.text.delta",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "delta": "\n"
+    }
+  },
+  {
+    "id": "evt_1c3a2b75a002HhNCYS3MnqY7Mw",
+    "created": 1794283583322,
+    "type": "session.text.ended",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "ordinal": 0,
+      "text": "## 1. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 1 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 2. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 2 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 3. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 3 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 10,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a2b75f001gvpm9MjARNmX9q",
+    "created": 1794283583327,
+    "type": "session.step.streamed",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 11,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a2b769001cpMn6b708jFLqZ",
+    "created": 1794283583337,
+    "type": "session.step.ended",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    },
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "assistantMessageID": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "finish": "stop",
+      "rawFinish": "stop",
+      "tokens": {
+        "input": 1,
+        "output": 1436,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "cost": 0,
+      "snapshot": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+      "files": []
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 12,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a2b76c00174HZNdsnz0DhIJ",
+    "created": 1794283583340,
+    "type": "session.usage.updated",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "cost": 0,
+      "tokens": {
+        "input": 2,
+        "output": 2872,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "evt_1c3a2b76e001ElTsVgHMLLn7IW",
+    "created": 1794283583342,
+    "type": "session.execution.succeeded",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ"
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 13,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a2b786001sZTCzMnoNVEhle",
+    "created": 1794283583366,
+    "type": "session.metadata.updated",
+    "data": {
+      "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794283564191,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794283583342,
+            "durationMs": 19199
+          }
+        }
+      }
+    },
+    "durable": {
+      "aggregateID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "seq": 14,
+      "version": 1
+    }
+  },
+  {
+    "id": "evt_1c3a2b78a0013PQFGxrs4NMmrO",
+    "created": 1794283583371,
+    "type": "project.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {
+      "id": "5e39b86bccb385c2dff0948be2cc7cb19c7e50c9",
+      "canonical": "/tmp/oc-desktop-rs-capture/state/oc-data/chats",
+      "time": {
+        "created": 1794283583369,
+        "updated": 1794283583369,
+        "active": 1794283583370
+      },
+      "sandboxes": []
+    }
+  },
+  {
+    "id": "evt_1c3a2b804001DrkLWWUTOJBHDy",
+    "created": 1794283583492,
+    "type": "integration.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b807001lEH5VSLgfspEZb",
+    "created": 1794283583495,
+    "type": "provider.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b80d001IHMUUC61ntFdIu",
+    "created": 1794283583501,
+    "type": "model.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b80f001Vslla84EPUZ4vc",
+    "created": 1794283583503,
+    "type": "agent.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b80f002NN8yPr4HWKEd2h",
+    "created": 1794283583503,
+    "type": "command.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b80f00313PzZUnitldW2X",
+    "created": 1794283583503,
+    "type": "skill.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b811001Rd33dUtTeFZ5CW",
+    "created": 1794283583505,
+    "type": "websearch.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b817001XeZstoEUxq3orS",
+    "created": 1794283583511,
+    "type": "reference.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  },
+  {
+    "id": "evt_1c3a2b817002NSUscekSNZGkoS",
+    "created": 1794283583511,
+    "type": "plugin.updated",
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/state/oc-data/chats"
+    },
+    "data": {}
+  }
+]

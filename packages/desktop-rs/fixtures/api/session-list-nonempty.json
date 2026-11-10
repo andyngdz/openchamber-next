@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "cost": 0,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "time": {
+        "created": 1794283563183,
+        "updated": 1794283563183
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTYzMTgzLCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTYzMTgzLCJkaXJlY3Rpb24iOiJuZXh0In19"
+  }
+}

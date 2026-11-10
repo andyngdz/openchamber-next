@@ -1,0 +1,1704 @@
+{
+  "text-reply-stream-300cps": {
+    "agent.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "command.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "integration.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "model.updated": {
+      "count": 3,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "models-dev.refreshed": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "plugin.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "project.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "canonical",
+        "id",
+        "sandboxes",
+        "time",
+        "vcs"
+      ]
+    },
+    "provider.updated": {
+      "count": 3,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "reference.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.execution.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.execution.succeeded": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.inbox.delivered": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "sessionID"
+      ]
+    },
+    "session.inbox.enqueued": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "item",
+        "sessionID"
+      ]
+    },
+    "session.instructions.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "metadata",
+        "type"
+      ],
+      "dataKeys": [
+        "delta",
+        "sessionID"
+      ]
+    },
+    "session.metadata.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.renamed": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID",
+        "title"
+      ]
+    },
+    "session.step.ended": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "cost",
+        "files",
+        "finish",
+        "rawFinish",
+        "sessionID",
+        "snapshot",
+        "tokens"
+      ]
+    },
+    "session.step.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "agent",
+        "assistantMessageID",
+        "model",
+        "sessionID",
+        "snapshot",
+        "started"
+      ]
+    },
+    "session.step.streamed": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "sessionID"
+      ]
+    },
+    "session.text.delta": {
+      "count": 184,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "delta",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.text.ended": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.text.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.usage.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "cost",
+        "sessionID",
+        "tokens"
+      ]
+    },
+    "skill.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "vcs.branch.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "branch"
+      ]
+    },
+    "websearch.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    }
+  },
+  "agent-20tools-300cps": {
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.execution.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.execution.succeeded": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.inbox.delivered": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "sessionID"
+      ]
+    },
+    "session.inbox.enqueued": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "item",
+        "sessionID"
+      ]
+    },
+    "session.instructions.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "metadata",
+        "type"
+      ],
+      "dataKeys": [
+        "delta",
+        "sessionID"
+      ]
+    },
+    "session.metadata.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.renamed": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID",
+        "title"
+      ]
+    },
+    "session.step.ended": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "cost",
+        "files",
+        "finish",
+        "rawFinish",
+        "sessionID",
+        "snapshot",
+        "tokens"
+      ]
+    },
+    "session.step.started": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "agent",
+        "assistantMessageID",
+        "model",
+        "sessionID",
+        "snapshot",
+        "started"
+      ]
+    },
+    "session.step.streamed": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "sessionID"
+      ]
+    },
+    "session.text.delta": {
+      "count": 229,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "delta",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.text.ended": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.text.started": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.tool.called": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "executed",
+        "id",
+        "input",
+        "sessionID"
+      ]
+    },
+    "session.tool.input.ended": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.tool.input.started": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "name",
+        "sessionID"
+      ]
+    },
+    "session.tool.success": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "content",
+        "executed",
+        "id",
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.usage.updated": {
+      "count": 22,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "cost",
+        "sessionID",
+        "tokens"
+      ]
+    }
+  },
+  "interrupted-agent-turn": {
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.execution.interrupted": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "reason",
+        "sessionID"
+      ]
+    },
+    "session.execution.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.inbox.delivered": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "sessionID"
+      ]
+    },
+    "session.inbox.enqueued": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "item",
+        "sessionID"
+      ]
+    },
+    "session.instructions.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "metadata",
+        "type"
+      ],
+      "dataKeys": [
+        "delta",
+        "sessionID"
+      ]
+    },
+    "session.metadata.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.step.ended": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "cost",
+        "files",
+        "finish",
+        "rawFinish",
+        "sessionID",
+        "snapshot",
+        "tokens"
+      ]
+    },
+    "session.step.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "agent",
+        "assistantMessageID",
+        "model",
+        "sessionID",
+        "snapshot",
+        "started"
+      ]
+    },
+    "session.step.streamed": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "sessionID"
+      ]
+    },
+    "session.text.delta": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "delta",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.text.ended": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.text.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.tool.called": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "executed",
+        "id",
+        "input",
+        "sessionID"
+      ]
+    },
+    "session.tool.input.ended": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.tool.input.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "name",
+        "sessionID"
+      ]
+    },
+    "session.tool.success": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "content",
+        "executed",
+        "id",
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.usage.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "cost",
+        "sessionID",
+        "tokens"
+      ]
+    }
+  },
+  "permission-asked-agent-turn": {
+    "permission.asked": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "action",
+        "id",
+        "metadata",
+        "resources",
+        "save",
+        "sessionID",
+        "source"
+      ]
+    },
+    "permission.replied": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "reply",
+        "requestID",
+        "sessionID"
+      ]
+    },
+    "project.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "canonical",
+        "id",
+        "sandboxes",
+        "time",
+        "vcs"
+      ]
+    },
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.execution.started": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.execution.succeeded": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.inbox.delivered": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "sessionID"
+      ]
+    },
+    "session.inbox.enqueued": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "item",
+        "sessionID"
+      ]
+    },
+    "session.instructions.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "metadata",
+        "type"
+      ],
+      "dataKeys": [
+        "delta",
+        "sessionID"
+      ]
+    },
+    "session.metadata.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.renamed": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID",
+        "title"
+      ]
+    },
+    "session.step.ended": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "cost",
+        "files",
+        "finish",
+        "rawFinish",
+        "sessionID",
+        "snapshot",
+        "tokens"
+      ]
+    },
+    "session.step.started": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "agent",
+        "assistantMessageID",
+        "model",
+        "sessionID",
+        "snapshot",
+        "started"
+      ]
+    },
+    "session.step.streamed": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "sessionID"
+      ]
+    },
+    "session.text.delta": {
+      "count": 227,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "delta",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.text.ended": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.text.started": {
+      "count": 21,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.tool.called": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "executed",
+        "id",
+        "input",
+        "sessionID"
+      ]
+    },
+    "session.tool.input.ended": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.tool.input.started": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "id",
+        "name",
+        "sessionID"
+      ]
+    },
+    "session.tool.success": {
+      "count": 20,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "content",
+        "executed",
+        "id",
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.usage.updated": {
+      "count": 23,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "cost",
+        "sessionID",
+        "tokens"
+      ]
+    }
+  },
+  "two-sessions-stream-300cps": {
+    "agent.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "command.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "integration.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "model.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "plugin.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "project.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "canonical",
+        "id",
+        "sandboxes",
+        "time"
+      ]
+    },
+    "provider.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "reference.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.execution.started": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.execution.succeeded": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    },
+    "session.inbox.delivered": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "sessionID"
+      ]
+    },
+    "session.inbox.enqueued": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "inboxID",
+        "item",
+        "sessionID"
+      ]
+    },
+    "session.instructions.updated": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "metadata",
+        "type"
+      ],
+      "dataKeys": [
+        "delta",
+        "sessionID"
+      ]
+    },
+    "session.metadata.updated": {
+      "count": 4,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "metadata",
+        "sessionID"
+      ]
+    },
+    "session.renamed": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID",
+        "title"
+      ]
+    },
+    "session.step.ended": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "cost",
+        "files",
+        "finish",
+        "rawFinish",
+        "sessionID",
+        "snapshot",
+        "tokens"
+      ]
+    },
+    "session.step.started": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "agent",
+        "assistantMessageID",
+        "model",
+        "sessionID",
+        "snapshot",
+        "started"
+      ]
+    },
+    "session.step.streamed": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "sessionID"
+      ]
+    },
+    "session.text.delta": {
+      "count": 375,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "delta",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.text.ended": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID",
+        "text"
+      ]
+    },
+    "session.text.started": {
+      "count": 2,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "assistantMessageID",
+        "ordinal",
+        "sessionID"
+      ]
+    },
+    "session.usage.updated": {
+      "count": 4,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "cost",
+        "sessionID",
+        "tokens"
+      ]
+    },
+    "skill.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "websearch.updated": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": []
+    }
+  },
+  "session-lifecycle": {
+    "server.connected": {
+      "count": 1,
+      "envelopeKeys": [
+        "data",
+        "id",
+        "type"
+      ],
+      "dataKeys": []
+    },
+    "session.created": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "location",
+        "type"
+      ],
+      "dataKeys": [
+        "location",
+        "projectID",
+        "sessionID",
+        "slug",
+        "subpath",
+        "version"
+      ]
+    },
+    "session.deleted": {
+      "count": 1,
+      "envelopeKeys": [
+        "created",
+        "data",
+        "durable",
+        "id",
+        "type"
+      ],
+      "dataKeys": [
+        "sessionID"
+      ]
+    }
+  }
+}

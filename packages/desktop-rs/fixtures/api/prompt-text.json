@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1c3a26ac6001vZsrMu25Y5Yz7r",
+    "sessionID": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+    "time": {
+      "created": 1794283564141
+    },
+    "type": "user",
+    "payload": {
+      "text": "Reply with the fixture text."
+    },
+    "delivery": "steer"
+  }
+}

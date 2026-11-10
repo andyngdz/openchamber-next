@@ -1,0 +1,1373 @@
+{
+  "data": [
+    {
+      "id": "msg_1c3a38d16001AxVHn3UtA4RNP8",
+      "time": {
+        "created": 1794283638038
+      },
+      "type": "idle",
+      "outcome": "succeeded"
+    },
+    {
+      "id": "msg_1c3a3423f0013z7dQN0SF6li60",
+      "time": {
+        "created": 1794283618883,
+        "streamed": 1794283638029,
+        "completed": 1794283638035
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "## 1. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 1 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 2. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 2 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 3. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 3 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n"
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "stop",
+      "rawFinish": "stop",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 1436,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a34152001Hg7pvktjcxlOwP",
+      "time": {
+        "created": 1794283618645,
+        "streamed": 1794283618864,
+        "completed": 1794283618874
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 20 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_20",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283618858,
+            "ran": 1794283618862,
+            "completed": 1794283618870
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a34062001BdILoGhXJl1vyf",
+      "time": {
+        "created": 1794283618405,
+        "streamed": 1794283618623,
+        "completed": 1794283618635
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 19 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_19",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "*.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283618617,
+            "ran": 1794283618621,
+            "completed": 1794283618630
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33f70001b7p9zrxsfMCrKs",
+      "time": {
+        "created": 1794283618164,
+        "streamed": 1794283618381,
+        "completed": 1794283618394
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 18 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_18",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283618374,
+            "ran": 1794283618379,
+            "completed": 1794283618388
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33e870011sC0xlEslpbJ3p",
+      "time": {
+        "created": 1794283617930,
+        "streamed": 1794283618144,
+        "completed": 1794283618155
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 17 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_17",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283618140,
+            "ran": 1794283618142,
+            "completed": 1794283618150
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33d7b001CtEkaIGOcPo2eN",
+      "time": {
+        "created": 1794283617662,
+        "streamed": 1794283617894,
+        "completed": 1794283617919
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 16 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_16",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283617874,
+            "ran": 1794283617886,
+            "completed": 1794283617912
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33c840010G27llwafq1kdM",
+      "time": {
+        "created": 1794283617416,
+        "streamed": 1794283617642,
+        "completed": 1794283617655
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 15 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_15",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "*.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283617628,
+            "ran": 1794283617636,
+            "completed": 1794283617650
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33b85001iD6S9CWS4DaL7q",
+      "time": {
+        "created": 1794283617160,
+        "streamed": 1794283617376,
+        "completed": 1794283617403
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 14 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_14",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283617372,
+            "ran": 1794283617374,
+            "completed": 1794283617389
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33a90001Aea8F0UJXuilld",
+      "time": {
+        "created": 1794283616918,
+        "streamed": 1794283617140,
+        "completed": 1794283617152
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 13 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_13",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283617130,
+            "ran": 1794283617136,
+            "completed": 1794283617148
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33998001FpLqSqwBQCV1v7",
+      "time": {
+        "created": 1794283616668,
+        "streamed": 1794283616888,
+        "completed": 1794283616899
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 12 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_12",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283616882,
+            "ran": 1794283616885,
+            "completed": 1794283616895
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a338a5001qGj9LLFoCLxntJ",
+      "time": {
+        "created": 1794283616425,
+        "streamed": 1794283616640,
+        "completed": 1794283616654
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 11 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_11",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "*.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283616636,
+            "ran": 1794283616639,
+            "completed": 1794283616646
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33795001tyRdtg53b6nsWj",
+      "time": {
+        "created": 1794283616152,
+        "streamed": 1794283616382,
+        "completed": 1794283616414
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 10 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_10",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283616364,
+            "ran": 1794283616378,
+            "completed": 1794283616404
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a33696001YFFng6lEaFFDXw",
+      "time": {
+        "created": 1794283615899,
+        "streamed": 1794283616126,
+        "completed": 1794283616142
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 9 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_9",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283616107,
+            "ran": 1794283616118,
+            "completed": 1794283616136
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a3358c001os3TNFz6bb4tcr",
+      "time": {
+        "created": 1794283615631,
+        "streamed": 1794283615853,
+        "completed": 1794283615879
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 8 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_8",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283615841,
+            "ran": 1794283615848,
+            "completed": 1794283615866
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a334a4001Aj1VGkOQlB0nne",
+      "time": {
+        "created": 1794283615399,
+        "streamed": 1794283615612,
+        "completed": 1794283615623
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 7 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_7",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "*.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283615608,
+            "ran": 1794283615610,
+            "completed": 1794283615618
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a333b3001VuDCRPtixm3M3H",
+      "time": {
+        "created": 1794283615160,
+        "streamed": 1794283615377,
+        "completed": 1794283615390
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 6 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_6",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283615371,
+            "ran": 1794283615374,
+            "completed": 1794283615383
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a332ae0015Rm4aYHYy8gPJh",
+      "time": {
+        "created": 1794283614896,
+        "streamed": 1794283615127,
+        "completed": 1794283615148
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 5 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_5",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283615103,
+            "ran": 1794283615117,
+            "completed": 1794283615142
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a331ab001K5MlM5TcXiKlBT",
+      "time": {
+        "created": 1794283614638,
+        "streamed": 1794283614862,
+        "completed": 1794283614888
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 4 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_4",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": ".agents/skills/*/SKILL.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283614848,
+            "ran": 1794283614856,
+            "completed": 1794283614879
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a3309b001OOJFj8mMT37Hoa",
+      "time": {
+        "created": 1794283614366,
+        "streamed": 1794283614593,
+        "completed": 1794283614630
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 3 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_3",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "*.md"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283614575,
+            "ran": 1794283614584,
+            "completed": 1794283614616
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a32fab001PkMoi2p3vqu7pG",
+      "time": {
+        "created": 1794283614125,
+        "streamed": 1794283614339,
+        "completed": 1794283614355
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 2 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_2",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "scripts/perf/*.mjs"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283614331,
+            "ran": 1794283614336,
+            "completed": 1794283614348
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a32ebb001AOfBO4qhN8foLE",
+      "time": {
+        "created": 1794283613885,
+        "streamed": 1794283614098,
+        "completed": 1794283614116
+      },
+      "type": "assistant",
+      "agent": "build",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step 1 of 20: listing files that the answer should mention.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_1",
+          "name": "glob",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "pattern": "packages/*/package.json"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "No files found"
+              }
+            ],
+            "metadata": {
+              "count": 0,
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794283614095,
+            "ran": 1794283614097,
+            "completed": 1794283614112
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 16,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1c3a32ea3001llYyEFBTumF1gR",
+      "time": {
+        "created": 1794283613876
+      },
+      "text": "List the files, ask first.",
+      "type": "user"
+    },
+    {
+      "id": "msg_1c3a32cab00116qum2gYTdD9hm",
+      "time": {
+        "created": 1794283613355
+      },
+      "type": "model-switched",
+      "model": {
+        "id": "agent-20tools-300cps",
+        "providerID": "perf"
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJpZCI6Im1zZ18xYzNhMzhkMTYwMDFBeFZIbjNVdEE0Uk5QOCIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
+    "next": "eyJpZCI6Im1zZ18xYzNhMzJjYWIwMDExNnF1bTJnWVRkRDlobSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
+  }
+}

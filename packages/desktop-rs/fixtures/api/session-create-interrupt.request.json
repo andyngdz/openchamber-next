@@ -1,0 +1,12 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "permissions": [
+    {
+      "action": "glob",
+      "resource": "*",
+      "effect": "allow"
+    }
+  ]
+}

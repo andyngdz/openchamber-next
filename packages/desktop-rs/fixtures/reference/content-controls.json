@@ -1,0 +1,221 @@
+{
+  "description": "Reference controls inside markdown message content that the parity test skips, each only in the states it lists. A later stage that renders markdown empties this list.",
+  "controls": [
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#4",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#5",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#6",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#7",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#8",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy code#9",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Copy table#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable cell wrap#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#4",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#5",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#6",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#7",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#8",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Disable line wrap#9",
+      "states": [
+        "session"
+      ],
+      "reason": "Code block action inside an assistant message. Code blocks exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#1",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#2",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Download table#3",
+      "states": [
+        "session"
+      ],
+      "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
+    }
+  ]
+}

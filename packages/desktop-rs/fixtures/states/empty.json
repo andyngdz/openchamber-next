@@ -1,0 +1,38 @@
+{
+  "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference",
+  "steps": [
+    {
+      "type": "connection",
+      "status": {
+        "state": "connected"
+      }
+    },
+    {
+      "type": "sessionsLoaded",
+      "sessions": [
+        {
+          "id": "ses_e3c5d4292ffefGk1vxdyIb4Kmq",
+          "title": "Reference: finished turn",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "time": {
+            "created": 1794283563183,
+            "updated": 1794283563183
+          }
+        },
+        {
+          "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+          "title": "Reference: streaming turn",
+          "location": {
+            "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
+          },
+          "time": {
+            "created": 1794283564183,
+            "updated": 1794283564183
+          }
+        }
+      ]
+    }
+  ]
+}

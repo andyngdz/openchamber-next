@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "projectID": "global",
+      "location": {
+        "directory": "/tmp/oc-desktop-rs-capture/project"
+      },
+      "title": "## 1. Executing a call in a bytecode virtual machine",
+      "cost": 0,
+      "tokens": {
+        "input": 2,
+        "output": 2872,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "outcome": "succeeded",
+      "time": {
+        "created": 1794283563183,
+        "updated": 1794283583366,
+        "busy": 1794283564143,
+        "idle": 1794283583342
+      },
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794283564191,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794283583342,
+            "durationMs": 19199
+          }
+        }
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTgzMzY2LCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTgzMzY2LCJkaXJlY3Rpb24iOiJuZXh0In19"
+  }
+}

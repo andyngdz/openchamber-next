@@ -1,0 +1,51 @@
+{
+  "text-reply-stream-300cps": {
+    "count": 224,
+    "model": "stream-300cps",
+    "sessions": [
+      "ses_e3c5d9768ffeustSm1lMVapzHJ"
+    ],
+    "note": "plain text reply"
+  },
+  "agent-20tools-300cps": {
+    "count": 445,
+    "model": "agent-20tools-300cps",
+    "sessions": [
+      "ses_e3c5d4292ffefGk1vxdyIb4Kmq"
+    ],
+    "note": "agent turn, 20 glob calls, then text; glob allowed by a session rule"
+  },
+  "interrupted-agent-turn": {
+    "count": 20,
+    "model": "agent-20tools-300cps",
+    "sessions": [
+      "ses_e3c5cdc42ffelz0QWoBPzU7Zi8"
+    ],
+    "note": "interrupted after the first tool result; interrupt answered 200"
+  },
+  "permission-asked-agent-turn": {
+    "count": 448,
+    "model": "agent-20tools-300cps",
+    "sessions": [
+      "ses_e3c5cd35bffews5ugJMR8RIsyu"
+    ],
+    "note": "glob asks; 1 request(s) answered with decision \"always\""
+  },
+  "two-sessions-stream-300cps": {
+    "count": 416,
+    "model": "stream-300cps",
+    "sessions": [
+      "ses_e3c5c6cfaffeZts0E9sczvZAMC",
+      "ses_e3c5c6cf3ffeUIFvldfzGnTxDW"
+    ],
+    "note": "two sessions of the same directory in one stream"
+  },
+  "session-lifecycle": {
+    "count": 3,
+    "model": null,
+    "sessions": [
+      "ses_e3c5c1805ffefPBAdb6WP8jM6y"
+    ],
+    "note": "session created, then deleted (delete answered 204)"
+  }
+}
