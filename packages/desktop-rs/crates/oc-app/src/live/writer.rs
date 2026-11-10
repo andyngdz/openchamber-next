@@ -4,12 +4,16 @@
 //! React debounces writes 200 ms (`persistence.ts:399`) and a collapse 700 ms
 //! (`useSessionProjectViewState.ts:79-103`). A failed write keeps the choice locally, logs it,
 //! and the next write carries it again; the window flushes what is pending when it closes.
+//!
+//! A flush answers its caller before it reports the write's answer to the window: the window
+//! waits on that answer while closing, and the update channel may be full because its reader
+//! has stopped. While closing, the answer is sent without waiting at all.
 
 use std::time::Duration;
 
 use futures::StreamExt;
 use futures::channel::mpsc::{Receiver, Sender};
-use oc_client::{Client, SettingsPatch};
+use oc_client::{Client, Settings, SettingsPatch};
 use oc_state::SidebarAction;
 
 use super::protocol::{SettingsCommand, Update, sidebar};
@@ -32,8 +36,9 @@ pub(crate) async fn run_settings(
         match command {
             SettingsCommand::Write(patch) => pending = Some(merge(pending.take(), *patch)),
             SettingsCommand::Flush(done) => {
-                flush(&client, &mut pending, &mut updates).await;
+                let answer = write(&client, &mut pending).await;
                 done.send(()).ok();
+                report(&mut updates, answer).await;
                 continue;
             }
         }
@@ -44,20 +49,24 @@ pub(crate) async fn run_settings(
             Settled::Quiet(patch) => pending = Some(patch),
             Settled::Closed(patch) => {
                 let mut batch = Some(patch);
-                flush(&client, &mut batch, &mut updates).await;
+                let answer = write(&client, &mut batch).await;
+                try_report(&mut updates, answer);
                 return;
             }
             Settled::Flush(patch, done) => {
                 let mut batch = Some(patch);
-                flush(&client, &mut batch, &mut updates).await;
+                let answer = write(&client, &mut batch).await;
                 done.send(()).ok();
+                report(&mut updates, answer).await;
                 pending = batch;
                 continue 'outer;
             }
         }
-        flush(&client, &mut pending, &mut updates).await;
+        let answer = write(&client, &mut pending).await;
+        report(&mut updates, answer).await;
     }
-    flush(&client, &mut pending, &mut updates).await;
+    let answer = write(&client, &mut pending).await;
+    try_report(&mut updates, answer);
 }
 
 /// What waiting out the debounce ended with.
@@ -131,17 +140,12 @@ fn merge_documents(
     serde_json::from_value(merged)
 }
 
-/// Sends the pending write and replaces the settings with the answer; a failure puts the
-/// patch back so the next write carries it.
-async fn flush(client: &Client, pending: &mut Option<SettingsPatch>, updates: &mut Sender<Update>) {
-    let Some(patch) = pending.take() else {
-        return;
-    };
+/// Sends the pending write and returns the answer when it landed; a failure puts the patch
+/// back so the next write carries it.
+async fn write(client: &Client, pending: &mut Option<SettingsPatch>) -> Option<Settings> {
+    let patch = pending.take()?;
     match tokio::time::timeout(WRITE_TIMEOUT, client.update_settings(&patch)).await {
-        Ok(Ok(settings)) => {
-            let action = SidebarAction::SettingsLoaded(Box::new(settings));
-            sidebar(updates, action).await.ok();
-        }
+        Ok(Ok(settings)) => Some(settings),
         Ok(Err(error)) => {
             tracing::warn!(
                 target: crate::logging::SERVER,
@@ -149,6 +153,7 @@ async fn flush(client: &Client, pending: &mut Option<SettingsPatch>, updates: &m
                 "[SERVER] Settings write failed"
             );
             *pending = Some(patch);
+            None
         }
         Err(_) => {
             tracing::warn!(
@@ -156,6 +161,29 @@ async fn flush(client: &Client, pending: &mut Option<SettingsPatch>, updates: &m
                 "[SERVER] Settings write timed out"
             );
             *pending = Some(patch);
+            None
+        }
+    }
+}
+
+/// Reports a settled write; a window that closed meanwhile is not an error.
+async fn report(updates: &mut Sender<Update>, answer: Option<Settings>) {
+    if let Some(settings) = answer {
+        let action = SidebarAction::SettingsLoaded(Box::new(settings));
+        sidebar(updates, action).await.ok();
+    }
+}
+
+/// The close path must not wait on a full update channel: its reader may be gone or busy, so
+/// the answer is dropped instead of blocking the writer forever.
+fn try_report(updates: &mut Sender<Update>, answer: Option<Settings>) {
+    if let Some(settings) = answer {
+        let action = SidebarAction::SettingsLoaded(Box::new(settings));
+        if updates.try_send(Update::Sidebar(action)).is_err() {
+            tracing::debug!(
+                target: crate::logging::SERVER,
+                "[SERVER] Dropped the settings answer while closing"
+            );
         }
     }
 }

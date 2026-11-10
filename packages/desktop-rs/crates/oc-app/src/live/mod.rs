@@ -31,6 +31,7 @@ use oc_client::{Client, ClientError, SettingsPatch};
 use tokio::runtime::Handle;
 use tokio::task::JoinHandle;
 
+pub use chat_folder::chat_folder_for;
 pub(crate) use chat_folder::new_chat_folder;
 pub(crate) use protocol::{
     Command, CreateDraftPrompt, CreateSessionRequest, CreateTarget, OpenMessages, SendRequest,
@@ -46,6 +47,8 @@ const UPDATE_BUFFER: usize = 256;
 const COMMAND_BUFFER: usize = 16;
 /// Settings writes in flight before the window drops one.
 const SETTINGS_BUFFER: usize = 16;
+/// How long a pending settings write may take before the sidecar stops or restarts.
+pub(crate) const SETTINGS_FLUSH_WAIT: Duration = Duration::from_secs(3);
 
 /// One server session: the request channels, the tasks on the runtime, the window's reader.
 struct Connection {

@@ -38,14 +38,17 @@ pub(crate) fn popover(scene: Scene<'_>, window: &mut Window, cx: &App) -> Option
     };
     let mut placement = anchored().position_mode(gpui_kit::AnchoredPositionMode::Window);
     placement = match kind {
-        // Side bottom, align start, sideOffset 4 (`DraftTargetSelectors.tsx:363-368`).
+        // Side bottom, align start, sideOffset 4 (`DraftTargetSelectors.tsx:363-368`). Base UI
+        // has no `alignOffset` here, so the popup's left edge is the trigger's; the offset is
+        // zero and the trigger is the button, not the row around it (`empty_state`).
         PopoverKind::Project => placement
             .attach(trigger, Anchor::BottomLeft)
             .anchor(Anchor::TopLeft)
-            .offset(point(px(2.), px(4.))),
-        // Side top, align end, alignOffset -40, sideOffset 4 (`dropdown-menu.tsx:155,205-212`).
-        // The fixed-size menus are placed from their own box so GPUI's rounded right edge does
-        // not move the panel when its width changes.
+            .offset(point(px(0.), px(4.))),
+        // Side top, align end, alignOffset -40, sideOffset 4 (`dropdown-menu.tsx:155,205-212`;
+        // the menus call it at `ModelControls.tsx:2410,2747,2894`). The fixed-size menus are
+        // placed from their own box so GPUI's rounded right edge does not move the panel when
+        // its width changes.
         PopoverKind::Model => {
             let left = trigger.right() + px(40.) - px(model::WIDTH);
             let top = trigger.top() - px(4.) - px(available);
@@ -217,17 +220,24 @@ fn available_height(
     viewport: gpui_kit::Pixels,
     content_origin: f32,
 ) -> f32 {
+    // The chat column's header (`h-12`, `ChatContainer.tsx:396`).
     const CHAT_TOP: f32 = 48.;
+    // `sideOffset={4}` (`DraftTargetSelectors.tsx:365`, `ModelControls.tsx:2408`).
     const SIDE_OFFSET: f32 = 4.;
+    // Base UI's default collision padding, which these positioners do not override.
     const COLLISION_PADDING: f32 = 5.;
+    // The tallest menu the CSS lets the model picker take (`ModelControls.tsx:2407-2409`).
+    const MAX_HEIGHT: f32 = 400.;
+    // The space below which the popup opens on the other side.
+    const MIN_ABOVE: f32 = 200.;
     let top = f32::from(trigger.origin.y) - content_origin;
     let bottom = f32::from(trigger.bottom()) - content_origin;
     let above = top - CHAT_TOP - SIDE_OFFSET - COLLISION_PADDING;
     let below = f32::from(viewport) - content_origin - bottom - SIDE_OFFSET - COLLISION_PADDING;
-    if above >= 200. {
-        above.min(400.)
+    if above >= MIN_ABOVE {
+        above.min(MAX_HEIGHT)
     } else {
-        below.min(400.)
+        below.min(MAX_HEIGHT)
     }
 }
 

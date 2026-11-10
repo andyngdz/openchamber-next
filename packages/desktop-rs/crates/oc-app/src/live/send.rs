@@ -5,9 +5,9 @@
 use futures::channel::mpsc::Sender;
 use oc_client::types::ModelRef;
 use oc_client::{Client, Directory};
-use oc_state::{Action, SessionId, is_same_model_ref};
+use oc_state::{Action, SelectionAction, SessionId, is_same_model_ref};
 
-use super::protocol::{Closed, CreateTarget, Update, apply, emit};
+use super::protocol::{Closed, CreateTarget, Update, apply, emit, selection};
 
 /// `POST /api/session` and open it, with no prompt.
 pub(crate) async fn create(
@@ -180,6 +180,11 @@ async fn sync_agent(
         apply(updates, Action::PromptFailed(message)).await?;
         return Ok(Step::Stop);
     }
+    let switched = SelectionAction::AgentSwitched {
+        session: open.session.clone(),
+        agent: agent.to_owned(),
+    };
+    selection(updates, switched).await?;
     Ok(Step::Next)
 }
 
@@ -205,6 +210,11 @@ async fn sync_model(
         apply(updates, Action::PromptFailed(message)).await?;
         return Ok(Step::Stop);
     }
+    let switched = SelectionAction::ModelSwitched {
+        session: open.session.clone(),
+        model: model.clone(),
+    };
+    selection(updates, switched).await?;
     Ok(Step::Next)
 }
 

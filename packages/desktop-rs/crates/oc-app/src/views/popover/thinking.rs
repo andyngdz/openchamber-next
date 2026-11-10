@@ -12,17 +12,51 @@ use gpui_kit::{
 use super::common::{control, frame};
 use crate::layout::Role;
 use crate::views::popover::Pick;
+use crate::views::text_metrics;
 use crate::views::{Intent, Scene};
 
 const DEFAULT: &str = "default";
+/// `p-1` on the popup (`dropdown-menu.styles.ts:1`): 0.25rem.
 const MENU_PADDING: f32 = 4.;
-const LABEL_HEIGHT: f32 = 29.;
-const ROW_HEIGHT: f32 = 26.;
-const FOOTER_HEIGHT: f32 = 28.;
+/// `py-1.5` on the label (`MobileSheetList.tsx:11`): 0.375rem.
+const LABEL_PADDING_Y: f32 = 6.;
+/// `py-1` on an item (`dropdown-menu.styles.ts`): 0.25rem.
+const ITEM_PADDING_Y: f32 = 4.;
+/// `gap-x-2` between the two footer hints (`ModelControls.tsx:2772`): 0.5rem.
 const FOOTER_GAP: f32 = 8.;
+/// `px-3` on the footer (`ModelControls.tsx:2772`): 0.75rem.
 const FOOTER_PADDING: f32 = 12.;
+/// `pt-1` / `pb-1.5` on the footer (`ModelControls.tsx:2772`): 0.25rem / 0.375rem.
+const FOOTER_PADDING_TOP: f32 = 4.;
+const FOOTER_PADDING_BOTTOM: f32 = 6.;
+/// `border-t` on the footer (`ModelControls.tsx:2772`): 1px.
+const BORDER_TOP: f32 = 1.;
+/// `px-2` on a row and the label (`MobileSheetList.tsx:11`): 0.5rem.
+const ROW_PADDING_X: f32 = 8.;
+/// `rounded-lg` (`dropdown-menu.styles.ts` item) = `--radius-lg` 0.5625rem
+/// (`design-system.css:893`).
+const ROW_RADIUS: f32 = 9.;
 const NAVIGATE_HINT: &str = "↑↓ navigate";
 const SWITCH_HINT: &str = "Ctrl + Shift + T switch";
+
+/// `px-2 py-1.5 typography-micro` label (`MobileSheetList.tsx:11`): 12 + 17.
+fn label_height() -> f32 {
+    2. * LABEL_PADDING_Y + text_metrics::line_height(text_metrics::MICRO)
+}
+
+/// `px-2 py-1` item with `typography-meta` (`dropdown-menu.styles.ts`, `ModelControls.tsx:2749`):
+/// 4 + 18 + 4.
+fn row_height() -> f32 {
+    2. * ITEM_PADDING_Y + text_metrics::line_height(text_metrics::META)
+}
+
+/// `pt-1 pb-1.5 border-t typography-micro` (`ModelControls.tsx:2772`): 4 + 6 + 1 + 17.
+fn footer_height() -> f32 {
+    FOOTER_PADDING_TOP
+        + FOOTER_PADDING_BOTTOM
+        + BORDER_TOP
+        + text_metrics::line_height(text_metrics::MICRO)
+}
 
 /// The Thinking menu panel.
 pub(super) fn panel(scene: Scene<'_>, window: &mut Window, cx: &App) -> Div {
@@ -54,12 +88,12 @@ pub(super) fn panel(scene: Scene<'_>, window: &mut Window, cx: &App) -> Div {
 
 fn label() -> Div {
     div()
-        .h(px(LABEL_HEIGHT))
-        .px(px(8.))
+        .h(px(label_height()))
+        .px(px(ROW_PADDING_X))
         .flex()
         .items_center()
-        .text_size(px(12.))
-        .line_height(px(17.))
+        .text_size(px(text_metrics::MICRO))
+        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
         .child("Thinking")
 }
 
@@ -69,15 +103,15 @@ fn footer(cx: &App) -> Div {
         .mx(px(-MENU_PADDING))
         .mb(px(-MENU_PADDING))
         .mt(px(MENU_PADDING))
-        .pt(px(4.))
-        .pb(px(6.))
+        .pt(px(FOOTER_PADDING_TOP))
+        .pb(px(FOOTER_PADDING_BOTTOM))
         .px(px(FOOTER_PADDING))
         .border_t_1()
         .border_color(cx.theme().border)
         .flex()
         .gap(px(FOOTER_GAP))
-        .text_size(px(12.))
-        .line_height(px(17.))
+        .text_size(px(text_metrics::MICRO))
+        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
         .text_color(cx.theme().muted_foreground)
         .child(NAVIGATE_HINT)
         .child(SWITCH_HINT)
@@ -93,19 +127,21 @@ pub(super) fn panel_width(window: &mut Window, cx: &App) -> f32 {
 /// The menu's CSS height for its current row count.
 pub(super) fn panel_height(scene: Scene<'_>) -> f32 {
     let rows = 1 + super::selected_model_variants(scene.state).len();
-    MENU_PADDING * 2. + LABEL_HEIGHT + rows as f32 * ROW_HEIGHT + FOOTER_HEIGHT
+    // The footer's `mt-1` and `-mb-1` cancel (`ModelControls.tsx:2772`), so it adds
+    // its border-box height to the panel's content.
+    MENU_PADDING * 2. + label_height() + rows as f32 * row_height() + footer_height()
 }
 
 fn item_row(scene: Scene<'_>, name: &str, pick: Pick) -> Div {
     let row = div()
         .id(name.to_owned())
-        .h(px(ROW_HEIGHT))
-        .px(px(8.))
-        .rounded(px(6.))
+        .h(px(row_height()))
+        .px(px(ROW_PADDING_X))
+        .rounded(px(ROW_RADIUS))
         .flex()
         .items_center()
-        .text_size(px(12.5))
-        .line_height(px(18.))
+        .text_size(px(text_metrics::META))
+        .line_height(px(text_metrics::line_height(text_metrics::META)))
         .child(name.to_lowercase());
     control(
         scene,

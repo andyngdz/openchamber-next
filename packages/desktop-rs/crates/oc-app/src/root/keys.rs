@@ -1,10 +1,24 @@
 //! Keyboard handling: picker navigation, `mod+shift+m`, and Enter-to-send.
 
-use gpui_kit::{App, Context, EntityInputHandler, KeyDownEvent, Window};
+use gpui_kit::{App, Context, EntityInputHandler, KeyDownEvent, Modifiers, Window};
 use oc_state::{EnterKeys, should_submit_enter};
 
 use super::RootView;
 use crate::views::PopoverKind;
+
+/// The modifier state, mapped the way React reads it.
+///
+/// `keyboardPolicy.ts:1-26` treats `ctrlKey` and `metaKey` as separate inputs
+/// (`isCtrlEnter = ctrlKey || metaKey`). GPUI's `secondary` is Cmd on macOS, so mapping it to
+/// both would make Ctrl+Enter there report as `metaKey`; map the physical modifiers instead.
+fn enter_keys(modifiers: Modifiers) -> EnterKeys {
+    EnterKeys {
+        shift: modifiers.shift,
+        ctrl: modifiers.control,
+        meta: modifiers.platform,
+        alt: modifiers.alt,
+    }
+}
 
 const KEY_MODEL_PICKER: &str = "m";
 const KEY_ENTER: &str = "enter";
@@ -98,12 +112,7 @@ impl RootView {
             return;
         }
         let settings = self.state.read(cx).settings().cloned();
-        let keys = EnterKeys {
-            shift: event.keystroke.modifiers.shift,
-            ctrl: event.keystroke.modifiers.secondary(cx),
-            meta: false,
-            alt: event.keystroke.modifiers.alt,
-        };
+        let keys = enter_keys(event.keystroke.modifiers);
         let send = settings.map_or(!keys.shift, |settings| should_submit_enter(&settings, keys));
         if send {
             self.send_prompt(cx);

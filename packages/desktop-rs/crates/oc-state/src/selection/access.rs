@@ -2,11 +2,11 @@
 
 use oc_client::SettingsPatch;
 use oc_client::settings::Settings;
-use oc_client::types::SessionRecord;
+use oc_client::types::{ModelRef, SessionRecord};
 
 use super::cascade::{ProjectDefaults, resolve_default_selection};
 use super::catalog::Catalog;
-use super::send::{SendSteps, resolve_send_selection};
+use super::send::{SendSteps, resolve_send_selection, wire_model};
 use super::state::DraftState;
 use super::value::{DraftTarget, Selection, SelectionSource};
 use crate::ids::SessionId;
@@ -101,6 +101,21 @@ impl State {
         }
     }
 
+    /// The server accepted `/model`; its record now holds the wire form sent, so the next
+    /// send compares against what the session is really on.
+    pub(super) fn session_model_switched(&mut self, session: &SessionId, model: &ModelRef) {
+        if let Some(record) = self.selection.records.get_mut(session) {
+            record.model = Some(wire_model(model));
+        }
+    }
+
+    /// The server accepted `/agent`; its record now holds the agent sent.
+    pub(super) fn session_agent_switched(&mut self, session: &SessionId, agent: &str) {
+        if let Some(record) = self.selection.records.get_mut(session) {
+            record.agent = Some(agent.to_owned());
+        }
+    }
+
     /// Fills the fields the cascade still owns; a user or record choice stays.
     pub(super) fn fill_auto_selection(&mut self) {
         let Some(directory) = self.selection_directory() else {
@@ -155,10 +170,11 @@ impl State {
         self.open.as_ref().map(|open| open.id.clone())
     }
 
-    pub(super) fn queue_settings_patch(&mut self, patch: SettingsPatch) {
+    pub(crate) fn queue_settings_patch(&mut self, patch: SettingsPatch) {
         if patch.is_empty() {
             return;
         }
+        super::patches::merge_patch(&mut self.settings_overlay, patch.clone());
         match &mut self.settings_patch {
             Some(existing) => super::patches::merge_patch(existing, patch),
             None => self.settings_patch = Some(patch),

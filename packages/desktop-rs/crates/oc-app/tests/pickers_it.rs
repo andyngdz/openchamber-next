@@ -243,14 +243,9 @@ fn a_session_sends_from_the_picked_model_and_keeps_every_switch() {
     stop(sidecar);
 }
 
-/// The folder `live/chat_folder.rs` builds: `<chatsRoot>/<local date>/session-<uuid v4>`.
-fn chat_folder(root: &str, uuid: &str) -> String {
-    let date = chrono::Local::now().format("%Y-%m-%d");
-    format!("{}/{date}/session-{uuid}", root.trim_end_matches('/'))
-}
-
 /// `live/send.rs` is crate-private and needs the window's update channel, so this mirrors
-/// its two calls for a Chat draft: `mkdir` for the folder, then a create inside it.
+/// its two calls for a Chat draft: `mkdir` for the folder the app would open, then a create
+/// inside it.
 #[test]
 fn a_chat_session_gets_its_folder_under_the_chats_root() {
     if !enabled() {
@@ -274,7 +269,7 @@ fn a_chat_session_gets_its_folder_under_the_chats_root() {
             "the chats root is outside the isolated root: {}",
             home.chats_root
         );
-        let folder = chat_folder(&home.chats_root, &uuid::Uuid::new_v4().to_string());
+        let folder = oc_app::chat_folder_for(&home.chats_root, &uuid::Uuid::new_v4().to_string());
         let created = client
             .mkdir(&Directory::new(folder.clone()))
             .await

@@ -20,6 +20,7 @@ mod requests;
 pub mod session_page;
 pub mod settings;
 pub mod settings_patch;
+mod sort_order;
 mod tool_payload;
 pub mod types;
 mod uri_component;

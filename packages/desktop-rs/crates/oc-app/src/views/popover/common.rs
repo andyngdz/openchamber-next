@@ -11,6 +11,19 @@ use crate::layout::{Area, ControlSpec, Role, control as control_element, region}
 use crate::views::Intent;
 use crate::views::Scene;
 use crate::views::popover::Pick;
+use crate::views::text_metrics;
+
+/// `px-2` (`command.tsx:127`): 0.5rem at the 16px root.
+const ROW_PADDING_X: f32 = 8.;
+/// `py-1.5` (`command.tsx:127`): 0.375rem.
+const ROW_PADDING_Y: f32 = 6.;
+/// `rounded-lg` (`command.tsx:127`) = `--radius-lg` 0.5625rem (`design-system.css:893`).
+const ROW_RADIUS: f32 = 9.;
+/// `size-4` on the project icon (`command.tsx:129`): 1rem.
+const PROJECT_ICON: f32 = 16.;
+/// `rounded-xl` (`dropdown-menu.styles.ts:1`) = `--radius-xl` 0.75rem
+/// (`design-system.css:894`).
+const PANEL_RADIUS: f32 = 12.;
 
 /// A control inside the popup, keyed by its accessibility path.
 pub(super) fn control(
@@ -49,12 +62,13 @@ pub(super) fn option_row(
     let name: SharedString = name.into();
     let row = div()
         .id(name.clone())
-        .h(px(34.2))
-        .px(px(8.))
-        .rounded(px(6.))
+        .h(px(project_row_height()))
+        .px(px(ROW_PADDING_X))
+        .rounded(px(ROW_RADIUS))
         .flex()
         .items_center()
-        .text_sm()
+        .text_size(px(text_metrics::META))
+        .line_height(px(text_metrics::line_height(text_metrics::META)))
         .child(name.clone());
     control(
         scene,
@@ -65,12 +79,20 @@ pub(super) fn option_row(
     )
 }
 
+/// The project `CommandItem` height: `px-2 py-1.5 typography-meta` (`command.tsx:121-131`)
+/// around `ProjectLabel`'s `inline-flex` (`DraftTargetSelectors.tsx:131-150`).
+pub(super) fn project_row_height() -> f32 {
+    let label_box = text_metrics::line_height(text_metrics::META).max(PROJECT_ICON);
+    let line_box = text_metrics::inline_flex_line_box(label_box, text_metrics::META);
+    2. * ROW_PADDING_Y + line_box
+}
+
 /// The popup panel's frame, one region.
 pub(super) fn frame(scene: Scene<'_>, cx: &App, width: Option<f32>, content: Div) -> Div {
     let panel = div()
         .flex()
         .flex_col()
-        .rounded(px(12.))
+        .rounded(px(PANEL_RADIUS))
         .bg(cx.theme().popover)
         .overflow_hidden()
         .child(content);

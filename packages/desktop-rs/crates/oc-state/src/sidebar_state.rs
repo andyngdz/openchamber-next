@@ -16,24 +16,6 @@ use crate::sidebar::{ChatRoots, MoreKey, SidebarModel, project_index, sections};
 use crate::state::{State, load_error};
 use crate::status::LoadStatus;
 
-/// A value that loads on its own, like the settings document or the home info.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct Loaded<T> {
-    /// The last answer; a failed refresh keeps it.
-    pub(crate) value: Option<T>,
-    /// How the last request ended.
-    pub(crate) load: LoadStatus,
-}
-
-impl<T> Default for Loaded<T> {
-    fn default() -> Self {
-        Self {
-            value: None,
-            load: LoadStatus::Loading,
-        }
-    }
-}
-
 /// Where the global walk stands.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub(crate) enum GlobalStatus {
@@ -91,7 +73,9 @@ impl State {
     pub fn apply_sidebar(&mut self, action: SidebarAction) {
         match action {
             SidebarAction::SettingsLoaded(settings) => {
-                self.settings_document.value = Some(*settings);
+                let document =
+                    crate::settings_overlay::reconcile(&settings, &mut self.settings_overlay);
+                self.settings_document.value = Some(document);
                 self.settings_document.load = LoadStatus::Ready;
             }
             SidebarAction::SettingsFailed(message) => {
@@ -123,9 +107,10 @@ impl State {
             complete: matches!(self.global.status, GlobalStatus::Complete),
             incomplete: matches!(self.global.status, GlobalStatus::Incomplete),
         };
-        if model.error.is_none()
-            && let (Some(settings), Some(home)) =
-                (&self.settings_document.value, &self.home_document.value)
+        if let (Some(settings), Some(home)) =
+            (&self.settings_document.value, &self.home_document.value)
+            && !matches!(self.global.status, GlobalStatus::Failed { .. })
+            && load_error(&self.sidebar).is_none()
         {
             model.sections = sections(settings, home, &self.global.list, &self.show_more);
         }
@@ -205,8 +190,12 @@ impl State {
 
     fn fail_page(&mut self, message: String) {
         self.global.status = match self.global.status {
-            GlobalStatus::ShowingFirstPage => GlobalStatus::Incomplete,
-            _ => GlobalStatus::Failed { message },
+            // A refresh over rows that are already shown keeps them and says the list is
+            // incomplete; only a first page with nothing behind it is a blocking error.
+            GlobalStatus::Loading | GlobalStatus::Failed { .. } => GlobalStatus::Failed { message },
+            GlobalStatus::ShowingFirstPage | GlobalStatus::Complete | GlobalStatus::Incomplete => {
+                GlobalStatus::Incomplete
+            }
         };
     }
 
@@ -231,10 +220,11 @@ impl State {
             ..ProjectPatch::default()
         };
         settings.projects[index] = settings.projects[index].with_patch(&patch);
-        self.settings_patch = Some(SettingsPatch {
+        let queued = SettingsPatch {
             projects: Some(settings.projects.clone()),
             ..SettingsPatch::default()
-        });
+        };
+        self.queue_settings_patch(queued);
     }
 }
 

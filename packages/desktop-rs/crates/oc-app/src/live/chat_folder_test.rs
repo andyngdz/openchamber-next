@@ -1,6 +1,6 @@
 use oc_client::filesystem::Home;
 
-use super::{chats_root, new_chat_folder};
+use super::{chat_folder_for, chats_root, new_chat_folder};
 
 fn home(home: &str, chats_root: &str) -> Home {
     Home {
@@ -32,6 +32,17 @@ fn the_legacy_root_follows_the_home_when_unconfigured() {
 fn no_home_and_no_chats_root_means_no_folder() {
     assert_eq!(chats_root(&home("", "")), None);
     assert_eq!(new_chat_folder(&home("", "")), None);
+}
+
+#[test]
+fn a_known_uuid_builds_the_path_the_app_opens() {
+    let folder = chat_folder_for("/chats/", "00000000-0000-0000-0000-000000000000");
+
+    assert!(folder.starts_with("/chats/"), "{folder}");
+    assert!(
+        folder.ends_with("/session-00000000-0000-0000-0000-000000000000"),
+        "{folder}"
+    );
 }
 
 #[test]

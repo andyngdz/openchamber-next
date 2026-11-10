@@ -10,8 +10,18 @@ use uuid::Uuid;
 /// Chats root nor a home directory.
 pub(crate) fn new_chat_folder(home: &Home) -> Option<String> {
     let root = chats_root(home)?;
+    Some(chat_folder_for(&root, &Uuid::new_v4().to_string()))
+}
+
+/// The folder a Chat session with `uuid` goes in today: `<root>/<local day>/session-<uuid>`
+/// (`chatDirectories.ts:109-118`). Exposed so the integration test builds the exact path.
+pub fn chat_folder_for(root: &str, uuid: &str) -> String {
     let now = Local::now();
-    Some(folder_path(&root, &date(&now)))
+    format!(
+        "{}/{}/session-{uuid}",
+        root.trim_end_matches('/'),
+        date(&now)
+    )
 }
 
 /// The configured Chats root, else the legacy `<home>/.config/openchamber/chats` that
@@ -26,10 +36,6 @@ fn chats_root(home: &Home) -> Option<String> {
         return None;
     }
     Some(format!("{base}/.config/openchamber/chats"))
-}
-
-fn folder_path(root: &str, day: &str) -> String {
-    format!("{root}/{day}/session-{}", Uuid::new_v4())
 }
 
 fn date(now: &DateTime<Local>) -> String {

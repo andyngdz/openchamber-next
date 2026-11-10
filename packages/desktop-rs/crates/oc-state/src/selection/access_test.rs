@@ -100,3 +100,74 @@ fn the_send_comparison_reads_the_record_held_in_state() {
     assert_eq!(steps.agent.as_deref(), Some("build"));
     assert_eq!(steps.model, Some(model_ref("perf", "stream-600cps", None)));
 }
+
+#[test]
+fn a_switched_model_is_recorded_in_the_wire_form_the_server_stores() {
+    let mut state = State::new(directory());
+    opportunity(&mut state);
+    let session = SessionId::from("ses_1");
+    state.apply_selection(SelectionAction::SessionRecordLoaded {
+        session: session.clone(),
+        record: SessionRecord {
+            id: "ses_1".to_owned(),
+            agent: Some("build".to_owned()),
+            model: Some(model_ref("perf", "stream-600cps", Some("high"))),
+        },
+    });
+
+    state.apply_selection(SelectionAction::ModelSwitched {
+        session: session.clone(),
+        model: model_ref("perf", "alt-thinking", None),
+    });
+
+    let stored = state
+        .session_record(&session)
+        .and_then(|record| record.model.clone())
+        .expect("the record keeps a model");
+    assert_eq!(stored.id, "alt-thinking");
+    assert_eq!(
+        stored.variant.as_deref(),
+        Some("default"),
+        "OpenCode records a switch without a variant as default"
+    );
+    let switched = state.resolve_send_steps(
+        &session,
+        &desired(Some(EffortChoice::Default)),
+        &SessionRecord {
+            id: "ses_1".to_owned(),
+            agent: None,
+            model: None,
+        },
+    );
+    assert_eq!(
+        switched.model,
+        Some(model_ref("perf", "stream-600cps", None))
+    );
+}
+
+#[test]
+fn a_switched_agent_is_recorded_so_the_next_send_sees_it() {
+    let mut state = State::new(directory());
+    opportunity(&mut state);
+    let session = SessionId::from("ses_1");
+    state.apply_selection(SelectionAction::SessionRecordLoaded {
+        session: session.clone(),
+        record: SessionRecord {
+            id: "ses_1".to_owned(),
+            agent: Some("build".to_owned()),
+            model: None,
+        },
+    });
+
+    state.apply_selection(SelectionAction::AgentSwitched {
+        session: session.clone(),
+        agent: "plan".to_owned(),
+    });
+
+    assert_eq!(
+        state
+            .session_record(&session)
+            .and_then(|record| record.agent.as_deref()),
+        Some("plan")
+    );
+}

@@ -99,22 +99,7 @@ impl Serialize for LastUsedEfforts {
     }
 }
 
-/// How the sidebar orders projects.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize, Serialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum SidebarSortOrder {
-    /// The order the projects array holds.
-    #[default]
-    Manual,
-    /// Label or path, ascending.
-    AZ,
-    /// Label or path, descending.
-    ZA,
-    /// Newest `addedAt` first.
-    DateAdded,
-    /// Newest session activity first.
-    Recent,
-}
+pub use crate::sort_order::SidebarSortOrder;
 
 /// One section of the sidebar, in the stored order. Custom sections carry more fields;
 /// this app only places the built-in ones and hides by id.

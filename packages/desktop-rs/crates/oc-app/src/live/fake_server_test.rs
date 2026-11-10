@@ -5,8 +5,8 @@
 
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{TcpListener, TcpStream};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+use std::sync::{Arc, Condvar, Mutex};
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
@@ -14,6 +14,40 @@ use oc_client::Client;
 
 const TIMEOUT: Duration = Duration::from_secs(5);
 const POLL: Duration = Duration::from_millis(2);
+
+/// A switch a test flips to let one scripted reply through, so a response lands after a
+/// later request was sent.
+#[derive(Clone)]
+pub(crate) struct Gate(Arc<(Mutex<bool>, Condvar)>);
+
+impl Gate {
+    /// A gate that holds its reply until `open`.
+    pub(crate) fn closed() -> Self {
+        Self(Arc::new((Mutex::new(false), Condvar::new())))
+    }
+
+    /// A gate that lets its reply through at once.
+    pub(crate) fn passing() -> Self {
+        let gate = Self::closed();
+        gate.open();
+        gate
+    }
+
+    /// Lets the held reply through; later waits return at once.
+    pub(crate) fn open(&self) {
+        let (open, ready) = &*self.0;
+        *open.lock().expect("gate lock") = true;
+        ready.notify_all();
+    }
+
+    fn wait(&self) {
+        let (open, ready) = &*self.0;
+        let mut open = open.lock().expect("gate lock");
+        while !*open {
+            open = ready.wait(open).expect("gate wait");
+        }
+    }
+}
 
 /// One request the server answered.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -35,23 +69,49 @@ pub(crate) struct FakeServer {
     pub(crate) client: Client,
     pub(crate) worker: JoinHandle<()>,
     requests: Arc<Mutex<Vec<Request>>>,
+    accepted: Arc<AtomicUsize>,
     stop: Arc<AtomicBool>,
 }
 
 impl FakeServer {
     pub(crate) fn start(replies: Vec<(&'static str, &'static str)>) -> Self {
+        Self::spawn(
+            replies
+                .into_iter()
+                .map(|(status, body)| (status, body, None))
+                .collect(),
+        )
+    }
+
+    /// Like [`Self::start`], but each reply waits for its gate before it answers.
+    pub(crate) fn start_gated(replies: Vec<(&'static str, &'static str, Gate)>) -> Self {
+        Self::spawn(
+            replies
+                .into_iter()
+                .map(|(status, body, gate)| (status, body, Some(gate)))
+                .collect(),
+        )
+    }
+
+    fn spawn(replies: Vec<(&'static str, &'static str, Option<Gate>)>) -> Self {
         let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
         listener.set_nonblocking(true).expect("nonblocking");
         let port = listener.local_addr().expect("addr").port();
         let requests = Arc::new(Mutex::new(Vec::new()));
         let recorded = requests.clone();
+        let accepted = Arc::new(AtomicUsize::new(0));
+        let arrived = accepted.clone();
         let stop = Arc::new(AtomicBool::new(false));
         let running = stop.clone();
         let worker = thread::spawn(move || {
-            for (status, body) in replies {
+            for (status, body, gate) in replies {
                 let Some(stream) = accept(&listener, &running) else {
                     return;
                 };
+                arrived.fetch_add(1, Ordering::SeqCst);
+                if let Some(gate) = gate {
+                    gate.wait();
+                }
                 let request = answer(stream, status, body);
                 recorded.lock().expect("requests").push(request);
             }
@@ -62,8 +122,14 @@ impl FakeServer {
             client,
             worker,
             requests,
+            accepted,
             stop,
         }
+    }
+
+    /// How many connections the server has accepted so far.
+    pub(crate) fn accepted(&self) -> usize {
+        self.accepted.load(Ordering::SeqCst)
     }
 
     /// Stops waiting for connections the test will not make, such as the requests

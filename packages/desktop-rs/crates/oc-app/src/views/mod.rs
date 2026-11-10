@@ -14,6 +14,7 @@ mod model_names;
 mod popover;
 mod sidebar;
 mod sidebar_list;
+mod text_metrics;
 mod tool_rows;
 mod turn_stats;
 mod turns;

@@ -6,6 +6,7 @@ use crate::action::Action;
 use crate::fixture_test::{
     api_home, api_sessions, api_settings, event, home, settings, sidebar_session,
 };
+use crate::selection::SelectionAction;
 use crate::sidebar::{MoreKey, ProjectGroup, SidebarSectionModel};
 use crate::sidebar_state::SidebarAction;
 use crate::state::State;
@@ -263,4 +264,132 @@ fn show_more_extends_the_row_list_the_view_reads() {
 
     let model = state.sidebar_model();
     assert_eq!(groups(&model)[0].shown, 10);
+}
+
+#[test]
+fn a_settings_read_keeps_the_picks_an_earlier_write_did_not_confirm() {
+    let mut state = loaded(api_settings());
+    // Pick A, which a write carries first.
+    state.apply_selection(SelectionAction::ToggleFavoriteAgent("a".to_owned()));
+    let agents = state.settings().expect("settings").favorite_agents.clone();
+    // Pick B while A is still in flight.
+    state.apply_selection(SelectionAction::ToggleFavoriteModel {
+        provider_id: "perf".to_owned(),
+        model_id: "stream-1200cps".to_owned(),
+    });
+    let models = state.settings().expect("settings").favorite_models.clone();
+
+    // A's answer holds the starred agents only.
+    state.apply_sidebar(SidebarAction::SettingsLoaded(Box::new(settings(json!({
+        "favoriteAgents": agents,
+    })))));
+    let after_a = state.settings().expect("settings");
+    assert_eq!(after_a.favorite_agents, agents);
+    assert_eq!(
+        after_a.favorite_models[0].model_id, "stream-1200cps",
+        "the pending pick survived the answer"
+    );
+
+    // Pick C after A's answer.
+    state.apply_selection(SelectionAction::PickAgent("it-primary".to_owned()));
+    let recent = state.settings().expect("settings").recent_agents.clone();
+    assert_eq!(recent.first().map(String::as_str), Some("it-primary"));
+
+    // The final answer echoes all three picks.
+    state.apply_sidebar(SidebarAction::SettingsLoaded(Box::new(settings(json!({
+        "favoriteAgents": agents,
+        "favoriteModels": models,
+        "recentAgents": recent,
+    })))));
+    let final_settings = state.settings().expect("settings");
+    assert_eq!(final_settings.favorite_agents, agents);
+    assert_eq!(final_settings.favorite_models[0].model_id, "stream-1200cps");
+    assert_eq!(final_settings.recent_agents, recent);
+    assert_eq!(
+        state.settings_overlay,
+        oc_client::SettingsPatch::default(),
+        "confirmed picks stop being overlaid"
+    );
+}
+
+#[test]
+fn a_pending_collapse_survives_the_active_project_writes_answer() {
+    let mut state = loaded(settings(json!({"projects": [{
+        "id": "p", "path": "/p/app", "color": "#4F46E5", "icon": "rocket",
+    }]})));
+    // The project pick's write leaves first.
+    state.apply_selection(SelectionAction::PickProject {
+        id: "p".to_owned(),
+        now: 1000,
+    });
+    // The collapse waits behind it.
+    state.apply_sidebar(SidebarAction::ToggleProjectCollapsed("p".to_owned()));
+
+    state.apply_sidebar(SidebarAction::SettingsLoaded(Box::new(settings(json!({
+        "activeProjectId": "p",
+        "projects": [{
+            "id": "p", "path": "/p/app", "lastOpenedAt": 1000,
+            "color": "#4F46E5", "icon": "rocket",
+        }],
+    })))));
+
+    let document = state.settings().expect("settings");
+    assert_eq!(document.active_project_id.as_deref(), Some("p"));
+    let project = &document.projects[0];
+    assert_eq!(
+        project.sidebar_collapsed(),
+        Some(true),
+        "the pending collapse survived the answer"
+    );
+    let object = serde_json::to_value(project).expect("json");
+    assert_eq!(object["color"], "#4F46E5");
+    assert_eq!(object["icon"], "rocket");
+    assert!(state.settings_overlay.projects.is_some());
+}
+
+#[test]
+fn a_refetch_page_failure_keeps_the_complete_rows_and_marks_them_incomplete() {
+    let mut state = loaded(api_settings());
+    state.apply_sidebar(SidebarAction::HomeLoaded(api_home()));
+    state.apply_sidebar(SidebarAction::Complete(api_sessions(
+        "session-list-global-page-1",
+    )));
+    let rows = chats(&state.sidebar_model());
+    assert!(rows > 0);
+
+    state.apply_sidebar(SidebarAction::PageFailed("later".to_owned()));
+
+    let model = state.sidebar_model();
+    assert!(model.incomplete);
+    assert!(!model.complete);
+    assert_eq!(model.error, None);
+    assert_eq!(chats(&model), rows, "the rows stay");
+}
+
+#[test]
+fn a_failed_settings_refresh_keeps_the_document_and_shows_the_sidebar() {
+    let mut state = loaded(api_settings());
+    state.apply_sidebar(SidebarAction::HomeLoaded(api_home()));
+    let projects = groups(&state.sidebar_model()).len();
+
+    state.apply_sidebar(SidebarAction::SettingsFailed("no settings".to_owned()));
+
+    assert!(state.settings().is_some(), "the loaded settings stay");
+    let model = state.sidebar_model();
+    assert_eq!(model.error.as_deref(), Some("no settings"));
+    assert_eq!(groups(&model).len(), projects, "the sidebar is not hidden");
+}
+
+#[test]
+fn a_failed_home_refresh_keeps_the_sidebar_visible() {
+    let mut state = loaded(api_settings());
+    state.apply_sidebar(SidebarAction::HomeLoaded(api_home()));
+    let projects = groups(&state.sidebar_model()).len();
+
+    state.apply_sidebar(SidebarAction::HomeFailed("no home".to_owned()));
+
+    assert!(state.home().is_some(), "the loaded home info stays");
+    let model = state.sidebar_model();
+    assert_eq!(model.error.as_deref(), Some("no home"));
+    assert_eq!(groups(&model).len(), projects, "the sidebar is not hidden");
 }

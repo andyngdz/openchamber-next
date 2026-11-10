@@ -82,6 +82,15 @@ fn a_settings_document_without_sidebar_keys_takes_the_captured_defaults() {
 }
 
 #[test]
+fn an_unknown_project_sort_order_does_not_fail_the_document() {
+    let settings: Settings =
+        serde_json::from_str(r#"{"sidebarProjectSortOrder":"by-color","projects":[]}"#)
+            .expect("decode");
+
+    assert_eq!(settings.sidebar_project_sort_order, SidebarSortOrder::Other);
+}
+
+#[test]
 fn last_used_efforts_keep_document_order_through_decode_and_encode() {
     let settings: Settings = serde_json::from_str(
         r#"{"lastUsedEfforts":{"z/model":"high","a/model":null,"m/model":"low"}}"#,

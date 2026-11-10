@@ -19,7 +19,7 @@ pub(crate) fn order_projects(
 ) -> Vec<usize> {
     let mut indices: Vec<usize> = (0..projects.len()).collect();
     match order {
-        SidebarSortOrder::Manual => {}
+        SidebarSortOrder::Manual | SidebarSortOrder::Other => {}
         SidebarSortOrder::AZ => indices.sort_by_key(|index| sort_key(&projects[*index])),
         SidebarSortOrder::ZA => {
             indices.sort_by_key(|index| std::cmp::Reverse(sort_key(&projects[*index])));

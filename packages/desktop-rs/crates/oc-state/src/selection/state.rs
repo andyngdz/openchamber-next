@@ -7,13 +7,13 @@
 
 use std::collections::BTreeMap;
 
-use oc_client::types::SessionRecord;
+use oc_client::types::{ModelRef, SessionRecord};
 
 use super::catalog::Catalog;
 use super::memory::SelectionMemory;
 use super::value::{DraftTarget, Selection};
 use crate::ids::SessionId;
-use crate::sidebar_state::Loaded;
+use crate::loaded::Loaded;
 use crate::state::State;
 
 /// A new draft: its target and the selection a picker edits.
@@ -64,6 +64,21 @@ pub enum SelectionAction {
         /// The record's agent and model.
         record: SessionRecord,
     },
+    /// `POST /api/session/:id/agent` succeeded; the stored record now holds `agent`.
+    AgentSwitched {
+        /// The session the switch was for.
+        session: SessionId,
+        /// The agent the session is on.
+        agent: String,
+    },
+    /// `POST /api/session/:id/model` succeeded; the stored record now holds the wire form
+    /// sent, with a missing variant recorded as `"default"`.
+    ModelSwitched {
+        /// The session the switch was for.
+        session: SessionId,
+        /// The model the request carried.
+        model: ModelRef,
+    },
     /// The user picked the Chat row.
     PickChat,
     /// The user picked a project; `now` stamps its `lastOpenedAt`.
@@ -109,6 +124,12 @@ impl State {
             }
             SelectionAction::SessionRecordLoaded { session, record } => {
                 self.session_record_loaded(&session, record);
+            }
+            SelectionAction::AgentSwitched { session, agent } => {
+                self.session_agent_switched(&session, &agent);
+            }
+            SelectionAction::ModelSwitched { session, model } => {
+                self.session_model_switched(&session, &model);
             }
             SelectionAction::PickChat => self.pick_chat(),
             SelectionAction::PickProject { id, now } => self.pick_project(&id, now),

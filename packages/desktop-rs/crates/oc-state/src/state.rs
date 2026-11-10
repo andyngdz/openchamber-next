@@ -2,10 +2,11 @@
 //! [`State::apply_sidebar`].
 
 use crate::ids::SessionId;
+use crate::loaded::Loaded;
 use crate::message::ChatMessage;
 use crate::session_entry::SessionEntry;
 use crate::session_list::SessionList;
-use crate::sidebar_state::{GlobalSessions, Loaded};
+use crate::sidebar_state::GlobalSessions;
 use crate::status::{ComposerStatus, ConnectionStatus, LoadStatus, Region, SessionStatus};
 use oc_client::SettingsPatch;
 use oc_client::filesystem::Home;
@@ -54,6 +55,9 @@ pub struct State {
     pub(crate) show_more: BTreeMap<crate::sidebar::MoreKey, u32>,
     /// A settings write the app has not sent yet.
     pub(crate) settings_patch: Option<SettingsPatch>,
+    /// Local settings values every read must keep until the server confirms them
+    /// (`persistence.ts:441-466`, `getSettingsWriteOverlay`/`reconcileSettingsRead`).
+    pub(crate) settings_overlay: SettingsPatch,
     /// The catalogs, draft target and per-session selections.
     pub(crate) selection: crate::selection::SelectionState,
 }
@@ -74,6 +78,7 @@ impl State {
             global: GlobalSessions::default(),
             show_more: BTreeMap::new(),
             settings_patch: None,
+            settings_overlay: SettingsPatch::default(),
             selection: crate::selection::SelectionState::default(),
         }
     }

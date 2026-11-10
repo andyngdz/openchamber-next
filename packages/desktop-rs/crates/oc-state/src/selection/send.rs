@@ -39,6 +39,20 @@ pub fn resolve_send_selection(
     SendSteps { agent, model }
 }
 
+/// The model a switch sends, as OpenCode stores it: a model switched without a variant is
+/// recorded as `"default"` (`lib/opencode/model.ts:96-100`).
+pub fn wire_model(model: &ModelRef) -> ModelRef {
+    ModelRef {
+        variant: Some(
+            model
+                .variant
+                .clone()
+                .unwrap_or_else(|| DEFAULT_VARIANT.to_owned()),
+        ),
+        ..model.clone()
+    }
+}
+
 /// Whether a switch to `next` would leave the session on `current`.
 ///
 /// OpenCode records a model switched without a variant as `"default"` and treats the two

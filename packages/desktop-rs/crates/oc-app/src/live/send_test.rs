@@ -1,8 +1,8 @@
 use crate::live::protocol::Update;
 use futures::StreamExt;
 use futures::channel::mpsc;
-use oc_client::types::ModelRef;
-use oc_state::{Action, SessionId};
+use oc_client::types::{ModelRef, SessionRecord};
+use oc_state::{Action, SelectionAction, SessionId, State};
 
 use super::{OpenSend, create, create_and_prompt, prompt};
 use crate::live::fake_server_test::FakeServer;
@@ -29,6 +29,14 @@ fn model(variant: Option<&str>) -> ModelRef {
         id: "m".to_owned(),
         provider_id: "p".to_owned(),
         variant: variant.map(str::to_owned),
+    }
+}
+
+fn named(id: &str) -> ModelRef {
+    ModelRef {
+        id: id.to_owned(),
+        provider_id: "p".to_owned(),
+        variant: None,
     }
 }
 
@@ -196,8 +204,25 @@ async fn an_open_session_switches_its_agent_and_model_before_the_prompt() {
     let updates = drain(sender, receiver).await;
     let requests = server.finish();
 
+    let switched: Vec<&SelectionAction> = updates
+        .iter()
+        .filter_map(|update| match update {
+            Update::Selection(action) => Some(action),
+            _ => None,
+        })
+        .collect();
     assert!(
-        matches!(&updates[..], [Update::Sent { text }] if text == "hello"),
+        matches!(
+            switched.as_slice(),
+            [
+                SelectionAction::AgentSwitched { agent, .. },
+                SelectionAction::ModelSwitched { model, .. }
+            ] if agent == "plan" && model.id == "m"
+        ),
+        "{updates:?}"
+    );
+    assert!(
+        matches!(updates.last(), Some(Update::Sent { text }) if text == "hello"),
         "{updates:?}"
     );
     let paths: Vec<&str> = requests
@@ -301,6 +326,75 @@ async fn switching_only_the_variant_sends_the_model_again() {
     let updates = drain(sender, receiver).await;
     let requests = server.finish();
 
-    assert!(matches!(&updates[..], [Update::Sent { .. }]), "{updates:?}");
+    assert!(
+        matches!(updates.last(), Some(Update::Sent { .. })),
+        "{updates:?}"
+    );
     assert_eq!(requests[1].json()["model"]["variant"], "low");
+}
+
+#[tokio::test]
+async fn a_model_switch_and_back_sends_the_model_both_times() {
+    let record = r#"{"data":{"id":"ses_a","agent":"build","model":{"id":"a","providerID":"p"}}}"#;
+    let server = FakeServer::start(vec![
+        ("200 OK", record),
+        ("204 No Content", ""),
+        ("200 OK", PROMPTED),
+        ("200 OK", record),
+        ("204 No Content", ""),
+        ("200 OK", PROMPTED),
+    ]);
+    let mut state = State::new("/p");
+    let session = SessionId::from("ses_a");
+    let first = named("a");
+    let second = named("b");
+    state.apply_selection(SelectionAction::SessionRecordLoaded {
+        session: session.clone(),
+        record: SessionRecord {
+            id: "ses_a".to_owned(),
+            agent: Some("build".to_owned()),
+            model: Some(first.clone()),
+        },
+    });
+
+    for target in [&second, &first] {
+        let record_model = state
+            .session_record(&session)
+            .and_then(|record| record.model.clone());
+        let (mut sender, receiver) = mpsc::channel(8);
+        let open = OpenSend {
+            session: &session,
+            directory: "/p",
+            text: "hello",
+            agent: Some("build"),
+            model: Some(target),
+            record_model: record_model.as_ref(),
+        };
+        prompt(&server.client, open, &mut sender)
+            .await
+            .expect("window open");
+        drop(sender);
+        for update in receiver.collect::<Vec<Update>>().await {
+            if let Update::Selection(action) = update {
+                state.apply_selection(action);
+            }
+        }
+    }
+    let requests = server.finish();
+
+    let model_switches: Vec<String> = requests
+        .iter()
+        .filter(|request| request.path == "/api/session/ses_a/model")
+        .map(|request| {
+            request.json()["model"]["id"]
+                .as_str()
+                .unwrap_or_default()
+                .to_owned()
+        })
+        .collect();
+    assert_eq!(
+        model_switches,
+        vec!["b".to_owned(), "a".to_owned()],
+        "both switches sent a model"
+    );
 }

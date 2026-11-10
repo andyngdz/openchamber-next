@@ -12,6 +12,28 @@ use crate::views::Scene;
 use crate::views::model_names::compact_tokens;
 use crate::views::popover::common::{control, hidden_control};
 use crate::views::popover::{Pick, selected_model};
+use crate::views::text_metrics;
+
+/// `rounded-md` (`ModelPickerList.tsx:960`) = `--radius-md` 0.4375rem
+/// (`design-system.css:892`).
+const ROW_RADIUS: f32 = 7.;
+/// `px-2` (`ModelPickerList.tsx:960`): 0.5rem.
+const ROW_PADDING_X: f32 = 8.;
+/// `py-1.5` (`ModelPickerList.tsx:960`): 0.375rem.
+const ROW_PADDING_Y: f32 = 6.;
+/// `gap-2` between the row's children (`ModelPickerList.tsx:960`): 0.5rem.
+const ROW_GAP: f32 = 8.;
+
+/// The Favorites or Recent section header height: `px-2 py-1.5 typography-micro`
+/// (`MobileSheetList.tsx:11`).
+pub(super) fn header_height() -> f32 {
+    2. * ROW_PADDING_Y + text_metrics::line_height(text_metrics::MICRO)
+}
+
+/// One option row's height: `px-2 py-1.5 typography-meta` (`ModelPickerList.tsx:960`).
+pub(super) fn row_height() -> f32 {
+    2. * ROW_PADDING_Y + text_metrics::line_height(text_metrics::META)
+}
 
 /// The list's accessibility group, `ModelPickerList`'s named list.
 pub(super) const MODELS_GROUP: &str = "Models";
@@ -56,11 +78,12 @@ impl Section {
 /// The Favorites or Recent section header (`PICKER_SECTION_HEADER_CLASS`).
 pub(super) fn section_header(scene: Scene<'_>, section: Section) -> Div {
     let header = div()
-        .h(px(29.))
-        .px(px(8.))
+        .h(px(header_height()))
+        .px(px(ROW_PADDING_X))
         .flex()
         .items_center()
-        .text_xs()
+        .text_size(px(text_metrics::MICRO))
+        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
         .child(section.header());
     control(
         scene,
@@ -75,11 +98,12 @@ pub(super) fn section_header(scene: Scene<'_>, section: Section) -> Div {
 pub(super) fn provider_header(scene: Scene<'_>, provider_name: &str, provider_id: &str) -> Div {
     let name = format!("{provider_id} logo {}", provider_name.to_uppercase());
     let header = div()
-        .h(px(29.))
-        .px(px(8.))
+        .h(px(header_height()))
+        .px(px(ROW_PADDING_X))
         .flex()
         .items_center()
-        .text_xs()
+        .text_size(px(text_metrics::MICRO))
+        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
         .child(name.clone());
     control(
         scene,
@@ -94,12 +118,13 @@ pub(super) fn provider_header(scene: Scene<'_>, provider_name: &str, provider_id
 pub(super) fn option_row_flat(scene: Scene<'_>, name: &'static str, ancestors: &[&str]) -> Div {
     let row = div()
         .id(name)
-        .h(px(30.))
-        .px(px(8.))
-        .rounded(px(6.))
+        .h(px(row_height()))
+        .px(px(ROW_PADDING_X))
+        .rounded(px(ROW_RADIUS))
         .flex()
         .items_center()
-        .text_sm()
+        .text_size(px(text_metrics::META))
+        .line_height(px(text_metrics::line_height(text_metrics::META)))
         .child(name);
     control(
         scene,
@@ -146,11 +171,11 @@ pub(super) fn model_row(
     );
     let row = div()
         .id(row_name.clone())
-        .h(px(30.))
-        .px(px(8.))
+        .h(px(row_height()))
+        .px(px(ROW_PADDING_X))
         .flex()
         .items_center()
-        .gap(px(6.))
+        .gap(px(ROW_GAP))
         .child(visible_name(entry, section))
         .child(div().flex_1())
         .child(star);

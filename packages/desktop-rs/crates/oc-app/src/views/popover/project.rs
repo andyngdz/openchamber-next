@@ -40,11 +40,12 @@ fn search_row(scene: Scene<'_>, cx: &App) -> Div {
         .appearance(false)
         .small()
         .w_full();
+    // `h-8 ... border-b px-3` on the command input wrapper (`command.tsx:68-72`).
     div()
         .h(px(32.))
         .border_b_1()
         .border_color(cx.theme().border)
-        .px(px(8.))
+        .px(px(12.))
         .flex()
         .items_center()
         .child(control(scene, Role::Combobox, SEARCH, &[], input))

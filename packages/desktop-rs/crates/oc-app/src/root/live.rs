@@ -84,6 +84,8 @@ impl RootView {
         let Some(link) = self.link.as_mut() else {
             return;
         };
+        // A pending write goes out before the old connection drops, as quitting does.
+        link.flush_settings(crate::live::SETTINGS_FLUSH_WAIT);
         link.disconnect();
         let started = link.process().start();
         self.dispatch(Action::Connection(ConnectionStatus::Starting), cx);

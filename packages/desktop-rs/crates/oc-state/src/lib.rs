@@ -13,6 +13,7 @@ mod events;
 mod fixture_test;
 mod ids;
 mod load;
+mod loaded;
 mod logging;
 mod message;
 mod message_events;
@@ -20,6 +21,7 @@ pub mod search;
 mod selection;
 mod session_entry;
 mod session_list;
+mod settings_overlay;
 mod sidebar;
 mod sidebar_state;
 mod state;
@@ -37,7 +39,7 @@ pub use selection::{
     Catalog, DraftState, DraftTarget, EffortChoice, EnterKeys, ModelEntry, ModelKey, ModelSections,
     ProviderModels, ProviderSection, Selection, SelectionAction, SelectionSource, SendSteps,
     is_same_model_ref, model_sections, ranked_agents, ranked_projects, resolve_send_selection,
-    should_submit_enter,
+    should_submit_enter, wire_model,
 };
 pub use session_entry::{PendingRequest, SessionEntry};
 pub use session_list::SessionList;

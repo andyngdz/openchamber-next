@@ -40,6 +40,11 @@ fn manual_keeps_the_settings_order() {
 }
 
 #[test]
+fn an_unknown_order_keeps_the_settings_order_as_manual_does() {
+    assert_eq!(order(SidebarSortOrder::Other), [0, 1, 2]);
+}
+
+#[test]
 fn a_z_sorts_by_label_then_path_lowercased() {
     assert_eq!(order(SidebarSortOrder::AZ), [2, 1, 0]);
 }

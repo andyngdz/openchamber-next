@@ -26,6 +26,7 @@ pub use pickers::{
 };
 pub use send::{
     EnterKeys, SendSteps, is_same_model_ref, resolve_send_selection, should_submit_enter,
+    wire_model,
 };
 pub use state::{DraftState, SelectionAction};
 pub use value::{DraftTarget, EffortChoice, ModelKey, Selection, SelectionSource};

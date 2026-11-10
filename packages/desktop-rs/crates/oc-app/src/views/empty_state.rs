@@ -45,15 +45,24 @@ const CHIPS: [(&str, IconName); 9] = [
 fn choose_project(scene: Scene<'_>) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
     let button = label_button(&spec, Some(IconName::ChevronDown), CHOOSE_PROJECT)
+        // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
+        .h(px(28.))
         .on_click(scene.on_click_intent(Intent::OpenPopover(PopoverKind::Project)));
-    // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`).
+    // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`). The popup is
+    // anchored to the trigger button, not this row: Base UI's `align="start"` puts the
+    // popup's left edge on the button, which is exactly the row's 2px inset.
     let row = div()
         .h(px(28.))
         .px(px(2.))
         .flex()
         .items_center()
-        .child(control(scene.registry, spec.clone(), button));
-    anchored_control(scene.registry, spec, row, scene.triggers.project.clone()).into_any_element()
+        .child(anchored_control(
+            scene.registry,
+            spec,
+            button,
+            scene.triggers.project.clone(),
+        ));
+    row.into_any_element()
 }
 
 /// A quick-action chip: smaller and outlined, so a row holds as many as React's.

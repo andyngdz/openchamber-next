@@ -88,6 +88,7 @@ fn search_row(scene: Scene<'_>, cx: &App) -> Div {
             .child(ADD_PROVIDER)
             .on_click(scene.on_click_intent(Intent::ClosePopover)),
     );
+    // `flex items-center gap-2 px-2 py-1 border-b` (`ModelPickerList.tsx:1307`).
     div()
         .px(px(8.))
         .py(px(4.))
