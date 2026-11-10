@@ -83,16 +83,16 @@ impl Client {
 
     /// `GET /api/event` with no directory, so the stream is global: every project's events
     /// arrive here, each naming its directory. The connect and the response head have the
-    /// call timeout. After that the stream ends when the server closes it, when the caller
-    /// drops it, or with [`ClientError::EventsIdle`] when nothing (no event, no heartbeat
-    /// comment) arrives for the idle limit, 60 s unless [`Client::with_event_idle_timeout`]
-    /// set another. A frame that fails to decode is an `Err` item and the stream continues.
+    /// call timeout; the body is not limited by it, only by the idle limit below. The stream
+    /// ends when the server closes it, when the caller drops it, or with
+    /// [`ClientError::EventsIdle`] when nothing (no event, no heartbeat comment) arrives for
+    /// the idle limit, 60 s unless [`Client::with_event_idle_timeout`] set another. A frame
+    /// that fails to decode is an `Err` item and the stream continues.
     pub async fn events(&self) -> Result<EventStream, ClientError> {
         let request = self
             .http
             .get(self.url("/api/event"))
-            .header(ACCEPT, "text/event-stream")
-            .timeout(self.timeout);
+            .header(ACCEPT, "text/event-stream");
         let response = tokio::time::timeout(self.timeout, request.send())
             .await
             .map_err(|_| ClientError::Timeout {

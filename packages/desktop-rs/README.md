@@ -1,8 +1,8 @@
 # OpenChamber desktop (Rust + GPUI spike)
 
 A GPUI desktop client that runs the OpenChamber server as a sidecar, lists the
-sessions of one directory, sends a prompt and renders the streamed reply. It is
-a spike: it does not replace `packages/electron`.
+projects from the shared settings with their sessions, sends a prompt and renders
+the streamed reply. It is a spike: it does not replace `packages/electron`.
 
 ## Crates
 
@@ -12,6 +12,10 @@ a spike: it does not replace `packages/electron`.
 | `oc-client` | HTTP and event-stream client for the server API |
 | `oc-state` | Pure state reducer, no GPUI |
 | `oc-app` | The GPUI binary |
+
+`oc-app` also uses `uuid` 1 (feature `v4`) to mint a Chat session's folder and
+`chrono` 0.4 (feature `clock`) for its local date. Both are already in
+`Cargo.lock` through GPUI, so the workspace gains no second version of either.
 
 ## Prerequisites
 
@@ -34,15 +38,30 @@ a spike: it does not replace `packages/electron`.
 
 ```bash
 cd packages/desktop-rs
-cargo run -p oc-app -- --directory /path/to/project
+cargo run -p oc-app
 ```
 
-`--directory` defaults to the current directory. The app starts
-`openchamber serve` for that directory before it opens the window, lists its
-sessions, and stops the server, and the `opencode serve` process it runs, when
-the window closes. The CLI is `OPENCHAMBER_CLI` when set, otherwise
-`packages/web/bin/cli.js` found by walking up from the executable and the
-current directory.
+There is no `--directory`: the app loads the shared settings, so the sidebar
+comes from the same projects the Electron app shows, and the window opens on a
+new Chat draft. The sidecar works in the user's home directory, and a new Chat
+session gets a folder under the server's chats root
+(`<chatsRoot>/YYYY-MM-DD/session-<uuid v4>`). The app starts `openchamber serve`
+before it opens the window, and stops the server, and the `opencode serve`
+process it runs, when the window closes. The CLI is `OPENCHAMBER_CLI` when set,
+otherwise `packages/web/bin/cli.js` found by walking up from the executable and
+the current directory.
+
+### Shared settings
+
+Next reads and writes the same `GET`/`PUT /api/config/settings?surface=desktop`
+document as the React UI, so the active project, recents, favorites, the sidebar
+settings and each project's collapse state are shared with the Electron app.
+Writes are partial: each `PUT` carries only the keys the change touched, the
+server merges them, and the answer replaces the settings the window holds. A
+write is debounced 200 ms (700 ms for a collapse) and a failed write keeps the
+choice locally and is sent again with the next one; closing the window flushes
+what is pending before the sidecar stops. Next reads the settings at startup and
+after an event-stream reconnect, not while the Electron app writes in between.
 
 The server inherits the app's environment, so `HOME`,
 `OPENCHAMBER_DATA_DIR` and `OPENCODE_CONFIG_CONTENT` choose its data and its
@@ -55,7 +74,7 @@ file returns:
 env -i PATH="$PATH" HOME=/tmp/oc-home OPENCHAMBER_DATA_DIR=/tmp/oc-data \
   OPENCODE_CONFIG_CONTENT="$(cat /tmp/oc-fixture-config.json)" \
   WAYLAND_DISPLAY="$WAYLAND_DISPLAY" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-  cargo run -p oc-app -- --directory /tmp/oc-project
+  cargo run -p oc-app
 ```
 
 When the server does not start, the window shows the error with the server's

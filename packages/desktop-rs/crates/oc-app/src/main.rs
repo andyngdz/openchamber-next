@@ -4,13 +4,10 @@ use std::process::ExitCode;
 use clap::Parser;
 use oc_app::Launch;
 
-/// OpenChamber desktop (Rust + GPUI spike).
+/// OpenChamber desktop (Rust + GPUI).
 #[derive(Parser)]
 #[command(name = "oc-app")]
 struct Cli {
-    /// Project directory to open; defaults to the current directory.
-    #[arg(long, default_value = ".")]
-    directory: String,
     /// Write the layout of one rendered frame to this file and exit.
     #[arg(long, requires = "state")]
     dump_layout: Option<PathBuf>,
@@ -29,9 +26,7 @@ fn main() -> ExitCode {
     let launch = match (cli.dump_layout, cli.state) {
         (Some(output), Some(state)) => Launch::DumpLayout { output, state },
         (None, Some(state)) => Launch::Fixture { state },
-        (None | Some(_), None) => Launch::Window {
-            directory: cli.directory,
-        },
+        (None | Some(_), None) => Launch::Window,
     };
     match oc_app::run(launch) {
         Ok(()) => ExitCode::SUCCESS,

@@ -3,18 +3,18 @@
 
 use futures::channel::mpsc::{Receiver, Sender};
 use futures::{SinkExt, StreamExt};
-use oc_client::{Client, Directory};
+use oc_client::Client;
 use oc_state::{Action, ConnectionStatus, ServerFailure};
 use tokio::task::JoinSet;
 
-use super::protocol::{Command, Update};
+use super::protocol::{Closed, Command, Update};
 use super::reconnect::follow_events;
+use super::{catalog, send, startup};
 
 /// Checks auth, then serves `commands` and follows the global event stream. Requests run
 /// side by side in a [`JoinSet`] this task owns, so they stop with it.
 pub(crate) async fn run_session(
     client: Client,
-    directory: Directory,
     mut commands: Receiver<Command>,
     mut updates: Sender<Update>,
 ) {
@@ -39,7 +39,7 @@ pub(crate) async fn run_session(
             () = &mut events => break,
             command = commands.next() => match command {
                 Some(command) => {
-                    let request = answer(client.clone(), directory.clone(), command, updates.clone());
+                    let request = answer(client.clone(), command, updates.clone());
                     requests.spawn(request);
                 }
                 None => break,
@@ -50,42 +50,53 @@ pub(crate) async fn run_session(
     requests.shutdown().await;
 }
 
-/// Sends one request and reports its answer as an action.
-async fn answer(
-    client: Client,
-    directory: Directory,
+/// Runs one request and reports its answers.
+async fn answer(client: Client, command: Command, mut updates: Sender<Update>) {
+    if dispatch(&client, command, &mut updates).await == Err(Closed) {
+        tracing::debug!(target: crate::logging::SERVER, "[SERVER] Dropped an answer with no window");
+    }
+}
+
+async fn dispatch(
+    client: &Client,
     command: Command,
-    mut updates: Sender<Update>,
-) {
-    let action = match command {
-        Command::LoadSessions => match client.list_sessions(&directory).await {
-            Ok(sessions) => Action::SessionsLoaded(sessions),
-            Err(error) => Action::SessionsFailed(format!("Could not load sessions: {error}")),
-        },
-        Command::LoadMessages(session) => {
-            match client.list_messages(&directory, session.as_str()).await {
-                Ok(messages) => Action::MessagesLoaded { session, messages },
-                Err(error) => Action::MessagesFailed {
-                    session,
-                    message: format!("Could not load messages: {error}"),
-                },
-            }
+    updates: &mut Sender<Update>,
+) -> Result<(), Closed> {
+    match command {
+        Command::Startup { catalog } => startup::load_startup(client, &catalog, updates).await,
+        Command::Refetch { catalogs, open } => {
+            startup::refetch(client, catalogs, open, updates).await
         }
-        Command::CreateSession => match client.create_session(&directory, None, None).await {
-            Ok(session) => Action::SessionCreated(session),
-            Err(error) => Action::CreateFailed(format!("Could not create a session: {error}")),
-        },
-        Command::SendPrompt { session, text } => {
-            match client
-                .send_prompt(&directory, session.as_str(), &text)
-                .await
-            {
-                Ok(_) => Action::PromptAccepted(text),
-                Err(error) => Action::PromptFailed(format!("Could not send the prompt: {error}")),
-            }
+        Command::LoadMessages { session, directory } => {
+            startup::load_messages(client, &session, &directory, updates).await
         }
-    };
-    updates.send(Update::Apply(action)).await.ok();
+        Command::LoadCatalog(directory) => catalog::load(client, &directory, updates).await,
+        Command::LoadSessionRecord { session, directory } => {
+            startup::load_record(client, &session, &directory, updates).await
+        }
+        Command::CreateSession(request) => {
+            send::create(
+                client,
+                &request.target,
+                request.agent.as_deref(),
+                request.model.as_ref(),
+                updates,
+            )
+            .await
+        }
+        Command::CreateAndPrompt(request) => {
+            send::create_and_prompt(
+                client,
+                &request.target,
+                &request.text,
+                request.agent.as_deref(),
+                request.model.as_ref(),
+                updates,
+            )
+            .await
+        }
+        Command::SendPrompt(request) => send::prompt(client, request.open(), updates).await,
+    }
 }
 
 #[cfg(test)]

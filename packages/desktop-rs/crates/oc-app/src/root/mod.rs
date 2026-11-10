@@ -3,9 +3,13 @@
 //! server it also turns intents into requests and applies what the server sends back.
 
 mod live;
+mod plan;
+mod requests;
+mod updates;
 
 pub(crate) use live::Started;
 
+use std::collections::BTreeSet;
 use std::rc::Rc;
 
 use gpui_kit::component::ActiveTheme;
@@ -39,6 +43,8 @@ pub(crate) struct RootView {
     /// The first session list after a start records OpenCode's pids: listing goes through
     /// OpenCode, so it runs by then, even if the check at connect caught it before `exec`.
     record_pids_on_list: bool,
+    /// Directories whose catalogs the window asked for; a reconnect refetches them.
+    catalogs: BTreeSet<String>,
     _draft_events: Subscription,
 }
 
@@ -74,6 +80,7 @@ impl RootView {
             starting: None,
             exit_check: None,
             record_pids_on_list: false,
+            catalogs: BTreeSet::new(),
             _draft_events: draft_events,
         }
     }
@@ -84,7 +91,7 @@ impl RootView {
         if self.scroll.offset().y <= -self.scroll.max_offset().y + px(1.) {
             self.scroll.scroll_to_bottom();
         }
-        cx.notify();
+        self.after_change(cx);
     }
 }
 

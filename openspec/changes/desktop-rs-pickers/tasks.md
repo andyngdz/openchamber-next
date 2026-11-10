@@ -46,7 +46,7 @@
 - [ ] 6.6 Unit tests: each cascade step taken; catalog absence; agent switch and back; every picker rule; the desktop cases of `keyboardPolicy.test.ts:25-52`.
 - [ ] 6.7 Gate as in 2.4.
 
-## 7. Live wiring   [depends-on: 6] [writes: packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/src/main.rs, packages/desktop-rs/crates/oc-app/Cargo.toml, packages/desktop-rs/Cargo.toml, packages/desktop-rs/Cargo.lock, packages/desktop-rs/README.md] [parallel-safe: no]
+## 7. Live wiring   [depends-on: 6] [writes: packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/src/main.rs, packages/desktop-rs/crates/oc-app/Cargo.toml, packages/desktop-rs/Cargo.toml, packages/desktop-rs/Cargo.lock, packages/desktop-rs/README.md, packages/desktop-rs/crates/oc-client/src/client.rs, packages/desktop-rs/crates/oc-client/src/client_test.rs] [parallel-safe: no]
 
 - [ ] 7.1 Add `uuid` (feature `v4`) and `chrono` (feature `clock`) as design.md "Package decisions" lists; no other dependency.
 - [ ] 7.2 Remove `--directory` from the live app; sidecar working directory is the home directory; startup loads settings, home info and the global list with retries.
