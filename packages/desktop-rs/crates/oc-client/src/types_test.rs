@@ -46,6 +46,17 @@ fn every_session_list_fixture_decodes() {
 }
 
 #[test]
+fn listed_session_time_carries_the_turn_stamps_when_the_server_sends_them() {
+    let after: Page<Session> = decode("session-list-after-turn.json");
+    let time = &after.data[0].time;
+    assert!(time.busy.is_some() && time.idle.is_some());
+
+    let bare: Session = serde_json::from_str(r#"{"id":"ses_x","time":{"created":1,"updated":2}}"#)
+        .expect("session without turn stamps");
+    assert_eq!((bare.time.busy, bare.time.idle), (None, None));
+}
+
+#[test]
 fn listed_session_has_no_title_until_a_turn_is_titled() {
     let fresh: Page<Session> = decode("session-list-nonempty.json");
     assert_eq!(fresh.data[0].title, None);

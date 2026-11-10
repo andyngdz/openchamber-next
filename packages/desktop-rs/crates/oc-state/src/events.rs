@@ -92,6 +92,7 @@ fn session_of(data: &EventData) -> Option<&str> {
         | EventData::SessionIdle(only) => &only.session_id,
         EventData::InboxEnqueued(enqueued) => &enqueued.session_id,
         EventData::InboxDelivered(delivered) => &delivered.session_id,
+        EventData::InboxCancelled(cancelled) => &cancelled.session_id,
         EventData::ExecutionInterrupted(interrupted) => &interrupted.session_id,
         EventData::ExecutionFailed(failed) => &failed.session_id,
         EventData::SessionStatus(status) => &status.session_id,
@@ -164,7 +165,7 @@ fn set_status(state: &mut State, session_id: &str, status: SessionStatus, at: u6
         return;
     };
     let was_busy = entry.is_busy();
-    entry.status = status;
+    entry.record_status(status, at);
     if was_busy != entry.is_busy() {
         state.sessions.touch(session_id, at);
     }

@@ -21,6 +21,7 @@ pub(crate) fn reduce_message_event(state: &mut State, event: &Event) {
     let session_id = match &event.data {
         EventData::InboxEnqueued(enqueued) => &enqueued.session_id,
         EventData::InboxDelivered(delivered) => &delivered.session_id,
+        EventData::InboxCancelled(cancelled) => &cancelled.session_id,
         EventData::StepStarted(step) => &step.session_id,
         EventData::StepEnded(step) => &step.session_id,
         EventData::TextStarted(text) => &text.session_id,
@@ -55,6 +56,7 @@ fn apply(messages: &mut Vec<ChatMessage>, event: &Event, at: u64) {
     match &event.data {
         EventData::InboxEnqueued(enqueued) => enqueue(messages, enqueued),
         EventData::InboxDelivered(delivered) => deliver(messages, &delivered.inbox_id),
+        EventData::InboxCancelled(cancelled) => withdraw(messages, &cancelled.inbox_id),
         EventData::StepStarted(step) => start_step(messages, step, at),
         EventData::StepEnded(step) => end_step(messages, step, at),
         EventData::TextStarted(text) => start_text(messages, event, text),
@@ -114,6 +116,11 @@ fn deliver(messages: &mut [ChatMessage], inbox_id: &str) {
             user.delivery = Delivery::Delivered;
         }
     }
+}
+
+/// A withdrawn user message leaves the chat (`message.removed` in `events.ts`).
+fn withdraw(messages: &mut Vec<ChatMessage>, inbox_id: &str) {
+    messages.retain(|message| !matches!(message, ChatMessage::User(user) if user.id == *inbox_id));
 }
 
 /// Opens the step's assistant message; a repeated start keeps the items it already has.

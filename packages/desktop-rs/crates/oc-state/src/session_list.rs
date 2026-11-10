@@ -4,9 +4,9 @@
 //! (`compareSessionsByLifecycleOrder` in `packages/ui/src/sync/session-ordering.ts`): a session
 //! moves to the top when it starts or ends a turn, and otherwise sits at its last activity time,
 //! ties broken by newer creation, then by id. Here a turn start or end stamps the event's
-//! `created`, and a loaded session starts at `time.updated` (else `time.created`); React reads
-//! `time.idle` first, which the client's session type does not decode, and a rename does not move
-//! a session in either. Pinned sessions, which React lists first, do not exist in the spike.
+//! `created`, and a loaded session starts at `time.idle`, else `time.updated`, else
+//! `time.created`, as `getSessionActivityTime` does; a rename does not move a session in either.
+//! Pinned sessions, which React lists first, do not exist in the spike.
 
 use std::cmp::Reverse;
 
@@ -35,6 +35,8 @@ pub struct SessionEntry {
     pub pending: Vec<PendingRequest>,
     activity: u64,
     created: u64,
+    /// When `status` was last set (ms): an event's time, or the newest turn stamp of a list.
+    status_at: u64,
 }
 
 impl SessionEntry {
@@ -47,7 +49,21 @@ impl SessionEntry {
             pending: Vec::new(),
             activity,
             created,
+            status_at: 0,
         }
+    }
+
+    /// Sets the status the list reports, stamped with the turn time it was read from.
+    pub(crate) fn with_listed_status(mut self, status: SessionStatus, at: u64) -> Self {
+        self.status = status;
+        self.status_at = at;
+        self
+    }
+
+    /// Sets the status an event reports at `at` (ms).
+    pub(crate) fn record_status(&mut self, status: SessionStatus, at: u64) {
+        self.status = status;
+        self.status_at = self.status_at.max(at);
     }
 
     /// The busy indicator.
@@ -113,15 +129,21 @@ impl SessionList {
         self.entries.retain(|entry| entry.id != *id);
     }
 
-    /// Replaces the rows with a fresh list. Status and pending requests come only from events,
-    /// so a session that stays listed keeps them, and its activity never moves back.
+    /// Replaces the rows with a fresh list. Pending requests come only from events, so a
+    /// session that stays listed keeps them, and its activity never moves back. The listed
+    /// status wins only when its turn stamp is newer than the status already held, so a
+    /// reload corrects a status whose ending event was missed, while an older snapshot never
+    /// overrides a newer event.
     pub(crate) fn replace(&mut self, fresh: Vec<SessionEntry>) {
         let previous = std::mem::take(&mut self.entries);
         self.entries = fresh
             .into_iter()
             .map(|mut entry| {
                 if let Some(old) = previous.iter().find(|old| old.id == entry.id) {
-                    entry.status = old.status;
+                    if entry.status_at <= old.status_at {
+                        entry.status = old.status;
+                        entry.status_at = old.status_at;
+                    }
                     entry.pending.clone_from(&old.pending);
                     entry.activity = entry.activity.max(old.activity);
                 }

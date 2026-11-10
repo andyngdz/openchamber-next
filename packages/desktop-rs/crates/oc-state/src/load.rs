@@ -9,21 +9,31 @@ use crate::message::{
     AssistantMessage, ChatMessage, Delivery, Item, StepTiming, TextItem, ToolItem, UserMessage,
 };
 use crate::session_list::SessionEntry;
+use crate::status::SessionStatus;
 
 /// A sidebar row from a listed or created session.
 pub(crate) fn session_entry(session: &Session) -> SessionEntry {
-    let created = session.time.created;
-    let activity = if session.time.updated > 0 {
-        session.time.updated
+    let time = &session.time;
+    let idle = time.idle.unwrap_or_default();
+    let busy = time.busy.unwrap_or_default();
+    let activity = [idle, time.updated, time.created]
+        .into_iter()
+        .find(|stamp| *stamp > 0)
+        .unwrap_or_default();
+    // A list carries no live status, only when the last turn started and ended: the turn runs
+    // when it started after it last ended. Ties read as ended.
+    let status = if busy > idle {
+        SessionStatus::Busy
     } else {
-        created
+        SessionStatus::Idle
     };
     SessionEntry::new(
         SessionId::from(session.id.as_str()),
         session.title.clone(),
-        created,
+        time.created,
         activity,
     )
+    .with_listed_status(status, busy.max(idle))
 }
 
 /// The chat column from a message list, which the server sends newest first. Turn markers

@@ -45,6 +45,8 @@ pub enum EventData {
     SessionDeleted(SessionRef),
     InboxEnqueued(InboxEnqueued),
     InboxDelivered(InboxDelivered),
+    /// The queued user message was withdrawn; same shape as [`InboxDelivered`].
+    InboxCancelled(InboxDelivered),
     ExecutionStarted(SessionRef),
     ExecutionSucceeded(SessionRef),
     ExecutionInterrupted(ExecutionInterrupted),
@@ -98,6 +100,7 @@ impl EventData {
             "session.deleted" => Self::SessionDeleted(payload(data)?),
             "session.inbox.enqueued" => Self::InboxEnqueued(payload(data)?),
             "session.inbox.delivered" => Self::InboxDelivered(payload(data)?),
+            "session.inbox.cancelled" => Self::InboxCancelled(payload(data)?),
             "session.execution.started" => Self::ExecutionStarted(payload(data)?),
             "session.execution.succeeded" => Self::ExecutionSucceeded(payload(data)?),
             "session.execution.interrupted" => Self::ExecutionInterrupted(payload(data)?),

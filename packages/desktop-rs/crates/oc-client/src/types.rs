@@ -44,6 +44,12 @@ pub struct SessionTime {
     /// When the session last changed.
     #[serde(default)]
     pub updated: u64,
+    /// When the last turn started; missing until the first turn.
+    #[serde(default)]
+    pub busy: Option<u64>,
+    /// When the last turn ended; missing until the first turn ends.
+    #[serde(default)]
+    pub idle: Option<u64>,
 }
 
 /// One session of the list or of a create answer. `title` is missing until the first

@@ -30,6 +30,26 @@ fn tool_rows(items: &[Item]) -> Vec<(&str, ToolStatus)> {
 }
 
 #[test]
+fn a_cancelled_inbox_message_leaves_the_chat() {
+    let mut state = opened("ses_a");
+    let payload = |inbox: &str| json!({"sessionID": "ses_a", "inboxID": inbox});
+    let queued = |inbox: &str| json!({"sessionID": "ses_a", "inboxID": inbox, "item": {"payload": {"text": inbox}}});
+    replay(
+        &mut state,
+        &[
+            event("session.inbox.enqueued", 1, queued("msg_1")),
+            event("session.inbox.enqueued", 2, queued("msg_2")),
+            event("session.inbox.cancelled", 3, payload("msg_1")),
+        ],
+    );
+
+    let [ChatMessage::User(left)] = messages(&state) else {
+        panic!("only msg_2 should stay: {:?}", messages(&state));
+    };
+    assert_eq!(left.id.as_str(), "msg_2");
+}
+
+#[test]
 fn full_text_reply_builds_the_user_message_and_one_assistant_step() {
     let session_id = session_of(TEXT_REPLY);
     let captured = events(TEXT_REPLY);
