@@ -676,62 +676,62 @@
         },
         {
           "role": "generic",
-          "name": "Response <rate> tok/s",
-          "key": "workStatusPanel/Work status/Response <rate> tok/s",
+          "name": "Response",
+          "key": "workStatusPanel/Work status/Response",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Whole turn <rate> tok/s",
-          "key": "workStatusPanel/Work status/Whole turn <rate> tok/s",
+          "name": "Whole turn",
+          "key": "workStatusPanel/Work status/Whole turn",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Elapsed <duration>",
-          "key": "workStatusPanel/Work status/Elapsed <duration>",
+          "name": "Elapsed",
+          "key": "workStatusPanel/Work status/Elapsed",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Model time <duration>",
-          "key": "workStatusPanel/Work status/Model time <duration>",
+          "name": "Model time",
+          "key": "workStatusPanel/Work status/Model time",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Tool time <duration>",
-          "key": "workStatusPanel/Work status/Tool time <duration>",
+          "name": "Tool time",
+          "key": "workStatusPanel/Work status/Tool time",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Average TTFT <<duration>",
-          "key": "workStatusPanel/Work status/Average TTFT <<duration>",
+          "name": "Average TTFT",
+          "key": "workStatusPanel/Work status/Average TTFT",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Steps 21",
-          "key": "workStatusPanel/Work status/Steps 21",
+          "name": "Steps",
+          "key": "workStatusPanel/Work status/Steps",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Tokens 21 ↑ · 1.8K ↓",
-          "key": "workStatusPanel/Work status/Tokens 21 ↑ · 1.8K ↓",
+          "name": "Tokens",
+          "key": "workStatusPanel/Work status/Tokens",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Cache 0%",
-          "key": "workStatusPanel/Work status/Cache 0%",
+          "name": "Cache",
+          "key": "workStatusPanel/Work status/Cache",
           "shown": true
         },
         {
           "role": "generic",
-          "name": "Cost $0",
-          "key": "workStatusPanel/Work status/Cost $0",
+          "name": "Cost",
+          "key": "workStatusPanel/Work status/Cost",
           "shown": true
         }
       ]
@@ -1106,73 +1106,73 @@
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Response <rate> tok/s",
+      "key": "workStatusPanel/Work status/Response",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Whole turn <rate> tok/s",
+      "key": "workStatusPanel/Work status/Whole turn",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Elapsed <duration>",
+      "key": "workStatusPanel/Work status/Elapsed",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Model time <duration>",
+      "key": "workStatusPanel/Work status/Model time",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Tool time <duration>",
+      "key": "workStatusPanel/Work status/Tool time",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Average TTFT <<duration>",
+      "key": "workStatusPanel/Work status/Average TTFT",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Steps 21",
+      "key": "workStatusPanel/Work status/Steps",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Tokens 21 ↑ · 1.8K ↓",
+      "key": "workStatusPanel/Work status/Tokens",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Cache 0%",
+      "key": "workStatusPanel/Work status/Cache",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     },
     {
       "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Cost $0",
+      "key": "workStatusPanel/Work status/Cost",
       "role": "generic",
       "problem": "missing-name",
-      "nameSource": "text"
+      "nameSource": "text label"
     }
   ],
   "normalized": [
@@ -1202,48 +1202,6 @@
       "key": "workStatusPanel/Work status/Turn stats <rate> tok/s",
       "rules": [
         "rate"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Response <rate> tok/s",
-      "rules": [
-        "rate"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Whole turn <rate> tok/s",
-      "rules": [
-        "rate"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Elapsed <duration>",
-      "rules": [
-        "duration"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Model time <duration>",
-      "rules": [
-        "duration"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Tool time <duration>",
-      "rules": [
-        "duration"
-      ]
-    },
-    {
-      "region": "workStatusPanel",
-      "key": "workStatusPanel/Work status/Average TTFT <<duration>",
-      "rules": [
-        "duration"
       ]
     }
   ]

@@ -61,7 +61,14 @@
  *      (trimmed, whitespace collapsed) when it holds no other control (an
  *      unnamed container's text is its children's: the chat scroller's is
  *      the whole transcript); otherwise its role. Both fallbacks are listed
- *      in `accessibility` with the source used.
+ *      in `accessibility` with the source used. When that text pairs a label
+ *      with a value (a Turn stats row: "Elapsed" and "24.5s"), only the label
+ *      names the control, since the value is data, not identity (source
+ *      `text label`). The label comes from the row's DOM structure, not from
+ *      the joined text: descend while one child element holds all of the
+ *      text; where it first splits across two or more child elements, with
+ *      no loose text beside them, the first element is the label and the
+ *      rest is the value. Text that never splits names the control whole.
  *   2. Timing figures in a name become `<duration>` and `<rate> tok/s`
  *      (NAME_NORMALIZATION), and a name that starts with a seed session's
  *      title is cut to the title, dropping the row's status text ("Session
@@ -516,10 +523,26 @@ const collectInPage = `(() => {
     if (box.width === 0 || box.height === 0) continue
     elements.push(element)
   }
+  const visibleText = (node) => (node.innerText ?? "").replace(/\\s+/g, " ").trim()
+  // A row that pairs a label with a value: descend while one child element
+  // holds all of the text; where the text first splits across two or more
+  // child elements (and no loose text sits beside them), the first is the
+  // label and the rest is the value.
+  const labelOf = (element) => {
+    let node = element
+    for (;;) {
+      const loose = [...node.childNodes].some((child) => child.nodeType === Node.TEXT_NODE && child.textContent.trim())
+      const parts = [...node.children].filter((child) => visibleText(child))
+      if (loose || parts.length === 0) return null
+      if (parts.length === 1) { node = parts[0]; continue }
+      return visibleText(parts[0])
+    }
+  }
   const controls = elements.map((element) => ({
     region: REGIONS.find((region) => roots[region.name].some((root) => root.contains(element)))?.name ?? null,
     shown: element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
-    text: (element.innerText ?? "").replace(/\\s+/g, " ").trim(),
+    text: visibleText(element),
+    label: labelOf(element),
     // Controls inside this one, in DOM order.
     nested: elements.flatMap((other, index) => other !== element && element.contains(other) ? [index] : []),
   }))
@@ -617,7 +640,12 @@ const nameAndKey = async (client, collected, axData, titles) => {
     const aria = collapse(ax.name?.value)
     // Text only for a control holding no other control: an unnamed container's
     // text is its children's (the transcript, for the chat's scroller).
-    const [nameSource, raw] = aria ? ["aria name", aria] : control.text && control.nested.length === 0 ? ["text", control.text] : ["role", role]
+    const fromText = control.text && control.nested.length === 0
+    const [nameSource, raw] = aria
+      ? ["aria name", aria]
+      : fromText && control.label ? ["text label", control.label]
+      : fromText ? ["text", control.text]
+      : ["role", role]
     const { name, rules } = normalizeName(raw, titles)
     return { ...control, role, nameSource, name, rules, ax }
   })
@@ -708,7 +736,7 @@ const captureState = async (client, state, widths, titles) => {
   }
   const counts = Object.entries(regions).map(([name, region]) => `${name} ${region.controls.length}`).join(", ")
   const bySource = (source) => controls.filter((control) => control.nameSource === source).length
-  log(`${state}: ${counts}, outside ${reference.outside.length}; names from text ${bySource("text")}, from role ${bySource("role")}; repeated keys ${controls.filter((control) => control.repeated).length}`)
+  log(`${state}: ${counts}, outside ${reference.outside.length}; names from text ${bySource("text")}, from text label ${bySource("text label")}, from role ${bySource("role")}; repeated keys ${controls.filter((control) => control.repeated).length}`)
   return { state, json: `${JSON.stringify(reference, null, 2)}\n`, png: Buffer.from(shot.data, "base64"), chatCodeBlocks: collected.chatCodeBlocks }
 }
 
