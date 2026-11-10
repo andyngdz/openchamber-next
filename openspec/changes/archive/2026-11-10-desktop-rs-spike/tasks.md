@@ -73,5 +73,5 @@
 - [x] 9.1 Integration test `tests/sidecar_it.rs`, run only with `OC_DESKTOP_IT=1`, with an isolated `HOME`, data dir and fixture-provider config passed through the sidecar's env parameter: start, auth, list sessions, open the event stream, send a prompt and see text deltas arrive, shut down, and check that the CLI pid and the recorded `opencode serve` pids are gone.
 - [x] 9.2 Case with SIGSTOP on the CLI so the SIGKILL path runs; the same pid check.
 - [x] 9.3 Crash case: run `oc-sidecar`'s `hold` example, SIGKILL it, and check that the CLI and OpenCode pids it printed are gone within 15 s.
-- [ ] 9.4 Manual check on this Wayland machine: create a session, send a short prompt to a real model and watch the reply stream; send SIGKILL to the CLI and see the server-exit state; restart the app, close the window, then `pgrep -f "openchamber serve"` and `pgrep -f "opencode serve"` show nothing this app started.
+- [x] 9.4 Manual check on this Wayland machine: create a session, send a short prompt to a real model and watch the reply stream; send SIGKILL to the CLI and see the server-exit state; restart the app, close the window, then `pgrep -f "openchamber serve"` and `pgrep -f "opencode serve"` show nothing this app started.
 - [x] 9.5 Run the gate from 1.6 and both env-gated test suites; report what passed, what did not, and the Wayland result from 1.5.
