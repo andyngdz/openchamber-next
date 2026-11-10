@@ -5,7 +5,7 @@ use super::{
     PromptAccepted, PromptRequest, Session, ToolStatus,
 };
 
-const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../fixtures/api");
+const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
 
 fn fixture(name: &str) -> String {
     let path = format!("{FIXTURES}/{name}");

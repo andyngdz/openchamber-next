@@ -10,7 +10,7 @@ use crate::ids::SessionId;
 use crate::message::{AssistantMessage, ChatMessage};
 use crate::state::State;
 
-const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../fixtures");
+const FIXTURES: &str = env!("OC_DESKTOP_FIXTURES");
 
 /// Captured scenarios in `fixtures/events/`.
 pub(crate) const TEXT_REPLY: &str = "text-reply-stream-300cps";

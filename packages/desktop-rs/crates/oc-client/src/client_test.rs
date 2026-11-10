@@ -10,7 +10,7 @@ use super::Client;
 use crate::ClientError;
 use crate::event::EventData;
 
-const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../fixtures");
+const FIXTURES: &str = env!("OC_DESKTOP_FIXTURES");
 const DIRECTORY: &str = "/tmp/my project";
 const ENCODED_DIRECTORY: &str = "%2Ftmp%2Fmy%20project";
 const CRLF: &str = "\r\n";

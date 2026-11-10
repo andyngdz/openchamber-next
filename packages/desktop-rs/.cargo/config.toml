@@ -1,0 +1,3 @@
+# Test code reads OC_DESKTOP_FIXTURES to find the fixtures directory.
+[env]
+OC_DESKTOP_FIXTURES = { value = "fixtures", relative = true }

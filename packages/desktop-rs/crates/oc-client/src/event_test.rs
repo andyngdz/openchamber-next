@@ -1,6 +1,6 @@
 use super::{Event, EventData};
 
-const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../fixtures/events");
+const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/events");
 
 const FILES: [&str; 6] = [
     "text-reply-stream-300cps",
