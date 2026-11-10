@@ -1,5 +1,5 @@
 {
-  "description": "Reference controls inside message content that the parity test skips. A later stage that renders markdown and tool rows empties this list.",
+  "description": "Reference controls inside markdown message content that the parity test skips, each only in the states it lists. A later stage that renders markdown empties this list.",
   "controls": [
     {
       "region": "chatColumn",
@@ -216,122 +216,6 @@
         "session"
       ],
       "reason": "Table action inside an assistant message. Tables exist only once markdown is rendered, which the spike leaves out (design.md Parity reference)."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files *.md#1",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files *.md#2",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files *.md#3",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
-      "states": [
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#1",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#2",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#3",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
-      "states": [
-        "session",
-        "streaming"
-      ],
-      "reason": "Tool-call row inside an assistant message. The spike draws tool calls as plain name: status text (design.md Layout); the row button, its file pattern and its count depend on React rendering the tool input, which oc-state does not hold."
     }
   ]
 }

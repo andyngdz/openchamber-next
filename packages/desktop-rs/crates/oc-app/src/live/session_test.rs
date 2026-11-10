@@ -101,6 +101,28 @@ async fn a_failed_list_is_a_region_error_never_an_empty_list() {
 }
 
 #[tokio::test]
+async fn a_failed_create_is_its_own_error_not_a_list_error() {
+    let action = answer_of("500 Internal Server Error", "{}", Command::CreateSession).await;
+
+    assert!(
+        matches!(&action, Action::CreateFailed(message) if message.contains("500")),
+        "{action:?}"
+    );
+}
+
+#[tokio::test]
+async fn an_accepted_prompt_names_the_text_it_sent() {
+    let command = Command::SendPrompt {
+        session: SessionId::from("ses_a"),
+        text: "hello".to_owned(),
+    };
+
+    let action = answer_of("200 OK", r#"{"data":{"id":"msg_1"}}"#, command).await;
+
+    assert_eq!(action, Action::PromptAccepted("hello".to_owned()));
+}
+
+#[tokio::test]
 async fn a_failed_prompt_reports_prompt_failed() {
     let command = Command::SendPrompt {
         session: SessionId::from("ses_a"),

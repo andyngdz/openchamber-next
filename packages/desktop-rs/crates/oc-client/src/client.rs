@@ -9,7 +9,7 @@ use reqwest::header::ACCEPT;
 use reqwest::{RequestBuilder, Response};
 use serde::de::DeserializeOwned;
 
-use crate::error::ClientError;
+use crate::error::{ByteError, ClientError};
 use crate::event::Event;
 use crate::message_id::new_message_id;
 use crate::types::{
@@ -20,6 +20,10 @@ use crate::uri_component::encode_uri_component;
 
 const DIRECTORY_HEADER: &str = "x-opencode-directory";
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(15);
+/// The server writes `:heartbeat` on the event stream every 20 s
+/// (`DEFAULT_SSE_HEARTBEAT_INTERVAL_MS` in `packages/web/server/lib/opencode/proxy.js`). Three
+/// missed heartbeats in a row mean the connection is dead even when the socket never says so.
+const EVENT_IDLE_TIMEOUT: Duration = Duration::from_secs(3 * 20);
 /// Same page size the React UI asks for.
 const SESSION_LIMIT: u32 = 50;
 
@@ -33,6 +37,7 @@ pub struct Client {
     base_url: String,
     directory: String,
     timeout: Duration,
+    event_idle: Duration,
 }
 
 impl Client {
@@ -52,7 +57,10 @@ impl Client {
         directory: impl Into<String>,
         timeout: Duration,
     ) -> Result<Self, ClientError> {
+        // The server is always on this machine; a proxy from the environment must not
+        // intercept it.
         let http = reqwest::Client::builder()
+            .no_proxy()
             .cookie_store(true)
             .connect_timeout(timeout)
             .build()
@@ -62,7 +70,14 @@ impl Client {
             base_url: base_url.into().trim_end_matches('/').to_owned(),
             directory: directory.into(),
             timeout,
+            event_idle: EVENT_IDLE_TIMEOUT,
         })
+    }
+
+    /// The same client with another event-stream idle limit, see [`Client::events`].
+    pub fn with_event_idle_timeout(mut self, idle: Duration) -> Self {
+        self.event_idle = idle;
+        self
     }
 
     /// `GET /auth/session`; anything but `authenticated: true` is [`ClientError::Auth`].
@@ -122,9 +137,11 @@ impl Client {
         Ok(accepted.data)
     }
 
-    /// `GET /api/event`. Only the connect and the response head have a timeout; the
-    /// stream itself ends when the server closes it or the caller drops it. A frame that
-    /// fails to decode is an `Err` item and the stream continues.
+    /// `GET /api/event`. The connect and the response head have the call timeout. After that
+    /// the stream ends when the server closes it, when the caller drops it, or with
+    /// [`ClientError::EventsIdle`] when nothing (no event, no heartbeat comment) arrives for
+    /// the idle limit, 60 s unless [`Client::with_event_idle_timeout`] set another. A frame
+    /// that fails to decode is an `Err` item and the stream continues.
     pub async fn events(&self) -> Result<EventStream, ClientError> {
         let request = self
             .http
@@ -138,14 +155,19 @@ impl Client {
             })?
             .map_err(ClientError::Transport)?;
         let response = ensure_success(response).await?;
-        let frames = response
-            .bytes_stream()
+        let idle = self.event_idle;
+        let frames = until_idle(Box::pin(response.bytes_stream()), idle)
             .eventsource()
-            .map(|frame| match frame {
+            .map(move |frame| match frame {
                 Ok(frame) => {
                     serde_json::from_str::<Event>(&frame.data).map_err(ClientError::Decode)
                 }
-                Err(EventStreamError::Transport(err)) => Err(ClientError::Transport(err)),
+                Err(EventStreamError::Transport(ByteError::Transport(err))) => {
+                    Err(ClientError::Transport(err))
+                }
+                Err(EventStreamError::Transport(ByteError::Idle)) => Err(ClientError::EventsIdle {
+                    seconds: idle.as_secs(),
+                }),
                 Err(other) => Err(ClientError::Stream(other.to_string())),
             });
         Ok(Box::pin(frames))
@@ -175,6 +197,23 @@ impl Client {
         let body = response.bytes().await.map_err(ClientError::Transport)?;
         serde_json::from_slice(&body).map_err(ClientError::Decode)
     }
+}
+
+/// The body's chunks, ending with [`ByteError::Idle`] when none arrives within `idle`. Bytes
+/// are counted before SSE parsing, so a heartbeat comment, which the parser drops, still
+/// counts as life.
+fn until_idle<S, B>(body: S, idle: Duration) -> impl Stream<Item = Result<B, ByteError>>
+where
+    S: Stream<Item = Result<B, reqwest::Error>> + Unpin,
+{
+    futures::stream::unfold(Some(body), move |body| async move {
+        let mut body = body?;
+        match tokio::time::timeout(idle, body.next()).await {
+            Ok(Some(chunk)) => Some((chunk.map_err(ByteError::Transport), Some(body))),
+            Ok(None) => None,
+            Err(_) => Some((Err(ByteError::Idle), None)),
+        }
+    })
 }
 
 async fn ensure_success(response: Response) -> Result<Response, ClientError> {

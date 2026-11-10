@@ -64,11 +64,11 @@ async fn answer(client: Client, command: Command, mut updates: Sender<Update>) {
         },
         Command::CreateSession => match client.create_session().await {
             Ok(session) => Action::SessionCreated(session),
-            Err(error) => Action::SessionsFailed(format!("Could not create a session: {error}")),
+            Err(error) => Action::CreateFailed(format!("Could not create a session: {error}")),
         },
         Command::SendPrompt { session, text } => {
             match client.send_prompt(session.as_str(), &text).await {
-                Ok(_) => Action::PromptAccepted,
+                Ok(_) => Action::PromptAccepted(text),
                 Err(error) => Action::PromptFailed(format!("Could not send the prompt: {error}")),
             }
         }

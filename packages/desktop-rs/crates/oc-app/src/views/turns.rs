@@ -2,6 +2,8 @@
 //! message, its steps' text in order, runs of tool calls under one Activity row, and a meta
 //! row with model, agent and duration once the turn's last step has ended.
 
+use std::collections::HashMap;
+
 use oc_state::{AssistantMessage, ChatMessage, Item, StepTiming, ToolItem, ToolStatus};
 
 /// A user message and the assistant steps that answer it.
@@ -90,16 +92,67 @@ pub(crate) fn format_seconds(milliseconds: u64) -> String {
     format!("{}.{}s", tenths / 10, tenths % 10)
 }
 
-/// `glob: completed`.
-pub(crate) fn tool_line(tool: &ToolItem) -> String {
-    let status = match tool.status {
-        ToolStatus::Pending => "pending",
-        ToolStatus::Running => "running",
-        ToolStatus::Completed => "completed",
-        ToolStatus::Error => "error",
-        ToolStatus::Other => "unknown",
-    };
-    format!("{}: {status}", tool.name)
+/// What a tool row shows: the tool's display name and the description React derives from the
+/// input (`toolHelpers.ts` `getToolMetadata`, `tools.ts` `toolDescription`). Only `glob`
+/// occurs in the fixtures, so only its title is ported; any other tool shows its raw name.
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) struct ToolTitle<'a> {
+    pub(crate) name: &'a str,
+    pub(crate) detail: Option<&'a str>,
+}
+
+impl<'a> ToolTitle<'a> {
+    pub(crate) fn of(tool: &'a ToolItem) -> Self {
+        match tool.name.as_str() {
+            "glob" => Self {
+                name: "Find Files",
+                detail: tool.input["pattern"]
+                    .as_str()
+                    .filter(|text| !text.is_empty()),
+            },
+            other => Self {
+                name: other,
+                detail: None,
+            },
+        }
+    }
+
+    /// The accessible name: React's row button reads its name and its description.
+    pub(crate) fn accessible_name(&self) -> String {
+        match self.detail {
+            Some(detail) => format!("{} {detail}", self.name),
+            None => self.name.to_owned(),
+        }
+    }
+}
+
+/// What the row adds after its title while the call is not done; a finished call says nothing.
+pub(crate) fn tool_status(tool: &ToolItem) -> Option<&'static str> {
+    match tool.status {
+        ToolStatus::Pending => Some("pending"),
+        ToolStatus::Running => Some("running"),
+        ToolStatus::Completed => None,
+        ToolStatus::Error => Some("failed"),
+        ToolStatus::Other => Some("unknown"),
+    }
+}
+
+/// The `#n` index of each title in a region, from 1, or `None` for a title that occurs once:
+/// the reference key repeats only where the name does.
+pub(crate) fn repeat_indexes(titles: &[String]) -> Vec<Option<usize>> {
+    let mut totals: HashMap<&str, usize> = HashMap::new();
+    for title in titles {
+        *totals.entry(title).or_default() += 1;
+    }
+    let mut seen: HashMap<&str, usize> = HashMap::new();
+    titles
+        .iter()
+        .map(|title| {
+            let index = seen.entry(title).or_default();
+            *index += 1;
+            (totals[title.as_str()] > 1).then_some(*index)
+        })
+        .collect()
 }
 
 #[cfg(test)]

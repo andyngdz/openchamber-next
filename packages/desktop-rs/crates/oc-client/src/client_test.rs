@@ -312,3 +312,65 @@ async fn event_stream_open_failure_is_a_status_error() {
         Err(ClientError::Status { status: 503, .. })
     ));
 }
+
+/// An event stream that writes `chunks` with `gap` between them, then holds the connection
+/// open without a byte for up to five seconds. The handle is only held, never joined: the
+/// client's connection task runs on the test's one runtime thread.
+fn trickle(chunks: Vec<String>, gap: Duration) -> (Client, JoinHandle<()>) {
+    let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
+    let port = listener.local_addr().expect("addr").port();
+    let worker = thread::spawn(move || {
+        let (mut stream, _) = listener.accept().expect("accept");
+        read_request(&mut stream);
+        let head = ["HTTP/1.1 200 OK", "content-type: text/event-stream", "", ""].join(CRLF);
+        stream.write_all(head.as_bytes()).expect("write head");
+        for chunk in chunks {
+            stream.write_all(chunk.as_bytes()).expect("write chunk");
+            stream.flush().expect("flush");
+            thread::sleep(gap);
+        }
+        // Silent but open: the client must give up by itself.
+        stream
+            .set_read_timeout(Some(Duration::from_secs(5)))
+            .expect("read timeout");
+        let mut rest = Vec::new();
+        stream.read_to_end(&mut rest).ok();
+    });
+    let client = Client::new(port, DIRECTORY).expect("client");
+    (client, worker)
+}
+
+#[tokio::test]
+async fn a_silent_event_stream_ends_with_an_idle_error() {
+    let connected = format!(
+        r#"data: {{"id":"e1","type":"server.connected","data":{{}}}}{}"#,
+        LF.repeat(2)
+    );
+    let (client, _worker) = trickle(vec![connected], Duration::ZERO);
+    let client = client.with_event_idle_timeout(Duration::from_millis(300));
+
+    let items: Vec<_> = client.events().await.expect("open").collect().await;
+
+    assert_eq!(items.len(), 2, "{items:?}");
+    assert!(items[0].is_ok());
+    assert!(matches!(items[1], Err(ClientError::EventsIdle { .. })));
+}
+
+#[tokio::test]
+async fn heartbeats_keep_a_quiet_event_stream_open() {
+    let heartbeats = vec![format!(": heartbeat{}", LF.repeat(2)); 5];
+    let (client, _worker) = trickle(heartbeats, Duration::from_millis(150));
+    let client = client.with_event_idle_timeout(Duration::from_millis(400));
+    let mut stream = client.events().await.expect("open");
+
+    // Five heartbeats 150 ms apart outlast the 400 ms limit only because each one counts.
+    let first = tokio::time::timeout(Duration::from_millis(700), stream.next()).await;
+
+    assert!(first.is_err(), "no item while heartbeats arrive: {first:?}");
+    let ended = stream.next().await;
+    assert!(matches!(ended, Some(Err(ClientError::EventsIdle { .. }))));
+    assert!(
+        stream.next().await.is_none(),
+        "the stream ends after the idle error"
+    );
+}

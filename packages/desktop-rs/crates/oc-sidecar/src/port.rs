@@ -4,8 +4,15 @@ use std::num::NonZeroU16;
 use crate::errors::{PortLineError, SidecarError};
 
 /// What the CLI prints on stderr when `--port` names a port another process
-/// holds (`packages/web/bin/lib/commands-serve.js:88-100`).
-const PORT_IN_USE_MARKER: &str = "is already in use by another process.";
+/// holds, or another OpenChamber instance answers on it
+/// (`packages/web/bin/lib/commands-serve.js:96-99`), and what Node reports when
+/// the bind itself loses the race (`listen EADDRINUSE`), which can land only
+/// in the server log.
+const PORT_TAKEN_MARKERS: [&str; 3] = [
+    "is already in use by another process.",
+    "OpenChamber is already running on port",
+    "EADDRINUSE",
+];
 
 /// Token that starts the password half of a `<port> pass:<pw>` line.
 const PASSWORD_PREFIX: &str = "pass:";
@@ -63,8 +70,8 @@ pub fn parse_port_line(line: &str) -> Result<u16, PortLineError> {
         .map_err(|_| not_a_port())
 }
 
-/// Whether the CLI's stderr says the picked port was taken, which is the one
-/// startup failure worth a retry on a new port.
+/// Whether CLI output lines (stderr or the log tail) say the picked port was
+/// taken, which is the one startup failure worth a retry on a new port.
 ///
 /// # Examples
 ///
@@ -72,10 +79,12 @@ pub fn parse_port_line(line: &str) -> Result<u16, PortLineError> {
 /// let stderr = ["Error: Port 4096 is already in use by another process.".to_owned()];
 /// assert!(oc_sidecar::is_port_in_use_message(&stderr));
 /// ```
-pub fn is_port_in_use_message(stderr_lines: &[String]) -> bool {
-    stderr_lines
-        .iter()
-        .any(|line| line.contains(PORT_IN_USE_MARKER))
+pub fn is_port_in_use_message(lines: &[String]) -> bool {
+    lines.iter().any(|line| {
+        PORT_TAKEN_MARKERS
+            .iter()
+            .any(|marker| line.contains(marker))
+    })
 }
 
 #[cfg(test)]

@@ -1,6 +1,9 @@
 use nix::unistd::{Pid, getpid};
 
-use super::{is_opencode_serve, is_opencode_serve_pid, opencode_children, parse_stat_ppid};
+use super::{
+    is_opencode_serve, is_opencode_serve_pid, opencode_children, parse_stat_ppid,
+    parse_stat_start_time,
+};
 
 /// A `/proc/<pid>/cmdline` value: every argument followed by a NUL byte.
 fn cmdline(args: &[&str]) -> Vec<u8> {
@@ -14,6 +17,14 @@ fn reads_the_ppid_after_the_command_name() {
     assert_eq!(parse_stat_ppid("1234 (node) S 99 1234 1234 0"), Some(99));
     assert_eq!(parse_stat_ppid("7 (a (b) c) R 42 7 7"), Some(42));
     assert_eq!(parse_stat_ppid("garbage"), None);
+}
+
+#[test]
+fn reads_the_start_time_after_the_command_name() {
+    let stat = "7 (a (b) c) S 42 7 7 0 -1 4194560 100 0 0 0 1 2 0 0 20 0 1 0 987654 1000 50";
+    assert_eq!(parse_stat_start_time(stat), Some(987_654));
+    assert_eq!(parse_stat_start_time("7 (x) S 42"), None);
+    assert_eq!(parse_stat_start_time("garbage"), None);
 }
 
 #[test]

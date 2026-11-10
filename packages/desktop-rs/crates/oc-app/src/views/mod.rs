@@ -13,6 +13,7 @@ mod messages;
 mod sidebar;
 mod sidebar_list;
 mod sidebar_model;
+mod tool_rows;
 mod turn_stats;
 mod turns;
 mod work_status;

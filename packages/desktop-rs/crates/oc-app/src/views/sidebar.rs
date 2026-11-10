@@ -56,6 +56,7 @@ pub(crate) fn sidebar(scene: Scene<'_>, cx: &App) -> Div {
         .child(toolbar)
         .child(chats_row(scene))
         .children(status_line(scene, cx))
+        .children(create_line(scene, cx))
         .child(session_list(scene, cx))
         .child(footer(scene));
     region(scene.registry, Area::Sidebar, column)
@@ -153,6 +154,28 @@ fn status_line(scene: Scene<'_>, cx: &App) -> Option<AnyElement> {
         (_, LoadStatus::Loading) => Some(text("Loading sessions".to_owned()).into_any_element()),
         (_, LoadStatus::Ready) => None,
     }
+}
+
+/// A failed New session, with a Retry that creates again.
+fn create_line(scene: Scene<'_>, cx: &App) -> Option<Div> {
+    let message = scene.state.region_error(Region::NewSession)?;
+    Some(
+        div()
+            .flex()
+            .items_center()
+            .child(
+                div()
+                    .px(px(16.))
+                    .py(px(4.))
+                    .text_xs()
+                    .text_color(cx.theme().muted_foreground)
+                    .child(message.to_owned()),
+            )
+            .child(
+                retry_button("new-session-retry")
+                    .on_click(scene.on_click_dispatch(oc_state::Action::Retry(Region::NewSession))),
+            ),
+    )
 }
 
 fn footer(scene: Scene<'_>) -> Div {

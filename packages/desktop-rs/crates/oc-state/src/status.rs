@@ -50,6 +50,8 @@ pub enum Region {
     Messages,
     /// The composer; its error shows above it.
     Composer,
+    /// Creating a session; its error shows in the sidebar, and its Retry creates again.
+    NewSession,
 }
 
 /// Load state of the session list or of the open session's messages.

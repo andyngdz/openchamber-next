@@ -14,6 +14,7 @@ use serde_json::Value;
 
 pub use crate::metadata::MetadataUpdated;
 pub use crate::payload::*;
+pub use crate::tool_payload::*;
 
 /// One decoded frame.
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -61,7 +62,7 @@ pub enum EventData {
     TextDelta(TextDelta),
     TextEnded(TextEnded),
     ToolInputStarted(ToolInputStarted),
-    ToolCalled(ToolRef),
+    ToolCalled(ToolCalled),
     ToolSuccess(ToolRef),
     ToolFailed(ToolFailed),
     PermissionAsked(PermissionAsked),

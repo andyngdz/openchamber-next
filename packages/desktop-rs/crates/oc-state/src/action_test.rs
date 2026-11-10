@@ -118,9 +118,49 @@ fn an_accepted_prompt_clears_the_draft() {
     let mut state = opened("ses_a");
     state.apply(Action::DraftChanged("hello".to_owned()));
     state.apply(Action::PromptSent);
-    state.apply(Action::PromptAccepted);
+    state.apply(Action::PromptAccepted("hello".to_owned()));
     assert_eq!(state.composer().draft, "");
     assert_eq!(state.composer().status, ComposerStatus::Idle);
+}
+
+#[test]
+fn text_typed_while_the_prompt_was_in_flight_stays() {
+    let mut state = opened("ses_a");
+    state.apply(Action::DraftChanged("hello".to_owned()));
+    state.apply(Action::PromptSent);
+    state.apply(Action::DraftChanged("hello, and then".to_owned()));
+
+    state.apply(Action::PromptAccepted("hello".to_owned()));
+
+    assert_eq!(state.composer().draft, "hello, and then");
+    assert_eq!(state.composer().status, ComposerStatus::Idle);
+}
+
+#[test]
+fn a_failed_create_is_its_own_error_until_retried() {
+    let mut state = State::new(directory());
+    state.apply(Action::SessionsLoaded(Vec::new()));
+
+    state.apply(Action::CreateFailed(FAILURE.to_owned()));
+
+    assert_eq!(state.region_error(Region::NewSession), Some(FAILURE));
+    assert_eq!(
+        state.region_error(Region::Sidebar),
+        None,
+        "the list stays loaded"
+    );
+    state.apply(Action::Retry(Region::NewSession));
+    assert_eq!(state.region_error(Region::NewSession), None);
+}
+
+#[test]
+fn a_created_session_clears_the_create_error() {
+    let mut state = State::new(directory());
+    state.apply(Action::CreateFailed(FAILURE.to_owned()));
+
+    state.apply(Action::SessionCreated(session("ses_new", 1)));
+
+    assert_eq!(state.region_error(Region::NewSession), None);
 }
 
 #[test]

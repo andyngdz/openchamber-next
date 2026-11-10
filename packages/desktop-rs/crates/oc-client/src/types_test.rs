@@ -132,6 +132,16 @@ fn agent_turn_yields_one_assistant_message_per_step_with_tool_calls() {
         .collect();
     assert_eq!(tools.len(), 20);
     assert!(tools.iter().all(|t| *t == ("glob", ToolStatus::Completed)));
+    let patterns: Vec<_> = assistants
+        .iter()
+        .flat_map(|content| content.iter())
+        .filter_map(|c| match c {
+            AssistantContent::Tool { state, .. } => state.input["pattern"].as_str(),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(patterns.len(), 20);
+    assert_eq!(patterns.last(), Some(&"packages/*/package.json"));
     assert!(
         page.data
             .iter()

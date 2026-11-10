@@ -13,7 +13,7 @@ use crate::errors::{PortLineError, SidecarError, StartupDiagnostics};
 use crate::log_file::{LogCursor, log_file_path};
 use crate::pipes::{FirstLine, StderrTail, follow_stdout};
 use crate::port::parse_port_line;
-use crate::shutdown::{ShutdownOutcome, stop_cli};
+use crate::shutdown::{ShutdownOutcome, stop_cli, wait_for_exit};
 
 const NODE_PROGRAM: &str = "node";
 
@@ -58,9 +58,17 @@ pub(crate) fn launch(config: &SidecarConfig, port: u16) -> Result<Launched, Side
     };
     let exit_status = match failure {
         StartFailure::Exited => {
-            let status = child.wait().map_err(SidecarError::Wait)?;
+            // Stdout closed, so the CLI is exiting; one that hangs after
+            // closing it gets the stop path instead of blocking the caller.
+            let status = match wait_for_exit(&mut child, config.graceful_timeout)? {
+                Some(status) => Some(status),
+                None => {
+                    let outcome = stop_cli(&mut child, &mut Vec::new(), config.graceful_timeout)?;
+                    outcome_status(&outcome)
+                }
+            };
             stderr.wait_for_close();
-            Some(status)
+            status
         }
         StartFailure::InvalidLine(_) | StartFailure::ReadFailed(_) | StartFailure::TimedOut => {
             let outcome = stop_cli(&mut child, &mut Vec::new(), config.graceful_timeout)?;

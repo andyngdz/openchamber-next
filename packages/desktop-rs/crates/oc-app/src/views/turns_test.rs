@@ -3,7 +3,9 @@ use oc_state::{
     ToolItem, ToolStatus, UserMessage,
 };
 
-use super::{Block, format_seconds, tool_line, turns};
+use serde_json::json;
+
+use super::{Block, ToolTitle, format_seconds, repeat_indexes, tool_status, turns};
 
 fn user(text: &str) -> ChatMessage {
     ChatMessage::User(UserMessage {
@@ -37,6 +39,7 @@ fn tool(name: &str) -> Item {
     Item::Tool(ToolItem {
         call_id: "call_1".into(),
         name: name.to_owned(),
+        input: serde_json::Value::Null,
         status: ToolStatus::Completed,
     })
 }
@@ -112,11 +115,50 @@ fn seconds_round_to_one_decimal() {
     assert_eq!(format_seconds(300), "0.3s");
 }
 
+fn glob(pattern: serde_json::Value, status: ToolStatus) -> ToolItem {
+    ToolItem {
+        call_id: "call_1".into(),
+        name: "glob".to_owned(),
+        input: pattern,
+        status,
+    }
+}
+
 #[test]
-fn tool_line_is_name_and_status() {
-    let Item::Tool(row) = tool("glob") else {
+fn a_glob_row_is_titled_find_files_and_its_pattern() {
+    let row = glob(json!({"pattern": "*.md"}), ToolStatus::Completed);
+
+    let title = ToolTitle::of(&row);
+
+    assert_eq!(title.name, "Find Files");
+    assert_eq!(title.detail, Some("*.md"));
+    assert_eq!(title.accessible_name(), "Find Files *.md");
+    assert_eq!(tool_status(&row), None);
+}
+
+#[test]
+fn a_glob_row_without_input_yet_is_titled_find_files() {
+    let row = glob(serde_json::Value::Null, ToolStatus::Pending);
+
+    assert_eq!(ToolTitle::of(&row).accessible_name(), "Find Files");
+    assert_eq!(tool_status(&row), Some("pending"));
+}
+
+#[test]
+fn another_tool_keeps_its_raw_name() {
+    let Item::Tool(row) = tool("webfetch") else {
         unreachable!("tool() builds a tool item");
     };
 
-    assert_eq!(tool_line(&row), "glob: completed");
+    assert_eq!(ToolTitle::of(&row).accessible_name(), "webfetch");
+}
+
+#[test]
+fn only_repeated_titles_get_an_index() {
+    let titles = ["a", "b", "a", "c", "a"].map(str::to_owned);
+
+    assert_eq!(
+        repeat_indexes(&titles),
+        [Some(1), None, Some(2), None, Some(3)]
+    );
 }

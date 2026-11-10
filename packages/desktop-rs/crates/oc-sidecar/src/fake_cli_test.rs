@@ -39,6 +39,18 @@ pub(crate) fn crashes_with_log() -> String {
     )
 }
 
+/// Loses the bind race: Node's listen error reaches only the log file.
+pub(crate) fn listen_error_in_log() -> String {
+    format!(
+        "{PORT_ARG} const fs = require('fs'); const dir = process.env.OPENCHAMBER_DATA_DIR + '/logs'; fs.mkdirSync(dir, {{ recursive: true }}); fs.appendFileSync(dir + '/openchamber-' + port + '.log', 'Error: listen EADDRINUSE: address already in use 127.0.0.1:' + port + '\\n'); process.exit(1);"
+    )
+}
+
+/// Closes stdout without printing a line, then keeps running.
+pub(crate) fn closes_stdout_and_hangs() -> String {
+    format!("require('fs').closeSync(1); {STAY_ALIVE}")
+}
+
 /// Prints nothing and runs until signalled.
 pub(crate) fn stays_silent() -> String {
     STAY_ALIVE.to_owned()

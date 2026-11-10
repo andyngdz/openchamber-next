@@ -4,13 +4,15 @@
 
 mod live;
 
+pub(crate) use live::Started;
+
 use std::rc::Rc;
 
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::input::{InputEvent, TextareaState};
 use gpui_kit::{
     AppContext, Context, Entity, IntoElement, ParentElement, Render, ScrollHandle, Styled,
-    Subscription, Window, div, px,
+    Subscription, Task, Window, div, px,
 };
 use oc_state::{Action, State};
 
@@ -29,6 +31,8 @@ pub(crate) struct RootView {
     dispatch: Dispatch,
     /// The live server; `None` for a fixture, whose server-bound controls do nothing.
     link: Option<ServerLink>,
+    /// Waits for the server thread's answer to the latest start; a new start replaces it.
+    starting: Option<Task<()>>,
     _draft_events: Subscription,
 }
 
@@ -61,6 +65,7 @@ impl RootView {
             scroll: ScrollHandle::new(),
             dispatch,
             link,
+            starting: None,
             _draft_events: draft_events,
         }
     }

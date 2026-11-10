@@ -1,8 +1,8 @@
 //! Opens the window, and in dump mode writes the layout registry after the first frames.
 //!
-//! On a directory it first starts the sidecar on this thread, the main thread, before
-//! `Application::run` takes it over, and the I/O runtime on its own thread. Closing the last
-//! window stops the sidecar before the app quits.
+//! On a directory the sidecar starts on the server thread and the I/O runtime on its own
+//! thread, so the window opens at once on Starting. Closing the last window stops the sidecar
+//! before the app quits.
 
 mod live_start;
 
@@ -14,13 +14,13 @@ use gpui_kit::{
     AnyWindowHandle, App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions,
     application, assets, init, open_window, px, size,
 };
-use oc_state::{Action, ServerFailure, State};
+use oc_state::{Action, State};
 
 use crate::errors::AppError;
 use crate::fixture::StateScript;
 use crate::layout::{LayoutDump, LayoutRegistry};
 use crate::live::ServerLink;
-use crate::root::RootView;
+use crate::root::{RootView, Started};
 use crate::server::ServerProcess;
 use crate::theme::{self, DARK};
 
@@ -59,11 +59,11 @@ struct DumpTarget {
     name: String,
 }
 
-/// The server a live window talks to, and how its start went.
+/// The server a live window talks to, and the answer of its first start.
 struct LiveWindow {
     link: ServerLink,
     process: ServerProcess,
-    started: Result<u16, ServerFailure>,
+    started: Started,
 }
 
 /// What the window is opened for.
@@ -137,7 +137,7 @@ fn open(state: State, actions: Vec<Action>, mode: Mode) -> Result<(), AppError> 
                     view.dispatch(action, cx);
                 }
                 if let Some(started) = started {
-                    view.begin(started, window, cx);
+                    view.await_start(started, window, cx);
                 }
                 view
             })
@@ -161,7 +161,7 @@ fn quit_after_last_window(process: Option<ServerProcess>, cx: &mut App) {
     cx.on_window_closed(move |cx, _| {
         if cx.windows().is_empty() {
             if let Some(process) = process.as_ref() {
-                process.shutdown();
+                process.stop();
             }
             cx.quit();
         }

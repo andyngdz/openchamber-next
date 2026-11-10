@@ -7,7 +7,7 @@ use nix::sys::signal::{Signal, kill};
 use nix::unistd::Pid;
 
 use crate::errors::SidecarError;
-use crate::proc_scan::{is_opencode_serve_pid, opencode_children};
+use crate::proc_scan::{RecordedPid, opencode_children};
 
 const EXIT_POLL_INTERVAL: Duration = Duration::from_millis(50);
 
@@ -41,10 +41,10 @@ pub(crate) fn child_pid(child: &Child) -> Pid {
 }
 
 /// Adds the CLI's current `opencode serve` children to `recorded`.
-pub(crate) fn record_opencode_children(cli_pid: Pid, recorded: &mut Vec<Pid>) {
-    for pid in opencode_children(cli_pid) {
-        if !recorded.contains(&pid) {
-            recorded.push(pid);
+pub(crate) fn record_opencode_children(cli_pid: Pid, recorded: &mut Vec<RecordedPid>) {
+    for process in opencode_children(cli_pid) {
+        if !recorded.contains(&process) {
+            recorded.push(process);
         }
     }
 }
@@ -55,7 +55,7 @@ pub(crate) fn record_opencode_children(cli_pid: Pid, recorded: &mut Vec<Pid>) {
 /// runs in its own process group and the CLI's death does not reach it.
 pub(crate) fn stop_cli(
     child: &mut Child,
-    recorded: &mut Vec<Pid>,
+    recorded: &mut Vec<RecordedPid>,
     graceful_timeout: Duration,
 ) -> Result<ShutdownOutcome, SidecarError> {
     let cli_pid = child_pid(child);
@@ -81,18 +81,19 @@ pub(crate) fn stop_cli(
     })
 }
 
-fn exited(status: ExitStatus, recorded: &[Pid]) -> Result<ShutdownOutcome, SidecarError> {
+fn exited(status: ExitStatus, recorded: &[RecordedPid]) -> Result<ShutdownOutcome, SidecarError> {
     Ok(ShutdownOutcome::Exited {
         status,
         terminated_opencode: terminate_survivors(recorded)?,
     })
 }
 
-fn terminate_survivors(recorded: &[Pid]) -> Result<Vec<Pid>, SidecarError> {
+/// SIGTERM to each recorded process that is still the one recorded.
+fn terminate_survivors(recorded: &[RecordedPid]) -> Result<Vec<Pid>, SidecarError> {
     let survivors: Vec<Pid> = recorded
         .iter()
-        .copied()
-        .filter(|pid| is_opencode_serve_pid(*pid))
+        .filter(|process| process.is_still_running())
+        .map(|process| process.pid)
         .collect();
     for pid in &survivors {
         send_signal(*pid, Signal::SIGTERM)?;
@@ -100,7 +101,11 @@ fn terminate_survivors(recorded: &[Pid]) -> Result<Vec<Pid>, SidecarError> {
     Ok(survivors)
 }
 
-fn wait_for_exit(child: &mut Child, timeout: Duration) -> Result<Option<ExitStatus>, SidecarError> {
+/// Waits up to `timeout` for the child to exit; `None` when it is still running.
+pub(crate) fn wait_for_exit(
+    child: &mut Child,
+    timeout: Duration,
+) -> Result<Option<ExitStatus>, SidecarError> {
     let deadline = Instant::now() + timeout;
     loop {
         if let Some(status) = child.try_wait().map_err(SidecarError::Wait)? {

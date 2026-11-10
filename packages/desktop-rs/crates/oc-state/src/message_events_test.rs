@@ -135,6 +135,20 @@ fn agent_turn_has_one_assistant_message_per_step_and_twenty_finished_tools() {
             .iter()
             .all(|row| *row == ("glob", ToolStatus::Completed))
     );
+    let patterns: Vec<_> = steps
+        .iter()
+        .flat_map(|step| step.items.iter())
+        .filter_map(|item| match item {
+            Item::Tool(tool) => tool.input["pattern"].as_str(),
+            Item::Text(_) => None,
+        })
+        .collect();
+    assert_eq!(
+        patterns.len(),
+        20,
+        "every row keeps the input it was called with"
+    );
+    assert_eq!(patterns[0], "packages/*/package.json");
     assert!(steps.iter().all(|step| step.timing.duration_ms().is_some()));
     assert!(tool_rows(&steps[20].items).is_empty());
     assert_eq!(state.open_status(), SessionStatus::Idle);

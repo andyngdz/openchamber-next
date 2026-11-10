@@ -4,6 +4,7 @@
 //! the server adds later are ignored.
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 pub use crate::metadata::{SessionMetadata, WorkState};
 
@@ -150,11 +151,14 @@ pub enum AssistantContent {
     Other,
 }
 
-/// State of a tool call; only the status is read.
+/// State of a tool call: its status and its input.
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct ToolState {
     /// Where the call is in its life.
     pub status: ToolStatus,
+    /// The tool's arguments; missing while the input still streams.
+    #[serde(default)]
+    pub input: Value,
 }
 
 /// Status of a tool call as the message list reports it. A status the spike does not

@@ -22,6 +22,8 @@ pub enum Action {
     SessionsFailed(String),
     /// `POST /api/session` answered: the session joins the list and opens, with no messages.
     SessionCreated(Session),
+    /// `POST /api/session` failed; the sidebar shows the error with a Retry that creates again.
+    CreateFailed(String),
     /// The user picked a session; its messages load next.
     OpenSession(SessionId),
     /// `GET /api/session/:id/message` answered for `session`.
@@ -44,8 +46,9 @@ pub enum Action {
     DraftChanged(String),
     /// The prompt request left.
     PromptSent,
-    /// The server accepted the prompt; the draft clears.
-    PromptAccepted,
+    /// The server accepted the prompt with this text. The draft clears only while it still
+    /// holds that text: what the user typed while the prompt was in flight stays.
+    PromptAccepted(String),
     /// The prompt request failed; the draft stays.
     PromptFailed(String),
 }
@@ -59,6 +62,7 @@ impl State {
             Action::SessionsLoaded(sessions) => self.load_sessions(&sessions),
             Action::SessionsFailed(message) => self.sidebar = LoadStatus::Failed { message },
             Action::SessionCreated(session) => self.add_created_session(&session),
+            Action::CreateFailed(message) => self.create_error = Some(message),
             Action::OpenSession(id) => self.open_session(id, LoadStatus::Loading),
             Action::MessagesLoaded { session, messages } => {
                 self.set_messages(&session, LoadStatus::Ready, Some(&messages));
@@ -69,8 +73,10 @@ impl State {
             Action::Retry(region) => self.retry(region),
             Action::DraftChanged(draft) => self.composer.draft = draft,
             Action::PromptSent => self.composer.status = ComposerStatus::Sending,
-            Action::PromptAccepted => {
-                self.composer.draft.clear();
+            Action::PromptAccepted(sent) => {
+                if self.composer.draft == sent {
+                    self.composer.draft.clear();
+                }
                 self.composer.status = ComposerStatus::Idle;
             }
             Action::PromptFailed(message) => {
@@ -90,6 +96,7 @@ impl State {
     }
 
     fn add_created_session(&mut self, session: &Session) {
+        self.create_error = None;
         self.sessions.insert(session_entry(session));
         let id = SessionId::from(session.id.as_str());
         self.open_session(id, LoadStatus::Ready);
@@ -131,6 +138,7 @@ impl State {
                 }
             }
             Region::Composer => self.composer.status = ComposerStatus::Idle,
+            Region::NewSession => self.create_error = None,
         }
     }
 }

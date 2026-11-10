@@ -83,6 +83,7 @@ fn items(content: &[AssistantContent]) -> Vec<Item> {
             AssistantContent::Tool { id, name, state } => Some(Item::Tool(ToolItem {
                 call_id: CallId::from(id.as_str()),
                 name: name.clone(),
+                input: state.input.clone(),
                 status: state.status,
             })),
             AssistantContent::Other => None,

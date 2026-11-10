@@ -4,10 +4,12 @@
 //! load when it opens.
 
 use oc_client::event::{
-    InboxEnqueued, StepEnded, StepStarted, TextDelta, TextEnded, TextRef, ToolInputStarted,
+    InboxEnqueued, StepEnded, StepStarted, TextDelta, TextEnded, TextRef, ToolCalled,
+    ToolInputStarted,
 };
 use oc_client::types::ToolStatus;
 use oc_client::{Event, EventData};
+use serde_json::Value;
 
 use crate::ids::{CallId, MessageId};
 use crate::message::{
@@ -28,7 +30,8 @@ pub(crate) fn reduce_message_event(state: &mut State, event: &Event) {
         EventData::TextDelta(delta) => &delta.session_id,
         EventData::TextEnded(text) => &text.session_id,
         EventData::ToolInputStarted(tool) => &tool.session_id,
-        EventData::ToolCalled(tool) | EventData::ToolSuccess(tool) => &tool.session_id,
+        EventData::ToolCalled(tool) => &tool.session_id,
+        EventData::ToolSuccess(tool) => &tool.session_id,
         EventData::ToolFailed(tool) => &tool.session_id,
         EventData::ServerConnected
         | EventData::SessionCreated(_)
@@ -64,15 +67,7 @@ fn apply(messages: &mut Vec<ChatMessage>, event: &Event, at: u64) {
         EventData::TextDelta(delta) => append_text(messages, event, delta),
         EventData::TextEnded(text) => replace_text(messages, event, text),
         EventData::ToolInputStarted(tool) => start_tool(messages, event, tool),
-        EventData::ToolCalled(tool) => {
-            set_tool(
-                messages,
-                event,
-                &tool.assistant_message_id,
-                &tool.id,
-                ToolStatus::Running,
-            );
-        }
+        EventData::ToolCalled(tool) => call_tool(messages, event, tool),
         EventData::ToolSuccess(tool) => {
             set_tool(
                 messages,
@@ -178,10 +173,22 @@ fn start_tool(messages: &mut [ChatMessage], event: &Event, tool: &ToolInputStart
             step.items.push(Item::Tool(ToolItem {
                 call_id: CallId::from(tool.id.as_str()),
                 name: tool.name.clone(),
+                input: Value::Null,
                 status: ToolStatus::Pending,
             }));
         }
     });
+}
+
+/// The input is complete: the row gets it and the call runs.
+fn call_tool(messages: &mut [ChatMessage], event: &Event, tool: &ToolCalled) {
+    with_step(messages, event, &tool.assistant_message_id, |step| {
+        if let Some(row) = step.tool_mut(&tool.id) {
+            row.input.clone_from(&tool.input);
+        }
+    });
+    let (message_id, call_id) = (&tool.assistant_message_id, &tool.id);
+    set_tool(messages, event, message_id, call_id, ToolStatus::Running);
 }
 
 /// A finished call keeps its result: a late or replayed transition does not move it back.

@@ -25,4 +25,4 @@ pub use log_file::{TAIL_LINES, log_file_path, resolve_data_dir};
 pub use nix::unistd::Pid;
 pub use port::{is_port_in_use_message, parse_port_line, pick_free_port};
 pub use shutdown::ShutdownOutcome;
-pub use sidecar::{MAX_START_ATTEMPTS, Sidecar};
+pub use sidecar::{CliState, MAX_START_ATTEMPTS, Sidecar};

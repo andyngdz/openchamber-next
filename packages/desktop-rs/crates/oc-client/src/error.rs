@@ -20,7 +20,22 @@ pub enum ClientError {
     /// The server accepted the connection but did not answer in time.
     #[error("server did not answer within {seconds} seconds")]
     Timeout { seconds: u64 },
+    /// The event stream sent nothing, not even a heartbeat, for this long.
+    #[error("event stream sent nothing for {seconds} seconds")]
+    EventsIdle { seconds: u64 },
     /// The event stream broke after it had opened.
     #[error("event stream failed: {0}")]
     Stream(String),
+}
+
+/// Why the byte stream under the event parser stopped; [`crate::Client::events`] turns it
+/// into a [`ClientError`].
+#[derive(Debug, Error)]
+pub(crate) enum ByteError {
+    /// The connection broke.
+    #[error(transparent)]
+    Transport(reqwest::Error),
+    /// Nothing arrived within the idle limit.
+    #[error("no bytes within the idle limit")]
+    Idle,
 }

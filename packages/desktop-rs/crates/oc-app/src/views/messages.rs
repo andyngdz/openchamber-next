@@ -10,7 +10,8 @@ use gpui_kit::{
 use oc_state::{Action, LoadStatus, Region, SessionStatus};
 
 use super::composer::WIDTH;
-use super::turns::{Block, Turn, TurnMeta, tool_line, turns};
+use super::tool_rows::{ToolSpecs, activity, tool_row_specs};
+use super::turns::{Block, Turn, TurnMeta, turns};
 use super::{Scene, icon_button, retry_button};
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 
@@ -34,6 +35,7 @@ pub(crate) fn messages(scene: Scene<'_>, scroll: &ScrollHandle, cx: &App) -> Div
     let busy = scene.state.open_status() == SessionStatus::Busy;
     let all = turns(&open.messages);
     let count = all.len();
+    let mut tool_specs = tool_row_specs(&all).into_iter();
     let column = div()
         .w(px(WIDTH))
         .mx_auto()
@@ -44,7 +46,7 @@ pub(crate) fn messages(scene: Scene<'_>, scroll: &ScrollHandle, cx: &App) -> Div
         .children(all.iter().enumerate().map(|(index, turn)| {
             // The last turn of a busy session is still running: no meta row yet.
             let meta = turn.meta().filter(|_| !(busy && index + 1 == count));
-            turn_view(scene, index, turn, meta, cx)
+            turn_view(scene, index, turn, meta, &mut tool_specs, cx)
         }))
         .children(load_line(scene, &open.load, cx));
     let scroller_spec = ControlSpec::named(Area::ChatColumn, Role::Generic, SCROLLER);
@@ -89,6 +91,7 @@ fn turn_view(
     index: usize,
     turn: &Turn<'_>,
     meta: Option<TurnMeta>,
+    tool_specs: &mut ToolSpecs,
     cx: &App,
 ) -> AnyElement {
     div()
@@ -96,7 +99,11 @@ fn turn_view(
         .flex_col()
         .gap(px(8.))
         .children(turn.user_text.map(|text| user_bubble(text, cx)))
-        .children(turn.blocks().into_iter().map(|block| block_view(block, cx)))
+        .children(
+            turn.blocks()
+                .into_iter()
+                .map(|block| block_view(scene, block, tool_specs, cx)),
+        )
         .children(meta.map(|meta| meta_row(scene, index, &meta, cx)))
         .into_any_element()
 }
@@ -114,25 +121,15 @@ fn user_bubble(text: &str, cx: &App) -> Div {
     )
 }
 
-fn block_view(block: Block<'_>, cx: &App) -> AnyElement {
+fn block_view(
+    scene: Scene<'_>,
+    block: Block<'_>,
+    tool_specs: &mut ToolSpecs,
+    cx: &App,
+) -> AnyElement {
     match block {
         Block::Text(text) => div().text_sm().child(text.to_owned()).into_any_element(),
-        Block::Activity(tools) => div()
-            .flex()
-            .flex_col()
-            .gap(px(2.))
-            .child(
-                div()
-                    .text_xs()
-                    .text_color(cx.theme().muted_foreground)
-                    .child("Activity"),
-            )
-            .children(
-                tools
-                    .into_iter()
-                    .map(|tool| div().text_xs().child(tool_line(tool))),
-            )
-            .into_any_element(),
+        Block::Activity(tools) => activity(scene, tools, tool_specs, cx).into_any_element(),
     }
 }
 

@@ -5,203 +5,24 @@
 //! Each case has its own isolated temp root and fixture provider, removed by a guard; the
 //! cases run one at a time.
 
-use std::ffi::OsString;
-use std::fs;
 use std::io::{BufRead, BufReader, Write};
-use std::net::TcpStream;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Mutex, MutexGuard, PoisonError, mpsc};
+use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
 
 use futures::StreamExt;
 use oc_client::{Client, EventData};
-use oc_sidecar::{ShutdownOutcome, Sidecar, SidecarConfig, locate_cli, pick_free_port};
-use serde_json::{Value, json};
+use oc_sidecar::{ShutdownOutcome, Sidecar, SidecarConfig, locate_cli};
+use serde_json::Value;
 
-const FIXTURE_SCRIPT: &str = "scripts/perf/fixture-provider.mjs";
-const MODEL: &str = "perf/stream-1200cps";
-const PROVIDER_START_LIMIT: Duration = Duration::from_secs(15);
-const OPENCODE_START_LIMIT: Duration = Duration::from_secs(30);
+mod common;
+
+use common::{Env, enabled, fail, is_gone, wait_for_opencode, wait_until_gone};
+
 const DELTA_LIMIT: Duration = Duration::from_secs(60);
-const GONE_LIMIT: Duration = Duration::from_secs(15);
 const HOLD_LINE_LIMIT: Duration = Duration::from_secs(60);
-const POLL: Duration = Duration::from_millis(100);
-
-static ONE_AT_A_TIME: Mutex<()> = Mutex::new(());
-static CASES: AtomicUsize = AtomicUsize::new(0);
-
-fn enabled() -> bool {
-    let on = std::env::var("OC_DESKTOP_IT").is_ok_and(|value| value == "1");
-    if !on {
-        writeln!(
-            std::io::stderr(),
-            "sidecar_it: skipped, set OC_DESKTOP_IT=1"
-        )
-        .ok();
-    }
-    on
-}
-
-fn fail(what: &str, error: impl std::fmt::Display) -> ! {
-    panic!("{what}: {error}")
-}
-
-/// The nearest ancestor of the fixtures directory that has the provider script.
-fn repo_root() -> PathBuf {
-    Path::new(env!("OC_DESKTOP_FIXTURES"))
-        .ancestors()
-        .find(|dir| dir.join(FIXTURE_SCRIPT).is_file())
-        .map(Path::to_path_buf)
-        .unwrap_or_else(|| {
-            fail(
-                "repo root",
-                "no ancestor of the fixtures dir has the provider",
-            )
-        })
-}
-
-struct Env {
-    root: PathBuf,
-    project: PathBuf,
-    provider: Child,
-    config: String,
-    _serial: MutexGuard<'static, ()>,
-}
-
-impl Env {
-    fn new() -> Self {
-        let serial = ONE_AT_A_TIME.lock().unwrap_or_else(PoisonError::into_inner);
-        let index = CASES.fetch_add(1, Ordering::Relaxed);
-        let root =
-            std::env::temp_dir().join(format!("oc-app-sidecar-it-{}-{index}", std::process::id()));
-        let project = root.join("project");
-        for dir in [&project, &root.join("home"), &root.join("data")] {
-            fs::create_dir_all(dir).unwrap_or_else(|error| fail("create dir", error));
-        }
-        let port = pick_free_port().unwrap_or_else(|error| fail("free port", error));
-        let provider = start_provider(port);
-        let config = opencode_config(port);
-        let env = Self {
-            root,
-            project,
-            provider,
-            config,
-            _serial: serial,
-        };
-        let status = Command::new("git")
-            .args(["init", "-q"])
-            .current_dir(&env.project)
-            .status()
-            .unwrap_or_else(|error| fail("git init", error));
-        assert!(status.success(), "git init failed in the scratch project");
-        env
-    }
-
-    /// The env the CLI sees: isolated home, data dir and OpenCode config.
-    fn child_env(&self) -> Vec<(OsString, OsString)> {
-        vec![
-            ("HOME".into(), self.root.join("home").into()),
-            ("OPENCHAMBER_DATA_DIR".into(), self.root.join("data").into()),
-            ("OPENCODE_CONFIG_CONTENT".into(), self.config.clone().into()),
-        ]
-    }
-
-    fn sidecar_config(&self, graceful: Duration) -> SidecarConfig {
-        let cli = locate_cli().unwrap_or_else(|error| fail("locate cli", error));
-        let mut config = SidecarConfig::new(cli, self.project.clone(), self.child_env());
-        config.graceful_timeout = graceful;
-        config
-    }
-}
-
-impl Drop for Env {
-    fn drop(&mut self) {
-        self.provider.kill().ok();
-        self.provider.wait().ok();
-        fs::remove_dir_all(&self.root).ok();
-    }
-}
-
-fn start_provider(port: u16) -> Child {
-    let mut child = Command::new("node")
-        .arg(repo_root().join(FIXTURE_SCRIPT))
-        .arg(port.to_string())
-        .stdin(Stdio::null())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .spawn()
-        .unwrap_or_else(|error| fail("start fixture provider", error));
-    let deadline = Instant::now() + PROVIDER_START_LIMIT;
-    while TcpStream::connect(("127.0.0.1", port)).is_err() {
-        if Instant::now() >= deadline {
-            child.kill().ok();
-            child.wait().ok();
-            fail("fixture provider", "did not listen in time");
-        }
-        thread::sleep(POLL);
-    }
-    child
-}
-
-fn opencode_config(port: u16) -> String {
-    let output = Command::new("node")
-        .arg(repo_root().join(FIXTURE_SCRIPT))
-        .arg(port.to_string())
-        .arg("--print-config")
-        .output()
-        .unwrap_or_else(|error| fail("provider config", error));
-    let mut config: Value = serde_json::from_slice(&output.stdout)
-        .unwrap_or_else(|error| fail("provider config JSON", error));
-    config["model"] = json!(MODEL);
-    config["small_model"] = json!(MODEL);
-    config["autoupdate"] = json!(false);
-    config["share"] = json!("disabled");
-    config.to_string()
-}
-
-fn is_gone(pid: i32) -> bool {
-    match fs::read_to_string(format!("/proc/{pid}/stat")) {
-        Err(_) => true,
-        Ok(stat) => stat
-            .rsplit_once(')')
-            .and_then(|(_, rest)| rest.split_whitespace().next().map(|state| state == "Z"))
-            .unwrap_or(true),
-    }
-}
-
-fn wait_until_gone(label: &str, pids: &[i32]) {
-    let deadline = Instant::now() + GONE_LIMIT;
-    loop {
-        let alive: Vec<i32> = pids.iter().copied().filter(|pid| !is_gone(*pid)).collect();
-        if alive.is_empty() {
-            return;
-        }
-        assert!(
-            Instant::now() < deadline,
-            "{label}: pids still running after {GONE_LIMIT:?}: {alive:?}"
-        );
-        thread::sleep(POLL);
-    }
-}
-
-fn wait_for_opencode(sidecar: &mut Sidecar) -> Vec<i32> {
-    let deadline = Instant::now() + OPENCODE_START_LIMIT;
-    while sidecar.record_opencode_pids().is_empty() {
-        assert!(
-            Instant::now() < deadline,
-            "no opencode serve child within {OPENCODE_START_LIMIT:?}"
-        );
-        thread::sleep(POLL);
-    }
-    sidecar
-        .opencode_pids()
-        .iter()
-        .map(|pid| pid.as_raw())
-        .collect()
-}
 
 /// Auth, list, create, open events, send a prompt, wait for that session's text delta.
 async fn drive_session(client: &Client) {
@@ -397,4 +218,60 @@ fn killed_parent_takes_the_server_down() {
     guard.0.wait().ok();
     wait_until_gone("cli", &[cli_pid]);
     wait_until_gone("opencode", &opencode);
+}
+
+/// The server lists a directory's sessions under its real path, whatever path the list asks
+/// for, and a session created under a symlinked path never shows in any list. The app
+/// therefore canonicalizes its directory before it creates or lists anything.
+#[test]
+fn sessions_are_listed_under_the_real_path_of_a_symlinked_project() {
+    if !enabled() {
+        return;
+    }
+    let env = Env::new();
+    let link = env.root.join("link");
+    std::os::unix::fs::symlink(&env.project, &link).unwrap_or_else(|error| fail("symlink", error));
+    let mut sidecar = Sidecar::start(&env.sidecar_config(SidecarConfig::DEFAULT_GRACEFUL_TIMEOUT))
+        .unwrap_or_else(|error| fail("start sidecar", error));
+    wait_for_opencode(&mut sidecar);
+    let client = |directory: &Path| {
+        Client::new(sidecar.port(), directory.to_string_lossy().into_owned())
+            .unwrap_or_else(|error| fail("client", error))
+    };
+    let (through_link, real) = (client(&link), client(&env.project));
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap_or_else(|error| fail("tokio runtime", error));
+    let project = env.project.to_string_lossy().into_owned();
+
+    let (lost, kept, listed) = runtime.block_on(async {
+        real.check_auth()
+            .await
+            .unwrap_or_else(|error| fail("auth", error));
+        let lost = through_link
+            .create_session()
+            .await
+            .unwrap_or_else(|error| fail("create through the link", error));
+        let kept = real
+            .create_session()
+            .await
+            .unwrap_or_else(|error| fail("create", error));
+        let listed = through_link
+            .list_sessions()
+            .await
+            .unwrap_or_else(|error| fail("list through the link", error));
+        (lost, kept, listed)
+    });
+    sidecar.shutdown().ok();
+
+    let listed: Vec<(&str, &str)> = listed
+        .iter()
+        .map(|session| (session.id.as_str(), session.location.directory.as_str()))
+        .collect();
+    assert_eq!(listed, [(kept.id.as_str(), project.as_str())]);
+    assert!(
+        !listed.iter().any(|(id, _)| *id == lost.id),
+        "a session created under the link path is listed: {listed:?}"
+    );
 }

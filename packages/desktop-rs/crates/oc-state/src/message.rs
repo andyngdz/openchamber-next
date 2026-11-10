@@ -4,6 +4,7 @@
 //! assistant messages. Grouping steps into a turn is a layout concern.
 
 use oc_client::types::{ModelRef, ToolStatus};
+use serde_json::Value;
 
 use crate::ids::{CallId, MessageId};
 
@@ -140,7 +141,7 @@ impl AssistantMessage {
 pub enum Item {
     /// A text block, drawn as plain text.
     Text(TextItem),
-    /// A tool call, drawn as `name: status` under the Activity row.
+    /// A tool call, drawn as its title row under the Activity row.
     Tool(ToolItem),
 }
 
@@ -160,6 +161,8 @@ pub struct ToolItem {
     pub call_id: CallId,
     /// Tool name.
     pub name: String,
+    /// The tool's arguments; `Null` until `session.tool.called` delivers them.
+    pub input: Value,
     /// Where the call is in its life.
     pub status: ToolStatus,
 }

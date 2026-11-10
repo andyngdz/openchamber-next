@@ -52,10 +52,25 @@ fn detects_the_port_in_use_message() {
 }
 
 #[test]
+fn detects_another_instance_on_the_port() {
+    let stderr = vec![
+        "Error: OpenChamber is already running on port 4100. Use `openchamber status` or `openchamber stop --port 4100`."
+            .to_owned(),
+    ];
+    assert!(is_port_in_use_message(&stderr));
+}
+
+#[test]
+fn detects_a_listen_error_from_the_log() {
+    let log = vec!["Error: listen EADDRINUSE: address already in use 127.0.0.1:4100".to_owned()];
+    assert!(is_port_in_use_message(&log));
+}
+
+#[test]
 fn other_startup_errors_are_not_port_in_use() {
     let stderr = vec![
-        "Error: OpenChamber is already running on port 4100 (PID: 12)".to_owned(),
         "Error: Port 4100 is used by OpenChamber Desktop app.".to_owned(),
+        "Error: OpenCode CLI not found".to_owned(),
     ];
     assert!(!is_port_in_use_message(&stderr));
     assert!(!is_port_in_use_message(&[]));

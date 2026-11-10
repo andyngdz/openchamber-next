@@ -41,10 +41,13 @@ pub enum AppError {
     /// The I/O runtime or its thread could not start.
     #[error("cannot start the I/O runtime: {0}")]
     StartRuntime(std::io::Error),
+    /// The thread that owns the sidecar could not start.
+    #[error("cannot start the server thread: {0}")]
+    StartServerThread(std::io::Error),
     /// The I/O thread ended before it built its runtime.
     #[error("the I/O thread exited before its runtime started")]
     RuntimeThreadExited,
-    /// The project directory could not be made absolute.
+    /// The project directory could not be resolved to its real path.
     #[error("cannot resolve the directory {path}: {source}")]
     ResolveDirectory {
         /// The directory as given.

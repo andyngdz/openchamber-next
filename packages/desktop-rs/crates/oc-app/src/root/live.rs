@@ -1,6 +1,7 @@
 //! The root view's side of the live server: intents become requests, updates become actions.
 
 use futures::StreamExt;
+use futures::channel::oneshot;
 use gpui_kit::{Context, Window};
 use oc_state::{Action, ConnectionStatus, Region, ServerFailure};
 
@@ -8,10 +9,31 @@ use super::RootView;
 use crate::live::{Command, Update};
 use crate::views::Intent;
 
+/// The server thread's answer to a start.
+pub(crate) type Started = oneshot::Receiver<Result<u16, ServerFailure>>;
+
 impl RootView {
-    /// Starts the session against the server started before the window opened, or shows why
-    /// it did not start.
-    pub(crate) fn begin(
+    /// Waits off the main thread for the server thread to start the sidecar, then begins.
+    pub(crate) fn await_start(
+        &mut self,
+        started: Started,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        self.starting = Some(cx.spawn_in(window, async move |view, cx| {
+            let started = started.await.unwrap_or_else(|_| {
+                Err(ServerFailure {
+                    message: "The server thread stopped before the server started".to_owned(),
+                    ..ServerFailure::default()
+                })
+            });
+            view.update_in(cx, |this, window, cx| this.begin(started, window, cx))
+                .ok();
+        }));
+    }
+
+    /// Starts the session against the started server, or shows why it did not start.
+    fn begin(
         &mut self,
         started: Result<u16, ServerFailure>,
         window: &mut Window,
@@ -32,11 +54,7 @@ impl RootView {
                 self.request_for(&action, cx);
                 self.dispatch(action, cx);
             }
-            Intent::NewSession => {
-                if *self.state.read(cx).connection() == ConnectionStatus::Connected {
-                    self.send(Command::CreateSession).ok();
-                }
-            }
+            Intent::NewSession => self.create_session(cx),
             Intent::SendPrompt => self.send_prompt(cx),
             Intent::RestartServer => self.restart_server(window, cx),
         }
@@ -51,21 +69,32 @@ impl RootView {
             }
             Action::Retry(Region::Sidebar) => Some(Command::LoadSessions),
             Action::Retry(Region::Messages) => open.map(Command::LoadMessages),
+            Action::Retry(Region::NewSession) => {
+                self.create_session(cx);
+                None
+            }
             Action::Retry(Region::Composer)
             | Action::Event(_)
             | Action::Connection(_)
             | Action::SessionsLoaded(_)
             | Action::SessionsFailed(_)
             | Action::SessionCreated(_)
+            | Action::CreateFailed(_)
             | Action::MessagesLoaded { .. }
             | Action::MessagesFailed { .. }
             | Action::DraftChanged(_)
             | Action::PromptSent
-            | Action::PromptAccepted
+            | Action::PromptAccepted(_)
             | Action::PromptFailed(_) => None,
         };
         if let Some(command) = command {
             self.send(command).ok();
+        }
+    }
+
+    fn create_session(&mut self, cx: &Context<Self>) {
+        if *self.state.read(cx).connection() == ConnectionStatus::Connected {
+            self.send(Command::CreateSession).ok();
         }
     }
 
@@ -85,28 +114,16 @@ impl RootView {
         }
     }
 
-    /// Stops the server, shows Starting, and starts it again once that frame is drawn, since
-    /// the start blocks the main thread until the port line arrives.
+    /// Drops the session, shows Starting, and has the server thread stop the server and start
+    /// it again; the window stays responsive meanwhile.
     fn restart_server(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let Some(link) = self.link.as_mut() else {
             return;
         };
         link.disconnect();
-        link.process().shutdown();
-        self.dispatch(Action::Connection(ConnectionStatus::Starting), cx);
-        let view = cx.entity().downgrade();
-        window.on_next_frame(move |window, cx| {
-            view.update(cx, |this, cx| this.start_server(window, cx))
-                .ok();
-        });
-    }
-
-    fn start_server(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let Some(link) = self.link.as_ref() else {
-            return;
-        };
         let started = link.process().start();
-        self.begin(started, window, cx);
+        self.dispatch(Action::Connection(ConnectionStatus::Starting), cx);
+        self.await_start(started, window, cx);
     }
 
     fn connect(&mut self, port: u16, window: &mut Window, cx: &mut Context<Self>) {
@@ -144,34 +161,48 @@ impl RootView {
         }
     }
 
-    /// A dropped stream or a failed check may mean the CLI died: then the session ends and the
-    /// header shows how the server exited.
+    /// A dropped stream or a failed check may mean the CLI died: the server thread is asked,
+    /// and if it did, the session ends and the header shows how the server exited.
     fn apply_live(&mut self, action: Action, window: &mut Window, cx: &mut Context<Self>) {
         if let Action::Connection(status) = &action {
             match status {
                 ConnectionStatus::Connected => self.record_opencode_pids(),
                 ConnectionStatus::Reconnecting { .. } | ConnectionStatus::Failed(_) => {
-                    if let Some(exit) = self.server_exit() {
-                        self.dispatch(Action::Connection(ConnectionStatus::ServerExited(exit)), cx);
-                        return;
-                    }
+                    self.check_server_exit(window, cx);
                 }
                 ConnectionStatus::Starting | ConnectionStatus::ServerExited(_) => {}
             }
         }
-        if action == Action::PromptAccepted {
+        // Text typed while the prompt was in flight stays in the composer.
+        if let Action::PromptAccepted(sent) = &action
+            && self.draft.read(cx).value() == sent.as_str()
+        {
             self.draft
                 .update(cx, |draft, cx| draft.set_value("", window, cx));
         }
         self.dispatch(action, cx);
     }
 
-    /// How the CLI ended, once it has; the session with it is dropped.
-    fn server_exit(&mut self) -> Option<oc_state::ServerExit> {
-        let link = self.link.as_mut()?;
-        let exit = link.process().exit()?;
-        link.disconnect();
-        Some(exit)
+    /// Once the server thread says the CLI ended, the session with it is dropped and the
+    /// header shows the exit. The status that prompted the check shows until the answer.
+    fn check_server_exit(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(link) = self.link.as_ref() else {
+            return;
+        };
+        let answer = link.process().exit();
+        cx.spawn_in(window, async move |view, cx| {
+            let Ok(Some(exit)) = answer.await else {
+                return;
+            };
+            view.update_in(cx, |this, _, cx| {
+                if let Some(link) = this.link.as_mut() {
+                    link.disconnect();
+                }
+                this.dispatch(Action::Connection(ConnectionStatus::ServerExited(exit)), cx);
+            })
+            .ok();
+        })
+        .detach();
     }
 
     fn record_opencode_pids(&self) {

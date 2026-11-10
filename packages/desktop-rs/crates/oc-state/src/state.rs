@@ -34,6 +34,8 @@ pub struct State {
     pub(crate) sidebar: LoadStatus,
     pub(crate) open: Option<OpenSession>,
     pub(crate) composer: Composer,
+    /// Why the last `POST /api/session` failed, until a create succeeds or is retried.
+    pub(crate) create_error: Option<String>,
 }
 
 impl State {
@@ -46,6 +48,7 @@ impl State {
             sidebar: LoadStatus::Loading,
             open: None,
             composer: Composer::default(),
+            create_error: None,
         }
     }
 
@@ -106,6 +109,7 @@ impl State {
                 ComposerStatus::Failed { message } => Some(message),
                 ComposerStatus::Idle | ComposerStatus::Sending => None,
             },
+            Region::NewSession => self.create_error.as_deref(),
         }
     }
 

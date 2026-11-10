@@ -201,3 +201,41 @@ fn sessions_are_ordered_by_the_end_of_their_last_turn() {
     // `ses_none` has no turn stamp, so it falls back to its `updated` and sorts last.
     assert_eq!(order, ["ses_new", "ses_old", "ses_none"]);
 }
+
+fn asked(at: u64) -> oc_client::Event {
+    crate::fixture_test::event(
+        "permission.asked",
+        at,
+        serde_json::json!({"id": "per_1", "sessionID": "ses_a"}),
+    )
+}
+
+#[test]
+fn a_reload_of_an_idle_session_drops_its_pending_request() {
+    let mut state = opened("ses_a");
+    replay(&mut state, &[started(100), asked(110)]);
+    assert!(state.open_is_waiting());
+
+    // The reply and the turn's end were missed while the event stream was down.
+    state.apply(Action::SessionsLoaded(vec![turn_session(
+        "ses_a",
+        Some(100),
+        Some(200),
+    )]));
+
+    assert!(!state.open_is_waiting());
+}
+
+#[test]
+fn a_reload_of_a_busy_session_keeps_its_pending_request() {
+    let mut state = opened("ses_a");
+    replay(&mut state, &[started(100), asked(110)]);
+
+    state.apply(Action::SessionsLoaded(vec![turn_session(
+        "ses_a",
+        Some(100),
+        Some(50),
+    )]));
+
+    assert!(state.open_is_waiting());
+}

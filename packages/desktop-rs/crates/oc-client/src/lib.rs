@@ -10,6 +10,7 @@ pub mod event;
 mod message_id;
 mod metadata;
 mod payload;
+mod tool_payload;
 pub mod types;
 mod uri_component;
 

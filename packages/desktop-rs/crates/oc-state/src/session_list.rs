@@ -147,7 +147,10 @@ impl SessionList {
     }
 
     /// Replaces the rows with a fresh list. Pending requests come only from events, so a
-    /// session that stays listed keeps them, and its activity never moves back. The listed
+    /// session that stays listed keeps them while a turn runs; a session that is idle after
+    /// the merge drops them, since nothing waits for an answer outside a turn, and a reply
+    /// event missed while disconnected would otherwise keep it waiting for good. Activity
+    /// never moves back. The listed
     /// status wins only when its turn stamp is newer than the status already held, so a
     /// reload corrects a status whose ending event was missed, while an older snapshot never
     /// overrides a newer event.
@@ -161,7 +164,9 @@ impl SessionList {
                         entry.status = old.status;
                         entry.status_at = old.status_at;
                     }
-                    entry.pending.clone_from(&old.pending);
+                    if entry.status != SessionStatus::Idle {
+                        entry.pending.clone_from(&old.pending);
+                    }
                     entry.activity = entry.activity.max(old.activity);
                 }
                 entry

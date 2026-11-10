@@ -125,6 +125,14 @@ fn agent_turn_carries_tool_names_and_one_step_per_message() {
         count(&events, |d| matches!(d, EventData::ToolCalled(_))),
         20
     );
+    let first_input = events.iter().find_map(|e| match &e.data {
+        EventData::ToolCalled(called) => Some(&called.input),
+        _ => None,
+    });
+    assert_eq!(
+        first_input,
+        Some(&serde_json::json!({"pattern": "packages/*/package.json"}))
+    );
     assert_eq!(
         count(&events, |d| matches!(d, EventData::ToolSuccess(_))),
         20
