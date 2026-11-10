@@ -1,0 +1,146 @@
+//! The directory's sessions in the order the sidebar shows them.
+//!
+//! The React sidebar orders a directory's sessions newest activity first
+//! (`compareSessionsByLifecycleOrder` in `packages/ui/src/sync/session-ordering.ts`): a session
+//! moves to the top when it starts or ends a turn, and otherwise sits at its last activity time,
+//! ties broken by newer creation, then by id. Here a turn start or end stamps the event's
+//! `created`, and a loaded session starts at `time.updated` (else `time.created`); React reads
+//! `time.idle` first, which the client's session type does not decode, and a rename does not move
+//! a session in either. Pinned sessions, which React lists first, do not exist in the spike.
+
+use std::cmp::Reverse;
+
+use crate::ids::{RequestId, SessionId};
+use crate::status::SessionStatus;
+
+/// A request from the agent the user has not answered.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum PendingRequest {
+    /// A `permission.asked` request.
+    Permission(RequestId),
+    /// A `form.created` form.
+    Form(RequestId),
+}
+
+/// One sidebar row.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SessionEntry {
+    /// Session id.
+    pub id: SessionId,
+    /// `None` until the first turn has been titled.
+    pub title: Option<String>,
+    /// Whether a turn runs; drives the busy indicator.
+    pub status: SessionStatus,
+    /// Unanswered permission requests and forms, oldest first.
+    pub pending: Vec<PendingRequest>,
+    activity: u64,
+    created: u64,
+}
+
+impl SessionEntry {
+    /// A row created at `created` (ms) and last active at `activity` (ms).
+    pub(crate) fn new(id: SessionId, title: Option<String>, created: u64, activity: u64) -> Self {
+        Self {
+            id,
+            title,
+            status: SessionStatus::Idle,
+            pending: Vec::new(),
+            activity,
+            created,
+        }
+    }
+
+    /// The busy indicator.
+    pub fn is_busy(&self) -> bool {
+        self.status == SessionStatus::Busy
+    }
+
+    /// The agent is waiting for an answer.
+    pub fn is_waiting(&self) -> bool {
+        !self.pending.is_empty()
+    }
+
+    fn order_key(&self) -> (Reverse<u64>, Reverse<u64>, &SessionId) {
+        (Reverse(self.activity), Reverse(self.created), &self.id)
+    }
+}
+
+/// The sessions of the directory, always in sidebar order.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct SessionList {
+    entries: Vec<SessionEntry>,
+}
+
+impl SessionList {
+    /// The rows in sidebar order.
+    pub fn iter(&self) -> impl Iterator<Item = &SessionEntry> {
+        self.entries.iter()
+    }
+
+    /// Number of rows.
+    pub fn len(&self) -> usize {
+        self.entries.len()
+    }
+
+    /// The directory has no session.
+    pub fn is_empty(&self) -> bool {
+        self.entries.is_empty()
+    }
+
+    /// The row of this session.
+    pub fn get(&self, id: &SessionId) -> Option<&SessionEntry> {
+        self.entries.iter().find(|entry| entry.id == *id)
+    }
+
+    pub(crate) fn contains(&self, id: &str) -> bool {
+        self.entries.iter().any(|entry| entry.id == *id)
+    }
+
+    pub(crate) fn get_mut(&mut self, id: &str) -> Option<&mut SessionEntry> {
+        self.entries.iter_mut().find(|entry| entry.id == *id)
+    }
+
+    /// Adds a row unless the session is listed already.
+    pub(crate) fn insert(&mut self, entry: SessionEntry) {
+        if self.contains(entry.id.as_str()) {
+            return;
+        }
+        self.entries.push(entry);
+        self.sort();
+    }
+
+    pub(crate) fn remove(&mut self, id: &str) {
+        self.entries.retain(|entry| entry.id != *id);
+    }
+
+    /// Replaces the rows with a fresh list. Status and pending requests come only from events,
+    /// so a session that stays listed keeps them, and its activity never moves back.
+    pub(crate) fn replace(&mut self, fresh: Vec<SessionEntry>) {
+        let previous = std::mem::take(&mut self.entries);
+        self.entries = fresh
+            .into_iter()
+            .map(|mut entry| {
+                if let Some(old) = previous.iter().find(|old| old.id == entry.id) {
+                    entry.status = old.status;
+                    entry.pending.clone_from(&old.pending);
+                    entry.activity = entry.activity.max(old.activity);
+                }
+                entry
+            })
+            .collect();
+        self.sort();
+    }
+
+    /// Moves the session to its new activity time, as a turn start or end does.
+    pub(crate) fn touch(&mut self, id: &str, at: u64) {
+        if let Some(entry) = self.get_mut(id) {
+            entry.activity = entry.activity.max(at);
+            self.sort();
+        }
+    }
+
+    fn sort(&mut self) {
+        self.entries
+            .sort_by(|left, right| left.order_key().cmp(&right.order_key()));
+    }
+}
