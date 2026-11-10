@@ -7,13 +7,14 @@ use std::time::Duration;
 
 use futures::StreamExt;
 use futures::channel::mpsc;
-use oc_client::Client;
+use oc_client::{Client, Directory};
 use oc_state::{Action, ConnectionStatus, SessionId};
 
 use super::{answer, run_session};
 use crate::live::protocol::{Command, Update};
 
 const TIMEOUT: Duration = Duration::from_secs(5);
+const DIRECTORY: &str = "/tmp/p";
 
 /// Answers each connection with the next `(status line, JSON body)`, then stops.
 fn serve(replies: Vec<(&'static str, &'static str)>) -> (Client, JoinHandle<()>) {
@@ -25,8 +26,8 @@ fn serve(replies: Vec<(&'static str, &'static str)>) -> (Client, JoinHandle<()>)
             reply(stream, status, body);
         }
     });
-    let client = Client::with_base_url(format!("http://127.0.0.1:{port}"), "/tmp/p", TIMEOUT)
-        .expect("client");
+    let client =
+        Client::with_base_url(format!("http://127.0.0.1:{port}"), TIMEOUT).expect("client");
     (client, worker)
 }
 
@@ -55,7 +56,7 @@ fn reply(mut stream: TcpStream, status: &str, body: &str) {
 async fn answer_of(status: &'static str, body: &'static str, command: Command) -> Action {
     let (client, worker) = serve(vec![(status, body)]);
     let (sender, receiver) = mpsc::channel(1);
-    answer(client, command, sender).await;
+    answer(client, Directory::new(DIRECTORY), command, sender).await;
     worker.join().expect("server thread");
     let updates: Vec<Update> = receiver.collect().await;
     match updates.as_slice() {
@@ -70,7 +71,7 @@ async fn an_unauthenticated_server_fails_the_connection_and_ends_the_task() {
     let (_commands, command_receiver) = mpsc::channel(1);
     let (sender, receiver) = mpsc::channel(4);
 
-    run_session(client, command_receiver, sender).await;
+    run_session(client, Directory::new(DIRECTORY), command_receiver, sender).await;
     worker.join().expect("server thread");
 
     let updates: Vec<Update> = receiver.collect().await;

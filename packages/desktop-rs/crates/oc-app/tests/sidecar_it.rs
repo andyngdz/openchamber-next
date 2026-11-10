@@ -13,7 +13,7 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use futures::StreamExt;
-use oc_client::{Client, EventData};
+use oc_client::{Client, Directory, EventData};
 use oc_sidecar::{ShutdownOutcome, Sidecar, SidecarConfig, locate_cli};
 use serde_json::Value;
 
@@ -25,17 +25,17 @@ const DELTA_LIMIT: Duration = Duration::from_secs(60);
 const HOLD_LINE_LIMIT: Duration = Duration::from_secs(60);
 
 /// Auth, list, create, open events, send a prompt, wait for that session's text delta.
-async fn drive_session(client: &Client) {
+async fn drive_session(client: &Client, directory: &Directory) {
     client
         .check_auth()
         .await
         .unwrap_or_else(|error| fail("auth", error));
     client
-        .list_sessions()
+        .list_sessions(directory)
         .await
         .unwrap_or_else(|error| fail("list sessions", error));
     let session = client
-        .create_session()
+        .create_session(directory, None, None)
         .await
         .unwrap_or_else(|error| fail("create session", error));
     let mut events = client
@@ -43,7 +43,7 @@ async fn drive_session(client: &Client) {
         .await
         .unwrap_or_else(|error| fail("open events", error));
     client
-        .send_prompt(&session.id, "Say hello.")
+        .send_prompt(directory, &session.id, "Say hello.")
         .await
         .unwrap_or_else(|error| fail("send prompt", error));
     let wait = async {
@@ -73,14 +73,13 @@ fn start_prompt_stream_and_shut_down() {
         .unwrap_or_else(|error| fail("start sidecar", error));
     let cli_pid = sidecar.cli_pid().as_raw();
     let opencode = wait_for_opencode(&mut sidecar);
-    let directory = env.project.to_string_lossy().into_owned();
-    let client =
-        Client::new(sidecar.port(), directory).unwrap_or_else(|error| fail("client", error));
+    let directory = Directory::new(env.project.to_string_lossy().into_owned());
+    let client = Client::new(sidecar.port()).unwrap_or_else(|error| fail("client", error));
     let runtime = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap_or_else(|error| fail("tokio runtime", error));
-    runtime.block_on(drive_session(&client));
+    runtime.block_on(drive_session(&client, &directory));
 
     let outcome = sidecar
         .shutdown()
@@ -235,10 +234,12 @@ fn sessions_are_listed_under_the_real_path_of_a_symlinked_project() {
         .unwrap_or_else(|error| fail("start sidecar", error));
     wait_for_opencode(&mut sidecar);
     let client = |directory: &Path| {
-        Client::new(sidecar.port(), directory.to_string_lossy().into_owned())
-            .unwrap_or_else(|error| fail("client", error))
+        let client = Client::new(sidecar.port()).unwrap_or_else(|error| fail("client", error));
+        let directory = Directory::new(directory.to_string_lossy().into_owned());
+        (client, directory)
     };
-    let (through_link, real) = (client(&link), client(&env.project));
+    let (through_link, link_directory) = client(&link);
+    let (real, project_directory) = client(&env.project);
     let runtime = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
@@ -250,15 +251,15 @@ fn sessions_are_listed_under_the_real_path_of_a_symlinked_project() {
             .await
             .unwrap_or_else(|error| fail("auth", error));
         let lost = through_link
-            .create_session()
+            .create_session(&link_directory, None, None)
             .await
             .unwrap_or_else(|error| fail("create through the link", error));
         let kept = real
-            .create_session()
+            .create_session(&project_directory, None, None)
             .await
             .unwrap_or_else(|error| fail("create", error));
         let listed = through_link
-            .list_sessions()
+            .list_sessions(&link_directory)
             .await
             .unwrap_or_else(|error| fail("list through the link", error));
         (lost, kept, listed)

@@ -180,6 +180,8 @@ fn create_session_request_serializes_to_the_captured_body() {
                 .expect("directory")
                 .to_owned(),
         },
+        agent: None,
+        model: None,
     };
     assert_eq!(serde_json::to_value(&request).expect("serialize"), captured);
 }

@@ -19,7 +19,7 @@
 - [ ] 3.3 Write every state, old and new, in the version 2 format to `fixtures/states/v2/<name>.json` from the responses the run received; the first-format files stay until unit 8 switches the loader.
 - [ ] 3.4 Run the capture twice and confirm identical JSON; report any control with a missing or duplicate accessible name.
 
-## 4. Client   [depends-on: 1] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/app/] [parallel-safe: no]
+## 4. Client   [depends-on: 1] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/tests/sidecar_it.rs] [parallel-safe: no]
 
 - [ ] 4.1 `Directory` newtype; `Client::new(port)` without a directory; every scoped call takes `&Directory`; `events()` unscoped (global stream).
 - [ ] 4.2 New calls and request fields from design.md "Client", including the global session page with cursor and the stop rules.

@@ -3,6 +3,7 @@
 
 use std::path::{Path, PathBuf};
 
+use oc_client::Directory;
 use oc_state::State;
 
 use super::{LiveWindow, Mode, open};
@@ -15,7 +16,7 @@ use crate::server::ServerProcess;
 /// start shows its failure there.
 pub(super) fn run_live(directory: &str) -> Result<(), AppError> {
     let directory = real_directory(Path::new(directory))?;
-    let process = ServerProcess::spawn(PathBuf::from(&directory))?;
+    let process = ServerProcess::spawn(PathBuf::from(directory.as_str()))?;
     let started = process.start();
     let runtime = IoRuntime::start()?;
     let live = LiveWindow {
@@ -23,7 +24,7 @@ pub(super) fn run_live(directory: &str) -> Result<(), AppError> {
         process: process.clone(),
         started,
     };
-    let outcome = open(State::new(directory), Vec::new(), Mode::Live(live));
+    let outcome = open(State::new(directory.as_str()), Vec::new(), Mode::Live(live));
     process.stop();
     drop(runtime);
     outcome
@@ -32,12 +33,12 @@ pub(super) fn run_live(directory: &str) -> Result<(), AppError> {
 /// The directory as the server records it: its real path, without symlinks or a trailing
 /// slash. The server lists a directory's sessions under the real path and never lists one
 /// created under a symlinked path (`sidecar_it`), so the window must ask with the real path.
-pub(super) fn real_directory(directory: &Path) -> Result<String, AppError> {
+pub(super) fn real_directory(directory: &Path) -> Result<Directory, AppError> {
     let real = std::fs::canonicalize(directory).map_err(|source| AppError::ResolveDirectory {
         path: directory.to_path_buf(),
         source,
     })?;
-    Ok(real.to_string_lossy().into_owned())
+    Ok(Directory::new(real.to_string_lossy().into_owned()))
 }
 
 #[cfg(test)]

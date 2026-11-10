@@ -12,7 +12,7 @@ mod session;
 
 use futures::channel::mpsc::{self, Receiver, Sender};
 use gpui_kit::Task;
-use oc_client::{Client, ClientError};
+use oc_client::{Client, ClientError, Directory};
 use tokio::runtime::Handle;
 use tokio::task::JoinHandle;
 
@@ -43,13 +43,13 @@ impl Drop for Connection {
 pub(crate) struct ServerLink {
     process: ServerProcess,
     runtime: Handle,
-    directory: String,
+    directory: Directory,
     connection: Option<Connection>,
 }
 
 impl ServerLink {
     /// A link to `process` for `directory`, doing its I/O on `runtime`.
-    pub(crate) fn new(process: ServerProcess, runtime: Handle, directory: String) -> Self {
+    pub(crate) fn new(process: ServerProcess, runtime: Handle, directory: Directory) -> Self {
         Self {
             process,
             runtime,
@@ -71,11 +71,12 @@ impl ServerLink {
         read_updates: impl FnOnce(Receiver<Update>) -> Task<()>,
     ) -> Result<(), ClientError> {
         self.disconnect();
-        let client = Client::new(port, self.directory.clone())?;
+        let client = Client::new(port)?;
         let (commands, command_receiver) = mpsc::channel(COMMAND_BUFFER);
         let (update_sender, updates) = mpsc::channel(UPDATE_BUFFER);
         let task = self.runtime.spawn(session::run_session(
             client,
+            self.directory.clone(),
             command_receiver,
             update_sender,
         ));
