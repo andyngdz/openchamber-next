@@ -59,7 +59,7 @@
 
 ## 8. Live wiring   [depends-on: 4, 5, 7] [writes: packages/desktop-rs/crates/oc-app/src/] [parallel-safe: no]
 
-- [ ] 8.1 Spawn the sidecar on the main thread before `Application::run`; start a tokio runtime on a background thread; send results and events over `futures::channel::mpsc` to a `cx.spawn` task that applies them to the state `Entity`.
+- [ ] 8.1 Spawn the sidecar on the main thread before `Application::run`, and call `record_opencode_pids()` once the auth check succeeds; start a tokio runtime on a background thread; send results and events over `futures::channel::mpsc` to a `cx.spawn` task that applies them to the state `Entity`.
 - [ ] 8.2 Startup flow: auth check, session list, header server state; New session, open session, send prompt; send disabled while busy or disconnected.
 - [ ] 8.3 Reconnect loop that takes its connect function as a parameter: backoff 500 ms doubling to 10 s, then refetch the session list and open messages. Unit test with a stream that fails twice, checking the delays and the refetch.
 - [ ] 8.4 Failure states from design.md "Failure behavior", including server exit while running, each with its retry action.
