@@ -20,6 +20,7 @@ impl RootView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        self.exit_check = None;
         self.starting = Some(cx.spawn_in(window, async move |view, cx| {
             let started = started.await.unwrap_or_else(|_| {
                 Err(ServerFailure {
@@ -40,7 +41,10 @@ impl RootView {
         cx: &mut Context<Self>,
     ) {
         match started {
-            Ok(port) => self.connect(port, window, cx),
+            Ok(port) => {
+                self.record_pids_on_list = true;
+                self.connect(port, window, cx);
+            }
             Err(failure) => {
                 self.dispatch(Action::Connection(ConnectionStatus::Failed(failure)), cx)
             }
@@ -173,6 +177,10 @@ impl RootView {
                 ConnectionStatus::Starting | ConnectionStatus::ServerExited(_) => {}
             }
         }
+        if matches!(action, Action::SessionsLoaded(_)) && self.record_pids_on_list {
+            self.record_pids_on_list = false;
+            self.record_opencode_pids();
+        }
         // Text typed while the prompt was in flight stays in the composer.
         if let Action::PromptAccepted(sent) = &action
             && self.draft.read(cx).value() == sent.as_str()
@@ -190,7 +198,7 @@ impl RootView {
             return;
         };
         let answer = link.process().exit();
-        cx.spawn_in(window, async move |view, cx| {
+        self.exit_check = Some(cx.spawn_in(window, async move |view, cx| {
             let Ok(Some(exit)) = answer.await else {
                 return;
             };
@@ -201,8 +209,7 @@ impl RootView {
                 this.dispatch(Action::Connection(ConnectionStatus::ServerExited(exit)), cx);
             })
             .ok();
-        })
-        .detach();
+        }));
     }
 
     fn record_opencode_pids(&self) {

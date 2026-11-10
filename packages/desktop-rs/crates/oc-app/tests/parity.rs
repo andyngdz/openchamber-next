@@ -13,14 +13,9 @@ use std::time::Duration;
 
 use serde_json::Value;
 
-const REGIONS: [&str; 6] = [
-    "sidebar",
-    "header",
-    "chatColumn",
-    "composer",
-    "workStatusPanel",
-    "iconRail",
-];
+mod parity_support;
+
+use parity_support::{REGIONS, control_differences};
 
 fn fixtures() -> &'static Path {
     Path::new(env!("OC_DESKTOP_FIXTURES"))
@@ -163,90 +158,6 @@ fn region_differences(expected: &Value, actual: &Value) -> Vec<String> {
         .collect()
 }
 
-fn keys(layout: &Value, region: &str) -> Vec<String> {
-    layout["regions"][region]["controls"]
-        .as_array()
-        .map(|controls| {
-            controls
-                .iter()
-                .filter_map(|control| control["key"].as_str().map(str::to_owned))
-                .collect()
-        })
-        .unwrap_or_default()
-}
-
-/// The key without its `#n`, and whether it had one.
-fn base_key(key: &str) -> (&str, bool) {
-    match key.rsplit_once('#') {
-        Some((base, ordinal)) if ordinal.parse::<usize>().is_ok() => (base, true),
-        _ => (key, false),
-    }
-}
-
-/// Reference controls missing from the dump, and regions whose shared controls are out of order.
-///
-/// A key with `#n` (one per tool row) is compared by its base key. React virtualizes the
-/// timeline (`MessageList.tsx`, `@legendapp/list`), so the reference lists only the rows
-/// mounted around the viewport and counts `#n` from the first mounted one; the spike draws
-/// every row. The reference's repeated rows must appear, in order, as one unbroken run of the
-/// dump's repeated rows.
-fn control_differences(
-    expected: &Value,
-    actual: &Value,
-    skipped: &HashSet<(String, String)>,
-) -> Vec<String> {
-    let mut differences = Vec::new();
-    for region in REGIONS {
-        let wanted_all: Vec<String> = keys(expected, region)
-            .into_iter()
-            .filter(|key| !skipped.contains(&(region.to_owned(), key.clone())))
-            .collect();
-        let dumped_all = keys(actual, region);
-        let (wanted_rows, wanted): (Vec<String>, Vec<String>) =
-            wanted_all.into_iter().partition(|key| base_key(key).1);
-        differences.extend(single_differences(region, &wanted, &dumped_all));
-        differences.extend(run_difference(region, &wanted_rows, &dumped_all));
-    }
-    differences
-}
-
-/// Controls whose key does not repeat: each must be in the dump, in the reference order.
-fn single_differences(region: &str, wanted: &[String], dumped_all: &[String]) -> Option<String> {
-    let wanted_set: HashSet<&String> = wanted.iter().collect();
-    let dumped: Vec<&String> = dumped_all
-        .iter()
-        .filter(|key| wanted_set.contains(key))
-        .collect();
-    let dumped_set: HashSet<&String> = dumped.iter().copied().collect();
-    let missing: Vec<&String> = wanted
-        .iter()
-        .filter(|key| !dumped_set.contains(key))
-        .collect();
-    if !missing.is_empty() {
-        return Some(format!("{region}: missing {missing:?}"));
-    }
-    let in_order = dumped.iter().copied().eq(wanted.iter());
-    (!in_order)
-        .then(|| format!("{region}: order differs\n  expected {wanted:?}\n  got      {dumped:?}"))
-}
-
-/// Repeated rows: their base keys must be one unbroken run of the dump's repeated rows.
-fn run_difference(region: &str, wanted_rows: &[String], dumped_all: &[String]) -> Option<String> {
-    if wanted_rows.is_empty() {
-        return None;
-    }
-    let wanted: Vec<&str> = wanted_rows.iter().map(|key| base_key(key).0).collect();
-    let dumped: Vec<&str> = dumped_all
-        .iter()
-        .map(|key| base_key(key))
-        .filter_map(|(base, repeated)| repeated.then_some(base))
-        .collect();
-    let found = dumped.windows(wanted.len()).any(|run| run == wanted);
-    (!found).then(|| {
-        format!("{region}: rows are not one run of the dump\n  expected {wanted:?}\n  got      {dumped:?}")
-    })
-}
-
 fn assert_parity(state: &str) {
     if !ui_enabled() {
         return;
@@ -331,23 +242,6 @@ fn binary_embeds_no_source_tree_path() {
         .collect();
 
     assert!(found.is_empty(), "the oc-app binary contains {found:?}");
-}
-
-#[test]
-fn repeated_rows_match_a_window_of_the_dump() {
-    let owned = |keys: &[&str]| keys.iter().map(|key| (*key).to_owned()).collect::<Vec<_>>();
-    let dumped = owned(&["c/a#1", "c/b#1", "c/a#2", "c/b#2", "c/a#3", "c/More"]);
-
-    // React mounted rows 2 to 4 and numbered them from 1.
-    assert_eq!(
-        run_difference("c", &owned(&["c/b#1", "c/a#1", "c/b#2"]), &dumped),
-        None
-    );
-    // The same rows out of order, or a row the dump does not have, still differ.
-    assert!(run_difference("c", &owned(&["c/a#1", "c/a#2"]), &dumped).is_some());
-    assert!(run_difference("c", &owned(&["c/z#1", "c/z#2"]), &dumped).is_some());
-    // A name holding `#` that is not an ordinal is a single key.
-    assert_eq!(base_key("c/Issue #x"), ("c/Issue #x", false));
 }
 
 #[test]

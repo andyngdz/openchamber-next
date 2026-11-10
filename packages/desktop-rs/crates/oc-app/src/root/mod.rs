@@ -33,6 +33,12 @@ pub(crate) struct RootView {
     link: Option<ServerLink>,
     /// Waits for the server thread's answer to the latest start; a new start replaces it.
     starting: Option<Task<()>>,
+    /// Waits for the server thread's answer to the latest exit check; a start drops it, so an
+    /// answer about the old server never shows over the new start.
+    exit_check: Option<Task<()>>,
+    /// The first session list after a start records OpenCode's pids: listing goes through
+    /// OpenCode, so it runs by then, even if the check at connect caught it before `exec`.
+    record_pids_on_list: bool,
     _draft_events: Subscription,
 }
 
@@ -66,6 +72,8 @@ impl RootView {
             dispatch,
             link,
             starting: None,
+            exit_check: None,
+            record_pids_on_list: false,
             _draft_events: draft_events,
         }
     }
