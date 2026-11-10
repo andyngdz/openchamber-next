@@ -15,6 +15,28 @@
       "card": 300
     }
   },
+  "selectors": {
+    "composer": {
+      "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
+      "parent": true
+    },
+    "workStatusPanel": {
+      "selector": "[data-right-slot]"
+    },
+    "iconRail": {
+      "selector": "nav:has([data-context-surface])"
+    },
+    "header": {
+      "selector": "[data-page-scroll-lock] > header"
+    },
+    "sidebar": {
+      "selector": "[data-left-sidebar]",
+      "also": "[data-titlebar-left-controls]"
+    },
+    "chatColumn": {
+      "selector": "[data-workspace-chat]"
+    }
+  },
   "regions": {
     "sidebar": {
       "bounds": {
@@ -27,175 +49,175 @@
         {
           "role": "button",
           "name": "Open OpenChamber menu",
-          "key": "Open OpenChamber menu",
+          "key": "sidebar/Open OpenChamber menu",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open sessions",
-          "key": "Open sessions",
+          "key": "sidebar/Open sessions",
           "shown": true
         },
         {
           "role": "button",
           "name": "New session",
-          "key": "div > button:nth-of-type(3)",
+          "key": "sidebar/New session#1",
           "shown": true
         },
         {
           "role": "separator",
           "name": "Resize left panel",
-          "key": "Resize left panel",
+          "key": "sidebar/Resize left panel",
           "shown": true
         },
         {
           "role": "button",
           "name": "Search sessions",
-          "key": "Search sessions",
+          "key": "sidebar/Search sessions",
           "shown": true
         },
         {
           "role": "button",
           "name": "Add project",
-          "key": "Add project",
+          "key": "sidebar/Add project",
           "shown": true
         },
         {
           "role": "button",
           "name": "Display mode",
-          "key": "Display mode",
+          "key": "sidebar/Display mode",
           "shown": true
         },
         {
           "role": "button",
           "name": "More",
-          "key": "More",
+          "key": "sidebar/More",
           "shown": true
         },
         {
           "role": "button",
           "name": "Chats",
-          "key": "Chats",
+          "key": "sidebar/Chats",
           "shown": true
         },
         {
           "role": "button",
           "name": "New session",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(1) > div > div > div > button:nth-of-type(2)",
+          "key": "sidebar/New session#2",
           "shown": false
         },
         {
           "role": "button",
-          "name": "",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div",
+          "name": "button",
+          "key": "sidebar/button",
           "shown": true
         },
         {
           "role": "button",
           "name": "In work",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div",
+          "key": "sidebar/In work (sortable)",
           "shown": true
         },
         {
           "role": "button",
           "name": "In work",
-          "key": "data-row-drag#1",
+          "key": "sidebar/In work",
           "shown": true
         },
         {
           "role": "button",
-          "name": "Reference: streaming turn Session active Active for <duration> Mark done Archive",
-          "key": "Reference: streaming turn Session active Active for <duration> Mark done Archive",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn (draggable)",
           "shown": true
         },
         {
           "role": "button",
-          "name": "Reference: streaming turn Session active Active for <duration>",
-          "key": "Reference: streaming turn Session active Active for <duration>",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn",
           "shown": true
         },
         {
           "role": "button",
           "name": "Mark done",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div:nth-of-type(2) > button:nth-of-type(1)",
+          "key": "sidebar/Reference: streaming turn/Mark done",
           "shown": false
         },
         {
           "role": "button",
           "name": "Archive",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div:nth-of-type(2) > button:nth-of-type(2)",
+          "key": "sidebar/Reference: streaming turn/Archive",
           "shown": false
         },
         {
           "role": "button",
-          "name": "Reference: finished turn Mark done Archive",
-          "key": "Reference: finished turn Mark done Archive",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn (draggable)",
           "shown": true
         },
         {
           "role": "button",
           "name": "Reference: finished turn",
-          "key": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn",
           "shown": true
         },
         {
           "role": "button",
           "name": "Mark done",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div:nth-of-type(2) > button:nth-of-type(1)",
+          "key": "sidebar/Reference: finished turn/Mark done",
           "shown": false
         },
         {
           "role": "button",
           "name": "Archive",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div:nth-of-type(2) > button:nth-of-type(2)",
+          "key": "sidebar/Reference: finished turn/Archive",
           "shown": false
         },
         {
           "role": "button",
           "name": "Projects",
-          "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(5) > div",
+          "key": "sidebar/Projects (sortable)",
           "shown": true
         },
         {
           "role": "button",
           "name": "Projects",
-          "key": "data-row-drag#2",
-          "shown": true
-        },
-        {
-          "role": "button",
-          "name": "desktop-rs-reference New worktree New draft session",
-          "key": "desktop-rs-reference New worktree New draft session",
+          "key": "sidebar/Projects",
           "shown": true
         },
         {
           "role": "button",
           "name": "desktop-rs-reference",
-          "key": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference (sortable)",
+          "shown": true
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference",
           "shown": true
         },
         {
           "role": "button",
           "name": "New worktree",
-          "key": "New worktree",
+          "key": "sidebar/desktop-rs-reference/New worktree",
           "shown": false
         },
         {
           "role": "button",
           "name": "New draft session",
-          "key": "New draft session",
+          "key": "sidebar/desktop-rs-reference/New draft session",
           "shown": false
         },
         {
           "role": "button",
           "name": "Settings",
-          "key": "Settings",
+          "key": "sidebar/Settings",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open instance, usage and MCP (current: Local)",
-          "key": "Open instance, usage and MCP (current: Local)",
+          "key": "sidebar/Open instance, usage and MCP (current: Local)",
           "shown": true
         }
       ]
@@ -211,55 +233,55 @@
         {
           "role": "button",
           "name": "Open session actions",
-          "key": "Open session actions",
+          "key": "header/Main navigation/Open session actions",
           "shown": true
         },
         {
           "role": "button",
           "name": "Context usage",
-          "key": "Context usage",
+          "key": "header/Main navigation/Context usage",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open in File Manager",
-          "key": "Open in File Manager",
+          "key": "header/Main navigation/Open in File Manager",
           "shown": true
         },
         {
           "role": "button",
           "name": "Run Auto-discover dev server",
-          "key": "Run Auto-discover dev server",
+          "key": "header/Main navigation/Run Auto-discover dev server",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open current session in Mini Chat",
-          "key": "Open current session in Mini Chat",
+          "key": "header/Main navigation/Open current session in Mini Chat",
           "shown": true
         },
         {
           "role": "button",
           "name": "Toggle work-status panel",
-          "key": "Toggle work-status panel",
+          "key": "header/Main navigation/Toggle work-status panel",
           "shown": true
         },
         {
           "role": "button",
           "name": "Minimize window",
-          "key": "Minimize window",
+          "key": "header/Main navigation/Window controls/Minimize window",
           "shown": true
         },
         {
           "role": "button",
           "name": "Maximize window",
-          "key": "Maximize window",
+          "key": "header/Main navigation/Window controls/Maximize window",
           "shown": true
         },
         {
           "role": "button",
           "name": "Close window",
-          "key": "Close window",
+          "key": "header/Main navigation/Window controls/Close window",
           "shown": true
         }
       ]
@@ -274,92 +296,92 @@
       "controls": [
         {
           "role": "generic",
-          "name": "",
-          "key": "data-scrollbar=chat",
+          "name": "generic",
+          "key": "chatColumn/generic",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(2) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files packages/*/package.json#1",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files *.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files *.md#1",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(5) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(6) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files packages/*/package.json#2",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(7) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files *.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(8) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files *.md#2",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(9) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(10) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files packages/*/package.json#3",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files scripts/perf/*.mjs",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(11) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files *.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(12) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files *.md#3",
           "shown": true
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(13) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
           "shown": true
         },
         {
           "role": "button",
           "name": "Scroll to bottom",
-          "key": "Scroll to bottom",
+          "key": "chatColumn/Scroll to bottom",
           "shown": false
         }
       ]
@@ -375,55 +397,55 @@
         {
           "role": "textbox",
           "name": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
-          "key": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "key": "composer/Plan, build, or ask. @ to mention, $ for skills, / for commands",
           "shown": true
         },
         {
           "role": "button",
           "name": "Add attachment",
-          "key": "Add attachment",
+          "key": "composer/Add attachment",
           "shown": true
         },
         {
           "role": "button",
           "name": "Permissions: ask every time",
-          "key": "Permissions: ask every time",
+          "key": "composer/Permissions: ask every time",
           "shown": true
         },
         {
           "role": "button",
           "name": "Start a goal with the next message",
-          "key": "Start a goal with the next message",
+          "key": "composer/Start a goal with the next message",
           "shown": true
         },
         {
           "role": "button",
           "name": "perf logo Fixture agent, 20 tool calls then 300...",
-          "key": "perf logo Fixture agent, 20 tool calls then 300...",
+          "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
           "shown": true
         },
         {
           "role": "button",
           "name": "Thinking: Default",
-          "key": "Thinking: Default",
+          "key": "composer/Thinking: Default",
           "shown": true
         },
         {
           "role": "button",
           "name": "Build",
-          "key": "Build",
+          "key": "composer/Build",
           "shown": true
         },
         {
           "role": "button",
           "name": "Start dictation",
-          "key": "Start dictation",
+          "key": "composer/Start dictation",
           "shown": true
         },
         {
           "role": "button",
           "name": "Stop generating",
-          "key": "Stop generating",
+          "key": "composer/Stop generating",
           "shown": true
         }
       ]
@@ -439,37 +461,37 @@
         {
           "role": "button",
           "name": "Choose sections",
-          "key": "Choose sections",
+          "key": "workStatusPanel/Work status/Choose sections",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open context panel",
-          "key": "Open context panel",
+          "key": "workStatusPanel/Work status/Open context panel",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open Git panel",
-          "key": "Open Git panel",
+          "key": "workStatusPanel/Work status/Open Git panel",
           "shown": true
         },
         {
           "role": "button",
           "name": "Open changes",
-          "key": "Open changes",
+          "key": "workStatusPanel/Work status/Open changes",
           "shown": true
         },
         {
           "role": "button",
           "name": "Context sources 3 skills",
-          "key": "Context sources 3 skills",
+          "key": "workStatusPanel/Work status/Context sources 3 skills",
           "shown": true
         },
         {
           "role": "button",
           "name": "Turn stats",
-          "key": "Turn stats",
+          "key": "workStatusPanel/Work status/Turn stats",
           "shown": true
         }
       ]
@@ -485,55 +507,55 @@
         {
           "role": "button",
           "name": "Context",
-          "key": "Context",
+          "key": "iconRail/Context",
           "shown": true
         },
         {
           "role": "button",
           "name": "Git",
-          "key": "Git",
+          "key": "iconRail/Git",
           "shown": true
         },
         {
           "role": "button",
           "name": "Changes",
-          "key": "Changes",
+          "key": "iconRail/Changes",
           "shown": true
         },
         {
           "role": "button",
           "name": "Walkthrough",
-          "key": "Walkthrough",
+          "key": "iconRail/Walkthrough",
           "shown": true
         },
         {
           "role": "button",
           "name": "Files",
-          "key": "Files",
+          "key": "iconRail/Files",
           "shown": true
         },
         {
           "role": "button",
           "name": "Terminal",
-          "key": "Terminal",
+          "key": "iconRail/Terminal",
           "shown": true
         },
         {
           "role": "button",
           "name": "Browser",
-          "key": "Browser",
+          "key": "iconRail/Browser",
           "shown": true
         },
         {
           "role": "button",
           "name": "Project knowledge",
-          "key": "Project knowledge",
+          "key": "iconRail/Project knowledge",
           "shown": true
         },
         {
           "role": "button",
           "name": "Configure panels",
-          "key": "Configure panels",
+          "key": "iconRail/Configure panels",
           "shown": true
         }
       ]
@@ -543,218 +565,153 @@
   "accessibility": [
     {
       "region": "sidebar",
-      "problem": "duplicate-name",
+      "key": "sidebar/New session#1",
       "role": "button",
-      "name": "New session",
-      "key": "div > button:nth-of-type(3)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "sidebar",
-      "problem": "duplicate-name",
+      "key": "sidebar/New session#2",
       "role": "button",
-      "name": "New session",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(1) > div > div > div > button:nth-of-type(2)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "sidebar",
+      "key": "sidebar/button",
+      "role": "button",
       "problem": "missing-name",
-      "role": "button",
-      "name": "",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "In work",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "In work",
-      "key": "data-row-drag#1",
-      "fallback": "data-attribute"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Mark done",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div:nth-of-type(2) > button:nth-of-type(1)",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Archive",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div:nth-of-type(2) > button:nth-of-type(2)",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Mark done",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div:nth-of-type(2) > button:nth-of-type(1)",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Archive",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div:nth-of-type(2) > button:nth-of-type(2)",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Projects",
-      "key": "aside > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(2) > div > div > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(5) > div",
-      "fallback": "dom-path"
-    },
-    {
-      "region": "sidebar",
-      "problem": "duplicate-name",
-      "role": "button",
-      "name": "Projects",
-      "key": "data-row-drag#2",
-      "fallback": "data-attribute"
+      "nameSource": "role"
     },
     {
       "region": "chatColumn",
-      "problem": "missing-name",
+      "key": "chatColumn/generic",
       "role": "generic",
-      "name": "",
-      "key": "data-scrollbar=chat",
-      "fallback": "data-attribute"
+      "problem": "missing-name",
+      "nameSource": "role"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
       "role": "button",
-      "name": "Find Files .agents/skills/*/SKILL.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files packages/*/package.json#1",
       "role": "button",
-      "name": "Find Files packages/*/package.json",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(2) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
       "role": "button",
-      "name": "Find Files scripts/perf/*.mjs",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(3) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files *.md#1",
       "role": "button",
-      "name": "Find Files *.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(4) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
       "role": "button",
-      "name": "Find Files .agents/skills/*/SKILL.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(5) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files packages/*/package.json#2",
       "role": "button",
-      "name": "Find Files packages/*/package.json",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(6) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#2",
       "role": "button",
-      "name": "Find Files scripts/perf/*.mjs",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(7) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files *.md#2",
       "role": "button",
-      "name": "Find Files *.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(8) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
       "role": "button",
-      "name": "Find Files .agents/skills/*/SKILL.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(9) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files packages/*/package.json#3",
       "role": "button",
-      "name": "Find Files packages/*/package.json",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(10) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#3",
       "role": "button",
-      "name": "Find Files scripts/perf/*.mjs",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(11) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files *.md#3",
       "role": "button",
-      "name": "Find Files *.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(12) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "problem": "duplicate-name",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
       "role": "button",
-      "name": "Find Files .agents/skills/*/SKILL.md",
-      "key": "main > div > div > div > div:nth-of-type(1) > div > div:nth-of-type(1) > div > div:nth-of-type(2) > div:nth-of-type(13) > div > div > div > div > div > div > div > div:nth-of-type(2) > div:nth-of-type(1)",
-      "fallback": "dom-path"
+      "problem": "repeated-key",
+      "nameSource": "aria name"
     }
   ],
   "normalized": [
     {
       "region": "sidebar",
-      "key": "Reference: streaming turn Session active Active for <duration> Mark done Archive",
+      "key": "sidebar/Reference: streaming turn (draggable)",
       "rules": [
-        "duration"
+        "duration",
+        "session-title"
       ]
     },
     {
       "region": "sidebar",
-      "key": "Reference: streaming turn Session active Active for <duration>",
+      "key": "sidebar/Reference: streaming turn",
       "rules": [
-        "duration"
+        "duration",
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: finished turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference (sortable)",
+      "rules": [
+        "container-name"
       ]
     }
   ]

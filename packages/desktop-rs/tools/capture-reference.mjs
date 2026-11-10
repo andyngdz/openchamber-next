@@ -23,7 +23,9 @@
  * wheel; `streaming` when every tool call has run and the document's first
  * heading is on screen, before its first code block.
  *
- * Regions and the selectors that find them (language independent):
+ * Regions and the selectors that find them (REGIONS; language independent,
+ * and written to every JSON under `selectors`, the only place a selector
+ * appears in the output):
  *
  *   sidebar          [data-left-sidebar], plus the titlebar controls that
  *                    float over its top strip ([data-titlebar-left-controls])
@@ -35,7 +37,7 @@
  *                    riders above it or the project picker and chips around it
  *   workStatusPanel  [data-right-slot]  (the slot that holds the Work status
  *                    card; 300 px card plus its 24 px gutter)
- *   iconRail         the <nav> that holds [data-context-surface] buttons
+ *   iconRail         nav:has([data-context-surface])
  *
  * A control belongs to the first region in the order composer,
  * workStatusPanel, iconRail, header, sidebar, chatColumn that contains it, so
@@ -47,21 +49,51 @@
  * content-visibility:hidden), has a non-empty box, and is not inside an
  * `inert` or `aria-hidden="true"` subtree. Controls that are rendered but
  * transparent until hovered (row actions) are kept with `shown: false`. The
- * pointer rests over the empty area under the Work status card before every
- * capture, so hover never changes that flag between runs.
+ * page ignores real input for the whole run (Input.setIgnoreInputEvents; the
+ * window is on the user's desktop), and the pointer rests over the empty
+ * area under the Work status card before every capture, so neither a stray
+ * click nor hover changes a capture.
  *
- * Role and accessible name come from Chromium's accessibility tree
- * (Accessibility.getPartialAXTree). A control's `key`, the id the GPUI app
- * gives the matching element, is its name when the name is non-empty and
- * unique in its region; otherwise the first stable `data-*` attribute
- * (`attr=value`), else the DOM path from the region's root; a key that still
- * repeats gets `#<n>` by DOM order. Every such control is listed in
- * `accessibility` with the fallback key used.
+ * Names and keys, all from Chromium's accessibility tree
+ * (Accessibility.getAXNodeAndAncestors), never from the DOM's structure:
  *
- * Accessible names carry timing figures that differ between runs of the
- * same turn (elapsed time, tokens per second); NAME_NORMALIZATION replaces
- * only those figures, and `normalized` in each JSON lists every control a
- * rule changed. Nothing else is normalized or dropped.
+ *   1. Name: the accessible name. Without one, the control's visible text
+ *      (trimmed, whitespace collapsed) when it holds no other control (an
+ *      unnamed container's text is its children's: the chat scroller's is
+ *      the whole transcript); otherwise its role. Both fallbacks are listed
+ *      in `accessibility` with the source used.
+ *   2. Timing figures in a name become `<duration>` and `<rate> tok/s`
+ *      (NAME_NORMALIZATION), and a name that starts with a seed session's
+ *      title is cut to the title, dropping the row's status text ("Session
+ *      active", "Active for <duration>"; rule `session-title`).
+ *   3. A control named from its contents that holds other controls takes the
+ *      name of the first control inside it: the project row is named
+ *      "desktop-rs-reference", not "desktop-rs-reference New worktree New
+ *      draft session" (rule `container-name`).
+ *   4. A control holding another control with the same name (the In work and
+ *      Projects section rows around their toggle, a session row around its
+ *      title, a project row around its name) gets its role description, or
+ *      its role when it has none, as a suffix: `sidebar/Projects (sortable)`
+ *      for the row, `sidebar/Projects` for the toggle inside it. The role
+ *      description is what a screen reader announces for the row; the tree
+ *      offers no other difference between the two.
+ *   5. Key: `<region>/<names of the named accessibility ancestors inside the
+ *      region, outermost first>/<name with its suffix>`. Ignored nodes and
+ *      unnamed ones (generic containers) are skipped; an ancestor that is
+ *      itself a control contributes its name from 1 to 3, without a suffix,
+ *      and only when that name is an accessible name, not a fallback;
+ *      the region's own root is not a segment. A segment equal to the one
+ *      after it is not repeated, so the toggle inside the Projects row is
+ *      `sidebar/Projects`, not `sidebar/Projects/Projects`. Keys are compared
+ *      as whole strings; a name may itself contain "/".
+ *   6. A key that still repeats (one per tool call in a turn, one per code
+ *      block: no message or turn has a name in the tree to tell them apart)
+ *      gets `#<n>` in DOM order, and each is listed in `accessibility` as a
+ *      repeated key.
+ *
+ * `normalized` in each JSON lists every control rules 2 and 3 changed, with
+ * the rules applied.
+ * Nothing else is normalized or dropped.
  *
  * The fixtures are committed, so no JSON may name the user: the run fails and
  * writes nothing when one contains the home directory, the repository path or
@@ -275,13 +307,28 @@ const connectPage = async (uiPort, child) => {
 // Page helpers
 // ---------------------------------------------------------------------------
 
-const click = async (client, { x, y }) => {
-  await client.send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y, button: "none" })
-  await client.send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 })
-  await client.send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y, button: "left", clickCount: 1 })
+/**
+ * The window sits on the user's desktop, and a real click or hover changes
+ * what a capture holds (a collapsed Work status section, revealed row
+ * actions). The page ignores input for the whole run; this lets the script's
+ * own events through for the moment they take.
+ */
+const sendInput = async (client, events) => {
+  await client.send("Input.setIgnoreInputEvents", { ignore: false })
+  try {
+    for (const [method, params] of events) await client.send(method, params)
+  } finally {
+    await client.send("Input.setIgnoreInputEvents", { ignore: true })
+  }
 }
 
-const restPointer = (client) => client.send("Input.dispatchMouseEvent", { type: "mouseMoved", ...POINTER_REST, button: "none" })
+const click = (client, { x, y }) => sendInput(client, [
+  ["Input.dispatchMouseEvent", { type: "mouseMoved", x, y, button: "none" }],
+  ["Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }],
+  ["Input.dispatchMouseEvent", { type: "mouseReleased", x, y, button: "left", clickCount: 1 }],
+])
+
+const restPointer = (client) => sendInput(client, [["Input.dispatchMouseEvent", { type: "mouseMoved", ...POINTER_REST, button: "none" }]])
 
 const centerOf = (client, expression) => evaluateValue(client, `(() => {
   const element = ${expression}
@@ -311,10 +358,12 @@ const resetWidths = async (client) => {
     const handle = await centerOf(client, `document.querySelector("[data-left-sidebar] > [role=separator]")`)
     if (!handle) throw new Error("The sidebar resize handle is not on screen")
     const to = { x: handle.x + (SIDEBAR_WIDTH - sidebar), y: handle.y }
-    await client.send("Input.dispatchMouseEvent", { type: "mouseMoved", ...handle, button: "none" })
-    await client.send("Input.dispatchMouseEvent", { type: "mousePressed", ...handle, button: "left", clickCount: 1 })
-    await client.send("Input.dispatchMouseEvent", { type: "mouseMoved", ...to, button: "left", buttons: 1 })
-    await client.send("Input.dispatchMouseEvent", { type: "mouseReleased", ...to, button: "left", clickCount: 1 })
+    await sendInput(client, [
+      ["Input.dispatchMouseEvent", { type: "mouseMoved", ...handle, button: "none" }],
+      ["Input.dispatchMouseEvent", { type: "mousePressed", ...handle, button: "left", clickCount: 1 }],
+      ["Input.dispatchMouseEvent", { type: "mouseMoved", ...to, button: "left", buttons: 1 }],
+      ["Input.dispatchMouseEvent", { type: "mouseReleased", ...to, button: "left", clickCount: 1 }],
+    ])
   }
   const contextPanelOpen = await evaluateValue(client, `document.querySelector("[data-right-slot]")?.getAttribute("data-context-panel-open")`)
   if (contextPanelOpen !== "false") throw new Error(`The context panel is open (data-context-panel-open=${contextPanelOpen}); close it in this profile first`)
@@ -386,21 +435,19 @@ const sendFromComposer = async (client, { origin, project, id, title, prompt }) 
   const editorExpression = renderedExpression("[role=textbox][contenteditable=true]")
   const editor = await waitFor("the composer", () => centerOf(client, editorExpression))
   await click(client, editor)
-  await client.send("Input.insertText", { text: prompt })
+  await sendInput(client, [["Input.insertText", { text: prompt }]])
   await waitFor("the prompt in the composer", () => evaluateValue(client, `${editorExpression}?.textContent.includes(${JSON.stringify(prompt)})`), { timeoutMs: 5000 })
-  for (const type of ["keyDown", "keyUp"]) {
-    await client.send("Input.dispatchKeyEvent", { type, key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 })
-  }
+  await sendInput(client, ["keyDown", "keyUp"].map((type) => ["Input.dispatchKeyEvent", { type, key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 }]))
   await waitFor(`the turn in "${title}" to start`, async () => isBusy(await sessionTime(origin, id, project)), { timeoutMs: 20_000, intervalMs: 200 })
 }
 
 /** Scrolls the chat column to its end with the mouse wheel, as a reader does. */
 const scrollChatToEnd = async (client) => {
   const center = await centerOf(client, renderedExpression("[data-workspace-chat]"))
-  await client.send("Input.dispatchMouseEvent", { type: "mouseWheel", ...center, deltaX: 0, deltaY: 100_000, button: "none" })
-  await wait(1500)
-  await client.send("Input.dispatchMouseEvent", { type: "mouseWheel", ...center, deltaX: 0, deltaY: 100_000, button: "none" })
-  await wait(1500)
+  for (let turn = 0; turn < 2; turn += 1) {
+    await sendInput(client, [["Input.dispatchMouseEvent", { type: "mouseWheel", ...center, deltaX: 0, deltaY: 100_000, button: "none" }]])
+    await wait(1500)
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -418,17 +465,31 @@ const CONTROL_SELECTOR = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(", ")
 
-// data-* attributes that carry state or styling, never identity.
-const VOLATILE_DATA = /^data-(slot|state|size|orientation|highlighted|popup-open|pressed|disabled|focused|hovered|active|selected|visible|top-scroll|bottom-scroll|scroll-shadow|side|align|base-ui.*|variant|starting-style|ending-style)$/
+/**
+ * The regions, in assignment order: a control belongs to the first region
+ * whose root contains it. `also` adds a second root to a region, `parent`
+ * takes the matched element's parent as the root. Written to every JSON
+ * under `selectors`; these are the only selectors in the output.
+ */
+const REGIONS = [
+  { name: "composer", selector: "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])", parent: true },
+  { name: "workStatusPanel", selector: "[data-right-slot]" },
+  { name: "iconRail", selector: "nav:has([data-context-surface])" },
+  { name: "header", selector: "[data-page-scroll-lock] > header" },
+  { name: "sidebar", selector: "[data-left-sidebar]", also: "[data-titlebar-left-controls]" },
+  { name: "chatColumn", selector: "[data-workspace-chat]" },
+]
+// The order regions appear in each JSON.
+const REGION_ORDER = ["sidebar", "header", "chatColumn", "composer", "workStatusPanel", "iconRail"]
 
 /**
  * Runs in the page in one task, so the regions and the control list come from
- * the same DOM. Leaves the control elements on window.__ocReferenceControls
+ * the same DOM. Leaves the control elements and the region roots on window
  * for the accessibility lookup.
  */
 const collectInPage = `(() => {
   const CONTROL_SELECTOR = ${JSON.stringify(CONTROL_SELECTOR)}
-  const VOLATILE_DATA = ${VOLATILE_DATA}
+  const REGIONS = ${JSON.stringify(REGIONS)}
   // Sessions kept alive in the background keep their own (hidden) chat
   // column and composer, so a region is the one rendered element that matches.
   const rendered = (element) => element.checkVisibility({ visibilityProperty: true }) && element.getBoundingClientRect().width > 0
@@ -437,65 +498,43 @@ const collectInPage = `(() => {
     if (found.length !== 1) throw new Error(selector + " matched " + found.length + " rendered elements")
     return found[0]
   }
-  const regions = {
-    sidebar: [exactlyOne("[data-left-sidebar]"), document.querySelector("[data-titlebar-left-controls]")],
-    header: [exactlyOne("[data-page-scroll-lock] > header")],
-    chatColumn: [exactlyOne("[data-workspace-chat]")],
-    composer: [exactlyOne("[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])").parentElement],
-    workStatusPanel: [exactlyOne("[data-right-slot]")],
-    iconRail: [document.querySelector("[data-context-surface]")?.closest("nav")],
+  const roots = {}
+  for (const region of REGIONS) {
+    const found = exactlyOne(region.selector)
+    roots[region.name] = [region.parent ? found.parentElement : found, region.also ? document.querySelector(region.also) : null].filter(Boolean)
   }
-  if (!regions.iconRail[0]) throw new Error("No icon rail: no [data-context-surface] inside a <nav>")
-  const ASSIGN_ORDER = ["composer", "workStatusPanel", "iconRail", "header", "sidebar", "chatColumn"]
   const round = (value) => Math.round(value * 100) / 100
   const bounds = (element) => {
     const rect = element.getBoundingClientRect()
     return { x: round(rect.x), y: round(rect.y), width: round(rect.width), height: round(rect.height) }
   }
-  const dataKey = (element) => {
-    for (const attribute of element.attributes) {
-      if (attribute.name.startsWith("data-") && !VOLATILE_DATA.test(attribute.name)) {
-        return attribute.value ? attribute.name + "=" + attribute.value : attribute.name
-      }
-    }
-    return null
-  }
-  const domPath = (element, root) => {
-    const steps = []
-    for (let node = element; node && node !== root; node = node.parentElement) {
-      const parent = node.parentElement
-      const same = parent ? [...parent.children].filter((child) => child.tagName === node.tagName) : [node]
-      steps.unshift(node.tagName.toLowerCase() + (same.length > 1 ? ":nth-of-type(" + (same.indexOf(node) + 1) + ")" : ""))
-    }
-    return steps.join(" > ")
-  }
-  const controls = []
   const elements = []
   for (const element of document.querySelectorAll(CONTROL_SELECTOR)) {
     if (element.closest("[inert]") || element.closest("[aria-hidden=true]")) continue
     if (!element.checkVisibility({ visibilityProperty: true })) continue
     const box = element.getBoundingClientRect()
     if (box.width === 0 || box.height === 0) continue
-    const region = ASSIGN_ORDER.find((name) => regions[name].some((root) => root && root.contains(element))) ?? null
-    const root = region ? regions[region].find((candidate) => candidate && candidate.contains(element)) : document.body
-    controls.push({
-      region,
-      tag: element.tagName.toLowerCase(),
-      shown: element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
-      dataKey: dataKey(element),
-      path: domPath(element, root),
-    })
     elements.push(element)
   }
+  const controls = elements.map((element) => ({
+    region: REGIONS.find((region) => roots[region.name].some((root) => root.contains(element)))?.name ?? null,
+    shown: element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
+    text: (element.innerText ?? "").replace(/\\s+/g, " ").trim(),
+    // Controls inside this one, in DOM order.
+    nested: elements.flatMap((other, index) => other !== element && element.contains(other) ? [index] : []),
+  }))
   window.__ocReferenceControls = elements
+  window.__ocReferenceRoots = roots
   return {
-    regions: Object.fromEntries(Object.entries(regions).map(([name, [root]]) => [name, bounds(root)])),
+    regions: Object.fromEntries(Object.entries(roots).map(([name, [root]]) => [name, bounds(root)])),
     controls,
-    chatCodeBlocks: [...regions.chatColumn[0].querySelectorAll("pre")].filter((element) => element.checkVisibility()).length,
+    chatCodeBlocks: [...roots.chatColumn[0].querySelectorAll("pre")].filter((element) => element.checkVisibility()).length,
   }
 })()`
 
-/** Role and accessible name of each collected control, from Chromium's accessibility tree. */
+const collapse = (value) => String(value ?? "").replace(/\s+/g, " ").trim()
+
+/** Each control's own accessibility node and its ancestors, nearest first, from Chromium's accessibility tree. */
 const accessibilityOf = async (client, count) => {
   const { result } = await client.send("Runtime.evaluate", { expression: "window.__ocReferenceControls" })
   const { result: properties } = await client.send("Runtime.getProperties", { objectId: result.objectId, ownProperties: true })
@@ -503,54 +542,49 @@ const accessibilityOf = async (client, count) => {
   const out = []
   for (let index = 0; index < count; index += 1) {
     const { node } = await client.send("DOM.describeNode", { objectId: byIndex.get(index) })
-    const { nodes } = await client.send("Accessibility.getPartialAXTree", { backendNodeId: node.backendNodeId, fetchRelatives: false })
-    const ax = nodes.find((entry) => entry.backendDOMNodeId === node.backendNodeId) ?? nodes[0]
-    out.push({
-      role: ax?.ignored ? "ignored" : String(ax?.role?.value ?? ""),
-      name: String(ax?.name?.value ?? "").replace(/\s+/g, " ").trim(),
-    })
+    const { nodes } = await client.send("Accessibility.getAXNodeAndAncestors", { backendNodeId: node.backendNodeId })
+    const self = nodes.findIndex((entry) => entry.backendDOMNodeId === node.backendNodeId)
+    if (self === -1) throw new Error(`No accessibility node for control ${index}`)
+    out.push({ backendNodeId: node.backendNodeId, ax: nodes[self], ancestors: nodes.slice(self + 1) })
   }
-  await client.send("Runtime.evaluate", { expression: "delete window.__ocReferenceControls" })
   return out
 }
 
-/** Gives every control a key unique in its region and lists the ones that needed a fallback. */
-const assignKeys = (controls) => {
-  const issues = []
-  const byRegion = Map.groupBy(controls, (control) => control.region ?? "outside")
-  for (const [region, list] of byRegion) {
-    const nameCount = new Map()
-    for (const control of list) nameCount.set(control.name, (nameCount.get(control.name) ?? 0) + 1)
-    const keyCount = new Map()
-    for (const control of list) {
-      const problem = control.name === "" ? "missing-name" : nameCount.get(control.name) > 1 ? "duplicate-name" : null
-      control.key = problem ? (control.dataKey ?? control.path) : control.name
-      keyCount.set(control.key, (keyCount.get(control.key) ?? 0) + 1)
-      if (problem) issues.push({ region, problem, role: control.role, name: control.name, control })
+/** Whether a DOM node lies inside a region's root (the root itself excluded); cached per node. */
+const regionMembership = (client) => {
+  const cache = new Map()
+  return async (region, backendNodeId) => {
+    const cacheKey = `${region}:${backendNodeId}`
+    if (!cache.has(cacheKey)) {
+      const { object } = await client.send("DOM.resolveNode", { backendNodeId })
+      const { result } = await client.send("Runtime.callFunctionOn", {
+        objectId: object.objectId,
+        functionDeclaration: "function (region) { return window.__ocReferenceRoots[region].some((root) => root !== this && root.contains(this)) }",
+        arguments: [{ value: region }],
+        returnByValue: true,
+      })
+      cache.set(cacheKey, result.value === true)
     }
-    const seen = new Map()
-    for (const control of list) {
-      if (keyCount.get(control.key) === 1) continue
-      const ordinal = (seen.get(control.key) ?? 0) + 1
-      seen.set(control.key, ordinal)
-      control.key = `${control.key}#${ordinal}`
-    }
+    return cache.get(cacheKey)
   }
-  return issues.map(({ control, ...issue }) => ({ ...issue, key: control.key, fallback: control.dataKey ? "data-attribute" : "dom-path" }))
 }
 
 /**
  * Figures in accessible names that the same turn measures differently on
- * every run: the session row's and status pill's elapsed time, the Turn
- * stats rate. Each rule replaces only the figure; `normalized` in the JSON
- * lists every control a rule changed.
+ * every run: elapsed times and the Turn stats rate. Each rule replaces only
+ * the figure.
  */
 const NAME_NORMALIZATION = [
   { rule: "rate", pattern: /~?\d+(?:\.\d+)?\s?tok\/s/g, replacement: "<rate> tok/s" },
   { rule: "duration", pattern: /\b\d+(?:\.\d+)?(?:ms|s|m|h)\b/g, replacement: "<duration>" },
 ]
 
-const normalizeName = (name) => {
+/**
+ * Rule 2 of the header: timing figures, then a name that starts with a seed
+ * session's title cut to the title (a session row adds its status,
+ * "Session active Active for 6s", to the title's own text).
+ */
+const normalizeName = (name, titles) => {
   const rules = []
   let out = name
   for (const { rule, pattern, replacement } of NAME_NORMALIZATION) {
@@ -558,36 +592,123 @@ const normalizeName = (name) => {
     if (next !== out) rules.push(rule)
     out = next
   }
+  const title = titles.find((candidate) => out.startsWith(`${candidate} `))
+  if (title) {
+    out = title
+    rules.push("session-title")
+  }
   return { name: out, rules }
 }
 
-const captureState = async (client, state, widths) => {
+const nameFromContents = (ax) => (ax.name?.sources ?? []).some((source) => source.type === "contents" && !source.superseded && source.value)
+const roleDescription = (ax) => ax.properties?.find((property) => property.name === "roledescription")?.value?.value
+
+/**
+ * Names and keys every control; the rules are in the header comment.
+ * Returns the controls with role, name, key and the bookkeeping for
+ * `accessibility` and `normalized`.
+ */
+const nameAndKey = async (client, collected, axData, titles) => {
+  const { controls: pageControls } = collected
+  const indexOfNode = new Map(axData.map(({ backendNodeId }, index) => [backendNodeId, index]))
+  const controls = pageControls.map((control, index) => {
+    const { ax } = axData[index]
+    const role = ax.ignored ? "ignored" : String(ax.role?.value ?? "")
+    const aria = collapse(ax.name?.value)
+    // Text only for a control holding no other control: an unnamed container's
+    // text is its children's (the transcript, for the chat's scroller).
+    const [nameSource, raw] = aria ? ["aria name", aria] : control.text && control.nested.length === 0 ? ["text", control.text] : ["role", role]
+    const { name, rules } = normalizeName(raw, titles)
+    return { ...control, role, nameSource, name, rules, ax }
+  })
+
+  // Rule 3: a control named from its contents that holds other controls
+  // takes the name of the first control inside it, not its children's names.
+  const finalName = (index, seen = new Set()) => {
+    const control = controls[index]
+    if (control.resolved) return control.name
+    if (control.nameSource === "aria name" && nameFromContents(control.ax) && control.nested.length > 0 && !seen.has(index)) {
+      seen.add(index)
+      const inner = finalName(control.nested[0], seen)
+      if (inner !== control.name) {
+        control.name = inner
+        control.rules = [...control.rules, "container-name"]
+      }
+    }
+    control.resolved = true
+    return control.name
+  }
+  controls.forEach((_, index) => finalName(index))
+
+  const inside = regionMembership(client)
+  for (const [index, control] of controls.entries()) {
+    // A control holding another control of the same name carries its role
+    // description (or role) as a suffix; the inner control keeps the bare name.
+    const sameNameInside = control.nested.some((other) => controls[other].name === control.name)
+    const own = sameNameInside ? `${control.name} (${roleDescription(control.ax) ?? control.role})` : control.name
+    const segments = []
+    if (control.region) {
+      for (const ancestor of axData[index].ancestors) {
+        if (ancestor.ignored || !ancestor.backendDOMNodeId) continue
+        const controlIndex = indexOfNode.get(ancestor.backendDOMNodeId)
+        // Only accessible names make segments, never a fallback text or role.
+        if (controlIndex !== undefined && controls[controlIndex].nameSource !== "aria name") continue
+        const segment = controlIndex === undefined ? normalizeName(collapse(ancestor.name?.value), titles).name : controls[controlIndex].name
+        if (!segment) continue
+        if (!(await inside(control.region, ancestor.backendDOMNodeId))) break
+        segments.unshift(segment)
+      }
+    }
+    segments.push(own)
+    // An ancestor segment equal to the one after it is not repeated.
+    const path = segments.filter((segment, position) => segment !== segments[position + 1])
+    control.key = [control.region ?? "outside", ...path].join("/")
+  }
+
+  // True repeats under the same parent: #n in DOM order.
+  const keyCount = Map.groupBy(controls, (control) => control.key)
+  const seen = new Map()
+  for (const control of controls) {
+    if (keyCount.get(control.key).length === 1) continue
+    const ordinal = (seen.get(control.key) ?? 0) + 1
+    seen.set(control.key, ordinal)
+    control.repeated = true
+    control.key = `${control.key}#${ordinal}`
+  }
+  return controls
+}
+
+const captureState = async (client, state, widths, titles) => {
   await restPointer(client)
   const collected = await evaluateValue(client, collectInPage)
   if (!collected) throw new Error(`Collecting ${state} failed in the page`)
   const shot = await client.send("Page.captureScreenshot", { format: "png" })
-  const accessibility = await accessibilityOf(client, collected.controls.length)
-  const controls = collected.controls.map((control, index) => {
-    const { name, rules } = normalizeName(accessibility[index].name)
-    return { ...control, role: accessibility[index].role, name, rules }
-  })
-  const issues = assignKeys(controls)
-  const normalized = controls.filter((control) => control.rules.length > 0).map(({ region, key, rules }) => ({ region: region ?? "outside", key, rules }))
-  const regions = Object.fromEntries(Object.entries(collected.regions).map(([name, bounds]) => [name, {
-    bounds,
-    controls: controls.filter((control) => control.region === name).map(({ role, name: label, key, shown }) => ({ role, name: label, key, shown })),
+  const controls = await nameAndKey(client, collected, await accessibilityOf(client, collected.controls.length), titles)
+  await client.send("Runtime.evaluate", { expression: "delete window.__ocReferenceControls; delete window.__ocReferenceRoots" })
+  const entry = ({ role, name, key, shown }) => ({ role, name, key, shown })
+  const regions = Object.fromEntries(REGION_ORDER.map((name) => [name, {
+    bounds: collected.regions[name],
+    controls: controls.filter((control) => control.region === name).map(entry),
   }]))
   const reference = {
     state,
     viewport: VIEWPORT,
     widths,
+    selectors: Object.fromEntries(REGIONS.map(({ name, ...selector }) => [name, selector])),
     regions,
-    outside: controls.filter((control) => control.region === null).map(({ role, name, key, shown, path }) => ({ role, name, key, shown, path })),
-    accessibility: issues,
-    normalized,
+    outside: controls.filter((control) => control.region === null).map(entry),
+    accessibility: controls.filter((control) => control.nameSource !== "aria name" || control.repeated).map(({ region, key, role, nameSource, repeated }) => ({
+      region: region ?? "outside",
+      key,
+      role,
+      problem: nameSource !== "aria name" ? "missing-name" : "repeated-key",
+      nameSource,
+    })),
+    normalized: controls.filter((control) => control.rules.length > 0).map(({ region, key, rules }) => ({ region: region ?? "outside", key, rules })),
   }
   const counts = Object.entries(regions).map(([name, region]) => `${name} ${region.controls.length}`).join(", ")
-  log(`${state}: ${counts}, outside ${reference.outside.length}, name issues ${issues.length}`)
+  const bySource = (source) => controls.filter((control) => control.nameSource === source).length
+  log(`${state}: ${counts}, outside ${reference.outside.length}; names from text ${bySource("text")}, from role ${bySource("role")}; repeated keys ${controls.filter((control) => control.repeated).length}`)
   return { state, json: `${JSON.stringify(reference, null, 2)}\n`, png: Buffer.from(shot.data, "base64"), chatCodeBlocks: collected.chatCodeBlocks }
 }
 
@@ -614,16 +735,18 @@ const run = async ({ client, origin, paths, seed }) => {
   // focusable and typing working.
   await client.send("Emulation.setFocusEmulationEnabled", { enabled: true })
   await client.send("Accessibility.enable")
+  await client.send("Input.setIgnoreInputEvents", { ignore: true })
   // The layout settles at the new viewport.
   await wait(1500)
   const widths = await resetWidths(client)
 
+  const titles = seed.sessions.map((session) => session.title)
   const ids = await createSessions(origin, seed, paths.project)
   for (const session of seed.sessions) {
     await waitFor(`the sidebar row "${session.title}"`, () => centerOf(client, sidebarRowExpression(session.title)))
   }
   await wait(1500)
-  captures.push(await captureState(client, "empty", widths))
+  captures.push(await captureState(client, "empty", widths, titles))
 
   const finished = seed.sessions.find((session) => session.state === "session")
   await sendFromComposer(client, { origin, project: paths.project, id: ids.session, title: finished.title, prompt: seed.prompt })
@@ -633,7 +756,7 @@ const run = async ({ client, origin, paths, seed }) => {
   // turn's meta row and the sidebar's busy indicator settled.
   await scrollChatToEnd(client)
   await wait(2000)
-  captures.push(await captureState(client, "session", await checkWidths(client)))
+  captures.push(await captureState(client, "session", await checkWidths(client), titles))
 
   const streaming = seed.sessions.find((session) => session.state === "streaming")
   await sendFromComposer(client, { origin, project: paths.project, id: ids.streaming, title: streaming.title, prompt: seed.prompt })
@@ -648,7 +771,7 @@ const run = async ({ client, origin, paths, seed }) => {
     const rendered = (selector) => chat ? [...chat.querySelectorAll(selector)].filter((element) => element.checkVisibility()) : []
     return rendered("h2").some((heading) => heading.textContent.includes("Executing a call")) && rendered("pre").length === 0
   })()`), { timeoutMs: 180_000, intervalMs: 50 })
-  const capture = await captureState(client, "streaming", streamingWidths)
+  const capture = await captureState(client, "streaming", streamingWidths, titles)
   if (capture.chatCodeBlocks > 0) throw new Error(`A code block reached the chat column before the streaming capture (${capture.chatCodeBlocks}); rerun`)
   if (!isBusy(await sessionTime(origin, ids.streaming, paths.project))) throw new Error("The streaming turn had ended before the capture")
   captures.push(capture)
