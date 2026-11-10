@@ -1,6 +1,6 @@
 # Event fixtures
 
-Raw `GET /api/event` streams from a real server (see `../api/README.md` for how they are captured and
+Raw `GET /api/event` streams from a real server (see `packages/desktop-rs/fixtures/api/README.md` for how they are captured and
 what varies between runs). Each `*.json` is a JSON array of the parsed `data:` payloads of one
 connection, in arrival order, nothing removed or rewritten. A file starts when the connection opens, so
 it begins with `server.connected` and, in the first scenario, with startup notices.

@@ -110,18 +110,25 @@
  */
 
 import { spawn } from "node:child_process"
-import { createWriteStream, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from "node:fs"
+import { createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from "node:fs"
 import { homedir, tmpdir, userInfo } from "node:os"
 import { basename, dirname, join, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import process from "node:process"
 
-import { CdpClient, findPageTarget, reservePort, wait } from "../../../scripts/perf/cdp.mjs"
-import { fixtureProviderConfig } from "../../../scripts/perf/fixture-provider.mjs"
-import { ensureProject, isolatedEnv, startFixture } from "../../../scripts/perf/isolated-server.mjs"
+const findRepoRoot = (start) => {
+  for (let dir = start; ; dir = dirname(dir)) {
+    if (existsSync(join(dir, "packages/web/bin/cli.js"))) return dir
+    if (dirname(dir) === dir) throw new Error(`No repository root (packages/web/bin/cli.js) above ${start}`)
+  }
+}
 
-const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..")
-const REPO_ROOT = resolve(PACKAGE_ROOT, "..", "..")
+const REPO_ROOT = findRepoRoot(dirname(fileURLToPath(import.meta.url)))
+const PACKAGE_ROOT = join(REPO_ROOT, "packages/desktop-rs")
+const importPerf = (name) => import(pathToFileURL(join(REPO_ROOT, "scripts/perf", name)).href)
+const { CdpClient, findPageTarget, reservePort, wait } = await importPerf("cdp.mjs")
+const { fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
+const { ensureProject, isolatedEnv, startFixture } = await importPerf("isolated-server.mjs")
 // A fixed root, so paths the UI shows are the same on every run. The CDP port
 // is fixed too, so two runs cannot overlap anyway.
 const ROOT = join(tmpdir(), "oc-desktop-rs-reference")

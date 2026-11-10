@@ -21,23 +21,33 @@
  */
 
 import { spawn } from "node:child_process"
-import { createWriteStream, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
+import { createWriteStream, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { createServer } from "node:net"
 import { homedir, tmpdir, userInfo } from "node:os"
 import { dirname, join, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import process from "node:process"
 
-import { ensureProject, isolatedEnv, REPO_ROOT, startFixture } from "../../../scripts/perf/isolated-server.mjs"
-import { fixtureProviderConfig } from "../../../scripts/perf/fixture-provider.mjs"
+const findRepoRoot = (start) => {
+  for (let dir = start; ; dir = dirname(dir)) {
+    if (existsSync(join(dir, "packages/web/bin/cli.js"))) return dir
+    if (dirname(dir) === dir) throw new Error(`No repository root (packages/web/bin/cli.js) above ${start}`)
+  }
+}
 
 const TOOL_DIR = dirname(fileURLToPath(import.meta.url))
+const REPO_ROOT = findRepoRoot(TOOL_DIR)
+const PACKAGE_ROOT = join(REPO_ROOT, "packages/desktop-rs")
+const importPerf = (name) => import(pathToFileURL(join(REPO_ROOT, "scripts/perf", name)).href)
+const { ensureProject, isolatedEnv, startFixture } = await importPerf("isolated-server.mjs")
+const { fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
+
 const PROVIDER = "perf"
 const TURN_TIMEOUT_MS = 180_000
 const SETTLE_MS = 1_500
 
 const parseArgs = (argv) => {
-  const options = { out: resolve(TOOL_DIR, "..", "fixtures"), root: join(tmpdir(), "oc-desktop-rs-capture") }
+  const options = { out: join(PACKAGE_ROOT, "fixtures"), root: join(tmpdir(), "oc-desktop-rs-capture") }
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === "--out") options.out = resolve(argv[++index])
     else if (argv[index] === "--root") options.root = resolve(argv[++index])

@@ -2,7 +2,7 @@
 
 Raw responses of a real OpenChamber server started the way the sidecar starts it
 (`node packages/web/bin/cli.js serve --foreground --quiet --api-only --host 127.0.0.1 --port <port>`),
-captured by `../../tools/capture-api.mjs` against the deterministic fixture provider
+captured by `packages/desktop-rs/tools/capture-api.mjs` against the deterministic fixture provider
 (`scripts/perf/fixture-provider.mjs`). Regenerate with:
 
 ```bash
