@@ -129,3 +129,7 @@ pub(super) fn render_error(error: impl std::fmt::Display) -> AppError {
 #[cfg(test)]
 #[path = "headless_test.rs"]
 mod headless_test;
+
+#[cfg(test)]
+#[path = "text_fit_test.rs"]
+mod text_fit_test;

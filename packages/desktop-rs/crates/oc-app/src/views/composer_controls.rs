@@ -1,10 +1,11 @@
 //! The composer footer's left icon group and right trigger/action group.
 
 use gpui_kit::assets::IconName;
-use gpui_kit::component::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::{ActiveTheme, Disableable};
 use gpui_kit::{
-    AnyElement, App, Div, FontWeight, IntoElement, ParentElement, Styled, Window, div, px,
+    AnyElement, App, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Styled,
+    Window, div, px,
 };
 use oc_state::{ComposerStatus, ConnectionStatus, State};
 
@@ -37,6 +38,10 @@ const LABEL_WEIGHT: f32 = 500.;
 const SLASH_SIZE: f32 = 16.;
 const SLASH_LINE_HEIGHT: f32 = 24.;
 const SLASH_WEIGHT: f32 = 400.;
+/// `max-w-[260px]` on the model label (`ModelControls.tsx:2396`).
+const MODEL_LABEL_MAX: f32 = 260.;
+/// `hover:opacity-70` on the model and agent triggers (`ModelControls.tsx:2358,2855`).
+const HOVER_OPACITY: f32 = 0.7;
 
 /// The left icon group.
 pub(super) fn left_group(tools: &[Tool], registry: &LayoutRegistry) -> Div {
@@ -109,29 +114,49 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
         return div().into_any_element();
     };
     let spec = ControlSpec::named(Area::Composer, Role::Button, name.clone());
-    let label_width = crate::views::line_width(window, cx, label, text_metrics::META, LABEL_WEIGHT);
+    let label_width = label_width(*layout, label, window, cx);
     let width = trigger_width(*layout, label_width, window, cx);
+    // `text` is gpui-kit's padless button with no background. A padded variant clips the label,
+    // because the width below holds only the content. Its own text colors dim at rest and
+    // brighten on hover, so the content row sets the reference's colors itself.
     let button = Button::new(spec.key.clone())
-        .ghost()
-        .compact()
+        .text()
         .w(px(width))
         .h(px(TRIGGER_HEIGHT))
         .accessibility_label(name.clone())
-        .child(trigger_content(*layout, label, label_width));
+        .child(trigger_content(*layout, label, label_width, cx));
     trigger_control(scene, *kind, button, cx).into_any_element()
 }
 
-fn trigger_content(layout: TriggerKind, label: &str, label_width: f32) -> Div {
+/// The label's width: its shaped line, the model label capped at the reference's maximum,
+/// rounded up to the device grid so layout never snaps the box below the line and ellipsizes it.
+fn label_width(layout: TriggerKind, label: &str, window: &mut Window, cx: &App) -> f32 {
+    let shaped = crate::views::line_width(window, cx, label, text_metrics::META, LABEL_WEIGHT);
+    let width = match layout {
+        TriggerKind::Model => shaped.min(MODEL_LABEL_MAX),
+        TriggerKind::Thinking | TriggerKind::Agent => shaped,
+    };
+    let scale = window.scale_factor();
+    (width * scale).ceil() / scale
+}
+
+/// `text-foreground` at rest; the model and agent triggers add `hover:opacity-70`
+/// (`ModelControls.tsx:2358,2855`), the Thinking trigger has no hover style (`2739`).
+fn trigger_content(layout: TriggerKind, label: &str, label_width: f32, cx: &App) -> Div {
+    let row = div()
+        .w_full()
+        .h_full()
+        .flex()
+        .items_center()
+        .text_color(cx.theme().foreground)
+        .debug_selector(|| content_selector(layout).to_owned());
     match layout {
-        TriggerKind::Model => div()
-            .flex()
-            .items_center()
+        TriggerKind::Model => row
+            .hover(|style| style.opacity(HOVER_OPACITY))
             .gap(px(GAP_MODEL))
             .child(icon_box(LOGO_SIZE, IconName::Bot))
-            .child(label_box(label, label_width)),
-        TriggerKind::Thinking => div()
-            .flex()
-            .items_center()
+            .child(label_box(layout, label, label_width)),
+        TriggerKind::Thinking => row
             .gap(px(GAP_THINKING))
             .child(
                 div()
@@ -139,13 +164,29 @@ fn trigger_content(layout: TriggerKind, label: &str, label_width: f32) -> Div {
                     .line_height(px(SLASH_LINE_HEIGHT))
                     .child("/"),
             )
-            .child(label_box(label, label_width)),
-        TriggerKind::Agent => div()
-            .flex()
-            .items_center()
+            .child(label_box(layout, label, label_width)),
+        TriggerKind::Agent => row
+            .hover(|style| style.opacity(HOVER_OPACITY))
             .gap(px(GAP_AGENT))
             .child(icon_box(ICON_SIZE, IconName::CircleUser))
-            .child(label_box(label, label_width)),
+            .child(label_box(layout, label, label_width)),
+    }
+}
+
+/// Test lookup keys for a trigger's content row and its label.
+fn content_selector(layout: TriggerKind) -> &'static str {
+    match layout {
+        TriggerKind::Model => "composer-trigger/model",
+        TriggerKind::Thinking => "composer-trigger/thinking",
+        TriggerKind::Agent => "composer-trigger/agent",
+    }
+}
+
+fn label_selector(layout: TriggerKind) -> &'static str {
+    match layout {
+        TriggerKind::Model => "composer-trigger/model/label",
+        TriggerKind::Thinking => "composer-trigger/thinking/label",
+        TriggerKind::Agent => "composer-trigger/agent/label",
     }
 }
 
@@ -161,9 +202,11 @@ fn trigger_width(layout: TriggerKind, label_width: f32, window: &mut Window, cx:
     }
 }
 
-fn label_box(label: &str, width: f32) -> Div {
+fn label_box(layout: TriggerKind, label: &str, width: f32) -> Div {
     div()
+        .debug_selector(|| label_selector(layout).to_owned())
         .w(px(width))
+        .flex_shrink_0()
         .truncate()
         .text_size(px(text_metrics::META))
         .line_height(px(text_metrics::line_height(text_metrics::META)))

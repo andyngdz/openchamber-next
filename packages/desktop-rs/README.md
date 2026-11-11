@@ -144,6 +144,15 @@ The sidecar suite is off by default:
 The layout parity test is part of `cargo test --workspace`: it renders each
 state in a headless window, so it needs no graphical session.
 
+The text-fit test (`src/app/text_fit_test.rs`) renders every
+`fixtures/states/*.json` with its popup the same way and reads the glyphs GPUI
+painted. It fails when a clip cuts a glyph on the left or right, or when a line
+of text runs past the painted box under its first or last glyph, such as a
+menu's hints past the menu's edge. A glyph a clip hides whole is not painted at
+all, so the test cannot see it; the test's doc comment lists what it misses. It
+needs GPUI's `bench-support` feature, enabled for tests
+only, to read the painted scene.
+
 ## Notes
 
 The sidecar runs the CLI in foreground mode, so `openchamber status` lists it

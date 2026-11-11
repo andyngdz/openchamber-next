@@ -23,4 +23,6 @@ tracing-subscriber.workspace = true
 uuid.workspace = true
 
 [dev-dependencies]
-gpui-pre = { version = "=0.3.12", features = ["test-support"] }
+# `bench-support` exposes the painted scene's glyphs (`Window::rendered_scene`) to the text-fit
+# check; as a dev-dependency feature it stays out of the release build.
+gpui-pre = { version = "=0.3.12", features = ["test-support", "bench-support"] }

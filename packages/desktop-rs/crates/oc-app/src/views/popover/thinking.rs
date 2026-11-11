@@ -34,7 +34,9 @@ pub(super) fn items(
     dispatch: &Dispatch,
     registry: &LayoutRegistry,
 ) -> PopupMenu {
-    menu = menu.min_w(px(WIDTH)).max_w(px(WIDTH)).label("Thinking");
+    // The reference width is a floor only: gpui-kit indents a label further than the
+    // reference does, and a capped menu let the hints run past its edge.
+    menu = menu.min_w(px(WIDTH)).label("Thinking");
     for (label, checked, pick) in rows {
         let dispatch = dispatch.clone();
         let pick = pick.clone();
