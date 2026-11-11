@@ -103,9 +103,8 @@ fn content_controls(state: &str) -> HashSet<(String, String)> {
 /// The regions whose reference bounds are not on any device-pixel grid: React centers the
 /// composer in the chat column (x 315.75, width 720.5) and the empty state places it at
 /// y 387.6. GPUI snaps every edge to the device grid, so it is compared on that grid. The
-/// open popup has the same property: Base UI places it at CSS offsets such as x 318/y 386
-/// (DraftTargetSelectors.tsx:363-370), and the headless window snaps those to 317.5/385.5 on
-/// its 2x grid. Decision trace, "Popover bounds".
+/// open popup's bounds are not compared at all: gpui-kit places it (design.md, "Decision
+/// trace", gpui-kit popups).
 const SNAPPED_REGIONS: [&str; 1] = ["composer"];
 
 fn bounds(layout: &Value, region: &str) -> [f64; 4] {
