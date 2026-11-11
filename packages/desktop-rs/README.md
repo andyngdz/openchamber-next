@@ -16,6 +16,8 @@ the streamed reply. It is a spike: it does not replace `packages/electron`.
 `oc-app` also uses `uuid` 1 (feature `v4`) to mint a Chat session's folder and
 `chrono` 0.4 (feature `clock`) for its local date. Both are already in
 `Cargo.lock` through GPUI, so the workspace gains no second version of either.
+It uses `image` 0.25 (feature `png`) to write `--screenshot`, which GPUI already
+depends on, and GPUI Kit's `test-support` feature for the headless renderer.
 
 ## Prerequisites
 
@@ -32,7 +34,8 @@ the streamed reply. It is a spike: it does not replace `packages/electron`.
   ```
 
   Other distributions need the equivalent packages, plus a working Vulkan
-  driver in a Wayland or X11 session.
+  driver. The parity test and `--screenshot` render through GPUI's headless
+  renderer, so they need no Wayland or X11 session.
 
 ## Run
 
@@ -94,9 +97,31 @@ reducer live data takes, and server-bound controls do nothing.
 cargo run -p oc-app -- --state fixtures/states/streaming.json
 ```
 
-With `--dump-layout <file>` the app renders that state at 1440x900, writes the
-bounds of every region and the controls of each, in order, to `<file>` as JSON,
-and exits. The parity test compares these dumps with `fixtures/reference/`.
+With `--dump-layout <file>` the app renders that state at 1440x900 in a headless
+GPUI window, writes the bounds of every region and the controls of each, in
+order, to `<file>` as JSON, and exits. The parity test compares these dumps with
+`fixtures/reference/`. No display server is involved.
+
+With `--screenshot <file>` the app renders the same headless window, using the
+real text system, fonts and theme, and writes the frame as a PNG. No display
+server or Vulkan window is involved: GPUI's headless renderer rasterizes the
+frame. The test window renders at its own 2x scale, so the PNG is 2880x1800 for
+the same 1440x900 content, and the dump records that scale factor.
+
+```bash
+cargo run -p oc-app -- --state fixtures/states/empty.json --screenshot /tmp/empty.png
+```
+
+`tools/screenshots.sh` renders every `fixtures/states/*.json`, popup states with
+their popup open, to `fixtures/screenshots/<state>.gpui.png`, and pairs each with
+its Electron reference at `fixtures/reference/<state>.png` in
+`fixtures/screenshots/<state>.side-by-side.png` (React on the left, GPUI on the
+right, both at the reference's 1440x900). It needs ImageMagick 7 (`magick`).
+
+```bash
+tools/screenshots.sh            # every state
+tools/screenshots.sh empty.json # named states only
+```
 
 ```bash
 cargo run -p oc-app -- --state fixtures/states/empty.json --dump-layout /tmp/empty.json
@@ -110,12 +135,23 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 ```
 
-Two suites are off by default:
+The sidecar suite is off by default:
 
 | Variable | Enables | Needs |
 | --- | --- | --- |
 | `OC_DESKTOP_IT=1` | Sidecar integration tests: start, shut down, no leftover processes | `bun install` and `opencode` |
-| `OC_DESKTOP_UI=1` | Layout parity test against `fixtures/reference/` | A graphical session, because it opens a window |
+
+The layout parity test is part of `cargo test --workspace`: it renders each
+state in a headless window, so it needs no graphical session.
+
+The text-fit test (`src/app/text_fit_test.rs`) renders every
+`fixtures/states/*.json` with its popup the same way and reads the glyphs GPUI
+painted. It fails when a clip cuts a glyph on the left or right, or when a line
+of text runs past the painted box under its first or last glyph, such as a
+menu's hints past the menu's edge. A glyph a clip hides whole is not painted at
+all, so the test cannot see it; the test's doc comment lists what it misses. It
+needs GPUI's `bench-support` feature, enabled for tests
+only, to read the painted scene.
 
 ## Notes
 

@@ -38,6 +38,17 @@ pub enum AppError {
     /// The platform refused to open the window.
     #[error("cannot open the window: {0}")]
     OpenWindow(String),
+    /// The headless window could not be opened, drawn or captured.
+    #[error("cannot render the window headless: {0}")]
+    RenderHeadless(String),
+    /// The screenshot could not be written.
+    #[error("cannot write the screenshot to {path}: {source}")]
+    WriteScreenshot {
+        /// File that was written.
+        path: PathBuf,
+        /// What the image encoder said.
+        source: image::ImageError,
+    },
     /// The I/O runtime or its thread could not start.
     #[error("cannot start the I/O runtime: {0}")]
     StartRuntime(std::io::Error),
@@ -55,7 +66,4 @@ pub enum AppError {
         /// What the file system said.
         source: std::io::Error,
     },
-    /// The window closed before the layout dump was written.
-    #[error("the window closed before the layout was dumped")]
-    DumpNotWritten,
 }

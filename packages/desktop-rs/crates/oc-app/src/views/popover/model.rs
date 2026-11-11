@@ -1,144 +1,155 @@
-//! The model picker panel: search, the leading actions, and the section list.
+//! The model picker panel: the search row with its action, the leading action, and the list.
 
-#[path = "model_rows.rs"]
-mod rows;
-
-use gpui_kit::component::input::Input;
-use gpui_kit::component::{ActiveTheme, Sizable};
+use gpui_kit::assets::IconName;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::input::{InputGroup, InputGroupAddon, InputGroupInput, InputState};
+use gpui_kit::component::list::{List, ListState};
+use gpui_kit::component::{ActiveTheme, Icon, Sizable};
 use gpui_kit::{
-    App, Div, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, div, px,
+    AnyElement, App, Div, Entity, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
-use oc_state::{LoadStatus, ModelSections, model_sections};
+use oc_state::{LoadStatus, State};
 
-use super::common::{control, frame};
-use crate::layout::{Area, ControlSpec, Role, control as control_element};
-use crate::views::{Intent, Scene};
-use rows::{Section, model_row, option_row_flat, provider_header, section_header};
+use super::list::row_item;
+use super::model_list::ModelList;
+use super::model_rows;
+use super::model_search;
+use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::views::{Dispatch, Intent, RETRY, retry_button};
 
 /// `w-[min(380px,calc(100vw-2rem))]` (`ModelControls.tsx:2407-2409`).
 pub(super) const WIDTH: f32 = 380.;
-const SEARCH: &str = "Search models";
-const ADD_PROVIDER: &str = "Add new provider";
+/// The tallest menu the CSS lets the model picker take (`ModelControls.tsx:2407-2409`).
+pub(super) const MAX_HEIGHT: f32 = 392.6;
+/// The model picker's search field, `labels.searchPlaceholder`.
+pub(super) const SEARCH: &str = "Search models";
+/// `px-2 py-1.5` around the field, then its 28px frame (`ModelPickerList.tsx:2130`).
+const SEARCH_ROW_HEIGHT: f32 = 36.;
+const SEARCH_HEIGHT: f32 = 28.;
+/// The leading action's row: `px-2 py-1.5` and the meta line (`ModelPickerList.tsx:960`).
+const LEADING_HEIGHT: f32 = 30.;
+const ROW_HEIGHT: f32 = 30.;
+const HEADER_HEIGHT: f32 = 29.;
 
-/// The model picker panel.
-pub(super) fn panel(scene: Scene<'_>, cx: &App, max_height: f32) -> Div {
-    let directory = super::selection_directory(scene.state);
-    if let Some(LoadStatus::Failed { message }) = directory
+/// The panel: the search row, the leading action and the sections, or the failure with Retry.
+pub(super) fn content(
+    state: &Entity<State>,
+    dispatch: &Dispatch,
+    registry: &LayoutRegistry,
+    list: &Entity<ListState<ModelList>>,
+    cx: &App,
+) -> AnyElement {
+    let state = state.read(cx);
+    let directory = super::selection_directory(state);
+    let failed = directory
         .as_deref()
-        .and_then(|directory| scene.state.catalog_load(directory))
-    {
-        return failure(scene, cx, message.clone());
+        .and_then(|directory| state.catalog_load(directory))
+        .and_then(|load| match load {
+            LoadStatus::Failed { message } => Some(message.clone()),
+            _ => None,
+        });
+    if let Some(message) = failed {
+        return failure(registry, dispatch, &message, directory);
     }
-    let query = scene.search.model.read(cx).value().to_string();
-    let (Some(settings), Some(directory)) = (scene.state.settings(), directory) else {
-        return frame(scene, cx, Some(WIDTH), div());
-    };
-    let Some(catalog) = scene.state.catalog(&directory) else {
-        return frame(scene, cx, Some(WIDTH), div());
-    };
-    let sections = model_sections(catalog, settings, &query);
-    frame(
-        scene,
-        cx,
-        Some(WIDTH),
-        div()
-            .flex()
-            .flex_col()
-            .h(px(max_height))
-            .child(search_row(scene, cx))
-            .child(
-                div()
-                    .id("model-list")
-                    .flex()
-                    .flex_col()
-                    .min_h_0()
-                    .overflow_y_scroll()
-                    .children(list_children(scene, &sections)),
-            ),
-    )
+    let delegate = list.read(cx).delegate();
+    let sections = delegate.sections(cx);
+    let rows: usize = sections.iter().map(|section| section.rows.len()).sum();
+    let headers = sections
+        .iter()
+        .filter(|section| section.header.is_some() && !section.rows.is_empty())
+        .count();
+    let height = panel_height(rows, headers);
+    let search = delegate.search();
+    let panel = div()
+        .w_full()
+        .h(px(height))
+        .flex()
+        .flex_col()
+        .child(search_row(registry, &search, dispatch, list, cx))
+        .child(leading_row(registry, dispatch, cx))
+        .child(div().flex_1().min_h_0().child(List::new(list).w_full()));
+    div().w_full().child(panel).into_any_element()
 }
 
-fn failure(scene: Scene<'_>, cx: &App, message: String) -> Div {
-    let retry = div().child(message).child(control_element(
-        scene.registry,
-        ControlSpec::named(Area::Popover, Role::Button, crate::views::RETRY),
-        div()
-            .id("catalog-retry")
-            .child(crate::views::RETRY)
-            .on_click(
-                scene.on_click_intent(match super::selection_directory(scene.state) {
-                    Some(directory) => Intent::LoadCatalog(directory),
-                    None => Intent::ClosePopover,
-                }),
-            ),
-    ));
-    frame(scene, cx, Some(WIDTH), retry)
+/// The panel's height for its rows and headers, capped at the reference's tallest menu.
+fn panel_height(rows: usize, headers: usize) -> f32 {
+    (SEARCH_ROW_HEIGHT + LEADING_HEIGHT + rows as f32 * ROW_HEIGHT + headers as f32 * HEADER_HEIGHT)
+        .min(MAX_HEIGHT)
 }
 
-fn search_row(scene: Scene<'_>, cx: &App) -> Div {
-    let input = Input::new(&scene.search.model)
-        .appearance(false)
+fn search_row(
+    registry: &LayoutRegistry,
+    search: &Entity<InputState>,
+    dispatch: &Dispatch,
+    list: &Entity<ListState<ModelList>>,
+    cx: &App,
+) -> Div {
+    let spec = ControlSpec::named(Area::Popover, Role::Combobox, SEARCH);
+    let group = InputGroup::new("model-search")
         .small()
-        .w_full();
-    let add = control_element(
-        scene.registry,
-        ControlSpec::named(Area::Popover, Role::Button, ADD_PROVIDER),
-        div()
-            .id("add-provider")
-            .child(ADD_PROVIDER)
-            .on_click(scene.on_click_intent(Intent::ClosePopover)),
-    );
-    // `flex items-center gap-2 px-2 py-1 border-b` (`ModelPickerList.tsx:1307`).
+        .h(px(SEARCH_HEIGHT))
+        .input(InputGroupInput::new(search).aria_label(SEARCH))
+        .addon(
+            InputGroupAddon::new("model-search-icon")
+                .child(Icon::new(IconName::Search).text_color(cx.theme().muted_foreground)),
+        );
+    let keys = list.clone();
+    let close = dispatch.clone();
     div()
-        .px(px(8.))
-        .py(px(4.))
-        .border_b_1()
-        .border_color(cx.theme().border)
+        .w_full()
         .flex()
         .items_center()
         .gap(px(8.))
-        .child(control(scene, Role::Combobox, SEARCH, &[], input))
-        .child(add)
+        .px(px(8.))
+        .py(px(4.))
+        .child(control(registry, spec, group).flex_1())
+        .child(add_provider(registry, dispatch))
+        .capture_key_down(move |event, window, cx| {
+            model_search::search_keys(&keys, &close, event, window, cx)
+        })
 }
 
-fn list_children(scene: Scene<'_>, sections: &ModelSections) -> Vec<Div> {
-    let mut children = vec![option_row_flat(
-        scene,
-        "Run on several models",
-        &[rows::MODELS_GROUP],
-    )];
-    if !sections.favorites.is_empty() {
-        children.push(section_header(scene, Section::Favorites));
-        children.extend(
-            sections
-                .favorites
-                .iter()
-                .map(|entry| model_row(scene, entry, Section::Favorites, rows::FAVORITES)),
-        );
-    }
-    if !sections.recent.is_empty() {
-        children.push(section_header(scene, Section::Recent));
-        children.extend(
-            sections
-                .recent
-                .iter()
-                .map(|entry| model_row(scene, entry, Section::Recent, rows::RECENT)),
-        );
-    }
-    for provider in &sections.providers {
-        children.push(provider_header(
-            scene,
-            &provider.name,
-            &provider.provider_id,
-        ));
-        children.extend(
-            provider
-                .models
-                .iter()
-                .map(|entry| model_row(scene, entry, Section::Provider, &provider.name)),
-        );
-    }
-    children
+fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
+    let spec = ControlSpec::named(Area::Popover, Role::Button, model_rows::ADD_PROVIDER);
+    let close = dispatch.clone();
+    let button = Button::new(spec.key.clone())
+        .ghost()
+        .small()
+        .compact()
+        .icon(Icon::new(IconName::Plus))
+        .label(model_rows::ADD_PROVIDER)
+        .accessibility_label(model_rows::ADD_PROVIDER)
+        .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx));
+    control(registry, spec, button)
+}
+
+fn leading_row(registry: &LayoutRegistry, dispatch: &Dispatch, cx: &App) -> impl IntoElement {
+    let close = dispatch.clone();
+    row_item(registry, dispatch, &model_rows::leading_row(), cx)
+        .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx))
+}
+
+fn failure(
+    registry: &LayoutRegistry,
+    dispatch: &Dispatch,
+    message: &str,
+    directory: Option<String>,
+) -> AnyElement {
+    let retry = dispatch.clone();
+    let retry = retry_button("catalog-retry").on_click(move |_, window, cx| {
+        let intent = match &directory {
+            Some(directory) => Intent::LoadCatalog(directory.clone()),
+            None => Intent::ClosePopover,
+        };
+        retry(&intent, window, cx);
+    });
+    let spec = ControlSpec::named(Area::Popover, Role::Button, RETRY);
+    div()
+        .p(px(12.))
+        .w_full()
+        .child(message.to_owned())
+        .child(control(registry, spec, retry))
+        .into_any_element()
 }
 
 #[cfg(test)]

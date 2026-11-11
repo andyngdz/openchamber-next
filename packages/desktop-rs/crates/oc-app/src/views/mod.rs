@@ -25,25 +25,24 @@ mod icons_test;
 #[cfg(test)]
 mod reference_test;
 
-use std::cell::Cell;
 use std::rc::Rc;
 
 use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::input::InputState;
 use gpui_kit::component::{Icon, Sizable};
-use gpui_kit::{
-    App, Bounds, ClickEvent, Entity, FontWeight, Pixels, SharedString, TextRun, Window, px,
-};
+use gpui_kit::{App, ClickEvent, Entity, FontWeight, SharedString, TextRun, Window, px};
 use oc_state::{Action, SidebarAction, State};
 
 pub(crate) use chat::chat_column;
 pub(crate) use composer::PLACEHOLDER;
 pub(crate) use header::header;
 pub(crate) use icon_rail::icon_rail;
-pub(crate) use popover::popover as popup;
-pub(crate) use popover::{Pick, PopoverKind, selectables};
+#[cfg(test)]
+pub(crate) use popover::trigger_spec;
+pub(crate) use popover::{Pick, PopoverKind, PopoverLists};
+pub(crate) use popover::{filter_model_list, model_search_field};
+pub(crate) use popover::{open_model_picker, thinking_items, thinking_rows};
 pub(crate) use sidebar::sidebar;
 pub(crate) use work_status::work_status;
 
@@ -85,13 +84,18 @@ pub(crate) struct Scene<'a> {
     pub(crate) dispatch: &'a Dispatch,
     /// The open picker popup, if any.
     pub(crate) popover: Option<PopoverKind>,
-    /// The popup search fields.
-    pub(crate) search: &'a PopoverInputs,
-    /// The bounds of every popup's trigger, from the previous frame.
-    pub(crate) triggers: &'a TriggerBounds,
+    /// The shared state entity the popups read.
+    pub(crate) state_entity: &'a Entity<State>,
+    /// The popup lists and menu, owned by the root view.
+    pub(crate) lists: &'a PopoverLists,
 }
 
 impl Scene<'_> {
+    /// The shared state entity, cloned for a popup builder.
+    fn state_entity(&self) -> Entity<State> {
+        self.state_entity.clone()
+    }
+
     /// A click handler that applies `action`.
     fn on_click_dispatch(
         &self,
@@ -107,52 +111,6 @@ impl Scene<'_> {
     ) -> impl Fn(&ClickEvent, &mut Window, &mut App) + 'static {
         let dispatch = self.dispatch.clone();
         move |_, window, cx| dispatch(&intent, window, cx)
-    }
-}
-
-/// The search field of each popup that has one.
-#[derive(Clone)]
-pub(crate) struct PopoverInputs {
-    pub(crate) project: Entity<InputState>,
-    pub(crate) model: Entity<InputState>,
-    pub(crate) agent: Entity<InputState>,
-}
-
-impl PopoverInputs {
-    /// The search field of one popup, if it has one.
-    pub(crate) fn for_kind(&self, kind: PopoverKind) -> Option<&Entity<InputState>> {
-        match kind {
-            PopoverKind::Project => Some(&self.project),
-            PopoverKind::Model => Some(&self.model),
-            PopoverKind::Agent => Some(&self.agent),
-            PopoverKind::Thinking => None,
-        }
-    }
-}
-
-/// The bounds of each popup trigger, recorded while the frame is prepainted.
-#[derive(Clone, Default)]
-pub(crate) struct TriggerBounds {
-    pub(crate) project: Rc<Cell<Option<Bounds<Pixels>>>>,
-    pub(crate) model: Rc<Cell<Option<Bounds<Pixels>>>>,
-    pub(crate) agent: Rc<Cell<Option<Bounds<Pixels>>>>,
-    pub(crate) thinking: Rc<Cell<Option<Bounds<Pixels>>>>,
-}
-
-impl TriggerBounds {
-    /// The cell of one popup's trigger.
-    pub(crate) fn for_kind(&self, kind: PopoverKind) -> &Rc<Cell<Option<Bounds<Pixels>>>> {
-        match kind {
-            PopoverKind::Project => &self.project,
-            PopoverKind::Model => &self.model,
-            PopoverKind::Agent => &self.agent,
-            PopoverKind::Thinking => &self.thinking,
-        }
-    }
-
-    /// The trigger's bounds from the last frame, if it was drawn.
-    pub(crate) fn get(&self, kind: PopoverKind) -> Option<Bounds<Pixels>> {
-        self.for_kind(kind).get()
     }
 }
 

@@ -76,9 +76,6 @@ pub(crate) struct PlacedControl {
 #[derive(Debug, Default)]
 struct Frame {
     content: Option<Bounds<Pixels>>,
-    /// The previous frame's content origin; kept across `begin_frame` so a control can turn
-    /// its window bounds into the dump's content-relative bounds while prepainting.
-    last_content: Option<Bounds<Pixels>>,
     regions: BTreeMap<Area, Bounds<Pixels>>,
     controls: Vec<PlacedControl>,
 }
@@ -103,17 +100,11 @@ impl LayoutRegistry {
     pub(crate) fn record_content(&self, bounds: Bounds<Pixels>) {
         let mut frame = self.frame.borrow_mut();
         frame.content = Some(bounds);
-        frame.last_content = Some(bounds);
     }
 
     /// The content area, if the frame laid it out.
     pub(crate) fn content(&self) -> Option<Bounds<Pixels>> {
         self.frame.borrow().content
-    }
-
-    /// The content area of the previous frame.
-    pub(crate) fn last_content(&self) -> Option<Bounds<Pixels>> {
-        self.frame.borrow().last_content
     }
 
     /// Records a region's bounds.

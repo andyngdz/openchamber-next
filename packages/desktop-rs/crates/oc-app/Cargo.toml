@@ -12,7 +12,8 @@ oc-state.workspace = true
 chrono.workspace = true
 clap.workspace = true
 futures.workspace = true
-gpui-kit.workspace = true
+gpui-kit = { workspace = true, features = ["test-support"] }
+image.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -20,3 +21,8 @@ tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 uuid.workspace = true
+
+[dev-dependencies]
+# `bench-support` exposes the painted scene's glyphs (`Window::rendered_scene`) to the text-fit
+# check; as a dev-dependency feature it stays out of the release build.
+gpui-pre = { version = "=0.3.12", features = ["test-support", "bench-support"] }

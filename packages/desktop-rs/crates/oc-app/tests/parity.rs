@@ -1,28 +1,24 @@
 //! Layout parity with the Electron desktop (`fixtures/reference/`), and a check that the
 //! binary carries no build-machine path.
 //!
-//! The parity cases open a window, so they run only with `OC_DESKTOP_UI=1`:
-//! `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity`.
+//! `--dump-layout` renders in a headless window, so these cases run without a display, in
+//! `cargo test --workspace`.
 
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Mutex, PoisonError, mpsc};
+use std::sync::mpsc;
 use std::time::Duration;
 
 use serde_json::Value;
 
 mod parity_support;
 
-use parity_support::{REGIONS, control_differences};
+use parity_support::{POPOVER_LIST_PREFIX, REGIONS, control_differences};
 
 fn fixtures() -> &'static Path {
     Path::new(env!("OC_DESKTOP_FIXTURES"))
-}
-
-fn ui_enabled() -> bool {
-    std::env::var("OC_DESKTOP_UI").is_ok_and(|value| value == "1")
 }
 
 fn read_json(path: &Path) -> Value {
@@ -36,18 +32,16 @@ fn reference(state: &str) -> Value {
     read_json(&fixtures().join("reference").join(format!("{state}.json")))
 }
 
-/// Longest a dump may take; a window that never gets a frame fails here instead of hanging.
+/// Longest a dump may take; a headless renderer that never produces a frame fails here
+/// instead of hanging the suite.
 const DUMP_LIMIT: Duration = Duration::from_secs(60);
 
 /// Runs `oc-app --dump-layout` for one state fixture and returns the dump.
 ///
-/// Dumps run one at a time: GPUI draws only when the compositor sends a frame, and Wayland
-/// stops sending frames to a window another window covers, so parallel test windows can
-/// starve each other.
+/// The child renders in its own headless window, so the cases run in parallel and need no
+/// display or compositor.
 fn dump(state: &str) -> Value {
-    static ONE_WINDOW: Mutex<()> = Mutex::new(());
     static DUMPS: AtomicUsize = AtomicUsize::new(0);
-    let _window = ONE_WINDOW.lock().unwrap_or_else(PoisonError::into_inner);
     let run_index = DUMPS.fetch_add(1, Ordering::Relaxed);
     let output = std::env::temp_dir().join(format!(
         "oc-app-parity-{}-{run_index}-{state}.json",
@@ -110,9 +104,9 @@ fn content_controls(state: &str) -> HashSet<(String, String)> {
 /// composer in the chat column (x 315.75, width 720.5) and the empty state places it at
 /// y 387.6. GPUI snaps every edge to the device grid, so it is compared on that grid. The
 /// open popup has the same property: Base UI places it at CSS offsets such as x 318/y 386
-/// (DraftTargetSelectors.tsx:363-370), and GPUI snaps those to 317.6/385.6 at scale 1.25.
-/// Decision trace, "Popover bounds".
-const SNAPPED_REGIONS: [&str; 2] = ["composer", "popover"];
+/// (DraftTargetSelectors.tsx:363-370), and the headless window snaps those to 317.5/385.5 on
+/// its 2x grid. Decision trace, "Popover bounds".
+const SNAPPED_REGIONS: [&str; 1] = ["composer"];
 
 fn bounds(layout: &Value, region: &str) -> [f64; 4] {
     let side = |name: &str| {
@@ -143,11 +137,13 @@ fn on_device_grid(expected: [f64; 4], actual: [f64; 4], scale: f64) -> bool {
 }
 
 /// Every region whose bounds differ, with both values. Regions match exactly, except the
-/// composer, which matches on the device grid of the scale the dump ran at.
+/// composer, which matches on the device grid of the scale the dump ran at, and the popover,
+/// whose placement follows the gpui-kit components rather than Base UI.
 fn region_differences(expected: &Value, actual: &Value) -> Vec<String> {
     let scale = actual["scaleFactor"].as_f64().unwrap_or(1.);
     REGIONS
         .iter()
+        .filter(|region| **region != "popover")
         .filter(|region| expected["regions"].get(*region).is_some())
         .filter_map(|&region| {
             let want = bounds(expected, region);
@@ -163,9 +159,6 @@ fn region_differences(expected: &Value, actual: &Value) -> Vec<String> {
 }
 
 fn assert_parity(state: &str) {
-    if !ui_enabled() {
-        return;
-    }
     let expected = reference(state);
     let actual = dump(state);
     let mut differences = region_differences(&expected, &actual);
@@ -224,9 +217,6 @@ fn streaming_session_matches_the_reference() {
 /// The server-error state exists only in this app; its regions sit where the empty state's do.
 #[test]
 fn server_error_keeps_the_empty_state_regions() {
-    if !ui_enabled() {
-        return;
-    }
     let differences = region_differences(&dump("empty"), &dump("server-error"));
 
     assert!(
@@ -278,26 +268,124 @@ fn composer_edges_compare_on_the_device_grid() {
     let reference_empty = [315.75, 387.6, 720.5, 100.];
     let reference_session = [315.75, 784., 720.5, 100.];
 
-    // Measured on this machine at scale 1.25 (0.8 px grid).
+    // Measured on this machine in the headless window, at its 2x scale (0.5 px grid).
     assert!(on_device_grid(
         reference_empty,
-        [316., 387.2, 720.8, 100.],
-        1.25
+        [315.5, 387.5, 720.5, 100.],
+        2.
     ));
     assert!(on_device_grid(
         reference_session,
-        [315.2, 784., 720.8, 100.],
-        1.25
+        [315.5, 784., 720.5, 100.],
+        2.
     ));
-    // A whole logical pixel off is two device pixels at 1.25, a real difference.
+    // A whole logical pixel off is two device pixels at 2x, a real difference.
     assert!(!on_device_grid(
         reference_session,
-        [314.4, 784., 720.8, 100.],
-        1.25
+        [314.5, 784., 720.5, 100.],
+        2.
     ));
     assert!(!on_device_grid(
         reference_session,
-        [315.2, 785.6, 720.8, 100.],
-        1.25
+        [315.5, 785., 720.5, 100.],
+        2.
     ));
+}
+
+/// One control as the dump places it on the frame.
+struct Placed {
+    key: String,
+    role: String,
+    name: String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+impl Placed {
+    fn read(control: &Value) -> Self {
+        let number = |field: &str| {
+            control["bounds"][field]
+                .as_f64()
+                .unwrap_or_else(|| panic!("control has no {field}: {control}"))
+        };
+        Self {
+            key: control["key"].as_str().unwrap_or_default().to_owned(),
+            role: control["role"].as_str().unwrap_or_default().to_owned(),
+            name: control["name"].as_str().unwrap_or_default().to_owned(),
+            x: number("x"),
+            y: number("y"),
+            width: number("width"),
+            height: number("height"),
+        }
+    }
+
+    fn overlaps(&self, other: &Self) -> bool {
+        self.x < other.x + other.width
+            && other.x < self.x + self.width
+            && self.y < other.y + other.height
+            && other.y < self.y + self.height
+    }
+}
+
+fn placed_controls(layout: &Value) -> Vec<Placed> {
+    layout["regions"]["popover"]["controls"]
+        .as_array()
+        .map(|controls| controls.iter().map(Placed::read).collect())
+        .unwrap_or_default()
+}
+
+/// A model section header: `FAVORITES`, `RECENT`, or a provider's `id logo NAME` label.
+fn is_section_header(control: &Placed) -> bool {
+    control.role == "button"
+        && control.key.starts_with(POPOVER_LIST_PREFIX)
+        && (control.key.ends_with("/FAVORITES")
+            || control.key.ends_with("/RECENT")
+            || control.name.contains(" logo "))
+}
+
+fn is_row(control: &Placed) -> bool {
+    matches!(control.role.as_str(), "option" | "menuitem")
+}
+
+/// `List` measures one section-header size from the first section and lays every section out
+/// with it. A section without a header gave every header zero height, and the header was drawn
+/// over the row below it; this fails for such a list.
+#[test]
+fn every_picker_section_header_sits_above_its_rows() {
+    for state in ["model-popover", "project-popover", "agent-menu"] {
+        let layout = dump(state);
+        let controls = placed_controls(&layout);
+        let headers: Vec<&Placed> = controls
+            .iter()
+            .filter(|control| is_section_header(control))
+            .collect();
+        let rows: Vec<&Placed> = controls.iter().filter(|control| is_row(control)).collect();
+        for header in &headers {
+            assert!(
+                header.height > 0.,
+                "{state}: section header {:?} was laid out with no height",
+                header.name
+            );
+            for row in &rows {
+                assert!(
+                    !header.overlaps(row),
+                    "{state}: section header {:?} overlaps row {:?}",
+                    header.name,
+                    row.name
+                );
+            }
+        }
+        for (index, row) in rows.iter().enumerate() {
+            for other in &rows[index + 1..] {
+                assert!(
+                    !row.overlaps(other),
+                    "{state}: rows {:?} and {:?} overlap",
+                    row.name,
+                    other.name
+                );
+            }
+        }
+    }
 }

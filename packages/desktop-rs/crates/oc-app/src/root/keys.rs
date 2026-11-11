@@ -1,7 +1,14 @@
-//! Keyboard handling: picker navigation, `mod+shift+m`, and Enter-to-send.
+//! Keyboard handling: `mod+shift+m`, and Enter-to-send.
+//!
+//! The draft is gpui-base's `TextareaState`, whose `Input` key context binds `enter`,
+//! `shift-enter` and the platform's secondary-enter to its own `Enter` action. GPUI dispatches
+//! a bound action before key-down listeners, so the composer decides on the action in its
+//! capture phase. Only combinations no binding claims reach the key-down listener.
 
+use gpui_kit::Focusable as _;
+use gpui_kit::component::input::Enter;
 use gpui_kit::{App, Context, EntityInputHandler, KeyDownEvent, Modifiers, Window};
-use oc_state::{EnterKeys, should_submit_enter};
+use oc_state::{ComposerStatus, ConnectionStatus, EnterKeys, SessionStatus, should_submit_enter};
 
 use super::RootView;
 use crate::views::PopoverKind;
@@ -20,33 +27,25 @@ fn enter_keys(modifiers: Modifiers) -> EnterKeys {
     }
 }
 
+/// The modifiers of a bound `Enter` action. Its own fields say which binding fired, so the
+/// action does not depend on the window having seen a modifiers-changed event first.
+fn action_keys(action: &Enter, window: &Window, cx: &App) -> EnterKeys {
+    let modifiers = window.modifiers();
+    let (ctrl, meta) = match (action.secondary, cx.platform_info().is_mac()) {
+        (false, _) => (modifiers.control, modifiers.platform),
+        (true, true) => (modifiers.control, true),
+        (true, false) => (true, modifiers.platform),
+    };
+    EnterKeys {
+        shift: action.shift || modifiers.shift,
+        ctrl,
+        meta,
+        alt: modifiers.alt,
+    }
+}
+
 const KEY_MODEL_PICKER: &str = "m";
 const KEY_ENTER: &str = "enter";
-
-/// A popup key, parsed once at the keyboard boundary.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum PopupKey {
-    Escape,
-    Enter,
-    Up,
-    Down,
-    Next,
-    Previous,
-}
-
-/// Whether the secondary modifier is held.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Secondary {
-    Held,
-    NotHeld,
-}
-
-/// Which way the popup cursor moves.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Direction {
-    Forward,
-    Backward,
-}
 
 impl RootView {
     /// Handles a key before the focused control sees it.
@@ -57,6 +56,16 @@ impl RootView {
         cx: &mut Context<Self>,
     ) {
         let keystroke = &event.keystroke;
+        if keystroke.key == KEY_ENTER || matches!(keystroke.key_char.as_deref(), Some("\n" | "\r"))
+        {
+            tracing::debug!(
+                target: crate::logging::APP,
+                key = %keystroke.key,
+                key_char = ?keystroke.key_char,
+                marked = self.marked_text(window, cx),
+                "[KEYS] Enter key reached the window"
+            );
+        }
         let secondary = keystroke.modifiers.secondary(cx);
         if secondary
             && keystroke.modifiers.shift
@@ -67,58 +76,76 @@ impl RootView {
             cx.stop_propagation();
             return;
         }
-        match self.popover {
-            Some(kind) => self.popup_key(kind, event, window, cx),
-            None => self.composer_key(event, window, cx),
+        // An open popup owns its keys; its component handles navigation, Enter and Escape.
+        if self.popover.is_none() {
+            self.composer_key(event, window, cx);
         }
     }
 
-    fn popup_key(
+    /// The composer's Enter action, before the textarea inserts a newline.
+    pub(super) fn composer_enter(
         &mut self,
-        kind: PopoverKind,
-        event: &KeyDownEvent,
+        action: &Enter,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let held = event.keystroke.modifiers.secondary(cx);
-        let secondary = if held {
-            Secondary::Held
-        } else {
-            Secondary::NotHeld
-        };
-        let Some(key) = PopupKey::parse(event.keystroke.key.as_str(), secondary) else {
+        tracing::debug!(
+            target: crate::logging::APP,
+            shift = action.shift,
+            secondary = action.secondary,
+            popover = self.popover.is_some(),
+            marked = self.marked_text(window, cx),
+            "[KEYS] Composer Enter action"
+        );
+        if self.popover.is_some() || self.marked_text(window, cx) {
             return;
-        };
-        let query = self.query(kind, cx);
-        let picks = crate::views::selectables(self.state.read(cx), kind, &query);
-        match key {
-            PopupKey::Escape => self.close_popover(window, cx),
-            PopupKey::Enter => {
-                if let Some(pick) = picks.get(self.cursor).cloned() {
-                    self.pick(pick, window, cx);
-                }
-            }
-            PopupKey::Up => self.move_cursor(picks.len(), Direction::Backward, cx),
-            PopupKey::Down => self.move_cursor(picks.len(), Direction::Forward, cx),
-            PopupKey::Next => self.move_cursor(picks.len(), Direction::Forward, cx),
-            PopupKey::Previous => self.move_cursor(picks.len(), Direction::Backward, cx),
+        }
+        let keys = action_keys(action, window, cx);
+        if self.enter_sends(keys, cx) && self.can_send(cx) {
+            self.send_prompt(cx);
+            cx.stop_propagation();
+        }
+    }
+
+    /// Enter combinations no key binding claims, such as Alt+Enter.
+    fn composer_key(&mut self, event: &KeyDownEvent, window: &mut Window, cx: &mut Context<Self>) {
+        if event.keystroke.key != KEY_ENTER || self.marked_text(window, cx) {
+            return;
+        }
+        let keys = enter_keys(event.keystroke.modifiers);
+        if self.enter_sends(keys, cx) && self.can_send(cx) {
+            self.send_prompt(cx);
+        } else {
+            // Let the textarea's own handler insert the newline for this combination.
+            window.dispatch_action(
+                Box::new(Enter {
+                    secondary: false,
+                    shift: true,
+                }),
+                cx,
+            );
         }
         window.prevent_default();
         cx.stop_propagation();
     }
 
-    fn composer_key(&mut self, event: &KeyDownEvent, window: &mut Window, cx: &mut Context<Self>) {
-        if event.keystroke.key != KEY_ENTER || self.marked_text(window, cx) {
-            return;
-        }
+    /// Whether React's composer policy sends for these modifiers.
+    fn enter_sends(&self, keys: EnterKeys, cx: &App) -> bool {
         let settings = self.state.read(cx).settings().cloned();
-        let keys = enter_keys(event.keystroke.modifiers);
-        let send = settings.map_or(!keys.shift, |settings| should_submit_enter(&settings, keys));
-        if send {
-            self.send_prompt(cx);
-            window.prevent_default();
-            cx.stop_propagation();
-        }
+        settings.map_or(
+            !keys.shift && (!keys.alt || keys.ctrl || keys.meta),
+            |settings| should_submit_enter(&settings, keys),
+        )
+    }
+
+    /// The checks `send_prompt` makes before it builds a request.
+    fn can_send(&self, cx: &App) -> bool {
+        let state = self.state.read(cx);
+        let composer = state.composer();
+        state.connection() == &ConnectionStatus::Connected
+            && composer.status != ComposerStatus::Sending
+            && !composer.draft.trim().is_empty()
+            && (state.open().is_none() || state.open_status() != SessionStatus::Busy)
     }
 
     /// Whether the composer's input has marked (composing) text.
@@ -126,24 +153,6 @@ impl RootView {
         self.draft.update(cx, |draft, cx| {
             draft.marked_text_range(window, cx).is_some()
         })
-    }
-
-    fn query(&self, kind: PopoverKind, cx: &App) -> String {
-        self.search
-            .for_kind(kind)
-            .map(|input| input.read(cx).value().to_string())
-            .unwrap_or_default()
-    }
-
-    fn move_cursor(&mut self, count: usize, direction: Direction, cx: &mut Context<Self>) {
-        if count == 0 {
-            return;
-        }
-        self.cursor = match direction {
-            Direction::Forward => (self.cursor + 1) % count,
-            Direction::Backward => (self.cursor + count - 1) % count,
-        };
-        cx.notify();
     }
 
     /// Opens a picker, clears its search and focuses it.
@@ -155,11 +164,28 @@ impl RootView {
     ) {
         self.popover = Some(kind);
         self.cursor = 0;
-        if let Some(input) = self.search.for_kind(kind) {
-            input.update(cx, |state, cx| {
-                state.set_value("", window, cx);
-                state.focus(window, cx);
-            });
+        match kind {
+            PopoverKind::Project => self
+                .lists
+                .project
+                .update(cx, |list, cx| list.focus(window, cx)),
+            PopoverKind::Model => crate::views::open_model_picker(&self.lists, window, cx),
+            PopoverKind::Agent => self
+                .lists
+                .agent
+                .update(cx, |list, cx| list.focus(window, cx)),
+            PopoverKind::Thinking => {
+                let rows = crate::views::thinking_rows(self.state.read(cx));
+                let dispatch = self.dispatch.clone();
+                let registry = self.registry.clone();
+                self.lists.thinking.update(cx, |menu, cx| {
+                    menu.rebuild(window, cx, |menu, _, _| {
+                        crate::views::thinking_items(menu, rows.clone(), &dispatch, &registry)
+                    })
+                });
+                let handle = self.lists.thinking.read(cx).focus_handle(cx);
+                handle.focus(window, cx);
+            }
         }
         cx.notify();
     }
@@ -170,20 +196,6 @@ impl RootView {
         self.cursor = 0;
         self.draft.update(cx, |draft, cx| draft.focus(window, cx));
         cx.notify();
-    }
-}
-
-impl PopupKey {
-    fn parse(key: &str, secondary: Secondary) -> Option<Self> {
-        match key {
-            "escape" => Some(Self::Escape),
-            KEY_ENTER => Some(Self::Enter),
-            "up" => Some(Self::Up),
-            "down" => Some(Self::Down),
-            "n" if secondary == Secondary::Held => Some(Self::Next),
-            "p" if secondary == Secondary::Held => Some(Self::Previous),
-            _ => None,
-        }
     }
 }
 

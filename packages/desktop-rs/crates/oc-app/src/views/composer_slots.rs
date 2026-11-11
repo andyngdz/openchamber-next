@@ -4,7 +4,7 @@ use gpui_kit::assets::IconName;
 use oc_state::{LoadStatus, SessionStatus, State};
 
 use crate::views::popover::{
-    PopoverKind, selected_agent_label, selected_model_label, selection_directory,
+    DEFAULT_MODEL, PopoverKind, selected_agent_label, selected_model_label, selection_directory,
 };
 
 const AGENT: &str = "Build";
@@ -75,7 +75,7 @@ fn model_tool(state: &State) -> Tool {
             label: UNAVAILABLE.to_owned(),
         };
     }
-    let name = selected_model_label(state).unwrap_or_else(|| "Default model".to_owned());
+    let name = selected_model_label(state).unwrap_or_else(|| DEFAULT_MODEL.to_owned());
     let label = name
         .split_once(" logo ")
         .map_or_else(|| name.clone(), |(_, model)| model.to_owned());
