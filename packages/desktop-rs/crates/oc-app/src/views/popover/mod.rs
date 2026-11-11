@@ -1,248 +1,210 @@
-//! The four picker popups, placed from their trigger bounds and the CSS React anchors them
-//! with.
+//! The four picker popups, built on gpui-component's `Popover` and `List`/`PopupMenu`.
 //!
-//! The panels are laid out by `Anchor` rules ported from Base UI's positioner configuration
-//! (`DraftTargetSelectors.tsx:363-370`, `ModelControls.tsx:2407-2413,2747,2894`): a popup
-//! below the project trigger, and the three composer menus above it, right-aligned by 40px.
+//! `Popover` owns placement, outside-press dismissal, focus capture and restoration, and the
+//! scroll-blocking surface. `List` owns the search field, filtering, rows, scrolling, and
+//! keyboard navigation; `PopupMenu` owns the Thinking menu.
 
 mod agent;
-mod common;
+mod labels;
+mod list;
 mod model;
+mod model_rows;
 mod project;
 mod thinking;
 
-use gpui_kit::{Anchor, AnyElement, App, IntoElement, ParentElement, Window, anchored, point, px};
-use oc_state::{Project, State, model_sections, ranked_agents, ranked_projects};
+use gpui_kit::component::button::Button;
+use gpui_kit::component::list::ListState;
+use gpui_kit::component::menu::PopupMenu;
+use gpui_kit::component::popover::{Popover, PopoverState};
+use gpui_kit::{
+    Anchor, AnyElement, App, AppContext as _, Context, Div, Entity, IntoElement, ParentElement,
+    Styled, Window, div, px,
+};
+use oc_state::State;
 
-use super::Scene;
+use super::{Dispatch, Scene};
+use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 
+pub(crate) use labels::{
+    selected_agent_label, selected_model_label, selected_model_variants, selection_directory,
+};
 pub(crate) use types::{Pick, PopoverKind};
 
 mod types;
 
-/// The popup positioned from the trigger it belongs to.
-pub(crate) fn popover(scene: Scene<'_>, window: &mut Window, cx: &App) -> Option<AnyElement> {
-    let kind = scene.popover?;
-    let trigger = scene.triggers.get(kind)?;
-    let viewport = window.viewport_size().height;
-    let content_origin = scene
-        .registry
-        .last_content()
-        .map_or(0., |bounds| f32::from(bounds.origin.y));
-    let available = available_height(trigger, viewport, content_origin);
-    let panel = match kind {
-        PopoverKind::Project => project::panel(scene, cx),
-        PopoverKind::Model => model::panel(scene, cx, available),
-        PopoverKind::Agent => agent::panel(scene, cx),
-        PopoverKind::Thinking => thinking::panel(scene, window, cx),
-    };
-    let mut placement = anchored().position_mode(gpui_kit::AnchoredPositionMode::Window);
-    placement = match kind {
-        // Side bottom, align start, sideOffset 4 (`DraftTargetSelectors.tsx:363-368`). Base UI
-        // has no `alignOffset` here, so the popup's left edge is the trigger's; the offset is
-        // zero and the trigger is the button, not the row around it (`empty_state`).
-        PopoverKind::Project => placement
-            .attach(trigger, Anchor::BottomLeft)
-            .anchor(Anchor::TopLeft)
-            .offset(point(px(0.), px(4.))),
-        // Side top, align end, alignOffset -40, sideOffset 4 (`dropdown-menu.tsx:155,205-212`;
-        // the menus call it at `ModelControls.tsx:2410,2747,2894`). The fixed-size menus are
-        // placed from their own box so GPUI's rounded right edge does not move the panel when
-        // its width changes.
-        PopoverKind::Model => {
-            let left = trigger.right() + px(40.) - px(model::WIDTH);
-            let top = trigger.top() - px(4.) - px(available);
-            placement.position(point(left, top))
-        }
-        PopoverKind::Thinking => {
-            let left = trigger.right() + px(40.) - px(thinking::panel_width(window, cx));
-            let top = trigger.top() - px(4.) - px(thinking::panel_height(scene));
-            placement.position(point(left, top))
-        }
-        PopoverKind::Agent => placement
-            .attach(trigger, Anchor::TopRight)
-            .anchor(Anchor::BottomRight)
-            .offset(point(px(40.), px(-4.))),
-    };
-    Some(placement.child(panel).into_any_element())
+const CHOOSE_PROJECT: &str = "Choose project";
+/// The model trigger when no catalog model is selected.
+pub(crate) const DEFAULT_MODEL: &str = "Default model";
+
+/// The searchable lists and the Thinking menu, owned by the root view so their state survives
+/// a render.
+#[derive(Clone)]
+pub(crate) struct PopoverLists {
+    pub(crate) project: Entity<ListState<project::ProjectList>>,
+    pub(crate) model: Entity<ListState<model::ModelList>>,
+    pub(crate) agent: Entity<ListState<agent::AgentList>>,
+    pub(crate) thinking: Entity<PopupMenu>,
 }
 
-/// The rows Enter can pick, in the popup's drawn order.
-pub(crate) fn selectables(state: &State, kind: PopoverKind, query: &str) -> Vec<Pick> {
+impl PopoverLists {
+    /// Creates the four popup states; their delegates read the shared state each frame.
+    pub(crate) fn new(
+        state: &Entity<State>,
+        dispatch: Dispatch,
+        registry: LayoutRegistry,
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Self {
+        let project = cx.new(|cx| {
+            ListState::new(
+                project::ProjectList::new(state.clone(), dispatch.clone(), registry.clone()),
+                window,
+                cx,
+            )
+            .searchable(true)
+        });
+        let model = cx.new(|cx| {
+            ListState::new(
+                model::ModelList::new(state.clone(), dispatch.clone(), registry.clone()),
+                window,
+                cx,
+            )
+            .searchable(true)
+        });
+        let agent = cx.new(|cx| {
+            ListState::new(
+                agent::AgentList::new(state.clone(), dispatch.clone(), registry.clone()),
+                window,
+                cx,
+            )
+            .searchable(true)
+        });
+        let rows = thinking::rows(state.read(cx));
+        let thinking = thinking::build(window, cx, rows, &dispatch, &registry);
+        Self {
+            project,
+            model,
+            agent,
+            thinking,
+        }
+    }
+}
+
+/// The popup trigger and its panel, all owned by the `Popover` component.
+pub(crate) fn trigger_control(scene: Scene<'_>, kind: PopoverKind, button: Button) -> Div {
+    let spec = trigger_spec(kind, scene.state);
+    control(scene.registry, spec, popover(scene, kind, button))
+}
+
+/// The control the `Popover` trigger is recorded under, for tests that press it.
+pub(crate) fn trigger_spec(kind: PopoverKind, state: &State) -> ControlSpec {
     match kind {
-        PopoverKind::Project => {
-            let Some(settings) = state.settings() else {
-                return Vec::new();
-            };
-            std::iter::once(Pick::Chat)
-                .chain(
-                    ranked_projects(settings, query)
-                        .into_iter()
-                        .filter_map(project_id),
-                )
-                .collect()
+        PopoverKind::Project => ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT),
+        PopoverKind::Model | PopoverKind::Agent | PopoverKind::Thinking => {
+            ControlSpec::named(Area::Composer, Role::Button, trigger_name(kind, state))
         }
-        PopoverKind::Model => model_rows(state, query),
-        PopoverKind::Agent => ranked_agents_in(state, query)
-            .into_iter()
-            .map(|agent| Pick::Agent(agent.id.clone()))
-            .collect(),
+    }
+}
+
+fn trigger_name(kind: PopoverKind, state: &State) -> String {
+    match kind {
+        PopoverKind::Project => CHOOSE_PROJECT.to_owned(),
+        PopoverKind::Model => {
+            selected_model_label(state).unwrap_or_else(|| DEFAULT_MODEL.to_owned())
+        }
+        PopoverKind::Agent => selected_agent_label(state).unwrap_or_else(|| "Build".to_owned()),
         PopoverKind::Thinking => {
-            let mut picks = vec![Pick::Variant(None)];
-            picks.extend(
-                selected_model_variants(state)
-                    .into_iter()
-                    .map(|variant| Pick::Variant(Some(variant))),
-            );
-            picks
+            let label = state
+                .current_selection()
+                .and_then(|selection| selection.variant())
+                .and_then(|choice| choice.variant());
+            let effort = crate::views::model_names::effort_label(label);
+            if state.open().is_some() {
+                format!("Thinking: {effort}")
+            } else {
+                format!("Thinking: {effort}, last used with this model")
+            }
         }
     }
 }
 
-/// The directory the composer's pickers read the catalog from.
-pub(crate) fn selection_directory(state: &State) -> Option<String> {
-    if state.open().is_some() {
-        return Some(
-            state
-                .open_entry()
-                .map(|entry| entry.directory.clone())
-                .unwrap_or_else(|| state.directory().to_owned()),
-        );
-    }
-    match state.draft().target.directory() {
-        Some(directory) => Some(directory.to_owned()),
-        None => Some(state.directory().to_owned()),
-    }
-}
-
-/// The catalog models on a row list, in the popup's order.
-pub(crate) fn model_rows(state: &State, query: &str) -> Vec<Pick> {
-    let (Some(settings), Some(directory)) = (state.settings(), selection_directory(state)) else {
-        return Vec::new();
+fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button) -> Popover {
+    let state = scene.state_entity();
+    let dispatch = scene.dispatch.clone();
+    let registry = scene.registry.clone();
+    let lists = scene.lists.clone();
+    let open = scene.popover == Some(kind);
+    let close = dispatch.clone();
+    let open_change = move |open: &bool, window: &mut Window, cx: &mut App| {
+        let intent = if *open {
+            super::Intent::OpenPopover(kind)
+        } else {
+            super::Intent::ClosePopover
+        };
+        close(&intent, window, cx);
     };
-    let Some(catalog) = state.catalog(&directory) else {
-        return Vec::new();
+    let content = move |_: &mut PopoverState, _: &mut Window, cx: &mut Context<PopoverState>| {
+        content(kind, &state, &dispatch, &registry, &lists, cx)
     };
-    let sections = model_sections(catalog, settings, query);
-    sections
-        .favorites
-        .iter()
-        .chain(sections.recent.iter())
-        .chain(
-            sections
-                .providers
-                .iter()
-                .flat_map(|section| section.models.iter()),
-        )
-        .map(model_pick)
-        .collect()
-}
-
-/// The agent rows the menu draws for `query`, ranked as React ranks them.
-pub(crate) fn ranked_agents_in<'a>(
-    state: &'a State,
-    query: &str,
-) -> Vec<&'a oc_client::catalog::Agent> {
-    let Some(directory) = selection_directory(state) else {
-        return Vec::new();
-    };
-    let Some(catalog) = state.catalog(&directory) else {
-        return Vec::new();
-    };
-    ranked_agents(catalog, query)
-}
-
-/// The selected model's Thinking levels, in the server's order.
-pub(crate) fn selected_model_variants(state: &State) -> Vec<String> {
-    let Some((provider_id, model_id)) = selected_model(state) else {
-        return Vec::new();
-    };
-    let Some(directory) = selection_directory(state) else {
-        return Vec::new();
-    };
-    let Some(catalog) = state.catalog(&directory) else {
-        return Vec::new();
-    };
-    catalog
-        .provider(&provider_id)
-        .and_then(|provider| provider.models.iter().find(|model| model.id == model_id))
-        .map(|model| {
-            model
-                .variants
-                .iter()
-                .map(|variant| variant.id.clone())
-                .collect()
-        })
-        .unwrap_or_default()
-}
-
-/// The selected model's provider and catalog id.
-pub(crate) fn selected_model(state: &State) -> Option<(String, String)> {
-    let key = state.current_selection()?.model()?;
-    Some((key.provider_id().to_owned(), key.id().to_owned()))
-}
-
-/// The selected model's label (`provider logo name`).
-pub(crate) fn selected_model_label(state: &State) -> Option<String> {
-    let (provider_id, model_id) = selected_model(state)?;
-    let directory = selection_directory(state)?;
-    let catalog = state.catalog(&directory)?;
-    let provider = catalog.provider(&provider_id)?;
-    let model = provider.models.iter().find(|model| model.id == model_id)?;
-    let name = super::model_names::model_display_name(&model.name, &model.id);
-    Some(format!("{provider_id} logo {name}"))
-}
-
-/// The agent trigger's label: the display name, else the id capitalized.
-pub(crate) fn selected_agent_label(state: &State) -> Option<String> {
-    let agent = state.current_selection()?.agent()?;
-    let directory = selection_directory(state)?;
-    let catalog = state.catalog(&directory)?;
-    let entry = catalog.agent(agent)?;
-    Some(super::model_names::agent_display_name(
-        &entry.display_name,
-        &entry.id,
-    ))
-}
-
-/// One model row's pick.
-pub(crate) fn model_pick(entry: &oc_state::ModelEntry) -> Pick {
-    Pick::Model {
-        provider_id: entry.provider_id.clone(),
-        model_id: entry.model_id.clone(),
+    let popover = Popover::new(format!("popover-{kind:?}"))
+        .open(open)
+        .on_open_change(open_change)
+        .trigger(button)
+        .content(content);
+    match kind {
+        PopoverKind::Project => popover
+            .anchor(Anchor::TopLeft)
+            .offset(px(4.))
+            .p(px(0.))
+            .w(px(project::WIDTH)),
+        PopoverKind::Model => popover
+            .anchor(Anchor::BottomRight)
+            .offset(px(4.))
+            .p(px(0.))
+            .w(px(model::WIDTH))
+            .max_h(px(model::MAX_HEIGHT)),
+        PopoverKind::Agent => popover
+            .anchor(Anchor::BottomRight)
+            .offset(px(4.))
+            .p(px(0.))
+            .w(px(agent::WIDTH)),
+        PopoverKind::Thinking => popover
+            .appearance(false)
+            .anchor(Anchor::BottomRight)
+            .offset(px(4.)),
     }
 }
 
-/// The space above the trigger that Base UI gives the model popup: the chat area above the
-/// trigger minus the side offset (4) and Base UI's 5px collision padding.
-fn available_height(
-    trigger: gpui_kit::Bounds<gpui_kit::Pixels>,
-    viewport: gpui_kit::Pixels,
-    content_origin: f32,
-) -> f32 {
-    // The chat column's header (`h-12`, `ChatContainer.tsx:396`).
-    const CHAT_TOP: f32 = 48.;
-    // `sideOffset={4}` (`DraftTargetSelectors.tsx:365`, `ModelControls.tsx:2408`).
-    const SIDE_OFFSET: f32 = 4.;
-    // Base UI's default collision padding, which these positioners do not override.
-    const COLLISION_PADDING: f32 = 5.;
-    // The tallest menu the CSS lets the model picker take (`ModelControls.tsx:2407-2409`).
-    const MAX_HEIGHT: f32 = 400.;
-    // The space below which the popup opens on the other side.
-    const MIN_ABOVE: f32 = 200.;
-    let top = f32::from(trigger.origin.y) - content_origin;
-    let bottom = f32::from(trigger.bottom()) - content_origin;
-    let above = top - CHAT_TOP - SIDE_OFFSET - COLLISION_PADDING;
-    let below = f32::from(viewport) - content_origin - bottom - SIDE_OFFSET - COLLISION_PADDING;
-    if above >= MIN_ABOVE {
-        above.min(MAX_HEIGHT)
-    } else {
-        below.min(MAX_HEIGHT)
-    }
+fn content(
+    kind: PopoverKind,
+    state: &Entity<State>,
+    dispatch: &Dispatch,
+    registry: &LayoutRegistry,
+    lists: &PopoverLists,
+    cx: &App,
+) -> AnyElement {
+    let body = match kind {
+        PopoverKind::Project => project::content(state, dispatch, registry, &lists.project, cx),
+        PopoverKind::Model => model::content(state, dispatch, registry, &lists.model, cx),
+        PopoverKind::Agent => agent::content(state, dispatch, registry, &lists.agent, cx),
+        PopoverKind::Thinking => lists.thinking.clone().into_any_element(),
+    };
+    crate::layout::region(registry, Area::Popover, div().w_full().child(body)).into_any_element()
 }
 
-fn project_id(project: &Project) -> Option<Pick> {
-    project.id().map(|id| Pick::Project(id.to_owned()))
+/// The Thinking menu rows for the current model.
+pub(crate) fn thinking_rows(state: &State) -> Vec<(String, bool, Pick)> {
+    thinking::rows(state)
+}
+
+/// Fills an existing Thinking menu with rows, keeping its identity.
+pub(crate) fn thinking_items(
+    menu: PopupMenu,
+    rows: Vec<(String, bool, Pick)>,
+    dispatch: &Dispatch,
+    registry: &LayoutRegistry,
+) -> PopupMenu {
+    thinking::items(menu, rows, dispatch, registry)
 }
 
 #[cfg(test)]

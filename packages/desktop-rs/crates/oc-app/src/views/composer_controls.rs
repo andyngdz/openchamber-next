@@ -1,17 +1,16 @@
 //! The composer footer's left icon group and right trigger/action group.
 
-use gpui_kit::StatefulInteractiveElement;
 use gpui_kit::assets::IconName;
 use gpui_kit::component::Disableable;
+use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::{
-    AnyElement, App, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Styled,
-    Window, div, px,
+    AnyElement, App, Div, FontWeight, IntoElement, ParentElement, Styled, Window, div, px,
 };
 use oc_state::{ComposerStatus, ConnectionStatus, State};
 
 use super::slots::{Tool, TriggerKind, tool_name};
-use crate::layout::anchored_control;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::views::popover::trigger_control;
 use crate::views::text_metrics;
 use crate::views::{Intent, Scene, icon_button};
 
@@ -62,7 +61,7 @@ pub(super) fn right_group(
     let mut group = div().flex().items_center();
     for (index, tool) in tools.iter().enumerate() {
         let slot = match tool {
-            Tool::Trigger { .. } => trigger(scene, tool, registry, window, cx),
+            Tool::Trigger { .. } => trigger(scene, tool, window, cx),
             Tool::Icon(name, icon) => icon_control(name, *icon, registry),
             Tool::Send | Tool::Stop => action_control(scene, tool, registry),
         };
@@ -99,13 +98,7 @@ fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> A
     control(registry, spec, button).into_any_element()
 }
 
-fn trigger(
-    scene: Scene<'_>,
-    tool: &Tool,
-    registry: &LayoutRegistry,
-    window: &mut Window,
-    cx: &App,
-) -> AnyElement {
+fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyElement {
     let Tool::Trigger {
         kind,
         layout,
@@ -118,18 +111,14 @@ fn trigger(
     let spec = ControlSpec::named(Area::Composer, Role::Button, name.clone());
     let label_width = crate::views::line_width(window, cx, label, text_metrics::META, LABEL_WEIGHT);
     let width = trigger_width(*layout, label_width, window, cx);
-    let trigger = trigger_content(*layout, label, label_width)
+    let button = Button::new(spec.key.clone())
+        .ghost()
+        .compact()
         .w(px(width))
         .h(px(TRIGGER_HEIGHT))
-        .id(spec.key.clone())
-        .on_click(scene.on_click_intent(Intent::OpenPopover(*kind)));
-    anchored_control(
-        registry,
-        spec,
-        trigger,
-        scene.triggers.for_kind(*kind).clone(),
-    )
-    .into_any_element()
+        .accessibility_label(name.clone())
+        .child(trigger_content(*layout, label, label_width));
+    trigger_control(scene, *kind, button).into_any_element()
 }
 
 fn trigger_content(layout: TriggerKind, label: &str, label_width: f32) -> Div {

@@ -4,6 +4,9 @@
 
 mod keys;
 mod live;
+#[cfg(test)]
+#[path = "overlay_test.rs"]
+mod overlay_test;
 mod picks;
 mod plan;
 mod requests;
@@ -15,18 +18,18 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 
 use gpui_kit::component::ActiveTheme;
-use gpui_kit::component::input::{InputEvent, InputState, TextareaState};
+use gpui_kit::component::input::{Enter, InputEvent, TextareaState};
 use gpui_kit::{
-    AppContext, Context, Entity, InteractiveElement, IntoElement, KeyDownEvent, ParentElement,
-    Render, ScrollHandle, Styled, Subscription, Task, Window, div, px,
+    AppContext, Context, DismissEvent, Entity, InteractiveElement, IntoElement, KeyDownEvent,
+    ParentElement, Render, ScrollHandle, Styled, Subscription, Task, Window, div, px,
 };
 use oc_state::{Action, State};
 
 use crate::layout::{LayoutRegistry, content};
 use crate::live::ServerLink;
 use crate::views::{
-    Dispatch, PLACEHOLDER, PopoverInputs, PopoverKind, Scene, TriggerBounds, chat_column, header,
-    icon_rail, popup, sidebar, work_status,
+    Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, Scene, chat_column, header, icon_rail,
+    sidebar, work_status,
 };
 
 /// The whole window.
@@ -40,8 +43,8 @@ pub(crate) struct RootView {
     pub(super) popover: Option<PopoverKind>,
     /// The popup row the keyboard is on.
     pub(super) cursor: usize,
-    pub(super) search: PopoverInputs,
-    pub(super) triggers: TriggerBounds,
+    /// The lists and menu the popovers render.
+    pub(super) lists: PopoverLists,
     /// The live server; `None` for a fixture, whose server-bound controls do nothing.
     pub(super) link: Option<ServerLink>,
     /// Waits for the server thread's answer to the latest start; a new start replaces it.
@@ -55,7 +58,7 @@ pub(crate) struct RootView {
     /// Directories whose catalogs the window asked for; a reconnect refetches them.
     pub(super) catalogs: BTreeSet<String>,
     _draft_events: Subscription,
-    _search_events: Vec<Subscription>,
+    _thinking_dismiss: Subscription,
 }
 
 impl RootView {
@@ -76,48 +79,34 @@ impl RootView {
                     this.dispatch(Action::DraftChanged(text), cx);
                 }
             });
-        let project = cx.new(|cx| InputState::new(window, cx).placeholder("Search projects..."));
-        let model = cx.new(|cx| InputState::new(window, cx).placeholder("Search models"));
-        let agent = cx.new(|cx| InputState::new(window, cx).placeholder("Search agents"));
-        let mut search_events = Vec::new();
-        for input in [&project, &model, &agent] {
-            search_events.push(cx.subscribe_in(
-                input,
-                window,
-                |this, _, event: &InputEvent, _, cx| {
-                    if matches!(event, InputEvent::Change) {
-                        this.cursor = 0;
-                        cx.notify();
-                    }
-                },
-            ));
-        }
+        let state = cx.new(|_| state);
         let root = cx.entity().downgrade();
         let dispatch: Dispatch = Rc::new(move |intent, window, cx| {
             root.update(cx, |this, cx| this.handle(intent.clone(), window, cx))
                 .ok();
         });
+        let lists = PopoverLists::new(&state, dispatch.clone(), registry.clone(), window, cx);
+        let thinking_dismiss = cx.subscribe_in(
+            &lists.thinking,
+            window,
+            |this, _, _: &DismissEvent, window, cx| this.close_popover(window, cx),
+        );
         Self {
-            state: cx.new(|_| state),
+            state,
             registry,
             draft,
             scroll: ScrollHandle::new(),
             dispatch,
             popover,
             cursor: 0,
-            search: PopoverInputs {
-                project,
-                model,
-                agent,
-            },
-            triggers: TriggerBounds::default(),
+            lists,
             link,
             starting: None,
             exit_check: None,
             record_pids_on_list: false,
             catalogs: BTreeSet::new(),
             _draft_events: draft_events,
-            _search_events: search_events,
+            _thinking_dismiss: thinking_dismiss,
         }
     }
 
@@ -140,8 +129,8 @@ impl Render for RootView {
             registry: &self.registry,
             dispatch: &self.dispatch,
             popover: self.popover,
-            search: &self.search,
-            triggers: &self.triggers,
+            state_entity: &self.state,
+            lists: &self.lists,
         };
         let theme = cx.theme();
         let body = div()
@@ -151,7 +140,7 @@ impl Render for RootView {
             .child(chat_column(scene, &self.draft, &self.scroll, window, cx))
             .child(work_status(scene, cx))
             .child(icon_rail(&self.registry, cx));
-        let mut root = div()
+        let root = div()
             .size_full()
             .flex()
             .bg(theme.background)
@@ -167,11 +156,14 @@ impl Render for RootView {
                     .child(header(scene, cx))
                     .child(body),
             );
-        if let Some(popup) = popup(scene, window, cx) {
-            root = root.child(popup);
-        }
-        content(&self.registry, root).capture_key_down(
-            cx.listener(|this, event: &KeyDownEvent, window, cx| this.on_key(event, window, cx)),
-        )
+        content(&self.registry, root)
+            .capture_action(cx.listener(|this, action: &Enter, window, cx| {
+                this.composer_enter(action, window, cx)
+            }))
+            .capture_key_down(
+                cx.listener(|this, event: &KeyDownEvent, window, cx| {
+                    this.on_key(event, window, cx)
+                }),
+            )
     }
 }

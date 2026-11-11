@@ -112,7 +112,7 @@ fn content_controls(state: &str) -> HashSet<(String, String)> {
 /// open popup has the same property: Base UI places it at CSS offsets such as x 318/y 386
 /// (DraftTargetSelectors.tsx:363-370), and GPUI snaps those to 317.6/385.6 at scale 1.25.
 /// Decision trace, "Popover bounds".
-const SNAPPED_REGIONS: [&str; 2] = ["composer", "popover"];
+const SNAPPED_REGIONS: [&str; 1] = ["composer"];
 
 fn bounds(layout: &Value, region: &str) -> [f64; 4] {
     let side = |name: &str| {
@@ -143,11 +143,13 @@ fn on_device_grid(expected: [f64; 4], actual: [f64; 4], scale: f64) -> bool {
 }
 
 /// Every region whose bounds differ, with both values. Regions match exactly, except the
-/// composer, which matches on the device grid of the scale the dump ran at.
+/// composer, which matches on the device grid of the scale the dump ran at, and the popover,
+/// whose placement follows the gpui-kit components rather than Base UI.
 fn region_differences(expected: &Value, actual: &Value) -> Vec<String> {
     let scale = actual["scaleFactor"].as_f64().unwrap_or(1.);
     REGIONS
         .iter()
+        .filter(|region| **region != "popover")
         .filter(|region| expected["regions"].get(*region).is_some())
         .filter_map(|&region| {
             let want = bounds(expected, region);

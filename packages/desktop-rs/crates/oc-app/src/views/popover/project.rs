@@ -1,82 +1,134 @@
-//! The Choose project popup: a fixed `w-72` panel below the composer's project trigger.
+//! The project picker: Chat and the ranked projects, over `List`.
 
-use gpui_kit::component::input::Input;
-use gpui_kit::component::{ActiveTheme, Sizable};
-use gpui_kit::{App, Div, ParentElement, Styled, div, px};
-use oc_state::{Project, Settings, ranked_projects};
+use gpui_kit::component::IndexPath;
+use gpui_kit::component::list::{List, ListDelegate, ListState};
+use gpui_kit::{
+    AnyElement, App, Context, Entity, IntoElement, ParentElement, Styled, Task, Window, div, px,
+};
+use oc_state::{Project, State, ranked_projects};
 
-use super::common::{control, frame, option_row};
-use crate::layout::Role;
-use crate::views::Scene;
-use crate::views::popover::Pick;
+use super::list::RowAction;
+use super::list::{Row, search};
+use crate::layout::{LayoutRegistry, Role};
+use crate::views::{Dispatch, Intent};
 
 /// `w-72` = 18rem at the 16px root (`DraftTargetSelectors.tsx:373`).
-const WIDTH: f32 = 288.;
+pub(super) const WIDTH: f32 = 288.;
 const SEARCH: &str = "Search projects...";
 const PROJECT_GROUP: &str = "Project";
+const SEARCH_HEIGHT: f32 = 32.;
+const ROW_HEIGHT: f32 = 34.2;
 
-/// The project picker panel.
-pub(super) fn panel(scene: Scene<'_>, cx: &App) -> Div {
-    let query = scene.search.project.read(cx).value().to_string();
-    let rows = scene
-        .state
-        .settings()
-        .map(|settings| project_rows(scene, cx, settings, &query))
-        .unwrap_or_default();
-    frame(
-        scene,
-        cx,
-        Some(WIDTH),
-        div()
-            .flex()
-            .flex_col()
-            .child(search_row(scene, cx))
-            .children(rows),
-    )
+/// The project picker's rows, filtered by the list's search field.
+pub(crate) struct ProjectList {
+    state: Entity<State>,
+    dispatch: Dispatch,
+    registry: LayoutRegistry,
+    query: String,
+    selected: Option<IndexPath>,
 }
 
-fn search_row(scene: Scene<'_>, cx: &App) -> Div {
-    let input = Input::new(&scene.search.project)
-        .appearance(false)
-        .small()
-        .w_full();
-    // `h-8 ... border-b px-3` on the command input wrapper (`command.tsx:68-72`).
-    div()
-        .h(px(32.))
-        .border_b_1()
-        .border_color(cx.theme().border)
-        .px(px(12.))
-        .flex()
-        .items_center()
-        .child(control(scene, Role::Combobox, SEARCH, &[], input))
+impl ProjectList {
+    /// A delegate reading the shared state each frame.
+    pub(crate) fn new(state: Entity<State>, dispatch: Dispatch, registry: LayoutRegistry) -> Self {
+        Self {
+            state,
+            dispatch,
+            registry,
+            query: String::new(),
+            selected: None,
+        }
+    }
+
+    fn rows(&self, cx: &App) -> Vec<Row> {
+        let mut rows = vec![project_row("Chat".to_owned(), super::Pick::Chat)];
+        if let Some(settings) = self.state.read(cx).settings() {
+            rows.extend(
+                ranked_projects(settings, &self.query)
+                    .into_iter()
+                    .filter_map(|project| {
+                        let id = project.id()?.to_owned();
+                        Some(project_row(label(project), super::Pick::Project(id)))
+                    }),
+            );
+        }
+        rows
+    }
 }
 
-fn project_rows(scene: Scene<'_>, cx: &App, settings: &Settings, query: &str) -> Vec<Div> {
-    let mut rows = vec![option_row(
-        scene,
-        cx,
-        Role::Option,
-        "Chat",
-        &[PROJECT_GROUP],
-        Pick::Chat,
-    )];
-    rows.extend(
-        ranked_projects(settings, query)
-            .into_iter()
-            .filter_map(|project| {
-                let id = project.id()?.to_owned();
-                let name = label(project);
-                Some(option_row(
-                    scene,
-                    cx,
-                    Role::Option,
-                    name,
-                    &[PROJECT_GROUP],
-                    Pick::Project(id),
-                ))
-            }),
-    );
-    rows
+fn project_row(name: String, pick: super::Pick) -> Row {
+    Row {
+        name: name.clone(),
+        visible: name,
+        role: Role::Option,
+        ancestors: vec![PROJECT_GROUP.to_owned()],
+        action: RowAction::Pick(pick),
+        star: None,
+        described: None,
+        repeat: None,
+        star_under_row: true,
+    }
+}
+
+impl ListDelegate for ProjectList {
+    type Item = gpui_kit::component::list::ListItem;
+
+    fn items_count(&self, _section: usize, cx: &App) -> usize {
+        self.rows(cx).len()
+    }
+
+    fn render_item(
+        &mut self,
+        index: IndexPath,
+        _window: &mut Window,
+        cx: &mut Context<ListState<Self>>,
+    ) -> Option<Self::Item> {
+        self.rows(cx)
+            .get(index.row)
+            .map(|row| super::list::row_item(&self.registry, &self.dispatch, row))
+    }
+
+    fn set_selected_index(
+        &mut self,
+        index: Option<IndexPath>,
+        _window: &mut Window,
+        _cx: &mut Context<ListState<Self>>,
+    ) {
+        self.selected = index;
+    }
+
+    fn confirm(
+        &mut self,
+        _secondary: bool,
+        window: &mut Window,
+        cx: &mut Context<ListState<Self>>,
+    ) {
+        let Some(index) = self.selected else {
+            return;
+        };
+        let rows = self.rows(cx);
+        let Some(row) = rows.get(index.row) else {
+            return;
+        };
+        match &row.action {
+            RowAction::Pick(pick) => (self.dispatch)(&Intent::Pick(pick.clone()), window, cx),
+            RowAction::Close => (self.dispatch)(&Intent::ClosePopover, window, cx),
+        }
+    }
+
+    fn cancel(&mut self, window: &mut Window, cx: &mut Context<ListState<Self>>) {
+        (self.dispatch)(&Intent::ClosePopover, window, cx);
+    }
+
+    fn perform_search(
+        &mut self,
+        query: &str,
+        _window: &mut Window,
+        _cx: &mut Context<ListState<Self>>,
+    ) -> Task<()> {
+        self.query = query.to_owned();
+        Task::ready(())
+    }
 }
 
 fn label(project: &Project) -> String {
@@ -93,6 +145,21 @@ fn label(project: &Project) -> String {
             })
         })
         .unwrap_or_default()
+}
+
+/// The popped-up list: its search field, then the ranked rows.
+pub(super) fn content(
+    _state: &Entity<State>,
+    _dispatch: &Dispatch,
+    registry: &LayoutRegistry,
+    list: &Entity<ListState<ProjectList>>,
+    cx: &App,
+) -> AnyElement {
+    let rows = list.read(cx).delegate().rows(cx);
+    let height = SEARCH_HEIGHT + rows.len() as f32 * ROW_HEIGHT;
+    let list = List::new(list).search_placeholder(SEARCH).w_full();
+    let panel = search(registry, Role::Combobox, SEARCH, list).h(px(height));
+    div().w_full().child(panel).into_any_element()
 }
 
 #[cfg(test)]

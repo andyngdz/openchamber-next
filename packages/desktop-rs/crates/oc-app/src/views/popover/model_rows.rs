@@ -1,201 +1,226 @@
-//! One model row and the section headers around it.
+//! The model picker's rows and sections.
 
-use gpui_kit::assets::IconName;
-use gpui_kit::{
-    Div, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, div, px,
-};
-use oc_state::{ModelEntry, SelectionAction};
+use oc_state::{ModelEntry, ModelSections, SelectionAction, State, model_sections};
 
+use super::list::RowAction;
+use super::list::{Header, Row, Section, Star, StarKind};
 use crate::layout::Role;
-use crate::views::Intent;
-use crate::views::Scene;
 use crate::views::model_names::compact_tokens;
-use crate::views::popover::common::{control, hidden_control};
-use crate::views::popover::{Pick, selected_model};
-use crate::views::text_metrics;
-
-/// `rounded-md` (`ModelPickerList.tsx:960`) = `--radius-md` 0.4375rem
-/// (`design-system.css:892`).
-const ROW_RADIUS: f32 = 7.;
-/// `px-2` (`ModelPickerList.tsx:960`): 0.5rem.
-const ROW_PADDING_X: f32 = 8.;
-/// `py-1.5` (`ModelPickerList.tsx:960`): 0.375rem.
-const ROW_PADDING_Y: f32 = 6.;
-/// `gap-2` between the row's children (`ModelPickerList.tsx:960`): 0.5rem.
-const ROW_GAP: f32 = 8.;
-
-/// The Favorites or Recent section header height: `px-2 py-1.5 typography-micro`
-/// (`MobileSheetList.tsx:11`).
-pub(super) fn header_height() -> f32 {
-    2. * ROW_PADDING_Y + text_metrics::line_height(text_metrics::MICRO)
-}
-
-/// One option row's height: `px-2 py-1.5 typography-meta` (`ModelPickerList.tsx:960`).
-pub(super) fn row_height() -> f32 {
-    2. * ROW_PADDING_Y + text_metrics::line_height(text_metrics::META)
-}
-
-/// The list's accessibility group, `ModelPickerList`'s named list.
 pub(super) const MODELS_GROUP: &str = "Models";
-/// The Favorites group and header (`chat.modelControls.favorites`).
-pub(super) const FAVORITES: &str = "Favorites";
-/// The Recent group and header (`chat.modelControls.recent`).
-pub(super) const RECENT: &str = "Recent";
+const ADD_PROVIDER: &str = "Add new provider";
+const RUN_ON_SEVERAL: &str = "Run on several models";
+const FAVORITES: &str = "Favorites";
+const RECENT: &str = "Recent";
 
-/// Which section a row belongs to.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(super) enum Section {
-    /// A starred model.
+/// Whether a row's star is filled.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(super) enum Favorite {
+    /// The model is starred.
+    Yes,
+    /// The model can be starred.
+    No,
+}
+
+impl Favorite {
+    fn is_favorite(self) -> bool {
+        matches!(self, Self::Yes)
+    }
+}
+
+/// Whether a row is the session's current model.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Selected {
+    /// This row is the current model.
+    Yes,
+    /// This row is another model.
+    No,
+}
+
+impl Selected {
+    fn is_selected(self) -> bool {
+        matches!(self, Self::Yes)
+    }
+}
+
+/// Which group a row belongs to, which decides whether its label shows the provider.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(super) enum SectionKind {
     Favorites,
-    /// A recently picked model.
     Recent,
-    /// A model of one provider's open section.
     Provider,
 }
 
-impl Section {
-    fn label(self) -> &'static str {
-        match self {
-            Self::Favorites => FAVORITES,
-            Self::Recent => RECENT,
-            Self::Provider => MODELS_GROUP,
-        }
-    }
-
-    fn header(self) -> &'static str {
-        match self {
-            Self::Favorites => "FAVORITES",
-            Self::Recent => "RECENT",
-            Self::Provider => MODELS_GROUP,
-        }
-    }
-
+impl SectionKind {
     fn shows_provider(self) -> bool {
         !matches!(self, Self::Provider)
     }
 }
 
-/// The Favorites or Recent section header (`PICKER_SECTION_HEADER_CLASS`).
-pub(super) fn section_header(scene: Scene<'_>, section: Section) -> Div {
-    let header = div()
-        .h(px(header_height()))
-        .px(px(ROW_PADDING_X))
-        .flex()
-        .items_center()
-        .text_size(px(text_metrics::MICRO))
-        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
-        .child(section.header());
-    control(
-        scene,
-        Role::Button,
-        section.header(),
-        &[MODELS_GROUP, section.label()],
-        header,
-    )
+/// The panel's sections in drawn order, filtered by `query`.
+pub(super) fn sections(state: &State, query: &str) -> Vec<Section> {
+    let mut sections = leading_sections();
+    let Some(found) = found_sections(state, query) else {
+        return sections;
+    };
+    sections.push(group(
+        "FAVORITES",
+        FAVORITES,
+        &found.favorites,
+        SectionKind::Favorites,
+        state,
+    ));
+    sections.push(group(
+        "RECENT",
+        RECENT,
+        &found.recent,
+        SectionKind::Recent,
+        state,
+    ));
+    sections.extend(
+        found
+            .providers
+            .iter()
+            .map(|provider| provider_section(provider, state)),
+    );
+    sections
 }
 
-/// One provider's header (`ModelPickerList.tsx:1100-1110`).
-pub(super) fn provider_header(scene: Scene<'_>, provider_name: &str, provider_id: &str) -> Div {
-    let name = format!("{provider_id} logo {}", provider_name.to_uppercase());
-    let header = div()
-        .h(px(header_height()))
-        .px(px(ROW_PADDING_X))
-        .flex()
-        .items_center()
-        .text_size(px(text_metrics::MICRO))
-        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
-        .child(name.clone());
-    control(
-        scene,
-        Role::Button,
-        name,
-        &[MODELS_GROUP, provider_name],
-        header,
-    )
+fn leading_sections() -> Vec<Section> {
+    vec![Section {
+        header: None,
+        rows: vec![
+            flat_row(ADD_PROVIDER, Role::Button, Vec::new()),
+            flat_row(RUN_ON_SEVERAL, Role::Option, vec![MODELS_GROUP.to_owned()]),
+        ],
+    }]
 }
 
-/// The leading "Run on several models" row.
-pub(super) fn option_row_flat(scene: Scene<'_>, name: &'static str, ancestors: &[&str]) -> Div {
-    let row = div()
-        .id(name)
-        .h(px(row_height()))
-        .px(px(ROW_PADDING_X))
-        .rounded(px(ROW_RADIUS))
-        .flex()
-        .items_center()
-        .text_size(px(text_metrics::META))
-        .line_height(px(text_metrics::line_height(text_metrics::META)))
-        .child(name);
-    control(
-        scene,
-        Role::Option,
-        name,
+fn found_sections(state: &State, query: &str) -> Option<ModelSections> {
+    let settings = state.settings()?;
+    let directory = super::selection_directory(state)?;
+    let catalog = state.catalog(&directory)?;
+    Some(model_sections(catalog, settings, query))
+}
+
+fn provider_section(provider: &oc_state::ProviderSection, state: &State) -> Section {
+    let name = format!(
+        "{} logo {}",
+        provider.provider_id,
+        provider.name.to_uppercase()
+    );
+    Section {
+        header: Some(Header {
+            name,
+            ancestors: vec![MODELS_GROUP.to_owned(), provider.name.clone()],
+        }),
+        rows: provider
+            .models
+            .iter()
+            .map(|entry| model_row(entry, &provider.name, SectionKind::Provider, state))
+            .collect(),
+    }
+}
+
+fn group(
+    header_name: &str,
+    label: &str,
+    entries: &[ModelEntry],
+    kind: SectionKind,
+    state: &State,
+) -> Section {
+    Section {
+        header: Some(Header {
+            name: header_name.to_owned(),
+            ancestors: vec![MODELS_GROUP.to_owned(), label.to_owned()],
+        }),
+        rows: entries
+            .iter()
+            .map(|entry| model_row(entry, label, kind, state))
+            .collect(),
+    }
+}
+
+fn flat_row(name: &str, role: Role, ancestors: Vec<String>) -> Row {
+    Row {
+        name: name.to_owned(),
+        visible: name.to_owned(),
+        role,
         ancestors,
-        row.on_click(scene.on_click_intent(Intent::ClosePopover)),
-    )
+        action: RowAction::Close,
+        star: None,
+        described: None,
+        repeat: None,
+        star_under_row: true,
+    }
 }
 
-/// One model row with its star toggle.
-pub(super) fn model_row(
-    scene: Scene<'_>,
-    entry: &ModelEntry,
-    section: Section,
-    group: &str,
-) -> Div {
-    let row_name = row_name(scene, entry, section);
-    let favorite = scene.state.settings().is_some_and(|settings| {
+fn model_row(entry: &ModelEntry, group: &str, kind: SectionKind, state: &State) -> Row {
+    let favorite = favorite_state(state, entry);
+    let selected = if is_selected(state, entry) {
+        Selected::Yes
+    } else {
+        Selected::No
+    };
+    Row {
+        name: row_name(entry, kind, selected, state),
+        visible: visible_name(entry, kind),
+        role: Role::Option,
+        ancestors: vec![MODELS_GROUP.to_owned(), group.to_owned()],
+        action: RowAction::Pick(super::Pick::Model {
+            provider_id: entry.provider_id.clone(),
+            model_id: entry.model_id.clone(),
+        }),
+        star: Some(model_star(entry, favorite)),
+        described: None,
+        repeat: None,
+        star_under_row: true,
+    }
+}
+
+fn favorite_state(state: &State, entry: &ModelEntry) -> Favorite {
+    let favorite = state.settings().is_some_and(|settings| {
         settings.favorite_models.iter().any(|reference| {
             reference.provider_id == entry.provider_id && reference.model_id == entry.model_id
         })
     });
-    let label = if favorite { "Unfavorite" } else { "Favorite" };
-    let star_ancestors = [MODELS_GROUP, group, row_name.as_str()];
-    let star = hidden_control(
-        scene,
-        Role::Button,
-        label,
-        &star_ancestors,
-        div()
-            .id(label)
-            .child(if favorite {
-                IconName::StarFill
-            } else {
-                IconName::Star
-            })
-            .on_click(scene.on_click_intent(Intent::ApplySelection(
-                SelectionAction::ToggleFavoriteModel {
-                    provider_id: entry.provider_id.clone(),
-                    model_id: entry.model_id.clone(),
-                },
-            ))),
-    );
-    let row = div()
-        .id(row_name.clone())
-        .h(px(row_height()))
-        .px(px(ROW_PADDING_X))
-        .flex()
-        .items_center()
-        .gap(px(ROW_GAP))
-        .child(visible_name(entry, section))
-        .child(div().flex_1())
-        .child(star);
-    control(
-        scene,
-        Role::Option,
-        row_name.clone(),
-        &[MODELS_GROUP, group],
-        row.on_click(scene.on_click_intent(Intent::Pick(Pick::Model {
-            provider_id: entry.provider_id.clone(),
-            model_id: entry.model_id.clone(),
-        }))),
-    )
+    if favorite {
+        Favorite::Yes
+    } else {
+        Favorite::No
+    }
 }
 
-fn row_name(scene: Scene<'_>, entry: &ModelEntry, section: Section) -> String {
-    let mut name = visible_name(entry, section);
-    if is_selected(scene, entry) && !entry.variants.is_empty() {
-        let variant = scene
-            .state
+fn is_selected(state: &State, entry: &ModelEntry) -> bool {
+    state
+        .current_selection()
+        .and_then(|selection| selection.model())
+        .is_some_and(|key| key.provider_id() == entry.provider_id && key.id() == entry.model_id)
+}
+
+fn model_star(entry: &ModelEntry, favorite: Favorite) -> Star {
+    Star {
+        label: if favorite.is_favorite() {
+            "Unfavorite"
+        } else {
+            "Favorite"
+        },
+        action: SelectionAction::ToggleFavoriteModel {
+            provider_id: entry.provider_id.clone(),
+            model_id: entry.model_id.clone(),
+        },
+        kind: if favorite.is_favorite() {
+            StarKind::Filled
+        } else {
+            StarKind::Outline
+        },
+        shown: favorite.is_favorite(),
+    }
+}
+
+fn row_name(entry: &ModelEntry, kind: SectionKind, selected: Selected, state: &State) -> String {
+    let mut name = visible_name(entry, kind);
+    if selected.is_selected() && !entry.variants.is_empty() {
+        let variant = state
             .current_selection()
             .and_then(|selection| selection.variant())
             .and_then(|choice| choice.variant())
@@ -206,9 +231,10 @@ fn row_name(scene: Scene<'_>, entry: &ModelEntry, section: Section) -> String {
     name
 }
 
-fn visible_name(entry: &ModelEntry, section: Section) -> String {
+/// The model's visible label: name, provider when the group shows it, and context.
+pub(super) fn visible_name(entry: &ModelEntry, kind: SectionKind) -> String {
     let mut name = crate::views::model_names::model_display_name(&entry.name, &entry.model_id);
-    if section.shows_provider() {
+    if kind.shows_provider() {
         name.push(' ');
         name.push_str(&entry.provider_name);
     }
@@ -217,12 +243,6 @@ fn visible_name(entry: &ModelEntry, section: Section) -> String {
         name.push_str(&compact_tokens(context));
     }
     name
-}
-
-fn is_selected(scene: Scene<'_>, entry: &ModelEntry) -> bool {
-    selected_model(scene.state).is_some_and(|(provider_id, model_id)| {
-        provider_id == entry.provider_id && model_id == entry.model_id
-    })
 }
 
 #[cfg(test)]

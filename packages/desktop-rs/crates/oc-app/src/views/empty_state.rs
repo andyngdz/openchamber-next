@@ -16,7 +16,7 @@ use super::header::server_label;
 use super::composer::{WIDTH, composer};
 use super::popover::PopoverKind;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
-use crate::layout::{Area, ControlSpec, Role, anchored_control, control};
+use crate::layout::{Area, ControlSpec, Role, control};
 
 /// Chat column width minus the composer width, halved: the composer's left edge.
 const LEFT: f32 = (792. - WIDTH) / 2.;
@@ -46,23 +46,19 @@ fn choose_project(scene: Scene<'_>) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
     let button = label_button(&spec, Some(IconName::ChevronDown), CHOOSE_PROJECT)
         // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
-        .h(px(28.))
-        .on_click(scene.on_click_intent(Intent::OpenPopover(PopoverKind::Project)));
-    // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`). The popup is
-    // anchored to the trigger button, not this row: Base UI's `align="start"` puts the
-    // popup's left edge on the button, which is exactly the row's 2px inset.
-    let row = div()
+        .h(px(28.));
+    // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`).
+    div()
         .h(px(28.))
         .px(px(2.))
         .flex()
         .items_center()
-        .child(anchored_control(
-            scene.registry,
-            spec,
+        .child(super::popover::trigger_control(
+            scene,
+            PopoverKind::Project,
             button,
-            scene.triggers.project.clone(),
-        ));
-    row.into_any_element()
+        ))
+        .into_any_element()
 }
 
 /// A quick-action chip: smaller and outlined, so a row holds as many as React's.

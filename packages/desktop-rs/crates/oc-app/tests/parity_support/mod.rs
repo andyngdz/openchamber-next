@@ -56,23 +56,45 @@ fn is_tool_row(key: &str, role: &str) -> bool {
     repeated && role == "button" && TOOL_ROW_BASES.iter().any(|prefix| base.starts_with(prefix))
 }
 
-/// One thing the order check matches: an exact key, or a tool row by its base key.
+/// The model picker's list rows. `List` virtualizes its rows, so the dump renders only the
+/// viewport's prefix of this run while the reference DOM holds all of them.
+const POPOVER_LIST_PREFIX: &str = "popover/Models/";
+
+/// A model-list row under the `List` virtualizer.
+fn is_popover_list_row(key: &str, role: &str) -> bool {
+    let (base, _) = base_key(key);
+    base.starts_with(POPOVER_LIST_PREFIX) && matches!(role, "option" | "button")
+}
+
+/// One thing the order check matches: an exact key, a tool row, or a virtualized popover row.
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Token {
     Exact(String),
     Row(String),
+    VirtualRow(String),
 }
 
-/// A key the reference lists in order, or its tool rows as one unbroken run.
+/// Which virtualization rule a run follows.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum RunKind {
+    /// Chat tool rows: the reference window may start anywhere in the dump's full run.
+    ToolWindow,
+    /// Popover list rows: the dump renders a prefix of the reference's full run.
+    PopoverPrefix,
+}
+
+/// A key the reference lists in order, or its rows as one unbroken run.
 #[derive(Debug)]
 enum Segment {
     Exact(String),
-    Run(Vec<Token>),
+    Run(RunKind, Vec<Token>),
 }
 
 fn token(key: &str, role: &str) -> Token {
     if is_tool_row(key, role) {
         Token::Row(base_key(key).0.to_owned())
+    } else if is_popover_list_row(key, role) {
+        Token::VirtualRow(base_key(key).0.to_owned())
     } else {
         Token::Exact(key.to_owned())
     }
@@ -105,32 +127,47 @@ pub fn control_differences(
 
 /// What is wrong with one region, if anything.
 fn region_order(region: &str, wanted: &[Token], dumped: &[Token]) -> Option<String> {
+    // A virtualized popover list renders a prefix, so unresolved `VirtualRow`s are covered by
+    // the run check below; every other token must appear.
     let missing: Vec<&Token> = wanted
         .iter()
-        .filter(|want| !dumped.contains(want))
+        .filter(|want| !matches!(want, Token::VirtualRow(_)) && !dumped.contains(want))
         .collect();
     if !missing.is_empty() {
         return Some(format!("{region}: missing {missing:?}"));
     }
     let shared: Vec<&Token> = dumped
         .iter()
-        .filter(|got| matches!(got, Token::Row(_)) || wanted.contains(got))
+        .filter(|got| matches!(got, Token::Row(_) | Token::VirtualRow(_)) || wanted.contains(got))
         .collect();
     (!in_order(&segments(wanted), dumped))
         .then(|| format!("{region}: order differs\n  expected {wanted:?}\n  got      {shared:?}"))
 }
 
-/// Consecutive tool rows of the reference become one run.
+/// Consecutive rows of one virtualization rule become one run.
 fn segments(wanted: &[Token]) -> Vec<Segment> {
     let mut segments: Vec<Segment> = Vec::new();
     for token in wanted {
-        match (token, segments.last_mut()) {
-            (Token::Row(_), Some(Segment::Run(run))) => run.push(token.clone()),
-            (Token::Row(_), _) => segments.push(Segment::Run(vec![token.clone()])),
-            (Token::Exact(key), _) => segments.push(Segment::Exact(key.clone())),
+        let kind = match token {
+            Token::Row(_) => Some(RunKind::ToolWindow),
+            Token::VirtualRow(_) => Some(RunKind::PopoverPrefix),
+            Token::Exact(key) => {
+                segments.push(Segment::Exact(key.clone()));
+                None
+            }
+        };
+        if let Some(kind) = kind {
+            push_run(&mut segments, kind, token);
         }
     }
     segments
+}
+
+fn push_run(segments: &mut Vec<Segment>, kind: RunKind, token: &Token) {
+    match segments.last_mut() {
+        Some(Segment::Run(existing, run)) if *existing == kind => run.push(token.clone()),
+        _ => segments.push(Segment::Run(kind, vec![token.clone()])),
+    }
 }
 
 /// Whether the segments appear in the dump in order, each run contiguous. Taking the earliest
@@ -143,10 +180,19 @@ fn in_order(segments: &[Segment], dumped: &[Token]) -> bool {
                 .iter()
                 .position(|got| *got == Token::Exact(key.clone()))
                 .map(|at| from + at + 1),
-            Segment::Run(run) => dumped[from..]
+            Segment::Run(RunKind::ToolWindow, run) => dumped[from..]
                 .windows(run.len())
                 .position(|window| window == run.as_slice())
                 .map(|at| from + at + run.len()),
+            Segment::Run(RunKind::PopoverPrefix, run) => {
+                // The dump renders the viewport's prefix of the reference's list.
+                let matched = run
+                    .iter()
+                    .zip(&dumped[from..])
+                    .take_while(|(want, got)| want == got)
+                    .count();
+                (matched > 0).then_some(from + matched)
+            }
         };
         match found {
             Some(next) => from = next,
@@ -223,6 +269,29 @@ mod tests {
         assert!(!order_differences("chatColumn", &broken, &dumped).is_empty());
         // A name holding `#` that is not an ordinal is a single key.
         assert_eq!(base_key("c/Issue #x"), ("c/Issue #x", false));
+    }
+
+    #[test]
+    fn popover_list_rows_match_the_rendered_prefix() {
+        let wanted = [
+            ("popover/Search models", "combobox"),
+            ("popover/Add new provider", "button"),
+            ("popover/Models/Run on several models", "option"),
+            ("popover/Models/FAVORITES", "button"),
+            ("popover/Models/A", "option"),
+            ("popover/Models/A/Favorite", "button"),
+            ("popover/Models/B", "option"),
+        ];
+        // `List` renders the viewport prefix only.
+        let dumped = &wanted[..5];
+        assert!(order_differences("popover", &wanted, dumped).is_empty());
+
+        // A missing exact control is still a failure.
+        let without_add = [wanted[0], wanted[2], wanted[3], wanted[4]];
+        assert!(!order_differences("popover", &wanted, &without_add).is_empty());
+        // The virtualized run must start at the same row, not later in the list.
+        let skips_run = [wanted[0], wanted[1], wanted[3], wanted[4]];
+        assert!(!order_differences("popover", &wanted, &skips_run).is_empty());
     }
 
     #[test]
