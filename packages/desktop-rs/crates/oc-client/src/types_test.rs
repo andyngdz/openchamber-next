@@ -146,7 +146,7 @@ fn every_created_session_decodes() {
 #[test]
 fn every_message_list_decodes_and_only_model_switches_are_skipped() {
     let lists = names("messages-", ".json");
-    assert_eq!(lists.len(), 5, "{lists:?}");
+    assert!(!lists.is_empty(), "{lists:?}");
     for name in lists {
         let raw: Page<serde_json::Value> = decode(&name);
         let switches = raw

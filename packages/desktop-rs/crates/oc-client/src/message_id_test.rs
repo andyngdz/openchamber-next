@@ -18,7 +18,9 @@ fn id_has_the_shape_the_ui_mints() {
 fn ids_minted_in_a_row_ascend_and_differ() {
     let ids: Vec<String> = (0..50).map(|_| new_message_id()).collect();
     for pair in ids.windows(2) {
-        assert!(pair[0][..16] < pair[1][..16], "{} !< {}", pair[0], pair[1]);
-        assert_ne!(pair[0], pair[1]);
+        let left = pair[0].as_str();
+        let right = pair[1].as_str();
+        assert!(left[..16] < right[..16], "{} !< {}", left, right);
+        assert_ne!(left, right);
     }
 }

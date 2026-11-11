@@ -1,22 +1,22 @@
 {
   "data": [
     {
-      "id": "msg_1c3a31dd3001lMpPTRI3lZgrHi",
+      "id": "msg_1cb4731f80011ceUm9Q7PIY5rZ",
       "time": {
-        "created": 1794283609555
+        "created": 1794411803128
       },
       "type": "idle",
       "outcome": "succeeded"
     },
     {
-      "id": "msg_1c3a2d300001QE9EW0OXegcKTp",
+      "id": "msg_1cb46e724001KVHugJ8WgIa52F",
       "time": {
-        "created": 1794283590404,
-        "streamed": 1794283609548,
-        "completed": 1794283609553
+        "created": 1794411783975,
+        "streamed": 1794411803121,
+        "completed": 1794411803126
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -47,14 +47,14 @@
       }
     },
     {
-      "id": "msg_1c3a2d206001rvrYF6Q6xJqDMj",
+      "id": "msg_1cb46e636001TS2Af26WcBl0yg",
       "time": {
-        "created": 1794283590152,
-        "streamed": 1794283590377,
-        "completed": 1794283590390
+        "created": 1794411783738,
+        "streamed": 1794411783954,
+        "completed": 1794411783965
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -87,9 +87,9 @@
             }
           },
           "time": {
-            "created": 1794283590365,
-            "ran": 1794283590373,
-            "completed": 1794283590384
+            "created": 1794411783950,
+            "ran": 1794411783953,
+            "completed": 1794411783961
           }
         }
       ],
@@ -112,14 +112,14 @@
       }
     },
     {
-      "id": "msg_1c3a2d109001lPfZkDZSB6umJt",
+      "id": "msg_1cb46e5490013dT0qjtGb6p7zW",
       "time": {
-        "created": 1794283589900,
-        "streamed": 1794283590126,
-        "completed": 1794283590144
+        "created": 1794411783500,
+        "streamed": 1794411783716,
+        "completed": 1794411783727
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -152,9 +152,9 @@
             }
           },
           "time": {
-            "created": 1794283590112,
-            "ran": 1794283590120,
-            "completed": 1794283590138
+            "created": 1794411783712,
+            "ran": 1794411783715,
+            "completed": 1794411783723
           }
         }
       ],
@@ -177,14 +177,14 @@
       }
     },
     {
-      "id": "msg_1c3a2d011001cZu5UPgIdff7K3",
+      "id": "msg_1cb46e462001ZjdME5PMYA4UM4",
       "time": {
-        "created": 1794283589652,
-        "streamed": 1794283589876,
-        "completed": 1794283589891
+        "created": 1794411783269,
+        "streamed": 1794411783483,
+        "completed": 1794411783492
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -217,9 +217,9 @@
             }
           },
           "time": {
-            "created": 1794283589863,
-            "ran": 1794283589871,
-            "completed": 1794283589886
+            "created": 1794411783479,
+            "ran": 1794411783482,
+            "completed": 1794411783488
           }
         }
       ],
@@ -242,14 +242,14 @@
       }
     },
     {
-      "id": "msg_1c3a2cf1a00124Z1N0zDVjLsKE",
+      "id": "msg_1cb46e379001osedgAqnmnaQ0l",
       "time": {
-        "created": 1794283589405,
-        "streamed": 1794283589629,
-        "completed": 1794283589645
+        "created": 1794411783036,
+        "streamed": 1794411783250,
+        "completed": 1794411783261
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -282,9 +282,9 @@
             }
           },
           "time": {
-            "created": 1794283589616,
-            "ran": 1794283589624,
-            "completed": 1794283589640
+            "created": 1794411783246,
+            "ran": 1794411783248,
+            "completed": 1794411783256
           }
         }
       ],
@@ -307,14 +307,14 @@
       }
     },
     {
-      "id": "msg_1c3a2ce2c001aHpxMvOrk6QePN",
+      "id": "msg_1cb46e28a001CaWBsuUcmkRMxr",
       "time": {
-        "created": 1794283589167,
-        "streamed": 1794283589383,
-        "completed": 1794283589396
+        "created": 1794411782797,
+        "streamed": 1794411783015,
+        "completed": 1794411783026
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -347,9 +347,9 @@
             }
           },
           "time": {
-            "created": 1794283589378,
-            "ran": 1794283589381,
-            "completed": 1794283589390
+            "created": 1794411783008,
+            "ran": 1794411783013,
+            "completed": 1794411783021
           }
         }
       ],
@@ -372,14 +372,14 @@
       }
     },
     {
-      "id": "msg_1c3a2cd380012ktRtsq1DcG8sn",
+      "id": "msg_1cb46e1a0001Ok2A5GXz8Xqw6h",
       "time": {
-        "created": 1794283588923,
-        "streamed": 1794283589141,
-        "completed": 1794283589159
+        "created": 1794411782563,
+        "streamed": 1794411782778,
+        "completed": 1794411782788
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -412,9 +412,9 @@
             }
           },
           "time": {
-            "created": 1794283589134,
-            "ran": 1794283589137,
-            "completed": 1794283589151
+            "created": 1794411782773,
+            "ran": 1794411782776,
+            "completed": 1794411782784
           }
         }
       ],
@@ -437,14 +437,14 @@
       }
     },
     {
-      "id": "msg_1c3a2cc390012I6tN0i5kAGx6L",
+      "id": "msg_1cb46e0ba001O4f1hAjkm9r6Fy",
       "time": {
-        "created": 1794283588668,
-        "streamed": 1794283588889,
-        "completed": 1794283588912
+        "created": 1794411782332,
+        "streamed": 1794411782545,
+        "completed": 1794411782555
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -477,9 +477,9 @@
             }
           },
           "time": {
-            "created": 1794283588882,
-            "ran": 1794283588886,
-            "completed": 1794283588904
+            "created": 1794411782542,
+            "ran": 1794411782544,
+            "completed": 1794411782551
           }
         }
       ],
@@ -502,14 +502,14 @@
       }
     },
     {
-      "id": "msg_1c3a2cb44001xJutdTkbtR0tPM",
+      "id": "msg_1cb46dfd30015uHIkrgQEh2fAQ",
       "time": {
-        "created": 1794283588423,
-        "streamed": 1794283588640,
-        "completed": 1794283588656
+        "created": 1794411782102,
+        "streamed": 1794411782315,
+        "completed": 1794411782325
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -542,9 +542,9 @@
             }
           },
           "time": {
-            "created": 1794283588633,
-            "ran": 1794283588637,
-            "completed": 1794283588650
+            "created": 1794411782311,
+            "ran": 1794411782313,
+            "completed": 1794411782320
           }
         }
       ],
@@ -567,14 +567,14 @@
       }
     },
     {
-      "id": "msg_1c3a2ca3c001WJrsE7KruF4Xd7",
+      "id": "msg_1cb46dee8001yqqqliS93OV510",
       "time": {
-        "created": 1794283588159,
-        "streamed": 1794283588388,
-        "completed": 1794283588413
+        "created": 1794411781867,
+        "streamed": 1794411782085,
+        "completed": 1794411782094
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -607,9 +607,9 @@
             }
           },
           "time": {
-            "created": 1794283588371,
-            "ran": 1794283588381,
-            "completed": 1794283588405
+            "created": 1794411782081,
+            "ran": 1794411782083,
+            "completed": 1794411782090
           }
         }
       ],
@@ -632,14 +632,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c94a001wgGLaXbJHESki8",
+      "id": "msg_1cb46ddfd0013mKH4WbTXpZ8F4",
       "time": {
-        "created": 1794283587919,
-        "streamed": 1794283588133,
-        "completed": 1794283588151
+        "created": 1794411781632,
+        "streamed": 1794411781846,
+        "completed": 1794411781858
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -672,9 +672,9 @@
             }
           },
           "time": {
-            "created": 1794283588129,
-            "ran": 1794283588131,
-            "completed": 1794283588138
+            "created": 1794411781842,
+            "ran": 1794411781845,
+            "completed": 1794411781854
           }
         }
       ],
@@ -697,14 +697,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c85a0012pd61jnJpUGqe7",
+      "id": "msg_1cb46dd10001w1ZcEIuP3rvyGX",
       "time": {
-        "created": 1794283587677,
-        "streamed": 1794283587894,
-        "completed": 1794283587908
+        "created": 1794411781394,
+        "streamed": 1794411781610,
+        "completed": 1794411781622
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -737,9 +737,9 @@
             }
           },
           "time": {
-            "created": 1794283587889,
-            "ran": 1794283587891,
-            "completed": 1794283587902
+            "created": 1794411781605,
+            "ran": 1794411781608,
+            "completed": 1794411781617
           }
         }
       ],
@@ -762,14 +762,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c770001Iyjbkrv9mtSMFZ",
+      "id": "msg_1cb46dc28001SOc4z7G6dlbNRt",
       "time": {
-        "created": 1794283587443,
-        "streamed": 1794283587657,
-        "completed": 1794283587667
+        "created": 1794411781162,
+        "streamed": 1794411781376,
+        "completed": 1794411781387
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -802,9 +802,9 @@
             }
           },
           "time": {
-            "created": 1794283587652,
-            "ran": 1794283587655,
-            "completed": 1794283587663
+            "created": 1794411781371,
+            "ran": 1794411781374,
+            "completed": 1794411781382
           }
         }
       ],
@@ -827,14 +827,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c680001BpU6at9W4X2Te1",
+      "id": "msg_1cb46db3d001e5BaXbk219fIzf",
       "time": {
-        "created": 1794283587203,
-        "streamed": 1794283587422,
-        "completed": 1794283587434
+        "created": 1794411780930,
+        "streamed": 1794411781143,
+        "completed": 1794411781154
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -867,9 +867,9 @@
             }
           },
           "time": {
-            "created": 1794283587410,
-            "ran": 1794283587418,
-            "completed": 1794283587429
+            "created": 1794411781138,
+            "ran": 1794411781141,
+            "completed": 1794411781150
           }
         }
       ],
@@ -892,14 +892,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c5940016nh1gyhEzRSW5C",
+      "id": "msg_1cb46da500010VrRgCEtyKlhjD",
       "time": {
-        "created": 1794283586967,
-        "streamed": 1794283587181,
-        "completed": 1794283587195
+        "created": 1794411780693,
+        "streamed": 1794411780905,
+        "completed": 1794411780918
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -932,9 +932,9 @@
             }
           },
           "time": {
-            "created": 1794283587177,
-            "ran": 1794283587179,
-            "completed": 1794283587189
+            "created": 1794411780900,
+            "ran": 1794411780903,
+            "completed": 1794411780913
           }
         }
       ],
@@ -957,14 +957,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c497001hYeu3fmsYh9UjV",
+      "id": "msg_1cb46d961001gNsAyvCXNi4Pwz",
       "time": {
-        "created": 1794283586714,
-        "streamed": 1794283586942,
-        "completed": 1794283586957
+        "created": 1794411780452,
+        "streamed": 1794411780666,
+        "completed": 1794411780680
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -997,9 +997,9 @@
             }
           },
           "time": {
-            "created": 1794283586926,
-            "ran": 1794283586936,
-            "completed": 1794283586951
+            "created": 1794411780662,
+            "ran": 1794411780664,
+            "completed": 1794411780673
           }
         }
       ],
@@ -1022,14 +1022,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c3a70014b90GZ6x6esQV9",
+      "id": "msg_1cb46d871001b0eK4wVZEj05Wz",
       "time": {
-        "created": 1794283586475,
-        "streamed": 1794283586690,
-        "completed": 1794283586705
+        "created": 1794411780212,
+        "streamed": 1794411780428,
+        "completed": 1794411780441
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -1062,9 +1062,9 @@
             }
           },
           "time": {
-            "created": 1794283586685,
-            "ran": 1794283586688,
-            "completed": 1794283586698
+            "created": 1794411780423,
+            "ran": 1794411780426,
+            "completed": 1794411780436
           }
         }
       ],
@@ -1087,14 +1087,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c2b3001m9o7GKpfbqZPtV",
+      "id": "msg_1cb46d7850014ad7hkA7YmnOaB",
       "time": {
-        "created": 1794283586233,
-        "streamed": 1794283586445,
-        "completed": 1794283586464
+        "created": 1794411779977,
+        "streamed": 1794411780191,
+        "completed": 1794411780202
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -1127,9 +1127,9 @@
             }
           },
           "time": {
-            "created": 1794283586440,
-            "ran": 1794283586443,
-            "completed": 1794283586455
+            "created": 1794411780187,
+            "ran": 1794411780189,
+            "completed": 1794411780197
           }
         }
       ],
@@ -1152,14 +1152,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c192001nvr68ti5412IMl",
+      "id": "msg_1cb46d699001XaNFfEx0pPykGd",
       "time": {
-        "created": 1794283585941,
-        "streamed": 1794283586167,
-        "completed": 1794283586214
+        "created": 1794411779740,
+        "streamed": 1794411779954,
+        "completed": 1794411779966
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -1192,9 +1192,9 @@
             }
           },
           "time": {
-            "created": 1794283586148,
-            "ran": 1794283586155,
-            "completed": 1794283586192
+            "created": 1794411779949,
+            "ran": 1794411779952,
+            "completed": 1794411779961
           }
         }
       ],
@@ -1217,14 +1217,14 @@
       }
     },
     {
-      "id": "msg_1c3a2c086001OPaMDqGnG77uih",
+      "id": "msg_1cb46d5b2001UsqatqBkDXgb3g",
       "time": {
-        "created": 1794283585674,
-        "streamed": 1794283585897,
-        "completed": 1794283585930
+        "created": 1794411779509,
+        "streamed": 1794411779720,
+        "completed": 1794411779732
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -1257,9 +1257,9 @@
             }
           },
           "time": {
-            "created": 1794283585881,
-            "ran": 1794283585891,
-            "completed": 1794283585914
+            "created": 1794411779715,
+            "ran": 1794411779718,
+            "completed": 1794411779727
           }
         }
       ],
@@ -1282,14 +1282,14 @@
       }
     },
     {
-      "id": "msg_1c3a2bf8d001ElRnOpRNxML8wg",
+      "id": "msg_1cb46d4b7001z22HIdCL0bsJQ9",
       "time": {
-        "created": 1794283585426,
-        "streamed": 1794283585644,
-        "completed": 1794283585662
+        "created": 1794411779258,
+        "streamed": 1794411779474,
+        "completed": 1794411779499
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "agent-20tools-300cps",
         "providerID": "perf",
@@ -1322,9 +1322,9 @@
             }
           },
           "time": {
-            "created": 1794283585637,
-            "ran": 1794283585641,
-            "completed": 1794283585656
+            "created": 1794411779467,
+            "ran": 1794411779471,
+            "completed": 1794411779494
           }
         }
       ],
@@ -1347,17 +1347,17 @@
       }
     },
     {
-      "id": "msg_1c3a2bf75001KW5OhLtwKFeL4w",
+      "id": "msg_1cb46d4a7001WVs1BsFCq31zTg",
       "time": {
-        "created": 1794283585411
+        "created": 1794411779249
       },
       "text": "List the files.",
       "type": "user"
     },
     {
-      "id": "msg_1c3a2bd7b001sIsl7S0SJaifmE",
+      "id": "msg_1cb46d2af001fCIweMdOBYhieM",
       "time": {
-        "created": 1794283584891
+        "created": 1794411778735
       },
       "type": "model-switched",
       "model": {
@@ -1367,7 +1367,7 @@
     }
   ],
   "cursor": {
-    "previous": "eyJpZCI6Im1zZ18xYzNhMzFkZDMwMDFsTXBQVFJJM2xaZ3JIaSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
-    "next": "eyJpZCI6Im1zZ18xYzNhMmJkN2IwMDFzSXNsN1MwU0phaWZtRSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
+    "previous": "eyJpZCI6Im1zZ18xY2I0NzMxZjgwMDExY2VVbTlRN1BJWTVyWiIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
+    "next": "eyJpZCI6Im1zZ18xY2I0NmQyYWYwMDFmQ0l3ZU1kT0JZaGllTSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
   }
 }

@@ -1,17 +1,17 @@
 {
   "text-reply-stream-300cps": {
-    "count": 224,
+    "count": 203,
     "model": "stream-300cps",
     "sessions": [
-      "ses_e3c5d9768ffeustSm1lMVapzHJ"
+      "ses_e34b9805fffeR1hoJh91dotmsT"
     ],
     "note": "plain text reply"
   },
   "agent-20tools-300cps": {
-    "count": 445,
+    "count": 446,
     "model": "agent-20tools-300cps",
     "sessions": [
-      "ses_e3c5d4292ffefGk1vxdyIb4Kmq"
+      "ses_e34b92d5affeYoB7elm7Rl4agt"
     ],
     "note": "agent turn, 20 glob calls, then text; glob allowed by a session rule"
   },
@@ -19,15 +19,15 @@
     "count": 20,
     "model": "agent-20tools-300cps",
     "sessions": [
-      "ses_e3c5cdc42ffelz0QWoBPzU7Zi8"
+      "ses_e34b8c81dffeaomwN59VEsyj0s"
     ],
     "note": "interrupted after the first tool result; interrupt answered 200"
   },
   "permission-asked-agent-turn": {
-    "count": 448,
+    "count": 453,
     "model": "agent-20tools-300cps",
     "sessions": [
-      "ses_e3c5cd35bffews5ugJMR8RIsyu"
+      "ses_e34b8bf41ffelYfDKRj1dWYn5n"
     ],
     "note": "glob asks; 1 request(s) answered with decision \"always\""
   },
@@ -35,8 +35,8 @@
     "count": 416,
     "model": "stream-300cps",
     "sessions": [
-      "ses_e3c5c6cfaffeZts0E9sczvZAMC",
-      "ses_e3c5c6cf3ffeUIFvldfzGnTxDW"
+      "ses_e34b859f3ffeSrergIEyOxvpK9",
+      "ses_e34b859edffeNhtAG4MAFAYye0"
     ],
     "note": "two sessions of the same directory in one stream"
   },
@@ -44,8 +44,38 @@
     "count": 3,
     "model": null,
     "sessions": [
-      "ses_e3c5c1805ffefPBAdb6WP8jM6y"
+      "ses_e34b80510ffeRhvOkSkKV5CUYl"
     ],
     "note": "session created, then deleted (delete answered 204)"
+  },
+  "turn-control": {
+    "count": 524,
+    "model": null,
+    "sessions": [
+      "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "ses_e34b7d5bfffe1EFItrF9nlaaDX",
+      "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+      "ses_e34b7c245ffeNORZ7U30pPtcUl",
+      "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+      "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "ses_e34b7931affewIJVeTC3knAJ62"
+    ],
+    "note": "permission requests and replies, the question and global forms, the interrupted question, a steer prompt, the message queue, and the safety-net turn"
+  },
+  "control": {
+    "count": 42,
+    "model": null,
+    "sessions": [
+      "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "ses_e34b7d5bfffe1EFItrF9nlaaDX",
+      "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+      "ses_e34b7c245ffeNORZ7U30pPtcUl",
+      "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+      "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "ses_e34b7931affewIJVeTC3knAJ62"
+    ],
+    "note": "the control stream: ready, a heartbeat, queue and auto-accept updates, and a request left for the user"
   }
 }

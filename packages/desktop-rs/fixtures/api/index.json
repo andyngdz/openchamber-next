@@ -97,7 +97,7 @@
   },
   "messages-empty": {
     "method": "GET",
-    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/message",
+    "path": "/api/session/ses_e34b9805fffeR1hoJh91dotmsT/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -105,7 +105,7 @@
   },
   "interrupt-idle": {
     "method": "POST",
-    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/interrupt",
+    "path": "/api/session/ses_e34b9805fffeR1hoJh91dotmsT/interrupt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -113,7 +113,7 @@
   },
   "prompt-text": {
     "method": "POST",
-    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/prompt",
+    "path": "/api/session/ses_e34b9805fffeR1hoJh91dotmsT/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -121,7 +121,7 @@
   },
   "messages-text-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3b0624aaffeBKHqVoWmmnSYQc/message",
+    "path": "/api/session/ses_e34b9805fffeR1hoJh91dotmsT/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -145,7 +145,7 @@
   },
   "switch-model": {
     "method": "POST",
-    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/model",
+    "path": "/api/session/ses_e34b92d5affeYoB7elm7Rl4agt/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -153,7 +153,7 @@
   },
   "prompt-agent": {
     "method": "POST",
-    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/prompt",
+    "path": "/api/session/ses_e34b92d5affeYoB7elm7Rl4agt/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -161,7 +161,7 @@
   },
   "messages-agent-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3b05d1b1ffe3eKUD6VpmioLdF/message",
+    "path": "/api/session/ses_e34b92d5affeYoB7elm7Rl4agt/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -177,7 +177,7 @@
   },
   "switch-model-interrupt": {
     "method": "POST",
-    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/model",
+    "path": "/api/session/ses_e34b8c81dffeaomwN59VEsyj0s/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -185,7 +185,7 @@
   },
   "prompt-interrupt": {
     "method": "POST",
-    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/prompt",
+    "path": "/api/session/ses_e34b8c81dffeaomwN59VEsyj0s/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -193,7 +193,7 @@
   },
   "interrupt-running": {
     "method": "POST",
-    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/interrupt",
+    "path": "/api/session/ses_e34b8c81dffeaomwN59VEsyj0s/interrupt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -201,7 +201,7 @@
   },
   "messages-interrupted-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3b056c0bffesEQnLy5OJPYMp1/message",
+    "path": "/api/session/ses_e34b8c81dffeaomwN59VEsyj0s/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -217,7 +217,7 @@
   },
   "switch-model-permission": {
     "method": "POST",
-    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/model",
+    "path": "/api/session/ses_e34b8bf41ffelYfDKRj1dWYn5n/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -225,7 +225,7 @@
   },
   "prompt-permission": {
     "method": "POST",
-    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/prompt",
+    "path": "/api/session/ses_e34b8bf41ffelYfDKRj1dWYn5n/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -233,7 +233,7 @@
   },
   "permission-reply": {
     "method": "POST",
-    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/permission/per_1c4fa9fbf001E7ruNf9VQkkh0N/reply",
+    "path": "/api/session/ses_e34b8bf41ffelYfDKRj1dWYn5n/permission/per_1cb4743a1001rKSPaDFti5eW0O/reply",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -241,7 +241,7 @@
   },
   "messages-permission-turn": {
     "method": "GET",
-    "path": "/api/session/ses_e3b05632dffeUhr17hCa6KrIQd/message",
+    "path": "/api/session/ses_e34b8bf41ffelYfDKRj1dWYn5n/message",
     "status": 200,
     "contentType": "application/json",
     "requestBody": false,
@@ -265,7 +265,7 @@
   },
   "prompt-two-a": {
     "method": "POST",
-    "path": "/api/session/ses_e3b04fdd3ffeIJlQsHTWIaCb4W/prompt",
+    "path": "/api/session/ses_e34b859f3ffeSrergIEyOxvpK9/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -273,7 +273,7 @@
   },
   "prompt-two-b": {
     "method": "POST",
-    "path": "/api/session/ses_e3b04fdcaffe1eRbGlaE7NGt3C/prompt",
+    "path": "/api/session/ses_e34b859edffeNhtAG4MAFAYye0/prompt",
     "status": 200,
     "contentType": "application/json",
     "requestBody": true,
@@ -289,7 +289,7 @@
   },
   "session-delete": {
     "method": "DELETE",
-    "path": "/api/session/ses_e3b04a8fdffehF0hG9dzBBmJKX",
+    "path": "/api/session/ses_e34b80510ffeRhvOkSkKV5CUYl",
     "status": 204,
     "contentType": "",
     "requestBody": false,
@@ -313,7 +313,7 @@
   },
   "session-get": {
     "method": "GET",
-    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv",
+    "path": "/api/session/ses_e34b7feeeffer6XaswwgEVQDoV",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
     "requestBody": false,
@@ -321,7 +321,7 @@
   },
   "switch-model-variant": {
     "method": "POST",
-    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/model",
+    "path": "/api/session/ses_e34b7feeeffer6XaswwgEVQDoV/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -329,7 +329,7 @@
   },
   "switch-model-default": {
     "method": "POST",
-    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/model",
+    "path": "/api/session/ses_e34b7feeeffer6XaswwgEVQDoV/model",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -337,7 +337,7 @@
   },
   "switch-agent": {
     "method": "POST",
-    "path": "/api/session/ses_e3b04a30effeHztg8aof3G7IFv/agent",
+    "path": "/api/session/ses_e34b7feeeffer6XaswwgEVQDoV/agent",
     "status": 204,
     "contentType": "",
     "requestBody": true,
@@ -353,7 +353,7 @@
   },
   "seed-metadata-btw": {
     "method": "POST",
-    "path": "/api/openchamber/sessions/ses_e3b04a284ffeyvPkjKTkm0VwfX/metadata",
+    "path": "/api/openchamber/sessions/ses_e34b7fe67ffe051FF2ZqhewReD/metadata",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
     "requestBody": true,
@@ -361,7 +361,7 @@
   },
   "seed-metadata-pinned": {
     "method": "POST",
-    "path": "/api/openchamber/sessions/ses_e3b04a25effe4WiotPMG015qOZ/metadata",
+    "path": "/api/openchamber/sessions/ses_e34b7fe43ffeoDxx4yGNaTf7EM/metadata",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
     "requestBody": true,
@@ -385,7 +385,479 @@
   },
   "session-list-global-page-2": {
     "method": "GET",
-    "path": "/api/session?limit=2&cursor=eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjVlZmZlNFdpb3RQTUcwMTVxT1oiLCJ0aW1lIjoxNzk0MzA2MTcwMjgyLCJkaXJlY3Rpb24iOiJuZXh0In19",
+    "path": "/api/session?limit=2&cursor=eyJhbmNob3IiOnsiaWQiOiJzZXNfZTM0YjdmZTQzZmZlb0R4eDR5R05hVGY3RU0iLCJ0aW1lIjoxNzk0NDExODU2MzI0LCJkaXJlY3Rpb24iOiJuZXh0In19",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-question": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-question": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "session-create-bash-ask": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-bash": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc10ffeAjpkl74xdwjCVE/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-question": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "form-create-global": {
+    "method": "POST",
+    "path": "/api/session/global/form",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-bash": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc10ffeAjpkl74xdwjCVE/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-request-list": {
+    "method": "GET",
+    "path": "/api/permission/request?location[directory]=%2Ftmp%2Foc-desktop-rs-capture%2Fproject",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "form-list": {
+    "method": "GET",
+    "path": "/api/form?location[directory]=%2Ftmp%2Foc-desktop-rs-capture%2Fproject",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "permission-reply-once": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc10ffeAjpkl74xdwjCVE/permission/per_1cb4804690015eG5h0PscnYugK/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-bash-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7fc10ffeAjpkl74xdwjCVE/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "form-cancel": {
+    "method": "DELETE",
+    "path": "/api/session/global/form/frm_fixture_global",
+    "status": 204,
+    "contentType": "",
+    "requestBody": false,
+    "responseBody": false
+  },
+  "form-reply": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/form/frm_1cb48042c0019SfBGywiZML0Ld/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-question-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "permission-reply-404": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc10ffeAjpkl74xdwjCVE/permission/per_fixture_missing/reply",
+    "status": 404,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "form-reply-404": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/form/frm_fixture_missing/reply",
+    "status": 404,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "form-cancel-404": {
+    "method": "DELETE",
+    "path": "/api/session/ses_e34b7fc1affeXRbxDTG3rYyHoj/form/frm_fixture_missing",
+    "status": 404,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-edit-ask": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-edit": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d5bfffe1EFItrF9nlaaDX/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-edit": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d5bfffe1EFItrF9nlaaDX/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-reply-reject": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d5bfffe1EFItrF9nlaaDX/permission/per_1cb482a7f001B77PgVRT3C0lBM/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-edit-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7d5bfffe1EFItrF9nlaaDX/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-webfetch-ask": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-webfetch": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d56dffexPKY6Kdt3lJJrc/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-webfetch": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d56dffexPKY6Kdt3lJJrc/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-reply-always": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7d56dffexPKY6Kdt3lJJrc/permission/per_1cb482ada001zmu3ExK7gmM6kc/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-webfetch-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7d56dffexPKY6Kdt3lJJrc/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-write": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-write": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7c245ffeNORZ7U30pPtcUl/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-write": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7c245ffeNORZ7U30pPtcUl/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-reply-write": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7c245ffeNORZ7U30pPtcUl/permission/per_1cb483e1f001H96tK2l4vU3i23/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-write-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7c245ffeNORZ7U30pPtcUl/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-question-interrupt": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-question-interrupt": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7aea6ffeCJMHK9rWnYmsIt/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "prompt-question-interrupt": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7aea6ffeCJMHK9rWnYmsIt/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "interrupt-question-turn": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7aea6ffeCJMHK9rWnYmsIt/interrupt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "messages-question-interrupted-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7aea6ffeCJMHK9rWnYmsIt/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-queue": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-queue-busy": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7ae4bffe3nFisYHmCqzWWC/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-steer": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7ae4bffe3nFisYHmCqzWWC/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-enqueue-1": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-enqueue-2": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-enqueue-3": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-list": {
+    "method": "GET",
+    "path": "/api/message-queue",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "message-queue-reorder": {
+    "method": "PUT",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/order",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-take-one": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items/queued-1794411876823-labbrd8/take",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "message-queue-take-all": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/take",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "message-queue-enqueue-4": {
+    "method": "POST",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "message-queue-remove": {
+    "method": "DELETE",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items/queued-1794411876843-1nvu3s5",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "interrupt-queue-turn": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7ae4bffe3nFisYHmCqzWWC/interrupt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "message-queue-remove-in-flight": {
+    "method": "DELETE",
+    "path": "/api/message-queue/sessions/ses_e34b7ae4bffe3nFisYHmCqzWWC/items/queued-1794411876864-ytvyc3i",
+    "status": 409,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "permission-auto-accept": {
+    "method": "GET",
+    "path": "/api/permission-auto-accept",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "session-create-safety": {
+    "method": "POST",
+    "path": "/api/session",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "switch-model-safety": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7931affewIJVeTC3knAJ62/model",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "permission-auto-accept-set": {
+    "method": "PUT",
+    "path": "/api/permission-auto-accept/sessions/ses_e34b7931affewIJVeTC3knAJ62",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "prompt-safety": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7931affewIJVeTC3knAJ62/prompt",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": true,
+    "responseBody": true
+  },
+  "permission-reply-safety": {
+    "method": "POST",
+    "path": "/api/session/ses_e34b7931affewIJVeTC3knAJ62/permission/per_1cb486d2b001eVCXDvfcua39Gi/reply",
+    "status": 204,
+    "contentType": "",
+    "requestBody": true,
+    "responseBody": false
+  },
+  "messages-safety-turn": {
+    "method": "GET",
+    "path": "/api/session/ses_e34b7931affewIJVeTC3knAJ62/message",
+    "status": 200,
+    "contentType": "application/json",
+    "requestBody": false,
+    "responseBody": true
+  },
+  "routing": {
+    "method": "GET",
+    "path": "/api/routing",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
     "requestBody": false,

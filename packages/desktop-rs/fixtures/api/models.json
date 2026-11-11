@@ -1395,6 +1395,171 @@
       }
     },
     {
+      "id": "bash-1200cps",
+      "modelID": "bash-1200cps",
+      "providerID": "perf",
+      "name": "Fixture bash tool call, then 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "edit-1200cps",
+      "modelID": "edit-1200cps",
+      "providerID": "perf",
+      "name": "Fixture edit tool call, then 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "write-1200cps",
+      "modelID": "write-1200cps",
+      "providerID": "perf",
+      "name": "Fixture write tool call, then 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "webfetch-1200cps",
+      "modelID": "webfetch-1200cps",
+      "providerID": "perf",
+      "name": "Fixture webfetch tool call, then 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
+      "id": "question-1200cps",
+      "modelID": "question-1200cps",
+      "providerID": "perf",
+      "name": "Fixture question tool call, then 1200 characters/s",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "apiKey": "unused",
+        "baseURL": "http://127.0.0.1:4611/v1",
+        "provider": "perf"
+      },
+      "capabilities": {
+        "tools": true,
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "variants": [],
+      "time": {
+        "released": 0
+      },
+      "cost": [],
+      "status": "active",
+      "enabled": true,
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      }
+    },
+    {
       "id": "agent-100tools-x5-300cps",
       "modelID": "agent-100tools-x5-300cps",
       "providerID": "perf",

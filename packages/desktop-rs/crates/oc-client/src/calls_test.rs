@@ -254,16 +254,16 @@ async fn the_global_walk_requests_pages_until_a_page_adds_nothing() {
 
     let sessions = client.list_global_sessions().await.expect("walk");
 
-    assert_eq!(sessions.len(), 4);
+    let first = json(&fixture("api/session-list-global-page-1.json"));
+    let second = json(&fixture("api/session-list-global-page-2.json"));
+    let mut expected: Vec<&str> = Vec::new();
+    for page in [&first, &second] {
+        for session in page["data"].as_array().expect("page data") {
+            expected.push(session["id"].as_str().expect("session id"));
+        }
+    }
+    assert_eq!(sessions.len(), expected.len());
     let ids: Vec<&str> = sessions.iter().map(|session| session.id.as_str()).collect();
-    assert_eq!(
-        ids,
-        [
-            "ses_e3b04a234ffefPTwC7fKiBtlJR",
-            "ses_e3b04a25effe4WiotPMG015qOZ",
-            "ses_e3b04a284ffeyvPkjKTkm0VwfX",
-            "ses_e3b04a2a8ffexjyVRS103t8pau",
-        ]
-    );
+    assert_eq!(ids, expected);
     assert_eq!(requests.try_iter().count(), 3);
 }

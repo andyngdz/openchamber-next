@@ -1,0 +1,119 @@
+{
+  "available": true,
+  "autoReady": false,
+  "jevAvailable": false,
+  "tokenPresent": false,
+  "customEndpoint": null,
+  "enterpriseMode": false,
+  "jevSource": "zen-free",
+  "classifier": null,
+  "classification": {
+    "selected": "off",
+    "effective": null,
+    "sources": [
+      {
+        "id": "off",
+        "usable": true
+      },
+      {
+        "id": "zen-promo",
+        "usable": true
+      },
+      {
+        "id": "zen-key",
+        "usable": false
+      },
+      {
+        "id": "openrouter",
+        "usable": false
+      },
+      {
+        "id": "vercel",
+        "usable": false
+      },
+      {
+        "id": "typesafe",
+        "usable": false
+      },
+      {
+        "id": "custom",
+        "usable": false
+      }
+    ]
+  },
+  "config": {
+    "enabled": false,
+    "fallback": null,
+    "minConfidence": 0.6,
+    "preserveCache": true,
+    "safetyNet": {
+      "enabled": false,
+      "threshold": 0.6
+    },
+    "categories": [
+      {
+        "id": "trivial",
+        "builtin": true,
+        "enabled": true,
+        "name": "Trivial",
+        "description": "Trivial, mechanical, or purely factual work: rename a symbol, fix a typo, reformat, add a comment, answer a short factual question about a known file, run one obvious command and report the output. Not for anything requiring design judgement or multi-file reasoning.",
+        "model": null,
+        "variant": null,
+        "agent": null
+      },
+      {
+        "id": "research",
+        "builtin": true,
+        "enabled": true,
+        "name": "Research",
+        "description": "Read and explain existing code or behaviour without changing it: explain how a module works, find where something is implemented, summarise what a change does. Not for requests that ask for edits or a plan.",
+        "model": null,
+        "variant": null,
+        "agent": null
+      },
+      {
+        "id": "implement",
+        "builtin": true,
+        "enabled": true,
+        "name": "Implement",
+        "description": "Ordinary engineering with a clear, bounded shape: implement a well-specified function, endpoint, or component; write or fix tests for existing behaviour; a localised bug fix where the cause is already understood. Not for open-ended architecture, subtle concurrency, or unknown-cause debugging.",
+        "model": null,
+        "variant": null,
+        "agent": null
+      },
+      {
+        "id": "hard",
+        "builtin": true,
+        "enabled": true,
+        "name": "Hard",
+        "description": "Hard reasoning, ambiguity, planning, or high blast radius: debug a failure whose cause is unknown, plan or design a change across several modules, security, auth, concurrency, data-migration, or money-handling logic. Not for work a competent mid-level engineer would finish without thinking hard.",
+        "model": null,
+        "variant": null,
+        "agent": null
+      }
+    ]
+  },
+  "builtins": [
+    {
+      "id": "trivial",
+      "name": "Trivial",
+      "description": "Trivial, mechanical, or purely factual work: rename a symbol, fix a typo, reformat, add a comment, answer a short factual question about a known file, run one obvious command and report the output. Not for anything requiring design judgement or multi-file reasoning."
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "description": "Read and explain existing code or behaviour without changing it: explain how a module works, find where something is implemented, summarise what a change does. Not for requests that ask for edits or a plan."
+    },
+    {
+      "id": "implement",
+      "name": "Implement",
+      "description": "Ordinary engineering with a clear, bounded shape: implement a well-specified function, endpoint, or component; write or fix tests for existing behaviour; a localised bug fix where the cause is already understood. Not for open-ended architecture, subtle concurrency, or unknown-cause debugging."
+    },
+    {
+      "id": "hard",
+      "name": "Hard",
+      "description": "Hard reasoning, ambiguity, planning, or high blast radius: debug a failure whose cause is unknown, plan or design a change across several modules, security, auth, concurrency, data-migration, or money-handling logic. Not for work a competent mid-level engineer would finish without thinking hard."
+    }
+  ],
+  "heldPermissions": []
+}

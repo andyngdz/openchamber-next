@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "id": "ses_e34b9805fffeR1hoJh91dotmsT",
       "projectID": "global",
       "location": {
         "directory": "/tmp/oc-desktop-rs-capture/project"
@@ -19,28 +19,28 @@
       },
       "outcome": "succeeded",
       "time": {
-        "created": 1794283563183,
-        "updated": 1794283583366,
-        "busy": 1794283564143,
-        "idle": 1794283583342
+        "created": 1794411757474,
+        "updated": 1794411777225,
+        "busy": 1794411758012,
+        "idle": 1794411777204
       },
       "metadata": {
         "openchamber": {
           "work": {
             "state": "open",
-            "openedAt": 1794283564191,
+            "openedAt": 1794411758060,
             "openedBy": "auto"
           },
           "turn": {
-            "endedAt": 1794283583342,
-            "durationMs": 19199
+            "endedAt": 1794411777204,
+            "durationMs": 19192
           }
         }
       }
     }
   ],
   "cursor": {
-    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTgzMzY2LCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
-    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTgzMzY2LCJkaXJlY3Rpb24iOiJuZXh0In19"
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTM0Yjk4MDVmZmZlUjFob0poOTFkb3Rtc1QiLCJ0aW1lIjoxNzk0NDExNzc3MjI1LCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTM0Yjk4MDVmZmZlUjFob0poOTFkb3Rtc1QiLCJ0aW1lIjoxNzk0NDExNzc3MjI1LCJkaXJlY3Rpb24iOiJuZXh0In19"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb485169001wYZDvra91nmtSD",
+    "sessionID": "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+    "time": {
+      "created": 1794411876716
+    },
+    "type": "user",
+    "payload": {
+      "text": "Ask a question, then I stop you."
+    },
+    "delivery": "steer"
+  }
+}

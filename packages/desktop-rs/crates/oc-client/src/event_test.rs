@@ -1,6 +1,7 @@
 use super::{Event, EventData};
 
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/events");
+const API_FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
 
 const FILES: [&str; 6] = [
     "text-reply-stream-300cps",
@@ -28,6 +29,20 @@ fn load(name: &str) -> Vec<Event> {
 
 fn count(events: &[Event], matches: impl Fn(&EventData) -> bool) -> usize {
     events.iter().filter(|e| matches(&e.data)).count()
+}
+
+/// The agent the capture's sessions start on when they name none themselves.
+fn configured_default_agent() -> String {
+    let path = format!("{API_FIXTURES}/config.json");
+    let text = std::fs::read_to_string(&path).unwrap_or_else(|err| panic!("read {path}: {err}"));
+    let sources: Vec<serde_json::Value> =
+        serde_json::from_str(&text).unwrap_or_else(|err| panic!("{path}: {err}"));
+    sources
+        .iter()
+        .filter_map(|source| source["info"]["default_agent"].as_str())
+        .next_back()
+        .expect("the capture config names a default agent")
+        .to_owned()
 }
 
 #[test]
@@ -142,15 +157,18 @@ fn agent_turn_carries_tool_names_and_one_step_per_message() {
 #[test]
 fn step_started_model_is_an_object() {
     let events = load("agent-20tools-300cps");
+    // The scenario's step, chosen by its model id rather than by position: the file also
+    // carries the session's own event traffic.
     let step = events
         .iter()
         .find_map(|e| match &e.data {
-            EventData::StepStarted(s) => Some(s),
+            EventData::StepStarted(s) if s.model.id == "agent-20tools-300cps" => Some(s),
             _ => None,
         })
-        .expect("step");
+        .expect("the agent-20tools step");
     assert_eq!(step.model.id, "agent-20tools-300cps");
-    assert_eq!(step.agent, "build");
+    assert_eq!(step.model.provider_id, "perf");
+    assert_eq!(step.agent, configured_default_agent());
 }
 
 #[test]

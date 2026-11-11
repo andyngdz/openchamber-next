@@ -1,0 +1,89 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "data": [
+    {
+      "id": "frm_1cb48042c0019SfBGywiZML0Ld",
+      "sessionID": "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "title": "Questions",
+      "metadata": {
+        "kind": "question",
+        "tool": {
+          "messageID": "msg_1cb480403001JyeR60kOMN1Pg8",
+          "id": "call_fixture_question"
+        }
+      },
+      "fields": [
+        {
+          "key": "q0",
+          "title": "Fixture choice",
+          "description": "Which fixture option should the capture answer?",
+          "type": "string",
+          "options": [
+            {
+              "value": "First option",
+              "label": "First option",
+              "description": "The first fixture choice"
+            },
+            {
+              "value": "Second option",
+              "label": "Second option",
+              "description": "The second fixture choice"
+            },
+            {
+              "value": "Third option",
+              "label": "Third option",
+              "description": "The third fixture choice"
+            }
+          ],
+          "custom": true
+        },
+        {
+          "key": "q1",
+          "title": "Fixture multiselect",
+          "description": "Which fixture details should the capture select?",
+          "type": "multiselect",
+          "options": [
+            {
+              "value": "Alpha detail",
+              "label": "Alpha detail",
+              "description": "The first selectable detail"
+            },
+            {
+              "value": "Beta detail",
+              "label": "Beta detail",
+              "description": "The second selectable detail"
+            }
+          ],
+          "custom": true
+        },
+        {
+          "key": "q2",
+          "title": "Fixture free text",
+          "description": "What free text should the capture answer with?",
+          "type": "string",
+          "options": [],
+          "custom": true
+        }
+      ]
+    },
+    {
+      "id": "frm_fixture_global",
+      "sessionID": "global",
+      "title": "Fixture global form",
+      "metadata": {
+        "kind": "fixture.global"
+      },
+      "fields": [
+        {
+          "key": "note",
+          "title": "Fixture note",
+          "description": "A location-scoped form",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

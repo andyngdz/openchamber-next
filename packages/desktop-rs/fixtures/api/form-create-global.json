@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "frm_fixture_global",
+    "sessionID": "global",
+    "title": "Fixture global form",
+    "metadata": {
+      "kind": "fixture.global"
+    },
+    "fields": [
+      {
+        "key": "note",
+        "title": "Fixture note",
+        "description": "A location-scoped form",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  }
+}

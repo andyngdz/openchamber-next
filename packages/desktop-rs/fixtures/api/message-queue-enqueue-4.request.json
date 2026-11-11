@@ -1,0 +1,12 @@
+{
+  "directory": "/tmp/oc-desktop-rs-capture/project",
+  "item": {
+    "content": "Fourth queued fixture message.",
+    "text": "Fourth queued fixture message.",
+    "sendConfig": {
+      "providerID": "perf",
+      "modelID": "stream-1200cps",
+      "agent": "capture-primary"
+    }
+  }
+}

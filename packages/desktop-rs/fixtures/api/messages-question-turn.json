@@ -1,0 +1,188 @@
+{
+  "data": [
+    {
+      "id": "msg_1cb482a22001mMfE63uz5Y4dbx",
+      "time": {
+        "created": 1794411866658
+      },
+      "type": "idle",
+      "outcome": "succeeded"
+    },
+    {
+      "id": "msg_1cb481765001FM5c57Iholx0bF",
+      "time": {
+        "created": 1794411861864,
+        "streamed": 1794411866652,
+        "completed": 1794411866656
+      },
+      "type": "assistant",
+      "agent": "capture-secondary",
+      "model": {
+        "id": "question-1200cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "## 1. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 1 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 2. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 2 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n## 3. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 3 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n1. The compiler emits a `CALL` instruction carrying the argument count.\n2. The interpreter pops the callee and its arguments from the operand stack.\n3. A frame is pushed holding the return address, the base pointer and the locals.\n4. The dispatch loop continues at the callee's entry point.\n\n```python\ndef call(vm, argc):\n    callee = vm.stack[-argc - 1]\n    frame = Frame(callee, base=len(vm.stack) - argc, return_ip=vm.ip)\n    vm.frames.append(frame)\n    vm.ip = callee.entry\n```\n\n```rust\nfn call(&mut self, argc: usize) -> Result<(), VmError> {\n    let base = self.stack.len() - argc;\n    let callee = self.stack[base - 1].as_function()?;\n    self.frames.push(Frame { base, return_ip: self.ip, function: callee.clone() });\n    self.ip = callee.entry;\n    Ok(())\n}\n```\n\n```typescript\nfunction call(vm: Vm, argc: number): void {\n  const base = vm.stack.length - argc\n  const callee = asFunction(vm.stack[base - 1])\n  vm.frames.push({ base, returnIp: vm.ip, fn: callee })\n  vm.ip = callee.entry\n}\n```\n\n| Aspect | Stack machine | Register machine |\n|---|---|---|\n| Operands | implicit, on the operand stack | explicit register indices |\n| Instruction size | small | larger |\n| Instruction count | higher | lower |\n| Call setup | arguments already in place | arguments copied into a window |\n\nReturning reverses the sequence: the result is moved to where the caller expects it, the frame is popped, and\nthe instruction pointer is restored from the saved return address.\n\n"
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "stop",
+      "rawFinish": "stop",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 1436,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1cb480403001JyeR60kOMN1Pg8",
+      "time": {
+        "created": 1794411856901,
+        "streamed": 1794411856937,
+        "completed": 1794411861856
+      },
+      "type": "assistant",
+      "agent": "capture-secondary",
+      "model": {
+        "id": "question-1200cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Calling the fixture question tool.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_question",
+          "name": "question",
+          "executed": false,
+          "state": {
+            "status": "completed",
+            "input": {
+              "questions": [
+                {
+                  "header": "Fixture choice",
+                  "question": "Which fixture option should the capture answer?",
+                  "options": [
+                    {
+                      "label": "First option",
+                      "description": "The first fixture choice"
+                    },
+                    {
+                      "label": "Second option",
+                      "description": "The second fixture choice"
+                    },
+                    {
+                      "label": "Third option",
+                      "description": "The third fixture choice"
+                    }
+                  ]
+                },
+                {
+                  "header": "Fixture multiselect",
+                  "question": "Which fixture details should the capture select?",
+                  "options": [
+                    {
+                      "label": "Alpha detail",
+                      "description": "The first selectable detail"
+                    },
+                    {
+                      "label": "Beta detail",
+                      "description": "The second selectable detail"
+                    }
+                  ],
+                  "multiple": true
+                },
+                {
+                  "header": "Fixture free text",
+                  "question": "What free text should the capture answer with?",
+                  "options": []
+                }
+              ]
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "User has answered your questions: \"Which fixture option should the capture answer?\"=\"First option\", \"Which fixture details should the capture select?\"=\"Alpha detail, Beta detail\", \"What free text should the capture answer with?\"=\"A free text fixture answer.\". You can now continue with the user's answers in mind."
+              }
+            ],
+            "metadata": {
+              "answers": [
+                [
+                  "First option"
+                ],
+                [
+                  "Alpha detail",
+                  "Beta detail"
+                ],
+                [
+                  "A free text fixture answer."
+                ]
+              ],
+              "truncated": false
+            }
+          },
+          "time": {
+            "created": 1794411856933,
+            "ran": 1794411856935,
+            "completed": 1794411861850
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
+        "files": []
+      },
+      "finish": "tool-calls",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 9,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      }
+    },
+    {
+      "id": "msg_1cb4803f7001GtuveHBcQfZOby",
+      "time": {
+        "created": 1794411856893
+      },
+      "text": "Ask the fixture questions.",
+      "type": "user"
+    },
+    {
+      "id": "msg_1cb4803ec001hxajmLwnlEP8U3",
+      "time": {
+        "created": 1794411856876
+      },
+      "type": "model-switched",
+      "model": {
+        "id": "question-1200cps",
+        "providerID": "perf"
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJpZCI6Im1zZ18xY2I0ODJhMjIwMDFtTWZFNjN1ejVZNGRieCIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
+    "next": "eyJpZCI6Im1zZ18xY2I0ODAzZWMwMDFoeGFqbUx3bmxFUDhVMyIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
+  }
+}

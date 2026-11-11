@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb482a480013MmcT7NMk5HKBz",
+    "sessionID": "ses_e34b7d5bfffe1EFItrF9nlaaDX",
+    "time": {
+      "created": 1794411866699
+    },
+    "type": "user",
+    "payload": {
+      "text": "Edit the fixture file."
+    },
+    "delivery": "steer"
+  }
+}

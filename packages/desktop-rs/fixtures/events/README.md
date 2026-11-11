@@ -2,8 +2,11 @@
 
 Raw `GET /api/event` streams from a real server (see `packages/desktop-rs/fixtures/api/README.md` for how they are captured and
 what varies between runs). Each `*.json` is a JSON array of the parsed `data:` payloads of one
-connection, in arrival order, nothing removed or rewritten. A file starts when the connection opens, so
-it begins with `server.connected` and, in the first scenario, with startup notices.
+connection, in arrival order, nothing removed or rewritten. A file starts when the connection opens, so a
+session stream begins with `server.connected` and, in the first scenario, with startup notices; the control
+stream begins with `openchamber:event-stream-ready`. One connection carries every session of the directory,
+so two runs can interleave independent sessions differently; replay by event type and session, not by array
+index.
 
 | File | Scenario |
 | --- | --- |
@@ -13,6 +16,8 @@ it begins with `server.connected` and, in the first scenario, with startup notic
 | `permission-asked-agent-turn.json` | the same turn with `glob` set to `ask`; the script answers `permission.asked` with decision `always` |
 | `two-sessions-stream-300cps.json` | two sessions of the same directory prompted together, one stream |
 | `session-lifecycle.json` | a session created and deleted while the stream is open |
+| `turn-control.json` | the turn-control run: permission requests and replies, the question form (created, replied, cancelled), the interrupted question, a steer prompt, and the queue send |
+| `control.json` | `GET /api/openchamber/events` for the same run: the ready frame, a heartbeat, queue and auto-accept updates, and a request left for the user |
 
 `index.json` names the session ids of each file and what it shows, `summary.json` lists for each file every
 event type with its count and the keys of the envelope and of `data`, and `framing.json` has the raw
@@ -24,6 +29,13 @@ Content type `text/event-stream`, status 200. Every event is one frame of a sing
 `data: <json>` followed by a blank line. There are no `event:`, `id:` or `retry:` lines. A keep-alive
 comment frame `: heartbeat` follows `server.connected` in every capture. No data event is wrapped in a
 comment. Parse by `data:` only; the type is in the JSON.
+
+`control.json` is the other stream. It has the same `data:` framing but no directory header and a flat
+payload, `{type, properties}`, with no event envelope, `id`, `created` or `duration`. Its types here are
+`openchamber:event-stream-ready`, `openchamber:heartbeat`, `openchamber:message-queue.updated`,
+`openchamber:permission-auto-accept.updated`, `openchamber:permission-auto-accept.left-for-user`; the run
+also carries `openchamber:session-metadata` and `openchamber:session-assist`, which a client drops. The
+heartbeat arrives every 25 seconds.
 
 ## Envelope
 
@@ -42,7 +54,7 @@ comment. Parse by `data:` only; the type is in the JSON.
   `model.updated`, `models-dev.refreshed`, `plugin.updated`, `project.updated`, `provider.updated`,
   `reference.updated`, `skill.updated`, `vcs.branch.updated`, `websearch.updated`, `worktree.resolved`,
   `session.instructions.updated`, `session.metadata.updated`, `session.usage.updated`,
-  `session.inbox.delivered`, `session.step.streamed`, `session.tool.input.ended`.
+  `session.step.streamed`, `session.tool.input.ended`, `session.model.selected`, `session.agent.selected`.
 
 ## Check against `events.ts` (task 2.5)
 
@@ -107,11 +119,12 @@ says about them.
 
 ### Not covered by any capture
 
-`session.tool.failed`, `session.execution.failed`, `session.step.failed`, `session.reasoning.*`,
-`session.tool.input.delta`, `session.tool.progress`, `form.created|replied|cancelled`, `session.status`,
-`session.idle` and `session.retry.scheduled`: the fixture provider never fails a call, never reasons and never
-asks a form. The reducer tests for these have to build their payloads by hand from `events.ts` and the
-`@opencode/client` types.
+`session.execution.failed`, `session.reasoning.*`, `session.tool.input.delta`,
+`session.tool.progress`, `session.status`, `session.idle` and `session.retry.scheduled`: the fixture
+provider never reasons, never retries and never fails a turn. `session.tool.failed` is in
+`turn-control.json` (a rejected edit, a failed webfetch and an interrupted question), but no
+`session.execution.failed` or `session.step.failed` for a model failure exists. The reducer tests for the
+rest have to build their payloads by hand from `events.ts` and the `@opencode/client` types.
 
 ### A delta before its start
 

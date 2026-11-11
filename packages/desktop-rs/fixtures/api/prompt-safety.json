@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb486cf8001mPufHDEW9sPP16",
+    "sessionID": "ses_e34b7931affewIJVeTC3knAJ62",
+    "time": {
+      "created": 1794411883771
+    },
+    "type": "user",
+    "payload": {
+      "text": "Run the fixture command under the safety net."
+    },
+    "delivery": "steer"
+  }
+}

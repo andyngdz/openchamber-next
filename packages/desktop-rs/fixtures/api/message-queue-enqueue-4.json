@@ -1,0 +1,23 @@
+{
+  "revision": 7,
+  "session": {
+    "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+    "directory": "/tmp/oc-desktop-rs-capture/project",
+    "items": [
+      {
+        "id": "queued-1794411876843-1nvu3s5",
+        "createdAt": 1794411876843,
+        "content": "Fourth queued fixture message.",
+        "text": "Fourth queued fixture message.",
+        "attachments": [],
+        "sendConfig": {
+          "providerID": "perf",
+          "modelID": "stream-1200cps",
+          "agent": "capture-primary"
+        }
+      }
+    ],
+    "sendingId": null
+  },
+  "itemId": "queued-1794411876843-1nvu3s5"
+}

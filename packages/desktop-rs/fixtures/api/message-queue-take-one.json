@@ -1,0 +1,47 @@
+{
+  "revision": 5,
+  "session": {
+    "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+    "directory": "/tmp/oc-desktop-rs-capture/project",
+    "items": [
+      {
+        "id": "queued-1794411876827-hl7evt1",
+        "createdAt": 1794411876827,
+        "content": "Third queued fixture message.",
+        "text": "Third queued fixture message.",
+        "attachments": [],
+        "sendConfig": {
+          "providerID": "perf",
+          "modelID": "stream-1200cps",
+          "agent": "capture-primary"
+        }
+      },
+      {
+        "id": "queued-1794411876819-n7akkd7",
+        "createdAt": 1794411876819,
+        "content": "First queued fixture message.",
+        "text": "First queued fixture message.",
+        "attachments": [],
+        "sendConfig": {
+          "providerID": "perf",
+          "modelID": "stream-1200cps",
+          "agent": "capture-primary"
+        }
+      }
+    ],
+    "sendingId": null
+  },
+  "item": {
+    "id": "queued-1794411876823-labbrd8",
+    "createdAt": 1794411876823,
+    "content": "Second queued fixture message.",
+    "text": "Second queued fixture message.",
+    "attachments": [],
+    "context": [],
+    "sendConfig": {
+      "providerID": "perf",
+      "modelID": "stream-1200cps",
+      "agent": "capture-primary"
+    }
+  }
+}

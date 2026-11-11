@@ -1,19 +1,19 @@
 [
   {
-    "id": "evt_1c3a3e600001LebYULLdBPWlXp",
+    "id": "evt_1cb47f8e9001MMNsTP2BLPbpFV",
     "type": "server.connected",
     "data": {}
   },
   {
-    "id": "evt_1c3a3e8010019vuYimHhE6REXj",
-    "created": 1794283661313,
+    "id": "evt_1cb47faf8001qRSfAtrhxjZBAN",
+    "created": 1794411854584,
     "type": "session.created",
     "location": {
       "directory": "/tmp/oc-desktop-rs-capture/project"
     },
     "data": {
-      "sessionID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
-      "slug": "gentle-orchid",
+      "sessionID": "ses_e34b80510ffeRhvOkSkKV5CUYl",
+      "slug": "kind-falcon",
       "version": "2.2.6",
       "projectID": "global",
       "location": {
@@ -22,20 +22,20 @@
       "subpath": ""
     },
     "durable": {
-      "aggregateID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
+      "aggregateID": "ses_e34b80510ffeRhvOkSkKV5CUYl",
       "seq": 0,
       "version": 1
     }
   },
   {
-    "id": "evt_1c3a3e806001wj0zUEeqCOaRLl",
-    "created": 1794283661318,
+    "id": "evt_1cb47fb17001dNOelw0OTGuNlR",
+    "created": 1794411854615,
     "type": "session.deleted",
     "data": {
-      "sessionID": "ses_e3c5c1805ffefPBAdb6WP8jM6y"
+      "sessionID": "ses_e34b80510ffeRhvOkSkKV5CUYl"
     },
     "durable": {
-      "aggregateID": "ses_e3c5c1805ffefPBAdb6WP8jM6y",
+      "aggregateID": "ses_e34b80510ffeRhvOkSkKV5CUYl",
       "seq": 1,
       "version": 2
     }

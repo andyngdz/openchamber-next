@@ -3,8 +3,8 @@ use oc_client::types::ToolStatus;
 use serde_json::json;
 
 use crate::fixture_test::{
-    AGENT_TURN, INTERRUPTED_TURN, TEXT_REPLY, assistants, ended_texts, event, events, messages,
-    opened, replay, session_of,
+    AGENT_TURN, INTERRUPTED_TURN, TEXT_REPLY, api_config, assistants, ended_texts, event, events,
+    messages, opened, replay, session_of,
 };
 use crate::message::{ChatMessage, Delivery, Item, StepTiming, TextItem};
 use crate::status::SessionStatus;
@@ -62,7 +62,10 @@ fn full_text_reply_builds_the_user_message_and_one_assistant_step() {
     assert_eq!(user.text, "Reply with the fixture text.");
     assert_eq!(user.delivery, Delivery::Delivered);
     assert_eq!(texts(&reply.items), ended_texts(&captured));
-    assert_eq!(reply.agent, "build");
+    assert_eq!(
+        Some(reply.agent.as_str()),
+        api_config().default_agent.as_deref()
+    );
     assert_eq!(reply.model.id, "stream-300cps");
     assert!(reply.timing.duration_ms().is_some());
     assert_eq!(state.open_status(), SessionStatus::Idle);
@@ -87,8 +90,9 @@ fn text_grows_with_each_delta_while_the_session_is_busy() {
         })
         .collect();
     let steps = assistants(&state);
-    assert_eq!(texts(&steps[0].items), [joined.as_str()]);
-    assert!(matches!(steps[0].timing, StepTiming::Running { .. }));
+    let step = &steps[0];
+    assert_eq!(texts(&step.items), [joined.as_str()]);
+    assert!(matches!(step.timing, StepTiming::Running { .. }));
     assert_eq!(state.open_status(), SessionStatus::Busy);
 }
 

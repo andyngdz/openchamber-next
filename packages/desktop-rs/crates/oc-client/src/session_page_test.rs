@@ -4,8 +4,6 @@ use super::{PageStep, SessionPager};
 use crate::types::{Page, Session};
 
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
-const FIRST_NEXT: &str = "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMjVlZmZlNFdpb3RQTUcwMTVxT1oiLCJ0aW1lIjoxNzk0MzA2MTcwMjgyLCJkaXJlY3Rpb24iOiJuZXh0In19";
-const SECOND_NEXT: &str = "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNiMDRhMmE4ZmZleGp5VlJTMTAzdDhwYXUiLCJ0aW1lIjoxNzk0MzA2MTcwMjA2LCJkaXJlY3Rpb24iOiJuZXh0In19";
 
 fn page(ids: &[&str], next: Option<&str>) -> Page<Session> {
     let data: Vec<serde_json::Value> = ids
@@ -77,18 +75,20 @@ fn sessions_are_deduped_across_pages_in_server_order() {
 fn the_captured_global_pages_walk_to_their_last_cursor() {
     let mut pager = SessionPager::new();
 
-    assert_eq!(
-        pager.accept(fixture("session-list-global-page-1.json")),
-        PageStep::Next(FIRST_NEXT.to_owned())
-    );
-    assert_eq!(
-        pager.accept(fixture("session-list-global-page-2.json")),
-        PageStep::Next(SECOND_NEXT.to_owned())
-    );
+    let first = fixture("session-list-global-page-1.json");
+    let first_next = first.cursor.next.clone().expect("page 1 cursor.next");
+    let first_len = first.data.len();
+    assert_eq!(pager.accept(first), PageStep::Next(first_next));
+
+    let second = fixture("session-list-global-page-2.json");
+    let second_next = second.cursor.next.clone().expect("page 2 cursor.next");
+    let second_len = second.data.len();
+    assert_eq!(pager.accept(second), PageStep::Next(second_next));
+
     assert_eq!(
         pager.accept(fixture("session-list-global-page-2.json")),
         PageStep::Done,
         "a repeated page adds no id"
     );
-    assert_eq!(pager.sessions().len(), 4);
+    assert_eq!(pager.sessions().len(), first_len + second_len);
 }
