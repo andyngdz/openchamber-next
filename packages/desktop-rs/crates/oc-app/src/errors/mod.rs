@@ -40,7 +40,7 @@ pub enum AppError {
     OpenWindow(String),
     /// The headless window could not be opened, drawn or captured.
     #[error("cannot render the window headless: {0}")]
-    RenderScreenshot(String),
+    RenderHeadless(String),
     /// The screenshot could not be written.
     #[error("cannot write the screenshot to {path}: {source}")]
     WriteScreenshot {
@@ -66,7 +66,4 @@ pub enum AppError {
         /// What the file system said.
         source: std::io::Error,
     },
-    /// The window closed before the layout dump was written.
-    #[error("the window closed before the layout was dumped")]
-    DumpNotWritten,
 }

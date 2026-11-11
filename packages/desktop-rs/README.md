@@ -34,7 +34,8 @@ depends on, and GPUI Kit's `test-support` feature for the headless renderer.
   ```
 
   Other distributions need the equivalent packages, plus a working Vulkan
-  driver in a Wayland or X11 session.
+  driver. The parity test and `--screenshot` render through GPUI's headless
+  renderer, so they need no Wayland or X11 session.
 
 ## Run
 
@@ -96,15 +97,16 @@ reducer live data takes, and server-bound controls do nothing.
 cargo run -p oc-app -- --state fixtures/states/streaming.json
 ```
 
-With `--dump-layout <file>` the app renders that state at 1440x900, writes the
-bounds of every region and the controls of each, in order, to `<file>` as JSON,
-and exits. The parity test compares these dumps with `fixtures/reference/`.
+With `--dump-layout <file>` the app renders that state at 1440x900 in a headless
+GPUI window, writes the bounds of every region and the controls of each, in
+order, to `<file>` as JSON, and exits. The parity test compares these dumps with
+`fixtures/reference/`. No display server is involved.
 
-With `--screenshot <file>` the app renders the same 1440x900 state in a headless
-GPUI window, using the real text system, fonts and theme, and writes the frame as
-a PNG. No display server or Vulkan window is involved: GPUI's headless renderer
-rasterizes the frame. The test window renders at its own 2x scale, so the PNG is
-2880x1800 for the same 1440x900 content.
+With `--screenshot <file>` the app renders the same headless window, using the
+real text system, fonts and theme, and writes the frame as a PNG. No display
+server or Vulkan window is involved: GPUI's headless renderer rasterizes the
+frame. The test window renders at its own 2x scale, so the PNG is 2880x1800 for
+the same 1440x900 content, and the dump records that scale factor.
 
 ```bash
 cargo run -p oc-app -- --state fixtures/states/empty.json --screenshot /tmp/empty.png
@@ -133,12 +135,14 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 ```
 
-Two suites are off by default:
+The sidecar suite is off by default:
 
 | Variable | Enables | Needs |
 | --- | --- | --- |
 | `OC_DESKTOP_IT=1` | Sidecar integration tests: start, shut down, no leftover processes | `bun install` and `opencode` |
-| `OC_DESKTOP_UI=1` | Layout parity test against `fixtures/reference/` | A graphical session, because it opens a window |
+
+The layout parity test is part of `cargo test --workspace`: it renders each
+state in a headless window, so it needs no graphical session.
 
 ## Notes
 

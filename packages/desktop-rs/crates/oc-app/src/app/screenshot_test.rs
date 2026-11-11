@@ -1,8 +1,8 @@
-//! The screenshot mode's write contract and failure text.
+//! The screenshot mode's write contract.
 
 use std::path::PathBuf;
 
-use super::{render_error, write_png};
+use super::write_png;
 use crate::errors::AppError;
 
 /// A path under the temporary directory that no other test run uses.
@@ -37,14 +37,5 @@ fn a_write_failure_names_the_file() {
     assert!(
         matches!(&error, AppError::WriteScreenshot { path: failed, .. } if failed == &path),
         "{error:?}"
-    );
-}
-
-#[test]
-fn a_failed_render_keeps_the_platform_text() {
-    let error = render_error("no headless renderer is available");
-    assert_eq!(
-        error.to_string(),
-        "cannot render the window headless: no headless renderer is available"
     );
 }

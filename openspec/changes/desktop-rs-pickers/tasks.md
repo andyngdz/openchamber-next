@@ -63,10 +63,10 @@
 - [ ] 8.3 Composer: model and Thinking triggers from state, agent trigger, Enter by the policy, no send while IME text is marked.
 - [ ] 8.4 `--state` loads the version 2 format; move `fixtures/states/v2/*` into `fixtures/states/` and `fixtures/reference/v2/*` into `fixtures/reference/`, delete the first-format state files, and extend `tests/parity.rs` to every new state with the existing rules.
 - [ ] 8.6 Popover bounds: the capture records each control's bounds; the composer triggers' positions and widths and the popover rows' heights follow those measurements and React's CSS until every popover region matches under the composer's device-pixel rule, which the parity test applies to `popover`.
-- [ ] 8.5 Gate as in 2.4, plus `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity` over all states.
+- [ ] 8.5 Gate as in 2.4, plus `cargo test -p oc-app --test parity` over all states, rendered headless.
 
 ## 9. Verification   [depends-on: 8] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]
 
 - [ ] 9.1 `sidecar_it`: create a session with an agent and model and see the reply from that fixture model; switch the model, and the variant alone, and send; a Chat session gets its folder under the chats root; a settings PUT from the app keeps a project's unknown fields.
-- [ ] 9.2 Full gate: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `OC_DESKTOP_UI=1 cargo test -p oc-app --test parity`, `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`; from the repo root `passgate-engine rust` and `passgate-engine logging` on `packages/desktop-rs`; `openspec validate desktop-rs-pickers --strict`.
+- [ ] 9.2 Full gate: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` (parity included, headless), `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`; from the repo root `passgate-engine rust` and `passgate-engine logging` on `packages/desktop-rs`; `openspec validate desktop-rs-pickers --strict`.
 - [ ] 9.3 Manual check on this machine (the user runs it): pick a project, model, variant and agent and send with Enter; type Vietnamese with the IME and press Enter while composing; pick a model in Next and see it under Recent in the Electron app; collapse a project and see its color and icon unchanged in Electron.

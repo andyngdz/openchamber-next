@@ -4,8 +4,9 @@
 //! window opens at once on Starting; the live window loads the shared settings, the home
 //! info and the global session list. Closing the last window flushes pending settings and
 //! stops the sidecar before the app quits. `--dump-layout` and `--screenshot` skip the server
-//! and draw a fixture's state instead.
+//! and draw a fixture's state in a headless window instead, so they need no display.
 
+mod headless;
 mod live_start;
 mod quit;
 mod screenshot;
@@ -15,8 +16,8 @@ use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
 use gpui_kit::{
-    AnyWindowHandle, App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions,
-    application, assets, init, open_window, px, size,
+    App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions, application, assets,
+    init, open_window, px, size,
 };
 use oc_state::State;
 
@@ -31,7 +32,8 @@ use crate::theme::{self, DARK};
 /// The content size the parity reference was measured at.
 const WINDOW_WIDTH: f32 = 1440.;
 const WINDOW_HEIGHT: f32 = 900.;
-/// Frames drawn before the dump, so text layout and the scroll position have settled.
+/// Frames drawn before the dump or screenshot, so text layout and the scroll position have
+/// settled.
 const SETTLE_FRAMES: u32 = 3;
 /// Resizes allowed while the content area converges on the reference size.
 const RESIZE_ATTEMPTS: u32 = 3;
@@ -46,7 +48,8 @@ pub enum Launch {
         /// A `fixtures/states/<name>.json` file.
         state: PathBuf,
     },
-    /// Build the state from a fixture file, render, write the layout to `output` and exit.
+    /// Build the state from a fixture file, render it in a headless window, write the layout
+    /// to `output` and exit.
     DumpLayout {
         /// Where the layout JSON goes.
         output: PathBuf,
@@ -63,11 +66,6 @@ pub enum Launch {
     },
 }
 
-struct DumpTarget {
-    output: PathBuf,
-    name: String,
-}
-
 /// The server a live window talks to, and the answer of its first start.
 struct LiveWindow {
     link: ServerLink,
@@ -79,8 +77,6 @@ struct LiveWindow {
 enum Mode {
     /// A fixture's state for review; no server.
     Review,
-    /// A fixture's state, dumped after the first frames.
-    Dump(DumpTarget),
     /// The shared settings and every project's sessions from the sidecar.
     Live(LiveWindow),
 }
@@ -103,8 +99,7 @@ pub fn run(launch: Launch) -> Result<(), AppError> {
             let script = StateScript::load(&state)?;
             let name = state_name(&state);
             let (state, popover) = script.into_parts();
-            let target = DumpTarget { output, name };
-            open(state, popover, Mode::Dump(target))
+            dump_layout(&output, &name, state, popover)
         }
         Launch::Screenshot { output, state } => {
             let script = StateScript::load(&state)?;
@@ -125,14 +120,9 @@ fn open(
     popover: Option<crate::views::PopoverKind>,
     mode: Mode,
 ) -> Result<(), AppError> {
-    let (dump, live) = match mode {
-        Mode::Review => (None, None),
-        Mode::Dump(target) => (Some(target), None),
-        Mode::Live(live) => (None, Some(live)),
-    };
-    let initial = match dump {
-        Some(_) => Err(AppError::DumpNotWritten),
-        None => Ok(()),
+    let live = match mode {
+        Mode::Review => None,
+        Mode::Live(live) => Some(live),
     };
     let process = live.as_ref().map(|live| live.process.clone());
     let (link, started, flush) = match live {
@@ -142,7 +132,7 @@ fn open(
         }
         None => (None, None, None),
     };
-    let outcome = Rc::new(RefCell::new(initial));
+    let outcome = Rc::new(RefCell::new(Ok(())));
     let final_outcome = outcome.clone();
     application().with_assets(assets::Assets).run(move |cx| {
         init(cx);
@@ -158,14 +148,10 @@ fn open(
                 view
             })
         });
-        match (opened, dump) {
-            (Err(error), _) => {
-                *outcome.borrow_mut() = Err(AppError::OpenWindow(error.to_string()));
-                cx.quit();
-                return;
-            }
-            (Ok((window, _)), Some(target)) => schedule_dump(window, target, registry, outcome, cx),
-            (Ok(_), None) => {}
+        if let Err(error) = opened {
+            *outcome.borrow_mut() = Err(AppError::OpenWindow(error.to_string()));
+            cx.quit();
+            return;
         }
         quit::quit_after_last_window(process, flush, cx);
     });
@@ -183,68 +169,30 @@ fn window_options(cx: &App) -> WindowOptions {
     }
 }
 
-fn schedule_dump(
-    window: AnyWindowHandle,
-    target: DumpTarget,
-    registry: LayoutRegistry,
-    outcome: Rc<RefCell<Result<(), AppError>>>,
-    cx: &mut App,
-) {
-    let scheduled = window.update(cx, |_, window, _| {
-        settle_then_dump(window, RESIZE_ATTEMPTS, target, registry, outcome);
-    });
-    if let Err(error) = scheduled {
-        tracing::error!(target: crate::logging::APP, %error, "[APP] Could not schedule the layout dump");
-        cx.quit();
-    }
-}
-
-/// GPUI Kit draws a frame (shadow and border) around the app on client-decorated windows, so
-/// the window is grown until the app's content area is the reference size, then dumped.
-fn settle_then_dump(
-    window: &mut gpui_kit::Window,
-    attempts: u32,
-    target: DumpTarget,
-    registry: LayoutRegistry,
-    outcome: Rc<RefCell<Result<(), AppError>>>,
-) {
-    after_frames(window, SETTLE_FRAMES, move |window, cx| {
-        let wanted = size(px(WINDOW_WIDTH), px(WINDOW_HEIGHT));
-        let content = registry.content().map(|bounds| bounds.size);
-        if let Some(content) = content.filter(|content| *content != wanted && attempts > 0) {
-            let viewport = window.viewport_size();
-            window.resize(viewport + wanted - content);
-            settle_then_dump(window, attempts - 1, target, registry, outcome);
-            return;
-        }
-        *outcome.borrow_mut() = write_dump(&target, window.scale_factor(), &registry);
-        cx.quit();
-    });
-}
-
-fn write_dump(
-    target: &DumpTarget,
-    scale_factor: f32,
-    registry: &LayoutRegistry,
+/// Renders the fixture state in the headless window and writes its layout to `output`.
+fn dump_layout(
+    output: &Path,
+    name: &str,
+    state: State,
+    popover: Option<crate::views::PopoverKind>,
 ) -> Result<(), AppError> {
-    let json = LayoutDump::capture(&target.name, scale_factor, registry)?.to_json()?;
-    std::fs::write(&target.output, json).map_err(|source| AppError::WriteDump {
-        path: target.output.clone(),
-        source,
+    headless::with_settled_window(state, popover, |headless, window, registry| {
+        let scale_factor = headless
+            .update_window(window, |_, window, _| window.scale_factor())
+            .map_err(headless::render_error)?;
+        write_dump(output, name, scale_factor, registry)
     })
 }
 
-fn after_frames(
-    window: &mut gpui_kit::Window,
-    remaining: u32,
-    finish: impl FnOnce(&mut gpui_kit::Window, &mut App) + 'static,
-) {
-    window.on_next_frame(move |window, cx| {
-        if remaining == 0 {
-            finish(window, cx);
-        } else {
-            window.refresh();
-            after_frames(window, remaining - 1, finish);
-        }
-    });
+fn write_dump(
+    output: &Path,
+    name: &str,
+    scale_factor: f32,
+    registry: &LayoutRegistry,
+) -> Result<(), AppError> {
+    let json = LayoutDump::capture(name, scale_factor, registry)?.to_json()?;
+    std::fs::write(output, json).map_err(|source| AppError::WriteDump {
+        path: output.to_path_buf(),
+        source,
+    })
 }

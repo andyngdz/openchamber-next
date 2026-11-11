@@ -8,7 +8,7 @@ use oc_app::Launch;
 #[derive(Parser)]
 #[command(name = "oc-app")]
 struct Cli {
-    /// Write the layout of one rendered frame to this file and exit.
+    /// Write the layout of one frame rendered in a headless window to this file and exit.
     #[arg(long, requires = "state", conflicts_with = "screenshot")]
     dump_layout: Option<PathBuf>,
     /// Render one fixture state in a headless window, write the frame to this PNG and exit.
