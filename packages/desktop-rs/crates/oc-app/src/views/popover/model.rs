@@ -1,15 +1,19 @@
-//! The model picker panel: search, the leading actions, and the section list.
+//! The model picker panel: the search row with its action, the leading action, and the list.
 
-use gpui_kit::component::IndexPath;
-use gpui_kit::component::list::{List, ListDelegate, ListState};
+use gpui_kit::assets::IconName;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::input::{InputGroup, InputGroupAddon, InputGroupInput, InputState};
+use gpui_kit::component::list::{List, ListState};
+use gpui_kit::component::{ActiveTheme, Icon, Sizable};
 use gpui_kit::{
-    AnyElement, App, Context, Entity, IntoElement, ParentElement, Styled, Task, Window, div, px,
+    AnyElement, App, Div, Entity, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
 use oc_state::{LoadStatus, State};
 
-use super::list::RowAction;
-use super::list::{Section, header, row_item, search};
+use super::list::row_item;
+use super::model_list::ModelList;
 use super::model_rows;
+use super::model_search;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 use crate::views::{Dispatch, Intent, RETRY, retry_button};
 
@@ -17,121 +21,17 @@ use crate::views::{Dispatch, Intent, RETRY, retry_button};
 pub(super) const WIDTH: f32 = 380.;
 /// The tallest menu the CSS lets the model picker take (`ModelControls.tsx:2407-2409`).
 pub(super) const MAX_HEIGHT: f32 = 392.6;
-const SEARCH: &str = "Search models";
-const SEARCH_HEIGHT: f32 = 36.;
+/// The model picker's search field, `labels.searchPlaceholder`.
+pub(super) const SEARCH: &str = "Search models";
+/// `px-2 py-1.5` around the field, then its 28px frame (`ModelPickerList.tsx:2130`).
+const SEARCH_ROW_HEIGHT: f32 = 36.;
+const SEARCH_HEIGHT: f32 = 28.;
+/// The leading action's row: `px-2 py-1.5` and the meta line (`ModelPickerList.tsx:960`).
+const LEADING_HEIGHT: f32 = 30.;
 const ROW_HEIGHT: f32 = 30.;
 const HEADER_HEIGHT: f32 = 29.;
 
-/// The model picker's sections, filtered by the list's search field.
-pub(crate) struct ModelList {
-    state: Entity<State>,
-    dispatch: Dispatch,
-    registry: LayoutRegistry,
-    query: String,
-    selected: Option<IndexPath>,
-}
-
-impl ModelList {
-    /// A delegate reading the shared state each frame.
-    pub(crate) fn new(state: Entity<State>, dispatch: Dispatch, registry: LayoutRegistry) -> Self {
-        Self {
-            state,
-            dispatch,
-            registry,
-            query: String::new(),
-            selected: None,
-        }
-    }
-
-    fn sections(&self, cx: &App) -> Vec<Section> {
-        model_rows::sections(self.state.read(cx), &self.query)
-    }
-}
-
-impl ListDelegate for ModelList {
-    type Item = gpui_kit::component::list::ListItem;
-
-    fn sections_count(&self, cx: &App) -> usize {
-        self.sections(cx).len().max(1)
-    }
-
-    fn items_count(&self, section: usize, cx: &App) -> usize {
-        self.sections(cx)
-            .get(section)
-            .map_or(0, |section| section.rows.len())
-    }
-
-    fn render_item(
-        &mut self,
-        index: IndexPath,
-        _window: &mut Window,
-        cx: &mut Context<ListState<Self>>,
-    ) -> Option<Self::Item> {
-        self.sections(cx)
-            .get(index.section)?
-            .rows
-            .get(index.row)
-            .map(|row| row_item(&self.registry, &self.dispatch, row))
-    }
-
-    fn render_section_header(
-        &mut self,
-        section: usize,
-        _window: &mut Window,
-        cx: &mut Context<ListState<Self>>,
-    ) -> Option<impl IntoElement> {
-        let sections = self.sections(cx);
-        let wanted = sections.get(section)?.header.as_ref()?;
-        Some(header(&self.registry, wanted).into_any_element())
-    }
-
-    fn set_selected_index(
-        &mut self,
-        index: Option<IndexPath>,
-        _window: &mut Window,
-        _cx: &mut Context<ListState<Self>>,
-    ) {
-        self.selected = index;
-    }
-
-    fn confirm(
-        &mut self,
-        _secondary: bool,
-        window: &mut Window,
-        cx: &mut Context<ListState<Self>>,
-    ) {
-        let Some(index) = self.selected else {
-            return;
-        };
-        let sections = self.sections(cx);
-        let Some(row) = sections
-            .get(index.section)
-            .and_then(|section| section.rows.get(index.row))
-        else {
-            return;
-        };
-        match &row.action {
-            RowAction::Pick(pick) => (self.dispatch)(&Intent::Pick(pick.clone()), window, cx),
-            RowAction::Close => (self.dispatch)(&Intent::ClosePopover, window, cx),
-        }
-    }
-
-    fn cancel(&mut self, window: &mut Window, cx: &mut Context<ListState<Self>>) {
-        (self.dispatch)(&Intent::ClosePopover, window, cx);
-    }
-
-    fn perform_search(
-        &mut self,
-        query: &str,
-        _window: &mut Window,
-        _cx: &mut Context<ListState<Self>>,
-    ) -> Task<()> {
-        self.query = query.to_owned();
-        Task::ready(())
-    }
-}
-
-/// The panel: the search list, or the catalog failure with Retry.
+/// The panel: the search row, the leading action and the sections, or the failure with Retry.
 pub(super) fn content(
     state: &Entity<State>,
     dispatch: &Dispatch,
@@ -151,17 +51,82 @@ pub(super) fn content(
     if let Some(message) = failed {
         return failure(registry, dispatch, &message, directory);
     }
-    let sections = list.read(cx).delegate().sections(cx);
+    let delegate = list.read(cx).delegate();
+    let sections = delegate.sections(cx);
     let rows: usize = sections.iter().map(|section| section.rows.len()).sum();
     let headers = sections
         .iter()
         .filter(|section| section.header.is_some() && !section.rows.is_empty())
         .count();
-    let height =
-        (SEARCH_HEIGHT + rows as f32 * ROW_HEIGHT + headers as f32 * HEADER_HEIGHT).min(MAX_HEIGHT);
-    let list = List::new(list).search_placeholder(SEARCH).w_full();
-    let panel = search(registry, Role::Combobox, SEARCH, list).h(px(height));
+    let height = panel_height(rows, headers);
+    let search = delegate.search();
+    let panel = div()
+        .w_full()
+        .h(px(height))
+        .flex()
+        .flex_col()
+        .child(search_row(registry, &search, dispatch, list, cx))
+        .child(leading_row(registry, dispatch, cx))
+        .child(div().flex_1().min_h_0().child(List::new(list).w_full()));
     div().w_full().child(panel).into_any_element()
+}
+
+/// The panel's height for its rows and headers, capped at the reference's tallest menu.
+fn panel_height(rows: usize, headers: usize) -> f32 {
+    (SEARCH_ROW_HEIGHT + LEADING_HEIGHT + rows as f32 * ROW_HEIGHT + headers as f32 * HEADER_HEIGHT)
+        .min(MAX_HEIGHT)
+}
+
+fn search_row(
+    registry: &LayoutRegistry,
+    search: &Entity<InputState>,
+    dispatch: &Dispatch,
+    list: &Entity<ListState<ModelList>>,
+    cx: &App,
+) -> Div {
+    let spec = ControlSpec::named(Area::Popover, Role::Combobox, SEARCH);
+    let group = InputGroup::new("model-search")
+        .small()
+        .h(px(SEARCH_HEIGHT))
+        .input(InputGroupInput::new(search).aria_label(SEARCH))
+        .addon(
+            InputGroupAddon::new("model-search-icon")
+                .child(Icon::new(IconName::Search).text_color(cx.theme().muted_foreground)),
+        );
+    let keys = list.clone();
+    let close = dispatch.clone();
+    div()
+        .w_full()
+        .flex()
+        .items_center()
+        .gap(px(8.))
+        .px(px(8.))
+        .py(px(4.))
+        .child(control(registry, spec, group).flex_1())
+        .child(add_provider(registry, dispatch))
+        .capture_key_down(move |event, window, cx| {
+            model_search::search_keys(&keys, &close, event, window, cx)
+        })
+}
+
+fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
+    let spec = ControlSpec::named(Area::Popover, Role::Button, model_rows::ADD_PROVIDER);
+    let close = dispatch.clone();
+    let button = Button::new(spec.key.clone())
+        .ghost()
+        .small()
+        .compact()
+        .icon(Icon::new(IconName::Plus))
+        .label(model_rows::ADD_PROVIDER)
+        .accessibility_label(model_rows::ADD_PROVIDER)
+        .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx));
+    control(registry, spec, button)
+}
+
+fn leading_row(registry: &LayoutRegistry, dispatch: &Dispatch, cx: &App) -> impl IntoElement {
+    let close = dispatch.clone();
+    row_item(registry, dispatch, &model_rows::leading_row(), cx)
+        .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx))
 }
 
 fn failure(

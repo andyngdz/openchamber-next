@@ -42,7 +42,7 @@ const CHIPS: [(&str, IconName); 9] = [
     ("Build an extension", IconName::LayoutDashboard),
 ];
 
-fn choose_project(scene: Scene<'_>) -> AnyElement {
+fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
     let button = label_button(&spec, Some(IconName::ChevronDown), CHOOSE_PROJECT)
         // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
@@ -57,6 +57,7 @@ fn choose_project(scene: Scene<'_>) -> AnyElement {
             scene,
             PopoverKind::Project,
             button,
+            cx,
         ))
         .into_any_element()
 }
@@ -93,7 +94,7 @@ pub(crate) fn empty_state(
                 .child("What are we working on?"),
         )
         .child(div().h(px(16.)))
-        .child(choose_project(scene))
+        .child(choose_project(scene, cx))
         .child(div().h(px(GAP)))
         .child(composer(scene, draft, window, cx))
         .child(

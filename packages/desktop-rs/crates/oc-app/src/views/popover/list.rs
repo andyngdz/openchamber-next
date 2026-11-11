@@ -1,15 +1,26 @@
 //! Shared rows, section headers and the recorded search field for the picker lists.
 
-use gpui_kit::component::list::ListItem;
-use gpui_kit::{
-    App, Div, InteractiveElement, IntoElement, ParentElement, StatefulInteractiveElement, Styled,
-    Window, canvas, div, px,
-};
-use oc_state::SelectionAction;
-
 use super::Pick;
-use crate::layout::{Area, ControlSpec, LayoutRegistry, Reveal, Role, control as control_element};
-use crate::views::{Intent, text_metrics};
+use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control as control_element};
+use crate::views::text_metrics;
+use gpui_kit::assets::IconName;
+use gpui_kit::component::ActiveTheme;
+use gpui_kit::component::list::ListItem;
+use gpui_kit::prelude::FluentBuilder as _;
+use gpui_kit::{App, Div, FontWeight, IntoElement, ParentElement, Styled, canvas, div, px};
+
+/// The provider mark on a Favorites or Recent row, `size-3.5` (`ModelPickerList.tsx:1054`).
+const ROW_ICON: f32 = 14.;
+/// The provider mark on a section header, `h-4 w-4` (`ModelPickerList.tsx:1104`).
+const HEADER_ICON: f32 = 16.;
+/// The check after the current model, `h-4 w-4` (`ModelPickerList.tsx:1063`).
+const CHECK_ICON: f32 = 16.;
+/// `gap-1.5` between a row's mark, name, context and check (`ModelPickerList.tsx:1052`).
+const GAP: f32 = 6.;
+/// `font-medium` on a model name (`ModelPickerList.tsx:1055`).
+const ROW_WEIGHT: f32 = 500.;
+/// `font-semibold` on a section label (`ModelPickerList.tsx:942`).
+const HEADER_WEIGHT: f32 = 600.;
 
 /// One row's action when the list confirms it.
 #[derive(Clone, PartialEq, Eq)]
@@ -20,27 +31,15 @@ pub(super) enum RowAction {
     Close,
 }
 
-/// Which star a row shows.
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub(super) enum StarKind {
-    /// The model or agent is starred.
-    Filled,
-    /// The row can be starred.
-    Outline,
-}
+pub(super) use super::star::{Star, StarKind};
 
-/// A row's star toggle.
-pub(super) struct Star {
-    pub(super) label: &'static str,
-    pub(super) action: SelectionAction,
-    pub(super) kind: StarKind,
-    pub(super) shown: bool,
-}
-
-/// One list row, named the way the reference keys it.
+/// One list row: its accessible name, what it draws, and its action.
 pub(super) struct Row {
     pub(super) name: String,
-    pub(super) visible: String,
+    pub(super) label: String,
+    pub(super) icon: Option<IconName>,
+    pub(super) context: Option<String>,
+    pub(super) selected: bool,
     pub(super) role: Role,
     pub(super) ancestors: Vec<String>,
     pub(super) action: RowAction,
@@ -56,17 +55,24 @@ pub(super) struct Section {
     pub(super) rows: Vec<Row>,
 }
 
-/// The button-shaped group header the reference lists.
+/// The group header the reference lists; its label is drawn, its name is accessible.
 pub(super) struct Header {
     pub(super) name: String,
+    pub(super) label: String,
+    pub(super) icon: Option<IconName>,
     pub(super) ancestors: Vec<String>,
 }
 
 /// A row as the list draws it, with its accessible name and recorded bounds.
+///
+/// React names the row from its visible parts and leaves the provider visual out; here the
+/// accessible name stays exactly as the reference keys it while the row draws only its mark,
+/// model name, context, check and star.
 pub(super) fn row_item(
     registry: &LayoutRegistry,
     dispatch: &super::Dispatch,
     row: &Row,
+    cx: &App,
 ) -> ListItem {
     let ancestors = ancestors(row.ancestors.iter().map(String::as_str));
     let mut spec = ControlSpec::named(Area::Popover, row.role, row.name.clone()).under(&ancestors);
@@ -79,81 +85,60 @@ pub(super) fn row_item(
     let content = div()
         .relative()
         .w_full()
+        .flex()
+        .items_center()
+        .gap(px(GAP))
         .child(probe(registry, spec))
-        .child(row.visible.clone());
+        .children(row.icon.map(|icon| icon_box(icon, ROW_ICON, cx)))
+        .child(
+            div()
+                .flex_1()
+                .min_w_0()
+                .truncate()
+                .font_weight(FontWeight(ROW_WEIGHT))
+                .child(row.label.clone()),
+        )
+        .children(row.context.as_ref().map(|context| muted(context, cx)))
+        .when(row.selected, |this| this.child(check_icon()));
     let mut list_item = ListItem::new(row.name.clone())
         .accessibility_label(row.name.clone())
         .px(px(8.))
-        .py(px(8.))
+        .py(px(6.))
         .text_size(px(text_metrics::META))
         .line_height(px(text_metrics::line_height(text_metrics::META)))
         .child(content);
     if let Some(star) = &row.star {
-        list_item = list_item.suffix(star_suffix(registry.clone(), dispatch.clone(), row, star));
+        list_item = list_item.suffix(super::star::suffix(
+            registry.clone(),
+            dispatch.clone(),
+            row,
+            star,
+        ));
     }
     list_item
 }
 
-fn star_suffix(
-    registry: LayoutRegistry,
-    dispatch: super::Dispatch,
-    row: &Row,
-    star: &Star,
-) -> impl Fn(&mut Window, &mut App) -> Div + 'static {
-    let mut parts: Vec<&str> = row.ancestors.iter().map(String::as_str).collect();
-    if row.star_under_row {
-        parts.push(row.name.as_str());
-    }
-    let ancestors = ancestors(parts.into_iter());
-    let label = star.label;
-    let action = star.action.clone();
-    let kind = star.kind;
-    let mut spec = ControlSpec::named(Area::Popover, Role::Button, label).under(&ancestors);
-    if let Some(index) = row.repeat {
-        spec = spec.repeated(index);
-    }
-    let spec = if star.shown {
-        spec
-    } else {
-        spec.revealed(Reveal::Hidden)
-    };
-    move |_, _| {
-        let dispatch = dispatch.clone();
-        let action = action.clone();
-        control_element(
-            &registry,
-            spec.clone(),
-            div()
-                .id(label)
-                .w(px(16.))
-                .h(px(16.))
-                .child(match kind {
-                    StarKind::Filled => gpui_kit::assets::IconName::StarFill,
-                    StarKind::Outline => gpui_kit::assets::IconName::Star,
-                })
-                .on_click(move |_, window, cx| {
-                    dispatch(&Intent::ApplySelection(action.clone()), window, cx);
-                    cx.stop_propagation();
-                }),
-        )
-        .w(px(16.))
-        .h(px(16.))
-    }
-}
-
 /// A section header, recorded under its group ancestors.
-pub(super) fn header(registry: &LayoutRegistry, header: &Header) -> Div {
+pub(super) fn header(registry: &LayoutRegistry, header: &Header, cx: &App) -> Div {
     let ancestors = ancestors(header.ancestors.iter().map(String::as_str));
     let spec =
         ControlSpec::named(Area::Popover, Role::Button, header.name.clone()).under(&ancestors);
+    let line = text_metrics::line_height(text_metrics::MICRO);
     let content = div()
-        .h(px(text_metrics::line_height(text_metrics::MICRO)))
+        .h(px(line))
         .flex()
         .items_center()
+        .gap(px(GAP))
         .text_size(px(text_metrics::MICRO))
-        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
-        .child(header.name.clone());
-    control_element(registry, spec, content).px(px(8.)).w_full()
+        .line_height(px(line))
+        .font_weight(FontWeight(HEADER_WEIGHT))
+        .text_color(cx.theme().muted_foreground)
+        .children(header.icon.map(|icon| icon_box(icon, HEADER_ICON, cx)))
+        .child(header.label.clone());
+    control_element(registry, spec, content)
+        .px(px(8.))
+        .py(px(6.))
+        .w_full()
 }
 
 /// The list with the search field, recorded under the reference's search key.
@@ -165,6 +150,34 @@ pub(super) fn search(
 ) -> Div {
     let spec = ControlSpec::named(Area::Popover, role, placeholder);
     control_element(registry, spec, list).w_full()
+}
+
+fn icon_box(icon: IconName, size: f32, cx: &App) -> Div {
+    div()
+        .flex_shrink_0()
+        .w(px(size))
+        .h(px(size))
+        .text_size(px(size))
+        .text_color(cx.theme().muted_foreground)
+        .child(icon)
+}
+
+fn muted(text: &str, cx: &App) -> Div {
+    div()
+        .flex_shrink_0()
+        .text_size(px(text_metrics::MICRO))
+        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
+        .text_color(cx.theme().muted_foreground)
+        .child(text.to_owned())
+}
+
+fn check_icon() -> Div {
+    div()
+        .flex_shrink_0()
+        .w(px(CHECK_ICON))
+        .h(px(CHECK_ICON))
+        .text_size(px(CHECK_ICON))
+        .child(gpui_kit::assets::IconName::Check)
 }
 
 fn probe(registry: &LayoutRegistry, spec: ControlSpec) -> impl IntoElement {
@@ -179,7 +192,8 @@ fn probe(registry: &LayoutRegistry, spec: ControlSpec) -> impl IntoElement {
     .size_full()
 }
 
-fn ancestors<'a>(parts: impl Iterator<Item = &'a str>) -> Vec<&'a str> {
+/// The named ancestors, outermost first, with empty names left out.
+pub(super) fn ancestors<'a>(parts: impl Iterator<Item = &'a str>) -> Vec<&'a str> {
     parts.filter(|part| !part.is_empty()).collect()
 }
 

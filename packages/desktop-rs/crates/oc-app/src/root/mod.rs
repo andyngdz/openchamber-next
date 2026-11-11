@@ -28,8 +28,8 @@ use oc_state::{Action, State};
 use crate::layout::{LayoutRegistry, content};
 use crate::live::ServerLink;
 use crate::views::{
-    Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, Scene, chat_column, header, icon_rail,
-    sidebar, work_status,
+    Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, Scene, chat_column, filter_model_list,
+    header, icon_rail, model_search_field, sidebar, work_status,
 };
 
 /// The whole window.
@@ -59,6 +59,7 @@ pub(crate) struct RootView {
     pub(super) catalogs: BTreeSet<String>,
     _draft_events: Subscription,
     _thinking_dismiss: Subscription,
+    _model_search: Subscription,
 }
 
 impl RootView {
@@ -91,6 +92,18 @@ impl RootView {
             window,
             |this, _, _: &DismissEvent, window, cx| this.close_popover(window, cx),
         );
+        // The model panel draws its own search field; its edits filter that list, and the
+        // field's keys (Enter included) are handled by the panel.
+        let model_search = model_search_field(&lists, cx);
+        let model_search_events = cx.subscribe_in(
+            &model_search,
+            window,
+            |this, search, event: &InputEvent, window, cx| {
+                if let InputEvent::Change = event {
+                    filter_model_list(&this.lists, search, window, cx);
+                }
+            },
+        );
         Self {
             state,
             registry,
@@ -107,6 +120,7 @@ impl RootView {
             catalogs: BTreeSet::new(),
             _draft_events: draft_events,
             _thinking_dismiss: thinking_dismiss,
+            _model_search: model_search_events,
         }
     }
 

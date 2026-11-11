@@ -1,15 +1,19 @@
 //! The four picker popups, built on gpui-component's `Popover` and `List`/`PopupMenu`.
 //!
 //! `Popover` owns placement, outside-press dismissal, focus capture and restoration, and the
-//! scroll-blocking surface. `List` owns the search field, filtering, rows, scrolling, and
-//! keyboard navigation; `PopupMenu` owns the Thinking menu.
+//! scroll-blocking surface. `List` owns filtering, rows, scrolling, and keyboard navigation,
+//! and its search field for the project and agent pickers; the model panel draws that field
+//! itself, beside the list. `PopupMenu` owns the Thinking menu.
 
 mod agent;
 mod labels;
 mod list;
 mod model;
+mod model_list;
 mod model_rows;
+mod model_search;
 mod project;
+mod star;
 mod thinking;
 
 use gpui_kit::component::button::Button;
@@ -17,8 +21,8 @@ use gpui_kit::component::list::ListState;
 use gpui_kit::component::menu::PopupMenu;
 use gpui_kit::component::popover::{Popover, PopoverState};
 use gpui_kit::{
-    Anchor, AnyElement, App, AppContext as _, Context, Div, Entity, IntoElement, ParentElement,
-    Styled, Window, div, px,
+    Anchor, AnyElement, App, AppContext as _, Context, Div, Entity, Focusable as _, IntoElement,
+    ParentElement, Styled, Window, div, px,
 };
 use oc_state::State;
 
@@ -28,6 +32,7 @@ use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 pub(crate) use labels::{
     selected_agent_label, selected_model_label, selected_model_variants, selection_directory,
 };
+pub(crate) use model_search::{filter_model_list, model_search_field, open_model_picker};
 pub(crate) use types::{Pick, PopoverKind};
 
 mod types;
@@ -41,7 +46,7 @@ pub(crate) const DEFAULT_MODEL: &str = "Default model";
 #[derive(Clone)]
 pub(crate) struct PopoverLists {
     pub(crate) project: Entity<ListState<project::ProjectList>>,
-    pub(crate) model: Entity<ListState<model::ModelList>>,
+    pub(crate) model: Entity<ListState<model_list::ModelList>>,
     pub(crate) agent: Entity<ListState<agent::AgentList>>,
     pub(crate) thinking: Entity<PopupMenu>,
 }
@@ -63,13 +68,20 @@ impl PopoverLists {
             )
             .searchable(true)
         });
+        // The model panel owns its search row beside the list, so the list's own filter
+        // field stays off; every section then has a header for the one measured size.
         let model = cx.new(|cx| {
             ListState::new(
-                model::ModelList::new(state.clone(), dispatch.clone(), registry.clone()),
+                model_list::ModelList::new(
+                    state.clone(),
+                    dispatch.clone(),
+                    registry.clone(),
+                    window,
+                    cx,
+                ),
                 window,
                 cx,
             )
-            .searchable(true)
         });
         let agent = cx.new(|cx| {
             ListState::new(
@@ -91,9 +103,14 @@ impl PopoverLists {
 }
 
 /// The popup trigger and its panel, all owned by the `Popover` component.
-pub(crate) fn trigger_control(scene: Scene<'_>, kind: PopoverKind, button: Button) -> Div {
+pub(crate) fn trigger_control(
+    scene: Scene<'_>,
+    kind: PopoverKind,
+    button: Button,
+    cx: &App,
+) -> Div {
     let spec = trigger_spec(kind, scene.state);
-    control(scene.registry, spec, popover(scene, kind, button))
+    control(scene.registry, spec, popover(scene, kind, button, cx))
 }
 
 /// The control the `Popover` trigger is recorded under, for tests that press it.
@@ -128,7 +145,7 @@ fn trigger_name(kind: PopoverKind, state: &State) -> String {
     }
 }
 
-fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button) -> Popover {
+fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button, cx: &App) -> Popover {
     let state = scene.state_entity();
     let dispatch = scene.dispatch.clone();
     let registry = scene.registry.clone();
@@ -151,6 +168,20 @@ fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button) -> Popover {
         .on_open_change(open_change)
         .trigger(button)
         .content(content);
+    // Opening the popover moves focus to it; the model panel's field must take it instead,
+    // so typing filters and the arrow keys reach the list.
+    let popover = match kind {
+        PopoverKind::Model => {
+            let search = scene.lists.model.read(cx).delegate().search();
+            popover.track_focus(&search.read(cx).focus_handle(cx))
+        }
+        PopoverKind::Project | PopoverKind::Agent | PopoverKind::Thinking => popover,
+    };
+    placed(popover, kind)
+}
+
+/// The popover's placement and surface for its kind.
+fn placed(popover: Popover, kind: PopoverKind) -> Popover {
     match kind {
         PopoverKind::Project => popover
             .anchor(Anchor::TopLeft)

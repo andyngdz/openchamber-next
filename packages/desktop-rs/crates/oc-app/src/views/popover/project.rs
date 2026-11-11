@@ -59,7 +59,10 @@ impl ProjectList {
 fn project_row(name: String, pick: super::Pick) -> Row {
     Row {
         name: name.clone(),
-        visible: name,
+        label: name,
+        icon: None,
+        context: None,
+        selected: false,
         role: Role::Option,
         ancestors: vec![PROJECT_GROUP.to_owned()],
         action: RowAction::Pick(pick),
@@ -85,7 +88,7 @@ impl ListDelegate for ProjectList {
     ) -> Option<Self::Item> {
         self.rows(cx)
             .get(index.row)
-            .map(|row| super::list::row_item(&self.registry, &self.dispatch, row))
+            .map(|row| super::list::row_item(&self.registry, &self.dispatch, row, cx))
     }
 
     fn set_selected_index(

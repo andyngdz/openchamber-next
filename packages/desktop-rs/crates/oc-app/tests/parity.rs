@@ -15,7 +15,7 @@ use serde_json::Value;
 
 mod parity_support;
 
-use parity_support::{REGIONS, control_differences};
+use parity_support::{POPOVER_LIST_PREFIX, REGIONS, control_differences};
 
 fn fixtures() -> &'static Path {
     Path::new(env!("OC_DESKTOP_FIXTURES"))
@@ -290,4 +290,102 @@ fn composer_edges_compare_on_the_device_grid() {
         [315.5, 785., 720.5, 100.],
         2.
     ));
+}
+
+/// One control as the dump places it on the frame.
+struct Placed {
+    key: String,
+    role: String,
+    name: String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+impl Placed {
+    fn read(control: &Value) -> Self {
+        let number = |field: &str| {
+            control["bounds"][field]
+                .as_f64()
+                .unwrap_or_else(|| panic!("control has no {field}: {control}"))
+        };
+        Self {
+            key: control["key"].as_str().unwrap_or_default().to_owned(),
+            role: control["role"].as_str().unwrap_or_default().to_owned(),
+            name: control["name"].as_str().unwrap_or_default().to_owned(),
+            x: number("x"),
+            y: number("y"),
+            width: number("width"),
+            height: number("height"),
+        }
+    }
+
+    fn overlaps(&self, other: &Self) -> bool {
+        self.x < other.x + other.width
+            && other.x < self.x + self.width
+            && self.y < other.y + other.height
+            && other.y < self.y + self.height
+    }
+}
+
+fn placed_controls(layout: &Value) -> Vec<Placed> {
+    layout["regions"]["popover"]["controls"]
+        .as_array()
+        .map(|controls| controls.iter().map(Placed::read).collect())
+        .unwrap_or_default()
+}
+
+/// A model section header: `FAVORITES`, `RECENT`, or a provider's `id logo NAME` label.
+fn is_section_header(control: &Placed) -> bool {
+    control.role == "button"
+        && control.key.starts_with(POPOVER_LIST_PREFIX)
+        && (control.key.ends_with("/FAVORITES")
+            || control.key.ends_with("/RECENT")
+            || control.name.contains(" logo "))
+}
+
+fn is_row(control: &Placed) -> bool {
+    matches!(control.role.as_str(), "option" | "menuitem")
+}
+
+/// `List` measures one section-header size from the first section and lays every section out
+/// with it. A section without a header gave every header zero height, and the header was drawn
+/// over the row below it; this fails for such a list.
+#[test]
+fn every_picker_section_header_sits_above_its_rows() {
+    for state in ["model-popover", "project-popover", "agent-menu"] {
+        let layout = dump(state);
+        let controls = placed_controls(&layout);
+        let headers: Vec<&Placed> = controls
+            .iter()
+            .filter(|control| is_section_header(control))
+            .collect();
+        let rows: Vec<&Placed> = controls.iter().filter(|control| is_row(control)).collect();
+        for header in &headers {
+            assert!(
+                header.height > 0.,
+                "{state}: section header {:?} was laid out with no height",
+                header.name
+            );
+            for row in &rows {
+                assert!(
+                    !header.overlaps(row),
+                    "{state}: section header {:?} overlaps row {:?}",
+                    header.name,
+                    row.name
+                );
+            }
+        }
+        for (index, row) in rows.iter().enumerate() {
+            for other in &rows[index + 1..] {
+                assert!(
+                    !row.overlaps(other),
+                    "{state}: rows {:?} and {:?} overlap",
+                    row.name,
+                    other.name
+                );
+            }
+        }
+    }
 }

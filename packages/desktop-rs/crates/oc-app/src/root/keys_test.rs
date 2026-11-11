@@ -201,3 +201,35 @@ fn the_action_path_uses_the_binding_shift_and_secondary(cx: &mut TestAppContext)
         );
     });
 }
+
+/// The model the shared state is on.
+fn model_of(root: &Entity<RootView>, cx: &App) -> Option<(String, String)> {
+    let state = root.read(cx).state.read(cx);
+    state
+        .current_selection()
+        .and_then(|selection| selection.model())
+        .map(|key| (key.provider_id().to_owned(), key.id().to_owned()))
+}
+
+#[gpui_kit::test]
+fn typing_in_the_model_search_filters_and_enter_picks(cx: &mut TestAppContext) {
+    let (root, cx) = open(cx, replay("model-popover"), None);
+    cx.update(|window, cx| {
+        root.update(cx, |root, cx| {
+            root.open_popover(crate::views::PopoverKind::Model, window, cx)
+        });
+        window.draw(cx).clear(cx);
+        window.draw(cx).clear(cx);
+    });
+
+    cx.simulate_input("code block");
+    cx.simulate_keystrokes("enter");
+
+    cx.update(|_, cx| {
+        assert_eq!(
+            model_of(&root, cx),
+            Some(("perf".to_owned(), "code-1200cps".to_owned())),
+            "Enter did not pick the row the filter left"
+        );
+    });
+}

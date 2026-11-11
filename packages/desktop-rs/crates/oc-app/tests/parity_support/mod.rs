@@ -58,7 +58,7 @@ fn is_tool_row(key: &str, role: &str) -> bool {
 
 /// The model picker's list rows. `List` virtualizes its rows, so the dump renders only the
 /// viewport's prefix of this run while the reference DOM holds all of them.
-const POPOVER_LIST_PREFIX: &str = "popover/Models/";
+pub const POPOVER_LIST_PREFIX: &str = "popover/Models/";
 
 /// A model-list row under the `List` virtualizer.
 fn is_popover_list_row(key: &str, role: &str) -> bool {

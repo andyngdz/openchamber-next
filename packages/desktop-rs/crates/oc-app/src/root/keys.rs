@@ -169,10 +169,7 @@ impl RootView {
                 .lists
                 .project
                 .update(cx, |list, cx| list.focus(window, cx)),
-            PopoverKind::Model => self
-                .lists
-                .model
-                .update(cx, |list, cx| list.focus(window, cx)),
+            PopoverKind::Model => crate::views::open_model_picker(&self.lists, window, cx),
             PopoverKind::Agent => self
                 .lists
                 .agent

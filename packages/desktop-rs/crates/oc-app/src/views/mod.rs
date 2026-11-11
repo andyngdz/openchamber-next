@@ -41,7 +41,8 @@ pub(crate) use icon_rail::icon_rail;
 #[cfg(test)]
 pub(crate) use popover::trigger_spec;
 pub(crate) use popover::{Pick, PopoverKind, PopoverLists};
-pub(crate) use popover::{thinking_items, thinking_rows};
+pub(crate) use popover::{filter_model_list, model_search_field};
+pub(crate) use popover::{open_model_picker, thinking_items, thinking_rows};
 pub(crate) use sidebar::sidebar;
 pub(crate) use work_status::work_status;
 

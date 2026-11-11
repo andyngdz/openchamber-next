@@ -118,7 +118,7 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
         .h(px(TRIGGER_HEIGHT))
         .accessibility_label(name.clone())
         .child(trigger_content(*layout, label, label_width));
-    trigger_control(scene, *kind, button).into_any_element()
+    trigger_control(scene, *kind, button, cx).into_any_element()
 }
 
 fn trigger_content(layout: TriggerKind, label: &str, label_width: f32) -> Div {

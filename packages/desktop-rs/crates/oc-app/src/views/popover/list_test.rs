@@ -1,12 +1,15 @@
 //! The shared picker row helpers.
 
-use super::{Row, RowAction, Star, StarKind};
+use super::{Row, RowAction};
 
 #[test]
-fn a_row_keeps_its_accessible_name_and_visible_text() {
+fn a_row_keeps_its_accessible_name_apart_from_what_it_draws() {
     let row = Row {
-        name: "Fixture model".to_owned(),
-        visible: "Fixture model 200K".to_owned(),
+        name: "Fixture model 200K".to_owned(),
+        label: "Fixture model".to_owned(),
+        icon: None,
+        context: Some("200K".to_owned()),
+        selected: false,
         role: crate::layout::Role::Option,
         ancestors: vec!["Models".to_owned()],
         action: RowAction::Close,
@@ -15,18 +18,8 @@ fn a_row_keeps_its_accessible_name_and_visible_text() {
         repeat: None,
         star_under_row: true,
     };
-    assert_eq!(row.name, "Fixture model");
-    assert_eq!(row.visible, "Fixture model 200K");
+    assert_eq!(row.name, "Fixture model 200K");
+    assert_eq!(row.label, "Fixture model");
+    assert_eq!(row.context.as_deref(), Some("200K"));
     assert!(matches!(row.action, RowAction::Close));
-}
-
-#[test]
-fn the_star_kind_names_the_icon() {
-    let starred = Star {
-        label: "Unfavorite",
-        action: oc_state::SelectionAction::ToggleFavoriteAgent("build".to_owned()),
-        kind: StarKind::Filled,
-        shown: true,
-    };
-    assert!(matches!(starred.kind, StarKind::Filled));
 }

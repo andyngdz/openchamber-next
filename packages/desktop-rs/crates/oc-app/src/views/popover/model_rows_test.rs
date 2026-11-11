@@ -1,6 +1,6 @@
 //! The model row label React builds.
 
-use super::{SectionKind, visible_name};
+use super::{SectionKind, readable_name};
 use oc_state::ModelEntry;
 
 fn entry(context: Option<u64>) -> ModelEntry {
@@ -15,9 +15,9 @@ fn entry(context: Option<u64>) -> ModelEntry {
 }
 
 #[test]
-fn favorites_show_the_provider_and_the_context() {
+fn favorites_name_the_provider_and_the_context() {
     assert_eq!(
-        visible_name(&entry(Some(200_000)), SectionKind::Favorites),
+        readable_name(&entry(Some(200_000)), SectionKind::Favorites),
         "Fixture stream, 300 characters/s Performance fixture 200K"
     );
 }
@@ -25,7 +25,14 @@ fn favorites_show_the_provider_and_the_context() {
 #[test]
 fn provider_sections_leave_the_provider_out() {
     assert_eq!(
-        visible_name(&entry(Some(200_000)), SectionKind::Provider),
+        readable_name(&entry(Some(200_000)), SectionKind::Provider),
         "Fixture stream, 300 characters/s 200K"
     );
+}
+
+#[test]
+fn only_favorites_and_recent_rows_carry_the_provider_mark() {
+    assert!(SectionKind::Favorites.icon().is_some());
+    assert!(SectionKind::Recent.icon().is_some());
+    assert!(SectionKind::Provider.icon().is_none());
 }

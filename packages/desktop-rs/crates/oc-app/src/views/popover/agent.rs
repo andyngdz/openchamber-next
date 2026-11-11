@@ -73,7 +73,10 @@ impl AgentList {
                 };
                 Row {
                     name: STAR_LABEL.to_owned(),
-                    visible: agent_display_name(&agent.display_name, &agent.id),
+                    label: agent_display_name(&agent.display_name, &agent.id),
+                    icon: None,
+                    context: None,
+                    selected: false,
                     role: Role::Menuitem,
                     ancestors: Vec::new(),
                     action: RowAction::Pick(super::Pick::Agent(agent.id.clone())),
@@ -102,7 +105,7 @@ impl ListDelegate for AgentList {
     ) -> Option<Self::Item> {
         self.rows(cx)
             .get(index.row)
-            .map(|row| super::list::row_item(&self.registry, &self.dispatch, row))
+            .map(|row| super::list::row_item(&self.registry, &self.dispatch, row, cx))
     }
 
     fn set_selected_index(

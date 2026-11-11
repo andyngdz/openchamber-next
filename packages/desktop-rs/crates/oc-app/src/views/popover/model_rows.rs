@@ -1,31 +1,25 @@
 //! The model picker's rows and sections.
+//!
+//! Every section carries a header: `List` measures one header size, from the first section,
+//! and lays out every section with it, so a section without a header would draw every header
+//! at zero height, over the row below it.
 
-use oc_state::{ModelEntry, ModelSections, SelectionAction, State, model_sections};
+use gpui_kit::assets::IconName;
+use oc_state::{ModelEntry, ModelSections, State, model_sections};
 
 use super::list::RowAction;
 use super::list::{Header, Row, Section, Star, StarKind};
 use crate::layout::Role;
-use crate::views::model_names::compact_tokens;
+use crate::views::model_names::{compact_tokens, model_display_name};
+
 pub(super) const MODELS_GROUP: &str = "Models";
-const ADD_PROVIDER: &str = "Add new provider";
-const RUN_ON_SEVERAL: &str = "Run on several models";
+pub(super) const ADD_PROVIDER: &str = "Add new provider";
+pub(super) const RUN_ON_SEVERAL: &str = "Run on several models";
 const FAVORITES: &str = "Favorites";
 const RECENT: &str = "Recent";
-
-/// Whether a row's star is filled.
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub(super) enum Favorite {
-    /// The model is starred.
-    Yes,
-    /// The model can be starred.
-    No,
-}
-
-impl Favorite {
-    fn is_favorite(self) -> bool {
-        matches!(self, Self::Yes)
-    }
-}
+/// The provider mark the reference draws from its logo set; the spike bundles no provider
+/// logos, so one neutral glyph stands in for every provider.
+const PROVIDER_ICON: IconName = IconName::Asterisk;
 
 /// Whether a row is the session's current model.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -42,7 +36,8 @@ impl Selected {
     }
 }
 
-/// Which group a row belongs to, which decides whether its label shows the provider.
+/// Which group a row belongs to, which decides whether its accessible name and row show the
+/// provider.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub(super) enum SectionKind {
     Favorites,
@@ -54,28 +49,27 @@ impl SectionKind {
     fn shows_provider(self) -> bool {
         !matches!(self, Self::Provider)
     }
+
+    fn icon(self) -> Option<IconName> {
+        self.shows_provider().then_some(PROVIDER_ICON)
+    }
 }
 
 /// The panel's sections in drawn order, filtered by `query`.
 pub(super) fn sections(state: &State, query: &str) -> Vec<Section> {
-    let mut sections = leading_sections();
     let Some(found) = found_sections(state, query) else {
-        return sections;
+        return Vec::new();
     };
-    sections.push(group(
-        "FAVORITES",
-        FAVORITES,
-        &found.favorites,
-        SectionKind::Favorites,
-        state,
-    ));
-    sections.push(group(
-        "RECENT",
-        RECENT,
-        &found.recent,
-        SectionKind::Recent,
-        state,
-    ));
+    let mut sections = vec![
+        group(
+            "FAVORITES",
+            FAVORITES,
+            &found.favorites,
+            SectionKind::Favorites,
+            state,
+        ),
+        group("RECENT", RECENT, &found.recent, SectionKind::Recent, state),
+    ];
     sections.extend(
         found
             .providers
@@ -85,14 +79,22 @@ pub(super) fn sections(state: &State, query: &str) -> Vec<Section> {
     sections
 }
 
-fn leading_sections() -> Vec<Section> {
-    vec![Section {
-        header: None,
-        rows: vec![
-            flat_row(ADD_PROVIDER, Role::Button, Vec::new()),
-            flat_row(RUN_ON_SEVERAL, Role::Option, vec![MODELS_GROUP.to_owned()]),
-        ],
-    }]
+/// The action pinned above the sections, which React keeps out of the list.
+pub(super) fn leading_row() -> Row {
+    Row {
+        name: RUN_ON_SEVERAL.to_owned(),
+        label: RUN_ON_SEVERAL.to_owned(),
+        icon: None,
+        context: None,
+        selected: false,
+        role: Role::Option,
+        ancestors: vec![MODELS_GROUP.to_owned()],
+        action: RowAction::Close,
+        star: None,
+        described: None,
+        repeat: None,
+        star_under_row: true,
+    }
 }
 
 fn found_sections(state: &State, query: &str) -> Option<ModelSections> {
@@ -103,14 +105,15 @@ fn found_sections(state: &State, query: &str) -> Option<ModelSections> {
 }
 
 fn provider_section(provider: &oc_state::ProviderSection, state: &State) -> Section {
-    let name = format!(
-        "{} logo {}",
-        provider.provider_id,
-        provider.name.to_uppercase()
-    );
     Section {
         header: Some(Header {
-            name,
+            name: format!(
+                "{} logo {}",
+                provider.provider_id,
+                provider.name.to_uppercase()
+            ),
+            label: provider.name.to_uppercase(),
+            icon: Some(PROVIDER_ICON),
             ancestors: vec![MODELS_GROUP.to_owned(), provider.name.clone()],
         }),
         rows: provider
@@ -131,6 +134,8 @@ fn group(
     Section {
         header: Some(Header {
             name: header_name.to_owned(),
+            label: label.to_uppercase(),
+            icon: (kind == SectionKind::Favorites).then_some(IconName::StarFill),
             ancestors: vec![MODELS_GROUP.to_owned(), label.to_owned()],
         }),
         rows: entries
@@ -140,53 +145,28 @@ fn group(
     }
 }
 
-fn flat_row(name: &str, role: Role, ancestors: Vec<String>) -> Row {
-    Row {
-        name: name.to_owned(),
-        visible: name.to_owned(),
-        role,
-        ancestors,
-        action: RowAction::Close,
-        star: None,
-        described: None,
-        repeat: None,
-        star_under_row: true,
-    }
-}
-
 fn model_row(entry: &ModelEntry, group: &str, kind: SectionKind, state: &State) -> Row {
-    let favorite = favorite_state(state, entry);
     let selected = if is_selected(state, entry) {
         Selected::Yes
     } else {
         Selected::No
     };
     Row {
-        name: row_name(entry, kind, selected, state),
-        visible: visible_name(entry, kind),
+        name: accessible_name(entry, kind, selected, state),
+        label: model_display_name(&entry.name, &entry.model_id),
+        icon: kind.icon(),
+        context: entry.context.map(compact_tokens),
+        selected: selected.is_selected(),
         role: Role::Option,
         ancestors: vec![MODELS_GROUP.to_owned(), group.to_owned()],
         action: RowAction::Pick(super::Pick::Model {
             provider_id: entry.provider_id.clone(),
             model_id: entry.model_id.clone(),
         }),
-        star: Some(model_star(entry, favorite)),
+        star: Some(model_star(state, entry)),
         described: None,
         repeat: None,
         star_under_row: true,
-    }
-}
-
-fn favorite_state(state: &State, entry: &ModelEntry) -> Favorite {
-    let favorite = state.settings().is_some_and(|settings| {
-        settings.favorite_models.iter().any(|reference| {
-            reference.provider_id == entry.provider_id && reference.model_id == entry.model_id
-        })
-    });
-    if favorite {
-        Favorite::Yes
-    } else {
-        Favorite::No
     }
 }
 
@@ -197,28 +177,27 @@ fn is_selected(state: &State, entry: &ModelEntry) -> bool {
         .is_some_and(|key| key.provider_id() == entry.provider_id && key.id() == entry.model_id)
 }
 
-fn model_star(entry: &ModelEntry, favorite: Favorite) -> Star {
-    Star {
-        label: if favorite.is_favorite() {
-            "Unfavorite"
-        } else {
-            "Favorite"
-        },
-        action: SelectionAction::ToggleFavoriteModel {
-            provider_id: entry.provider_id.clone(),
-            model_id: entry.model_id.clone(),
-        },
-        kind: if favorite.is_favorite() {
-            StarKind::Filled
-        } else {
-            StarKind::Outline
-        },
-        shown: favorite.is_favorite(),
-    }
+fn model_star(state: &State, entry: &ModelEntry) -> Star {
+    let starred = state.settings().is_some_and(|settings| {
+        settings.favorite_models.iter().any(|reference| {
+            reference.provider_id == entry.provider_id && reference.model_id == entry.model_id
+        })
+    });
+    let kind = if starred {
+        StarKind::Filled
+    } else {
+        StarKind::Outline
+    };
+    Star::model(entry, kind)
 }
 
-fn row_name(entry: &ModelEntry, kind: SectionKind, selected: Selected, state: &State) -> String {
-    let mut name = visible_name(entry, kind);
+fn accessible_name(
+    entry: &ModelEntry,
+    kind: SectionKind,
+    selected: Selected,
+    state: &State,
+) -> String {
+    let mut name = readable_name(entry, kind);
     if selected.is_selected() && !entry.variants.is_empty() {
         let variant = state
             .current_selection()
@@ -231,9 +210,9 @@ fn row_name(entry: &ModelEntry, kind: SectionKind, selected: Selected, state: &S
     name
 }
 
-/// The model's visible label: name, provider when the group shows it, and context.
-pub(super) fn visible_name(entry: &ModelEntry, kind: SectionKind) -> String {
-    let mut name = crate::views::model_names::model_display_name(&entry.name, &entry.model_id);
+/// The model's accessible name: name, provider when the group shows it, and context.
+pub(super) fn readable_name(entry: &ModelEntry, kind: SectionKind) -> String {
+    let mut name = model_display_name(&entry.name, &entry.model_id);
     if kind.shows_provider() {
         name.push(' ');
         name.push_str(&entry.provider_name);
