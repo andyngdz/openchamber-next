@@ -21,11 +21,14 @@
   - A headless render of a Rust `Diff` paints a keyword with that theme's `syntax.base.keyword`.
 - [ ] 2.4 Gate: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`; from the repo root `passgate-engine rust --scope packages/desktop-rs`.
 
-## 3. Electron references   [depends-on: 1] [writes: packages/desktop-rs/tools/capture-reference.mjs, packages/desktop-rs/fixtures/seed.json, packages/desktop-rs/fixtures/reference/turn/, packages/desktop-rs/fixtures/states/turn/] [parallel-safe: yes]
+## 3. Electron references   [depends-on: 1] [writes: packages/desktop-rs/tools/capture-reference.mjs, packages/desktop-rs/fixtures/seed.json, packages/desktop-rs/fixtures/reference/, packages/desktop-rs/fixtures/states/turn/] [parallel-safe: yes]
 
 - [ ] 3.1 Seed and capture the states that design.md's Parity reference lists: `permission-bash`, `permission-edit`, `permission-write`, `permission-two`, `form-choice`, `form-multiselect`, `form-text`, `form-external`, `websearch-consent`, `recovered-question`, `queue-one`, `queue-three-expanded` and `busy-with-text`. Add the `dock` region rule to `REGIONS` with its comment. A state that needs a form OpenCode will not produce from the fixture models, such as `websearch.provider` or `external`, is seeded through the server's form route, and the capture script's header comment says so.
 - [ ] 3.2 Write every new state as a state fixture that the same reducer replays, to `fixtures/states/turn/<name>.json`, and the references to `fixtures/reference/turn/`. Existing states stay where they are.
 - [ ] 3.3 Run the capture twice and confirm identical JSON. Report any control with a missing or duplicate accessible name.
+- [ ] 3.4 The capture runs with no window on the user's desktop: Electron on Chromium's Ozone `headless` backend, with no display variables passed to it. A run of the existing `empty` state matches `fixtures/reference/empty.json` in region bounds and in control keys, roles, names and order before any other change lands.
+- [ ] 3.5 Every control records `icons`, `marks` and `texts` as design.md's Parity reference says. Recapture every existing state's reference with these fields. Their region bounds, control keys, roles, names and order must pass the existing comparison rules against the committed files, and control bounds may move with headless font metrics. Any other difference is reported before it is written.
+- [ ] 3.6 Turn state fixtures carry the `ui` block for local view choices, as design.md says. Every dock control has an accessible name, and any control whose name falls back to its role is reported.
 
 ## 4. Client   [depends-on: 1] [writes: packages/desktop-rs/crates/oc-client/src/] [parallel-safe: no]
 
@@ -54,7 +57,7 @@
 - [ ] 6.5 Tests: every branch of `decide_send`, ported from `ChatInput.keystroke.test.tsx` where it applies. Include the pending-permission, empty-composer, two-queued-items case, both `enterToSend` settings, the revision rule, and the abort window edges.
 - [ ] 6.6 Gate as in 2.4.
 
-## 7. Live wiring   [depends-on: 5, 6] [writes: packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/src/root/live.rs, packages/desktop-rs/crates/oc-app/src/root/requests.rs, packages/desktop-rs/crates/oc-app/src/root/updates.rs, packages/desktop-rs/crates/oc-app/tests/sidecar_it.rs, packages/desktop-rs/README.md] [parallel-safe: no]
+## 7. Live wiring   [depends-on: 5, 6, 12] [writes: packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/src/root/live.rs, packages/desktop-rs/crates/oc-app/src/root/requests.rs, packages/desktop-rs/crates/oc-app/src/root/updates.rs, packages/desktop-rs/crates/oc-app/tests/sidecar_it.rs, packages/desktop-rs/README.md] [parallel-safe: no]
 
 - [ ] 7.1 The control stream task next to the session task, with backoff from 1 to 30 seconds. Every ready frame re-reads the queue, the auto-accept snapshot and the routing state. A server without the stream (404) logs once and turns the queue strip and the shield modes off.
 - [ ] 7.2 Startup and an `/api/event` reconnect list permissions and forms for every directory with an open session or a loaded catalog.
@@ -62,16 +65,17 @@
 - [ ] 7.4 README: the control stream, what Enter does while a turn runs, and the highlighter feature with its binary cost and its 38 languages.
 - [ ] 7.5 Gate as in 2.4, plus `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`.
 
-## 8. Docks   [depends-on: 2, 7] [writes: packages/desktop-rs/crates/oc-app/src/views/dock/, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/layout/] [parallel-safe: no]
+## 8. Docks   [depends-on: 2, 7, 14] [writes: packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/views/dock/, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/layout/] [parallel-safe: no]
 
 - [ ] 8.1 Permission dock: the header with `Stepper` dots and the subagent badge, the safety-hold banner, the summary and message, the per-tool bodies (read-only `Editor` for the command, `Diff` with a height cap for edit and write, the webfetch block, a collapsed `metadata` block), the buttons with the Always label rules, the three Alt shortcuts caught before the composer, and the in-flight, 404 and failure behavior.
 - [ ] 8.2 Form dock on `QuestionnaireState`: every field type mapped as design.md says, `set_item_disabled` for `when` and `hidden`, the external `Link` flag, the header with count, dots, `more waiting` and the collapse toggle, Dismiss, Back, Next and Submit, the error line, and draft restore. Hidden while the permission scope is not empty.
 - [ ] 8.3 Web search consent card and recovered question, as design.md says. A recovered submit sends through 7.3's send sequence, which switches `/agent` and `/model` to the linked message's picks before the prompt.
-- [ ] 8.4 The `dock` layout region above the composer, holding the permission or form dock and, under it, the queue strip's slot that unit 9 fills.
+- [ ] 8.4 The `dock` layout region with its two roots: the floating panel above the composer that holds the permission or form dock, and the queue strip's row group inside the composer box, which unit 9 builds in `composer.rs`. The region's bounds are their union.
+- [ ] 8.4a Every dock control registers `icons`, `marks` and `texts` (14.1).
 - [ ] 8.5 Interaction tests through `gpui_kit::test`, generic over every dock kind. For each dock: open from state, buttons and shortcuts send the right command, in-flight disables, a 404 removes, and a failure keeps. For forms: navigation, every field type's answer, `when` skipping, external refusal and the consent buttons.
 - [ ] 8.6 Gate as in 2.4.
 
-## 9. Composer turn controls   [depends-on: 7, 8] [writes: packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/composer.rs, packages/desktop-rs/crates/oc-app/src/views/composer_controls.rs, packages/desktop-rs/crates/oc-app/src/views/composer_slots.rs, packages/desktop-rs/crates/oc-app/src/views/queue_strip.rs, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs] [parallel-safe: no]
+## 9. Composer turn controls   [depends-on: 7, 8] [writes: packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/composer.rs, packages/desktop-rs/crates/oc-app/src/views/composer_controls.rs, packages/desktop-rs/crates/oc-app/src/views/composer_slots.rs, packages/desktop-rs/crates/oc-app/src/views/queue_strip.rs, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs] [parallel-safe: no]
 
 - [ ] 9.1 Stop instead of Send while the session is not idle, its tooltip with two `Kbd` Esc, and the follow-up button labeled `Queue message` or `Send message`. The button runs `decide_send` as the plain send key, so it applies `followUpBehavior` even when `enterToSend` is off, and shares 7.3's send plan.
 - [ ] 9.2 Escape twice in the composer editor through the abort window, ignored with a popup open, during IME composition and while idle.
@@ -87,7 +91,29 @@
 - [ ] 10.2 `tests/parity.rs` covers every new state. The `dock` region compares its controls in order, and its left, right and bottom edges by the composer's device-pixel rule, without its top edge or height. Every other region keeps its rules.
 - [ ] 10.3 Gate as in 2.4, plus `cargo test -p oc-app --test parity` over all states, rendered headless.
 
-## 11. Verification   [depends-on: 10] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]
+## 12. Remix icons   [depends-on: -] [writes: packages/desktop-rs/tools/gen-remix-icons.mjs, packages/desktop-rs/crates/oc-app/assets/icons/, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/app/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/lib.rs, packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: yes]
+
+- [ ] 12.1 `tools/gen-remix-icons.mjs` writes every symbol of `packages/ui/src/components/icon/sprite.ts` as `assets/icons/remix/<name>.svg`, a 24x24 viewBox around the symbol's content.
+- [ ] 12.2 `src/icons/`: `RemixIcon` with one name per file, implementing gpui-kit's `IconNamed`, and the app's `AssetSource`. It serves `icons/remix/` from the embedded files, answers the gpui-kit `icons/<name>.svg` paths in the substitution table with the Remix file React draws in the same place, and passes every other path to gpui-kit's `Assets`. It is registered for the window and the headless renderer.
+- [ ] 12.3 Every view draws its icons through `RemixIcon`, with the icon React draws for the same control (`packages/ui/src/components/icon/icons.ts` names, the React component cited in each view's doc comment). `gpui_kit::assets::IconName` leaves `src/views/`.
+- [ ] 12.4 Tests: the folder matches `sprite.ts` file for file (the test parses `sprite.ts`, found by walking up from `CARGO_MANIFEST_DIR`); every `RemixIcon` the views name has a file; a headless render draws a named icon; rendering every fixture state headless asks the asset source for no gpui-kit `icons/` path missing from the substitution table.
+- [ ] 12.5 Gate as in 2.4, plus `node --check` on the script.
+
+## 13. Theme palette   [depends-on: 2, 12] [writes: packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-app/src/app/mod.rs, packages/desktop-rs/crates/oc-app/src/app/headless.rs, packages/desktop-rs/crates/oc-app/src/views/work_status.rs, packages/desktop-rs/crates/oc-app/src/views/composer.rs, packages/desktop-rs/tools/gen-theme-fixture.mjs, packages/desktop-rs/fixtures/theme/] [parallel-safe: no]
+
+- [ ] 13.1 Build the window palette from the embedded `openchamber-dark.json` after `requireTheme`'s defaults, through `CSSVariableGenerator`'s mapping (`packages/ui/src/lib/theme/cssGenerator.ts:39-147`), for every token `Palette` holds plus the primary, status and agent colors views use for indicators. Remove the fixed `DARK` set.
+- [ ] 13.2 Tests: `gen-theme-fixture.mjs` also writes the CSS variables `CSSVariableGenerator` produces for `openchamber-dark`, and every palette token equals its variable.
+- [ ] 13.3 Gate as in 2.4.
+
+## 14. Icon and indicator parity   [depends-on: 3, 12, 13] [writes: packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+
+- [ ] 14.1 The layout registry and `--dump-layout` record each control's `icons`, `marks` and `texts` with their bounds, as design.md says, from what the view draws. A gpui-kit component's own icons come from the substitution table, and its own marks and text colors from the component table in `src/layout/`. Every control registers them, the controls units 8 and 9 add included.
+- [ ] 14.2a The frame check of design.md runs over every fixture state headless and fails on any icon, text run or mark whose pixels do not show its reported color.
+- [ ] 14.2 `tests/parity.rs` compares `icons`, `marks` and `texts`, colors within 1 per channel, for every shown control of every existing state, and names the control, the expected value and the drawn one on failure.
+- [ ] 14.3 Fix every existing surface until the gate passes: sidebar, header, empty state, composer and its triggers, the project, model, agent and Thinking popups, the work-status panel, the icon rail, the preset chips and the messages. That covers, for example, the agent color dots, the selected check, the variant color, the agent and project icons, and the send icon.
+- [ ] 14.4 Gate as in 2.4, plus `cargo test -p oc-app --test parity`, headless.
+
+## 11. Verification   [depends-on: 10, 14] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]
 
 - [ ] 11.1 `sidecar_it` with the fixture provider: a bash permission answered once and the turn finishing; an edit denied; a question answered and the reply reaching the model; a message queued during a turn and sent by the server after it; Stop of a running turn and the session going idle.
 - [ ] 11.2 Full gate: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` (parity included, headless), `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`; from the repo root `passgate-engine rust` and `passgate-engine logging` on `packages/desktop-rs`, `bun run check:changed`, and `openspec validate desktop-rs-turn-control --strict`.

@@ -15,6 +15,7 @@ The user's answers in the planning session:
 - Syntax highlighting: in this change. After measuring both gpui-kit backends (see Package decisions), the user picked tree-sitter.
 - Architecture: approach A below.
 - A form's free-text field uses `questionnaire`'s single-line input. Shift+Enter cannot insert a newline in a form answer, which React's `AutoGrowTextarea` allows (`packages/ui/src/components/chat/FormFieldControl.tsx:291-298`). Enter still advances, as in React.
+- Icons and indicators (added after implementation started): the user found the Rust app missing icons and indicators React shows, such as the agent color dots, the selected check mark, the orange variant text, the colored agent and project icons, and different composer, send and chip icons. The parity gate compared only role, name, order and bounds, so it could not see them. The user chose to fix this in this change. The capture, the dump and the parity test now record and compare each control's icons and color indicators, and the existing surfaces are fixed until the gate passes. This adds the Remix icon set and the Electron theme's palette to the change.
 - Standing decisions from earlier sessions that apply here: behavior follows the Electron app and React is the spec for clicks, keys and server writes. UI is built from gpui-kit components, and a component's own geometry may differ from React's. The parity gate compares popup controls but not popup bounds, and behavior is gated by headless interaction tests through `gpui_kit::test`. No check opens a visible window. Default to Electron's full behavior.
 
 ## Goals
@@ -25,6 +26,7 @@ The user's answers in the planning session:
 - Cycle the session's auto-accept mode and hide requests the server is answering.
 - Send while a turn runs by queue, steer or plain prompt as React decides, dismiss the tree's pending requests on send, and show and edit the server's queue.
 - Highlight the bash command and the diffs with the theme's syntax colors.
+- Draw the icons React draws (the Remix set in `packages/ui/src/components/icon/sprite.ts`) and the window palette of the Electron default theme. Make the parity gate fail on a missing or wrong icon, color dot or text color on every surface, the existing ones included.
 
 ## Non-Goals
 
@@ -106,7 +108,18 @@ Control stream: `control_events()` opens `GET /api/openchamber/events`. Frames a
 
 ### Highlighting and theme
 
-`gpui-kit` gets the `tree-sitter-languages` feature. A port of `packages/ui/src/lib/shiki/zedThemeFromAppTheme.ts` (`TOKEN_RULES`, the parent fallback and the `diff.plus`/`diff.minus` roles) builds a gpui-kit `HighlightTheme` from the `colors.syntax` of `openchamber-dark.json`, the Electron default dark theme (`packages/ui/src/lib/theme/themes/index.ts:16`). The app has no theme loading yet, and its window palette is the fixed `DARK` set in `oc-app/src/theme/mod.rs`. The JSON is copied into the crate and embedded, and a test keeps the copy equal to the source. `theme::apply` installs the result on `Theme::highlight_theme`. `Diff` picks the language from the file path, and the bash preview passes `bash`. A language without a grammar shows unhighlighted.
+`gpui-kit` gets the `tree-sitter-languages` feature. A port of `packages/ui/src/lib/shiki/zedThemeFromAppTheme.ts` (`TOKEN_RULES`, the parent fallback and the `diff.plus`/`diff.minus` roles) builds a gpui-kit `HighlightTheme` from the `colors.syntax` of `openchamber-dark.json`, the Electron default dark theme (`packages/ui/src/lib/theme/themes/index.ts:16`). The app has no theme switching yet. The window palette comes from the same JSON, as the Icons and palette section says. The JSON is copied into the crate and embedded, and a test keeps the copy equal to the source. `theme::apply` installs the result on `Theme::highlight_theme`. `Diff` picks the language from the file path, and the bash preview passes `bash`. A language without a grammar shows unhighlighted.
+
+### Icons and palette
+
+- **Remix icons.** `tools/gen-remix-icons.mjs` writes every symbol of `sprite.ts` (337 today) as `oc-app/assets/icons/remix/<name>.svg`. A test checks that the folder matches `sprite.ts`, file for file. `RemixIcon` names each one and implements gpui-kit's `IconNamed` (`gpui-component/src/icon.rs:30-148`). The app's `AssetSource` serves these files. It also answers the `icons/<name>.svg` paths that gpui-kit components load for their own icons, such as the search icon of `List`, the check of `PopupMenu` and `Checkbox`, and the arrows of `Select` and `Diff`, with the Remix file React draws in the same place. That substitution comes from one named table in `src/icons/`, and every other path goes to gpui-kit's `Assets`. A test renders every state headless and records each `icons/` path the asset source is asked for. It fails when a gpui-kit path has no Remix entry in the table, so no gpui-kit icon reaches the screen. Views name icons only through `RemixIcon`, with the same names React's `Icon` uses, and `gpui_kit::assets::IconName` leaves the views. The test in `views/icons_test.rs` checks that every name the views use has a file.
+- **Palette.** The window palette comes from `openchamber-dark.json` through the variable mapping of `CSSVariableGenerator` (`packages/ui/src/lib/theme/cssGenerator.ts:39-147`), after `requireTheme` fills the defaults as the highlight port does, for every token the `Palette` holds and every token a view needs for an indicator: the primary, status and agent colors. The fixed `DARK` set copied from `design-system.css` goes away, because Electron overrides those variables at runtime with the theme's values.
+- **What the dump records.** The views report, for each control they register, new controls included, the same three fields the capture records (Parity reference). A gpui-kit component's own icon is reported by the view that uses the component, from the same table that substitutes it. A component's own marks and text colors, such as `Stepper` dots or a `List` row label, are reported from the theme field the component paints with, through a second table in `src/layout/` that cites the gpui-kit source line for each entry. The dump also records the bounds of every icon, mark and text run.
+- **Frame check.** The dump's claims are checked against the painted frame, so the gate cannot pass while the screen differs. A test renders every fixture state headless at 2x, reads the frame, and requires two things of what the dump reports:
+  - every icon and text run has at least one pixel inside its bounds equal to its expected color within 1 per channel. At 2x, a glyph or icon stroke covers whole pixels, so such a pixel exists whenever the color is right;
+  - every mark's center pixel equals its expected color within 1 per channel.
+
+  The expected color is the claimed `#rrggbbaa` composited over the backdrop with source-over. The backdrop is the most frequent color of the one-pixel ring just outside the icon's, text run's or mark's bounds, which is the surface it sits on, also for a filled icon that covers most of its box. An opaque claim composites to itself, so translucent text such as `text-foreground/80` and the `opacity-60` hints is checked by the same rule. A text run inside a gpui-kit component whose run bounds the view does not know uses the control's bounds. There a same-colored icon or border can also satisfy the check, which makes it weaker, and the design accepts that.
 
 ### App (`oc-app`)
 
@@ -149,7 +162,14 @@ The capture tool seeds the new fixture models below and records these Electron s
 - `websearch-consent`, `recovered-question`.
 - `queue-one`, `queue-three-expanded`, `busy-with-text`: Stop plus the follow-up button.
 
-The dock and strip are a `dock` region placed above the composer. The parity test compares their controls in order, as it compares popups. It compares the region's left edge, right edge and bottom edge by the composer's device-pixel rule. The top edge and the height are left out, because a dock grows with its gpui-kit content.
+Every control of every reference, existing states included, also records what it draws:
+- `icons`: in DOM order, each `svg` inside the control, with `name` set to its `<use href="#oc-NAME">` symbol (`other` for an svg without one), and its color.
+- `marks`: in DOM order, each element inside the control with no text and no svg, whose own background fill is not transparent, and whose larger side is at most 12 px, with that fill's color. Borders, outlines, focus rings, box shadows and scrollbars are not marks. On the GPUI side a mark is a filled shape the view draws with no text or icon in it, under the same size rule.
+- `texts`: in DOM order, each run of visible text with its color, where adjacent text nodes of the same color merge into one run. A control such as the model trigger, whose name and Thinking level have different colors, has two runs. The text is recorded too, so a run is matched by its text.
+
+A color is recorded as `#rrggbbaa` in sRGB, in the resting state without hover or focus. The capture converts the computed value, `oklch` included, by painting it on a canvas and reading the pixel back. The element's own `opacity` and its ancestors' are multiplied into the alpha. The GPUI side converts the `Hsla` it paints, multiplied by any opacity the view applies, to the same form. The parity test compares `icons`, `marks` and `texts` for every shown control in every state, allowing a difference of 1 per channel for 8-bit rounding and nothing more. The dump reports the same three fields.
+
+The `dock` region has two roots: the floating panel above the composer that holds the permission or form dock, and the queue strip's row group inside the composer box. Its bounds are the union of the two. A state fixture can carry a `ui` block of local view choices that no server state holds, such as the shown permission, the form step and the expanded queue. The fixture loader applies it after the replay. References are captured with Electron on Chromium's Ozone `headless` backend, with no window on the user's desktop. Their control bounds follow the headless font metrics and may differ by a few pixels from earlier captures. The gate does not compare control bounds. The dock and the strip together form the `dock` region described above. The parity test compares their controls in order, as it compares popups. It compares the region's left edge, right edge and bottom edge by the composer's device-pixel rule. The top edge and the height are left out, because a dock grows with its gpui-kit content.
 
 ### Failure behavior
 
@@ -214,6 +234,7 @@ The dock and strip are a `dock` region placed above the composer. The parity tes
 ## Risks
 
 - The binary doubles. The cost is accepted, and it is measured above.
+- Comparing colors exactly will fail many existing controls at first, because the window palette and most icons differ from Electron today. Unit 14 fixes the existing surfaces before the new ones are built, so the dock and composer units start from a green gate.
 - `questionnaire` covers the field types only through validators and disabled items. A form whose `when` clauses chain across many fields re-evaluates on every answer. That is cheap at the sizes OpenCode sends, but it is not measured.
 - The control stream is new to the app. A server without it, such as an older OpenChamber, answers 404. The app then logs once, shows no queue strip and no shield modes, and keeps sending as plain prompts.
 - Recovered questions depend on the loaded tool parts. A session whose messages are not loaded shows no recovered question until it is opened, which matches React, whose store also holds only loaded parts.

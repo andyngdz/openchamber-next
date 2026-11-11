@@ -204,3 +204,27 @@ The bash command and the diffs in the permission dock SHALL be highlighted with 
 
 - **WHEN** the dock shows a Rust diff
 - **THEN** a keyword is painted with `openchamber-dark`'s `syntax.base.keyword` color
+
+### Requirement: Icon and indicator parity
+
+Every control the parity gate compares SHALL also match the Electron reference in the icons it draws, by Remix symbol name and color in order, in its color marks (dots and other small textless colored shapes), and in the color of each run of its text, on every captured state. Colors SHALL match within 1 per channel.
+
+#### Scenario: Agent menu dots
+
+- **WHEN** the agent menu is open with Build selected
+- **THEN** Build and Plan each show the agent's color dot, Build shows the check icon, and the parity test fails if either is missing or differs in color
+
+#### Scenario: Wrong icon
+
+- **WHEN** a view draws a different icon than React for a control
+- **THEN** the parity test fails and names the control, the expected icon and the drawn one
+
+### Requirement: Remix icons and the Electron palette
+
+The app SHALL draw icons from the same Remix set as React's `Icon`, including the icons drawn inside gpui-kit components, and SHALL paint the window palette of the Electron default dark theme, `openchamber-dark`.
+
+#### Scenario: A gpui-kit component's icon
+
+- **WHEN** the model popover's search field is drawn
+- **THEN** its search icon is the Remix icon React draws there, and no gpui-kit icon file is loaded
+
