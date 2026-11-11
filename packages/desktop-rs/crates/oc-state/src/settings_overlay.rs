@@ -69,6 +69,47 @@ fn overlay_keys(server: &Settings, settings: &mut Settings, overlay: &mut Settin
     );
 }
 
+/// Drops the keys of a write that will never be sent, so the next read is authoritative.
+///
+/// A key a later pick changed stays: only the abandoned value leaves the overlay.
+pub(crate) fn abandon(overlay: &mut SettingsPatch, patch: &SettingsPatch) {
+    macro_rules! keys {
+        ($($field:ident),+ $(,)?) => {
+            $(
+                if overlay.$field == patch.$field {
+                    overlay.$field = None;
+                }
+            )+
+        };
+    }
+    keys!(
+        active_project_id,
+        favorite_models,
+        recent_models,
+        hidden_models,
+        favorite_agents,
+        recent_agents,
+        collapsed_model_providers,
+        provider_order,
+        last_used_efforts,
+        last_selected_model,
+        default_model,
+        default_variant,
+        default_agent,
+        enter_to_send,
+        enter_to_send_configured,
+        sidebar_project_sort_order,
+        sidebar_keep_work_in_place,
+        sidebar_show_chats_section,
+        sidebar_show_work_section,
+        sidebar_show_pinned_section,
+        sidebar_sections,
+        sidebar_hidden_sections,
+        session_work_enabled,
+        projects,
+    );
+}
+
 /// The merged `projects` array, and the overlay cut down to the projects the read does not
 /// already match.
 fn reconcile_projects(server: &Settings, overlay: &mut SettingsPatch) -> Vec<Project> {

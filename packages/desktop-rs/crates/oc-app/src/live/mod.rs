@@ -21,6 +21,10 @@ mod writer;
 #[path = "fake_server_test.rs"]
 mod fake_server_test;
 
+#[cfg(test)]
+#[path = "link_test.rs"]
+mod link_test;
+
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Duration;
@@ -49,6 +53,28 @@ const COMMAND_BUFFER: usize = 16;
 const SETTINGS_BUFFER: usize = 16;
 /// How long a pending settings write may take before the sidecar stops or restarts.
 pub(crate) const SETTINGS_FLUSH_WAIT: Duration = Duration::from_secs(3);
+
+/// What became of a settings write handed to the link.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum WriteOutcome {
+    /// The writer owns it.
+    Queued,
+    /// There is no connection; the overlay keeps it so the next connection resends it.
+    Held,
+    /// The writer's queue was full; the write is abandoned.
+    Dropped,
+}
+
+/// Hands `patch` to the writer behind `settings`, or reports that it must wait or is lost.
+fn deliver(settings: Option<&mut Sender<SettingsCommand>>, patch: SettingsPatch) -> WriteOutcome {
+    let Some(settings) = settings else {
+        return WriteOutcome::Held;
+    };
+    match settings.try_send(SettingsCommand::Write(Box::new(patch))) {
+        Ok(()) => WriteOutcome::Queued,
+        Err(_) => WriteOutcome::Dropped,
+    }
+}
 
 /// One server session: the request channels, the tasks on the runtime, the window's reader.
 struct Connection {
@@ -90,17 +116,23 @@ impl ServerLink {
     }
 
     /// Starts the session and settings-writer tasks against the server on `port`;
-    /// `read_updates` starts the window's task that applies what arrives. Replaces the
+    /// `read_updates` starts the window's task that applies what arrives. `overlay` is the
+    /// local settings intent a new connection resends as its first write. Replaces the
     /// previous session.
     pub(crate) fn connect(
         &mut self,
         port: u16,
+        overlay: Option<SettingsPatch>,
         read_updates: impl FnOnce(Receiver<Update>) -> Task<()>,
     ) -> Result<(), ClientError> {
         self.disconnect();
         let client = Client::new(port)?;
         let (commands, command_receiver) = mpsc::channel(COMMAND_BUFFER);
-        let (settings, settings_receiver) = mpsc::channel(SETTINGS_BUFFER);
+        let (mut settings, settings_receiver) = mpsc::channel(SETTINGS_BUFFER);
+        if let Some(patch) = overlay {
+            // The writer starts empty, so the whole overlay is one write.
+            deliver(Some(&mut settings), patch);
+        }
         let (update_sender, updates) = mpsc::channel(UPDATE_BUFFER);
         let task = self.runtime.spawn(session::run_session(
             client.clone(),
@@ -140,19 +172,28 @@ impl ServerLink {
         })
     }
 
-    /// Queues a partial settings write for the debounced writer.
-    pub(crate) fn write_settings(&self, patch: SettingsPatch) {
-        let mut connection = self.connection.borrow_mut();
-        let Some(connection) = connection.as_mut() else {
-            tracing::debug!(target: crate::logging::SERVER, "[SERVER] Dropped a settings write with no server session");
-            return;
+    /// Queues a partial settings write for the debounced writer, or reports that it must wait
+    /// for the next connection or was abandoned.
+    pub(crate) fn write_settings(&self, patch: SettingsPatch) -> WriteOutcome {
+        let outcome = {
+            let mut connection = self.connection.borrow_mut();
+            let settings = connection
+                .as_mut()
+                .map(|connection| &mut connection.settings);
+            deliver(settings, patch)
         };
-        if let Err(error) = connection
-            .settings
-            .try_send(SettingsCommand::Write(Box::new(patch)))
-        {
-            tracing::warn!(target: crate::logging::SERVER, %error, "[SERVER] Dropped a settings write");
+        match outcome {
+            WriteOutcome::Queued => {}
+            WriteOutcome::Held => tracing::debug!(
+                target: crate::logging::SERVER,
+                "[SERVER] Held a settings write for the next connection"
+            ),
+            WriteOutcome::Dropped => tracing::warn!(
+                target: crate::logging::SERVER,
+                "[SERVER] Dropped a settings write"
+            ),
         }
+        outcome
     }
 
     /// Waits, up to `limit`, for the writer to send what is pending; called before the

@@ -137,6 +137,16 @@ impl State {
         self.settings_patch.take().filter(|patch| !patch.is_empty())
     }
 
+    /// The local settings values a new connection must resend before any read, as one write.
+    pub fn settings_overlay(&self) -> Option<SettingsPatch> {
+        (!self.settings_overlay.is_empty()).then(|| self.settings_overlay.clone())
+    }
+
+    /// Drops the keys of a write that will never be sent, so the next read is authoritative.
+    pub fn abandon_settings(&mut self, patch: &SettingsPatch) {
+        crate::settings_overlay::abandon(&mut self.settings_overlay, patch);
+    }
+
     /// The sidebar shows this error instead of a project list.
     pub(crate) fn sidebar_error(&self) -> Option<&str> {
         load_error(&self.settings_document.load)

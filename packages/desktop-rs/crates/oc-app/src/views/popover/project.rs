@@ -21,7 +21,7 @@ pub(super) fn panel(scene: Scene<'_>, cx: &App) -> Div {
     let rows = scene
         .state
         .settings()
-        .map(|settings| project_rows(scene, settings, &query))
+        .map(|settings| project_rows(scene, cx, settings, &query))
         .unwrap_or_default();
     frame(
         scene,
@@ -51,9 +51,10 @@ fn search_row(scene: Scene<'_>, cx: &App) -> Div {
         .child(control(scene, Role::Combobox, SEARCH, &[], input))
 }
 
-fn project_rows(scene: Scene<'_>, settings: &Settings, query: &str) -> Vec<Div> {
+fn project_rows(scene: Scene<'_>, cx: &App, settings: &Settings, query: &str) -> Vec<Div> {
     let mut rows = vec![option_row(
         scene,
+        cx,
         Role::Option,
         "Chat",
         &[PROJECT_GROUP],
@@ -67,6 +68,7 @@ fn project_rows(scene: Scene<'_>, settings: &Settings, query: &str) -> Vec<Div> 
                 let name = label(project);
                 Some(option_row(
                     scene,
+                    cx,
                     Role::Option,
                     name,
                     &[PROJECT_GROUP],

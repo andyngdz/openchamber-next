@@ -54,6 +54,7 @@ pub(super) fn hidden_control(
 /// One clickable popup row with the standard row metrics (`px-2 py-1.5 typography-meta`).
 pub(super) fn option_row(
     scene: Scene<'_>,
+    cx: &App,
     role: Role,
     name: impl Into<SharedString>,
     ancestors: &[&str],
@@ -62,7 +63,10 @@ pub(super) fn option_row(
     let name: SharedString = name.into();
     let row = div()
         .id(name.clone())
-        .h(px(project_row_height()))
+        .h(px(project_row_height(text_metrics::UiMetrics::ui(
+            cx,
+            text_metrics::META,
+        ))))
         .px(px(ROW_PADDING_X))
         .rounded(px(ROW_RADIUS))
         .flex()
@@ -81,9 +85,9 @@ pub(super) fn option_row(
 
 /// The project `CommandItem` height: `px-2 py-1.5 typography-meta` (`command.tsx:121-131`)
 /// around `ProjectLabel`'s `inline-flex` (`DraftTargetSelectors.tsx:131-150`).
-pub(super) fn project_row_height() -> f32 {
+pub(super) fn project_row_height(metrics: text_metrics::UiMetrics) -> f32 {
     let label_box = text_metrics::line_height(text_metrics::META).max(PROJECT_ICON);
-    let line_box = text_metrics::inline_flex_line_box(label_box, text_metrics::META);
+    let line_box = text_metrics::inline_flex_line_box(metrics, label_box, text_metrics::META);
     2. * ROW_PADDING_Y + line_box
 }
 

@@ -1,7 +1,7 @@
 //! The CSS box arithmetic the picker geometry is built from.
 
 use super::{
-    META, MICRO, ascent, descent, inline_flex_line_box, line_gap, line_height, strut_descent,
+    META, MICRO, UiMetrics, inline_flex_line_box, line_height, resolved_ui_metrics, strut_descent,
 };
 
 #[test]
@@ -10,15 +10,6 @@ fn the_semantic_sizes_use_their_round_up_line_heights() {
     assert_eq!(line_height(META), 18.);
     // `--text-micro` 12px -> 17 (`typography.css:31-34`).
     assert_eq!(line_height(MICRO), 17.);
-}
-
-#[test]
-fn the_metrics_come_from_the_adwaita_sans_file() {
-    assert!((ascent(META) - 12.109_375).abs() < 1e-4);
-    assert!((descent(META) - 3.015_136_7).abs() < 1e-4);
-    assert_eq!(line_gap(META), 0.);
-    // (18 - 12.109375 + 3.0151367) / 2.
-    assert!((strut_descent(META) - 4.452_881).abs() < 1e-4);
 }
 
 #[test]
@@ -34,10 +25,37 @@ fn a_row_is_its_vertical_padding_plus_one_line() {
 }
 
 #[test]
+fn the_strut_descender_follows_the_resolved_font_metrics() {
+    let (family, metrics) = resolved_ui_metrics(META);
+    // A specified CSS line-height overrides the font's natural line box, so the strut's
+    // descender is `(line-height - ascent + descent) / 2` for the font GPUI resolved.
+    let expected = (line_height(META) - metrics.ascent + metrics.descent) / 2.;
+    assert!(
+        (strut_descent(metrics, META) - expected).abs() < 1e-4,
+        "{family}: the strut must follow the resolved font ({metrics:?})"
+    );
+    // It is derived, not pinned: a taller ascent moves the descender by half as much.
+    let taller = UiMetrics {
+        ascent: metrics.ascent + 4.,
+        descent: metrics.descent,
+    };
+    assert!(
+        (strut_descent(taller, META) - (expected - 2.)).abs() < 1e-4,
+        "the strut follows the ascent it is given"
+    );
+}
+
+#[test]
 fn the_project_label_is_an_inline_flex_box_plus_the_strut() {
+    let (family, metrics) = resolved_ui_metrics(META);
     // `ProjectLabel`'s inline-flex (`DraftTargetSelectors.tsx:131`) with the
     // `size-4` icon (`command.tsx:129`) in an 18px meta line.
-    let line_box = inline_flex_line_box(line_height(META).max(16.), META);
-    assert!((line_box - 22.452_88).abs() < 1e-4);
-    assert!((12. + line_box - 34.452_88).abs() < 1e-4);
+    let label_box = line_height(META).max(16.);
+    let line_box = inline_flex_line_box(metrics, label_box, META);
+    let strut = (line_height(META) - metrics.ascent + metrics.descent) / 2.;
+    let expected = label_box + strut;
+    assert!(
+        (line_box - expected).abs() < 1e-4,
+        "{family}: the line box must follow the resolved font ({metrics:?})"
+    );
 }
