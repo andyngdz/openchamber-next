@@ -3,13 +3,14 @@ use super::{Event, EventData};
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/events");
 const API_FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
 
-const FILES: [&str; 6] = [
+const FILES: [&str; 7] = [
     "text-reply-stream-300cps",
     "agent-20tools-300cps",
     "interrupted-agent-turn",
     "permission-asked-agent-turn",
     "two-sessions-stream-300cps",
     "session-lifecycle",
+    "turn-control",
 ];
 
 fn load(name: &str) -> Vec<Event> {
@@ -29,6 +30,12 @@ fn load(name: &str) -> Vec<Event> {
 
 fn count(events: &[Event], matches: impl Fn(&EventData) -> bool) -> usize {
     events.iter().filter(|e| matches(&e.data)).count()
+}
+
+fn frames(name: &str) -> Vec<serde_json::Value> {
+    let path = format!("{FIXTURES}/{name}.json");
+    let text = std::fs::read_to_string(&path).unwrap_or_else(|err| panic!("read {path}: {err}"));
+    serde_json::from_str(&text).unwrap_or_else(|err| panic!("{path}: {err}"))
 }
 
 /// The agent the capture's sessions start on when they name none themselves.
@@ -197,6 +204,98 @@ fn permission_ids_pair_up() {
     });
     assert!(asked.is_some());
     assert_eq!(asked, replied);
+}
+
+#[test]
+fn permission_asked_carries_the_whole_request() {
+    let events = load("turn-control");
+    let asked = events
+        .iter()
+        .find_map(|e| match &e.data {
+            EventData::PermissionAsked(asked) => Some(asked),
+            _ => None,
+        })
+        .expect("the turn-control run asks");
+    let raw = frames("turn-control")
+        .into_iter()
+        .find(|frame| frame["type"] == "permission.asked")
+        .map(|frame| frame["data"].clone())
+        .expect("the captured permission.asked");
+
+    assert_eq!(asked.id, raw["id"].as_str().expect("id"));
+    assert_eq!(
+        asked.session_id,
+        raw["sessionID"].as_str().expect("session")
+    );
+    assert_eq!(
+        asked.request.action,
+        raw["action"].as_str().expect("action")
+    );
+    assert_eq!(
+        asked.request.resources.len(),
+        raw["resources"].as_array().expect("resources").len()
+    );
+    assert_eq!(asked.id, asked.request.id);
+    let source = asked.request.source.as_ref().expect("a tool source");
+    let raw_source = &raw["source"];
+    assert_eq!(
+        source.message_id,
+        raw_source["messageID"].as_str().expect("message")
+    );
+    assert_eq!(source.id, raw_source["id"].as_str().expect("call"));
+}
+
+#[test]
+fn form_created_carries_the_whole_form() {
+    let events = load("turn-control");
+    let created = events
+        .iter()
+        .find_map(|e| match &e.data {
+            EventData::FormCreated(created) => Some(created),
+            _ => None,
+        })
+        .expect("the turn-control run asks a question");
+    let raw = frames("turn-control")
+        .into_iter()
+        .find(|frame| frame["type"] == "form.created")
+        .map(|frame| frame["data"]["form"].clone())
+        .expect("the captured form.created");
+
+    assert_eq!(created.form.id, raw["id"].as_str().expect("id"));
+    assert_eq!(
+        created.form.session_id,
+        raw["sessionID"].as_str().expect("session")
+    );
+    assert_eq!(created.form.title, raw["title"].as_str().expect("title"));
+    assert_eq!(
+        created.form.fields.len(),
+        raw["fields"].as_array().expect("fields").len()
+    );
+    assert_eq!(created.form.metadata["kind"], raw["metadata"]["kind"]);
+}
+
+#[test]
+fn hand_built_events_naming_only_their_ids_still_decode() {
+    let asked: Event = serde_json::from_str(
+        r#"{"id":"e1","created":1,"type":"permission.asked","data":{"id":"per_1","sessionID":"ses_1"}}"#,
+    )
+    .expect("bare permission.asked");
+    let EventData::PermissionAsked(asked) = asked.data else {
+        panic!("permission.asked expected");
+    };
+    assert_eq!(asked.id, "per_1");
+    assert_eq!(asked.request.session_id, "ses_1");
+    assert!(asked.request.resources.is_empty());
+
+    let created: Event = serde_json::from_str(
+        r#"{"id":"e2","created":1,"type":"form.created","data":{"form":{"id":"frm_1","sessionID":"ses_1"}}}"#,
+    )
+    .expect("bare form.created");
+    let EventData::FormCreated(created) = created.data else {
+        panic!("form.created expected");
+    };
+    assert_eq!(created.form.id, "frm_1");
+    assert!(created.form.fields.is_empty());
 }
 
 #[test]

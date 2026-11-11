@@ -184,6 +184,13 @@ pub struct Settings {
     /// Whether the user ever chose the Enter behaviour.
     #[serde(default)]
     pub enter_to_send_configured: bool,
+    /// The composer's behaviour for a send during a running turn; read through
+    /// [`Settings::follow_up_behavior`].
+    #[serde(default, rename = "followUpBehavior")]
+    pub follow_up_behavior: Option<String>,
+    /// The retired on/off key the behaviour replaced; read only when the new key is absent.
+    #[serde(default, rename = "queueModeEnabled")]
+    pub queue_mode_enabled: Option<bool>,
     /// How the sidebar orders projects.
     #[serde(default)]
     pub sidebar_project_sort_order: SidebarSortOrder,

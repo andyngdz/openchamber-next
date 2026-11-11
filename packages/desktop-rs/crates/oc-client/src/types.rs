@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub use crate::metadata::{SessionMetadata, WorkState};
+pub use crate::prompt::{Delivery, PromptAccepted, PromptRequest};
 pub use crate::requests::{
     CreateSessionRequest, SessionRecord, SwitchAgentRequest, SwitchModelRequest,
 };
@@ -106,25 +107,6 @@ pub struct Session {
     /// The session this one nests under, when it is a subagent or a side conversation.
     #[serde(default, rename = "parentID")]
     pub parent_id: Option<String>,
-}
-
-/// Body of `POST /api/session/:id/prompt`; the plain composer send carries nothing else.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct PromptRequest {
-    /// Client-minted `msg_…` id, see [`crate::new_message_id`].
-    pub id: String,
-    /// What the user typed.
-    pub text: String,
-}
-
-/// The accepted prompt, echoed back by the server as the user message.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-pub struct PromptAccepted {
-    /// The `msg_…` id the client sent.
-    pub id: String,
-    /// Session the prompt went to.
-    #[serde(rename = "sessionID", default)]
-    pub session_id: String,
 }
 
 /// The model a step, message or request names; a catalog `id` plus its provider.
@@ -239,6 +221,13 @@ pub enum Message {
     /// `model-switched` and any type the spike does not draw.
     #[serde(other)]
     Other,
+}
+
+/// `POST /api/session/:id/interrupt`: whether a running turn was stopped.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+pub struct InterruptResult {
+    /// `true` when a turn was running and the interrupt was sent.
+    pub interrupted: bool,
 }
 
 #[cfg(test)]

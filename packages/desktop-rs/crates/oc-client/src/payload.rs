@@ -3,9 +3,11 @@
 //! Field names follow `fixtures/events/`; ids keep the wire spelling through `serde`
 //! renames.
 
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::Value;
 
+use crate::form::FormInfo;
+use crate::permission::PermissionRequest;
 use crate::types::{Location, ModelRef};
 
 /// Payloads that carry only the session id.
@@ -167,12 +169,28 @@ pub struct TextEnded {
     pub text: String,
 }
 
-/// The request id is `id` here and `requestID` in [`PermissionReplied`].
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+/// `permission.asked`: the whole request, with `id` and `session_id` also at the top
+/// level for the sidebar's pending mark. The request id is `id` here and `requestID` in
+/// [`PermissionReplied`].
+#[derive(Debug, Clone, PartialEq)]
 pub struct PermissionAsked {
+    /// The `per_…` request id.
     pub id: String,
-    #[serde(rename = "sessionID")]
+    /// The asking session.
     pub session_id: String,
+    /// Everything the request carries, as the pending list returns it.
+    pub request: PermissionRequest,
+}
+
+impl<'de> Deserialize<'de> for PermissionAsked {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let request = PermissionRequest::deserialize(deserializer)?;
+        Ok(Self {
+            id: request.id.clone(),
+            session_id: request.session_id.clone(),
+            request,
+        })
+    }
 }
 
 /// `permission.replied`: the request is answered.
@@ -185,17 +203,9 @@ pub struct PermissionReplied {
 }
 
 /// `form.created`: the agent asks the user to fill a form.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct FormCreated {
-    pub form: FormRef,
-}
-
-/// The form of [`FormCreated`].
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-pub struct FormRef {
-    pub id: String,
-    #[serde(rename = "sessionID")]
-    pub session_id: String,
+    pub form: FormInfo,
 }
 
 /// `form.replied` and `form.cancelled`.

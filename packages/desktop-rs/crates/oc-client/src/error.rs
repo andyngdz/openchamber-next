@@ -11,6 +11,10 @@ pub enum ClientError {
     /// The server answered with a status outside 2xx.
     #[error("server answered {status}: {body}")]
     Status { status: u16, body: String },
+    /// The server answered 404: the route or the record does not exist. A reply or a
+    /// cancel treats it as already settled, and a missing routing build as unavailable.
+    #[error("server answered 404: {body}")]
+    NotFound { body: String },
     /// The body arrived but is not the shape the client expects.
     #[error("could not decode the server answer: {0}")]
     Decode(#[source] serde_json::Error),

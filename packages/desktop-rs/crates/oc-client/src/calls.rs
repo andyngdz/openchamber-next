@@ -8,15 +8,14 @@ use crate::client::Client;
 use crate::directory::Directory;
 use crate::error::ClientError;
 use crate::filesystem::{Home, MkdirRequest, MkdirResult};
+use crate::prompt::{PromptAccepted, PromptRequest};
 use crate::requests::{
     CreateSessionRequest, SessionRecord, SwitchAgentRequest, SwitchModelRequest,
 };
 use crate::session_page::{PageStep, SessionPager};
 use crate::settings::Settings;
 use crate::settings_patch::SettingsPatch;
-use crate::types::{
-    Data, Located, Location, Message, ModelRef, Page, PromptAccepted, PromptRequest, Session,
-};
+use crate::types::{Data, Located, Location, Message, ModelRef, Page, Session};
 use crate::uri_component::encode_uri_component;
 
 /// Same page size the React UI asks for a scoped list.
@@ -32,6 +31,8 @@ const CONFIG: &str = "/api/config";
 const PROVIDERS: &str = "/api/provider";
 const MODELS: &str = "/api/model?types=chat&types=image";
 const AGENTS: &str = "/api/agent";
+/// The prompt route's suffix under `/api/session/:id`; the steer call sends the same one.
+pub(crate) const PROMPT: &str = "/prompt";
 
 impl Client {
     /// `GET /api/fs/home`: where the user's home and Chat folders live.
@@ -214,8 +215,9 @@ impl Client {
         let body = PromptRequest {
             id: crate::new_message_id(),
             text: text.to_owned(),
+            delivery: None,
         };
-        let path = session_path(session_id, "/prompt");
+        let path = session_path(session_id, PROMPT);
         let accepted: Data<PromptAccepted> = self
             .send(self.post_scoped(&path, directory).json(&body))
             .await?;
@@ -223,7 +225,8 @@ impl Client {
     }
 }
 
-fn session_path(session_id: &str, suffix: &str) -> String {
+/// `/api/session/:id` with a suffix such as `/prompt`, both segments percent-encoded.
+pub(crate) fn session_path(session_id: &str, suffix: &str) -> String {
     format!("/api/session/{}{suffix}", encode_uri_component(session_id))
 }
 
