@@ -16,6 +16,8 @@ the streamed reply. It is a spike: it does not replace `packages/electron`.
 `oc-app` also uses `uuid` 1 (feature `v4`) to mint a Chat session's folder and
 `chrono` 0.4 (feature `clock`) for its local date. Both are already in
 `Cargo.lock` through GPUI, so the workspace gains no second version of either.
+It uses `image` 0.25 (feature `png`) to write `--screenshot`, which GPUI already
+depends on, and GPUI Kit's `test-support` feature for the headless renderer.
 
 ## Prerequisites
 
@@ -97,6 +99,27 @@ cargo run -p oc-app -- --state fixtures/states/streaming.json
 With `--dump-layout <file>` the app renders that state at 1440x900, writes the
 bounds of every region and the controls of each, in order, to `<file>` as JSON,
 and exits. The parity test compares these dumps with `fixtures/reference/`.
+
+With `--screenshot <file>` the app renders the same 1440x900 state in a headless
+GPUI window, using the real text system, fonts and theme, and writes the frame as
+a PNG. No display server or Vulkan window is involved: GPUI's headless renderer
+rasterizes the frame. The test window renders at its own 2x scale, so the PNG is
+2880x1800 for the same 1440x900 content.
+
+```bash
+cargo run -p oc-app -- --state fixtures/states/empty.json --screenshot /tmp/empty.png
+```
+
+`tools/screenshots.sh` renders every `fixtures/states/*.json`, popup states with
+their popup open, to `fixtures/screenshots/<state>.gpui.png`, and pairs each with
+its Electron reference at `fixtures/reference/<state>.png` in
+`fixtures/screenshots/<state>.side-by-side.png` (React on the left, GPUI on the
+right, both at the reference's 1440x900). It needs ImageMagick 7 (`magick`).
+
+```bash
+tools/screenshots.sh            # every state
+tools/screenshots.sh empty.json # named states only
+```
 
 ```bash
 cargo run -p oc-app -- --state fixtures/states/empty.json --dump-layout /tmp/empty.json

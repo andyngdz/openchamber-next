@@ -56,6 +56,16 @@ impl RootView {
         cx: &mut Context<Self>,
     ) {
         let keystroke = &event.keystroke;
+        if keystroke.key == KEY_ENTER || matches!(keystroke.key_char.as_deref(), Some("\n" | "\r"))
+        {
+            tracing::debug!(
+                target: crate::logging::APP,
+                key = %keystroke.key,
+                key_char = ?keystroke.key_char,
+                marked = self.marked_text(window, cx),
+                "[KEYS] Enter key reached the window"
+            );
+        }
         let secondary = keystroke.modifiers.secondary(cx);
         if secondary
             && keystroke.modifiers.shift
@@ -79,6 +89,14 @@ impl RootView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        tracing::debug!(
+            target: crate::logging::APP,
+            shift = action.shift,
+            secondary = action.secondary,
+            popover = self.popover.is_some(),
+            marked = self.marked_text(window, cx),
+            "[KEYS] Composer Enter action"
+        );
         if self.popover.is_some() || self.marked_text(window, cx) {
             return;
         }

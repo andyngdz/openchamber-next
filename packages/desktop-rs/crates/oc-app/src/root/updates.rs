@@ -27,7 +27,7 @@ impl RootView {
                 self.refetch(cx);
             }
             Update::Sent { text } => {
-                self.dispatch(Action::PromptAccepted(text), cx);
+                self.accept_prompt(text, window, cx);
                 self.apply_selection(SelectionAction::SendSucceeded, cx);
             }
             Update::Created { session, directory } => {
@@ -43,7 +43,7 @@ impl RootView {
                 // until the session opens.
                 self.apply_selection(SelectionAction::SendSucceeded, cx);
                 self.dispatch(Action::SessionCreated(session), cx);
-                self.dispatch(Action::PromptAccepted(text), cx);
+                self.accept_prompt(text, window, cx);
                 self.request_session(&directory, cx);
             }
         }
@@ -65,14 +65,22 @@ impl RootView {
             self.record_pids_on_list = false;
             self.record_opencode_pids();
         }
-        // Text typed while the prompt was in flight stays in the composer.
-        if let Action::PromptAccepted(sent) = &action
-            && self.draft.read(cx).value() == sent.as_str()
-        {
+        match action {
+            Action::PromptAccepted(text) => self.accept_prompt(text, window, cx),
+            action => self.dispatch(action, cx),
+        }
+    }
+
+    /// Applies an accepted prompt. The composer clears only while it still holds the text that
+    /// was sent, so what the user typed while the prompt was in flight stays. Every path that
+    /// accepts a prompt goes through here: the textarea is the view's, and `State::apply` only
+    /// clears the state's copy of the draft.
+    fn accept_prompt(&mut self, text: String, window: &mut Window, cx: &mut Context<Self>) {
+        if self.draft.read(cx).value() == text.as_str() {
             self.draft
                 .update(cx, |draft, cx| draft.set_value("", window, cx));
         }
-        self.dispatch(action, cx);
+        self.dispatch(Action::PromptAccepted(text), cx);
     }
 
     /// Applies a sidebar input change; the first list page records OpenCode's pids too.

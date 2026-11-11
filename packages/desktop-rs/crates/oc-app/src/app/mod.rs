@@ -1,12 +1,14 @@
-//! Opens the window, and in dump mode writes the layout registry after the first frames.
+//! Opens the window, and in dump or screenshot mode writes what one fixture frame shows.
 //!
 //! The sidecar starts on the server thread and the I/O runtime on its own thread, so the
 //! window opens at once on Starting; the live window loads the shared settings, the home
 //! info and the global session list. Closing the last window flushes pending settings and
-//! stops the sidecar before the app quits.
+//! stops the sidecar before the app quits. `--dump-layout` and `--screenshot` skip the server
+//! and draw a fixture's state instead.
 
 mod live_start;
 mod quit;
+mod screenshot;
 
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
@@ -49,6 +51,14 @@ pub enum Launch {
         /// Where the layout JSON goes.
         output: PathBuf,
         /// A `fixtures/states/<name>.json` file; `<name>` becomes the dump's `state`.
+        state: PathBuf,
+    },
+    /// Build the state from a fixture file, render it in a headless window, write the frame
+    /// to `output` as a PNG and exit.
+    Screenshot {
+        /// Where the PNG goes.
+        output: PathBuf,
+        /// A `fixtures/states/<name>.json` file.
         state: PathBuf,
     },
 }
@@ -95,6 +105,11 @@ pub fn run(launch: Launch) -> Result<(), AppError> {
             let (state, popover) = script.into_parts();
             let target = DumpTarget { output, name };
             open(state, popover, Mode::Dump(target))
+        }
+        Launch::Screenshot { output, state } => {
+            let script = StateScript::load(&state)?;
+            let (state, popover) = script.into_parts();
+            screenshot::render(&output, state, popover)
         }
     }
 }

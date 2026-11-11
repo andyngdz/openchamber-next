@@ -12,7 +12,8 @@ oc-state.workspace = true
 chrono.workspace = true
 clap.workspace = true
 futures.workspace = true
-gpui-kit.workspace = true
+gpui-kit = { workspace = true, features = ["test-support"] }
+image.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

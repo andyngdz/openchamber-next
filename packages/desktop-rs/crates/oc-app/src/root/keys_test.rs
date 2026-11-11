@@ -8,6 +8,7 @@ use super::RootView;
 use crate::fixture::StateScript;
 use crate::fixture::fixture_test::state_path;
 use crate::layout::LayoutRegistry;
+use crate::live::Update;
 
 fn replay(name: &str) -> State {
     StateScript::load(&state_path(name))
@@ -78,6 +79,51 @@ fn enter_sends_without_inserting_a_newline(cx: &mut TestAppContext) {
             matches!(status(&root, cx), ComposerStatus::Failed { .. }),
             "Enter did not attempt a send"
         );
+    });
+}
+
+/// The server accepted the prompt `text`, as the live send sequence reports it.
+fn answer_sent(root: &Entity<RootView>, text: &str, cx: &mut VisualTestContext) {
+    let text = text.to_owned();
+    cx.update(|window, cx| {
+        root.update(cx, |root, cx| {
+            root.on_update(Update::Sent { text }, window, cx);
+        });
+    });
+}
+
+#[gpui_kit::test]
+fn an_answered_send_clears_the_composer(cx: &mut TestAppContext) {
+    let (root, cx) = open(cx, replay("session"), None);
+    type_hello(&root, cx);
+    cx.simulate_keystrokes("enter");
+
+    answer_sent(&root, "Hello", cx);
+
+    cx.update(|_, cx| {
+        assert_eq!(
+            draft_text(&root, cx),
+            "",
+            "the sent prompt stayed in the draft"
+        )
+    });
+}
+
+#[gpui_kit::test]
+fn text_typed_while_the_send_is_in_flight_stays(cx: &mut TestAppContext) {
+    let (root, cx) = open(cx, replay("session"), None);
+    type_hello(&root, cx);
+    cx.simulate_keystrokes("enter");
+    cx.simulate_input(" and then");
+
+    answer_sent(&root, "Hello", cx);
+
+    cx.update(|_, cx| {
+        assert_eq!(
+            draft_text(&root, cx),
+            "Hello and then",
+            "the prompt accepted in flight took the text typed since"
+        )
     });
 }
 
