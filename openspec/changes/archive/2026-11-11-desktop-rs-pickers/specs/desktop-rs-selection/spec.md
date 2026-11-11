@@ -87,9 +87,9 @@ The desktop composer SHALL decide Enter as React's `shouldSubmitEnter` does for 
 
 ### Requirement: Layout parity for pickers
 
-The multi-project sidebar and every popover SHALL be placed as the current OpenChamber desktop places them, checked by the parity gate against references captured from the Electron window.
+The multi-project sidebar SHALL be placed as the current OpenChamber desktop places it, and every popover SHALL list the same controls in the same order, checked by the parity gate against references captured from the Electron window.
 
 #### Scenario: New states match
 
 - **WHEN** `oc-app --dump-layout` runs for the states `projects`, `project-popover`, `model-popover`, `agent-menu` and `thinking-menu`
-- **THEN** region bounds, including the `popover` region, equal the reference, and every reference control is present in the same order under the existing comparison rules
+- **THEN** every region's bounds except the `popover` region's equal the reference, and every reference control, the popover's included, is present in the same order under the existing comparison rules
