@@ -1,7 +1,6 @@
 //! The open session's messages: user messages on the right, assistant text as plain text, tool
 //! calls under an Activity row, and a meta row with hover actions under each finished turn.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, ScrollHandle,
@@ -13,6 +12,7 @@ use super::composer::WIDTH;
 use super::tool_rows::{ToolSpecs, activity, tool_row_specs};
 use super::turns::{Block, Turn, TurnMeta, turns};
 use super::{Scene, icon_button, retry_button};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 
 /// The message scroller. React gives it no name, and its text is the whole transcript, so the
@@ -20,11 +20,14 @@ use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 const SCROLLER: &str = "generic";
 const SCROLL_TO_BOTTOM: &str = "Scroll to bottom";
 /// Hover actions of a finished turn's meta row.
-const META_ACTIONS: [(&str, IconName); 4] = [
-    ("Copy message text", IconName::Copy),
-    ("Continue from this answer", IconName::ArrowRight),
-    ("Pin into context (survives compaction)", IconName::StarOff),
-    ("More actions", IconName::Ellipsis),
+const META_ACTIONS: [(&str, RemixIcon); 4] = [
+    ("Copy message text", RemixIcon::FileCopy),
+    ("Continue from this answer", RemixIcon::ChatForward),
+    (
+        "Pin into context (survives compaction)",
+        RemixIcon::Pushpin2,
+    ),
+    ("More actions", RemixIcon::More),
 ];
 
 /// The scrolling message list and its Scroll to bottom button.
@@ -76,7 +79,7 @@ fn scroll_to_bottom(scene: Scene<'_>, scroll: &ScrollHandle) -> Div {
         ControlSpec::named(Area::ChatColumn, Role::Button, SCROLL_TO_BOTTOM).revealed(reveal);
     let handle = scroll.clone();
     let button =
-        icon_button(&spec, IconName::ArrowDown).on_click(move |_, _, _| handle.scroll_to_bottom());
+        icon_button(&spec, RemixIcon::ArrowDown).on_click(move |_, _, _| handle.scroll_to_bottom());
     div()
         .absolute()
         .bottom(px(8.))

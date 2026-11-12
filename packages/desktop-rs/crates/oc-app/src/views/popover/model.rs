@@ -1,6 +1,5 @@
 //! The model picker panel: the search row with its action, the leading action, and the list.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::{InputGroup, InputGroupAddon, InputGroupInput, InputState};
 use gpui_kit::component::list::{List, ListState};
@@ -14,6 +13,7 @@ use super::list::row_item;
 use super::model_list::ModelList;
 use super::model_rows;
 use super::model_search;
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 use crate::views::{Dispatch, Intent, RETRY, retry_button};
 
@@ -91,7 +91,7 @@ fn search_row(
         .input(InputGroupInput::new(search).aria_label(SEARCH))
         .addon(
             InputGroupAddon::new("model-search-icon")
-                .child(Icon::new(IconName::Search).text_color(cx.theme().muted_foreground)),
+                .child(Icon::new(RemixIcon::Search).text_color(cx.theme().muted_foreground)),
         );
     let keys = list.clone();
     let close = dispatch.clone();
@@ -116,7 +116,7 @@ fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
         .ghost()
         .small()
         .compact()
-        .icon(Icon::new(IconName::Plus))
+        .icon(Icon::new(RemixIcon::Add))
         .label(model_rows::ADD_PROVIDER)
         .accessibility_label(model_rows::ADD_PROVIDER)
         .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx));

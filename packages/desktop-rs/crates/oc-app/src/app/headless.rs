@@ -9,13 +9,13 @@ use std::sync::Arc;
 
 use gpui_kit::platform::{current_headless_renderer, current_platform};
 use gpui_kit::{
-    AnyWindowHandle, AppContext as _, HeadlessAppContext, WindowOptions, assets, init, open_window,
-    px, size,
+    AnyWindowHandle, AppContext as _, HeadlessAppContext, WindowOptions, init, open_window, px,
+    size,
 };
 use oc_state::State;
 
 use super::{RESIZE_ATTEMPTS, SETTLE_FRAMES, WINDOW_HEIGHT, WINDOW_WIDTH, window_options};
-use crate::errors::AppError;
+use crate::AppError;
 use crate::layout::LayoutRegistry;
 use crate::root::RootView;
 use crate::theme::{self, DARK};
@@ -23,7 +23,7 @@ use crate::views::PopoverKind;
 
 /// Draws `state` in a headless window until the frame settles, then hands the window and its
 /// registry to `finish`.
-pub(super) fn with_settled_window<T>(
+pub(crate) fn with_settled_window<T>(
     state: State,
     popover: Option<PopoverKind>,
     finish: impl FnOnce(
@@ -35,7 +35,7 @@ pub(super) fn with_settled_window<T>(
     let text_system = current_platform(true).text_system();
     let mut headless = HeadlessAppContext::with_platform(
         text_system,
-        Arc::new(assets::Assets),
+        Arc::new(crate::icons::AppAssets),
         current_headless_renderer,
     );
     // Asset loading is real I/O: the window's icons read while the frames are drawn.

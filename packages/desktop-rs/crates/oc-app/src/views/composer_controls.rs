@@ -1,6 +1,5 @@
 //! The composer footer's left icon group and right trigger/action group.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{ActiveTheme, Disableable};
 use gpui_kit::{
@@ -10,6 +9,7 @@ use gpui_kit::{
 use oc_state::{ComposerStatus, ConnectionStatus, State};
 
 use super::slots::{Tool, TriggerKind, tool_name};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 use crate::views::popover::trigger_control;
 use crate::views::text_metrics;
@@ -86,7 +86,7 @@ pub(super) fn right_group(
     group
 }
 
-fn icon_control(name: &str, icon: IconName, registry: &LayoutRegistry) -> AnyElement {
+fn icon_control(name: &str, icon: RemixIcon, registry: &LayoutRegistry) -> AnyElement {
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
     control(registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
 }
@@ -95,8 +95,8 @@ fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> A
     let name = tool_name(tool).unwrap_or_default();
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
     let button = match tool {
-        Tool::Stop => icon_button(&spec, IconName::Square),
-        _ => icon_button(&spec, IconName::ArrowUp)
+        Tool::Stop => icon_button(&spec, RemixIcon::Stop),
+        _ => icon_button(&spec, RemixIcon::SendPlane2)
             .disabled(!can_send(scene.state))
             .on_click(scene.on_click_intent(Intent::SendPrompt)),
     };
@@ -154,7 +154,7 @@ fn trigger_content(layout: TriggerKind, label: &str, label_width: f32, cx: &App)
         TriggerKind::Model => row
             .hover(|style| style.opacity(HOVER_OPACITY))
             .gap(px(GAP_MODEL))
-            .child(icon_box(LOGO_SIZE, IconName::Bot))
+            .child(icon_box(LOGO_SIZE, RemixIcon::Sparkling2))
             .child(label_box(layout, label, label_width)),
         TriggerKind::Thinking => row
             .gap(px(GAP_THINKING))
@@ -168,7 +168,7 @@ fn trigger_content(layout: TriggerKind, label: &str, label_width: f32, cx: &App)
         TriggerKind::Agent => row
             .hover(|style| style.opacity(HOVER_OPACITY))
             .gap(px(GAP_AGENT))
-            .child(icon_box(ICON_SIZE, IconName::CircleUser))
+            .child(icon_box(ICON_SIZE, RemixIcon::AiAgent))
             .child(label_box(layout, label, label_width)),
     }
 }
@@ -214,7 +214,7 @@ fn label_box(layout: TriggerKind, label: &str, width: f32) -> Div {
         .child(label.to_owned())
 }
 
-fn icon_box(size: f32, icon: IconName) -> Div {
+fn icon_box(size: f32, icon: RemixIcon) -> Div {
     div()
         .w(px(size))
         .h(px(size))

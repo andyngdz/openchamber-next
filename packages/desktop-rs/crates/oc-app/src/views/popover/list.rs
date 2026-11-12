@@ -1,9 +1,9 @@
 //! Shared rows, section headers and the recorded search field for the picker lists.
 
 use super::Pick;
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control as control_element};
 use crate::views::text_metrics;
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::list::ListItem;
 use gpui_kit::prelude::FluentBuilder as _;
@@ -37,7 +37,7 @@ pub(super) use super::star::{Star, StarKind};
 pub(super) struct Row {
     pub(super) name: String,
     pub(super) label: String,
-    pub(super) icon: Option<IconName>,
+    pub(super) icon: Option<RemixIcon>,
     pub(super) context: Option<String>,
     pub(super) selected: bool,
     pub(super) role: Role,
@@ -59,7 +59,7 @@ pub(super) struct Section {
 pub(super) struct Header {
     pub(super) name: String,
     pub(super) label: String,
-    pub(super) icon: Option<IconName>,
+    pub(super) icon: Option<RemixIcon>,
     pub(super) ancestors: Vec<String>,
 }
 
@@ -152,7 +152,7 @@ pub(super) fn search(
     control_element(registry, spec, list).w_full()
 }
 
-fn icon_box(icon: IconName, size: f32, cx: &App) -> Div {
+fn icon_box(icon: RemixIcon, size: f32, cx: &App) -> Div {
     div()
         .flex_shrink_0()
         .w(px(size))
@@ -177,7 +177,7 @@ fn check_icon() -> Div {
         .w(px(CHECK_ICON))
         .h(px(CHECK_ICON))
         .text_size(px(CHECK_ICON))
-        .child(gpui_kit::assets::IconName::Check)
+        .child(RemixIcon::Check)
 }
 
 fn probe(registry: &LayoutRegistry, spec: ControlSpec) -> impl IntoElement {

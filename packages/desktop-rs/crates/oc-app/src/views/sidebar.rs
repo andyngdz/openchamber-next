@@ -1,7 +1,6 @@
 //! The 280 px sidebar: title-bar controls, toolbar, Chats, the session groups and the footer.
 //! Live: session rows open their session. Everything else is inert.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
@@ -10,25 +9,26 @@ use oc_state::Region;
 
 use super::sidebar_list::session_list;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
 
 /// Title-bar controls, left to right.
-const TITLE_BAR: [(&str, IconName); 2] = [
-    ("Open OpenChamber menu", IconName::Menu),
-    ("Open sessions", IconName::PanelLeft),
+const TITLE_BAR: [(&str, RemixIcon); 2] = [
+    ("Open OpenChamber menu", RemixIcon::Menu2),
+    ("Open sessions", RemixIcon::LayoutLeft),
 ];
 pub(crate) const NEW_SESSION: &str = "New session";
 const RESIZE: &str = "Resize left panel";
-const TOOLBAR: [(&str, IconName); 4] = [
-    ("Search sessions", IconName::Search),
-    ("Add project", IconName::FolderOpen),
-    ("Display mode", IconName::SortAscending),
-    ("More", IconName::Ellipsis),
+const TOOLBAR: [(&str, RemixIcon); 4] = [
+    ("Search sessions", RemixIcon::Search),
+    ("Add project", RemixIcon::FolderAdd),
+    ("Display mode", RemixIcon::Equalizer2),
+    ("More", RemixIcon::More),
 ];
 const SETTINGS: &str = "Settings";
 const INSTANCE: &str = "Open instance, usage and MCP (current: Local)";
 
-fn button(scene: Scene<'_>, name: &'static str, icon: IconName) -> AnyElement {
+fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::Sidebar, Role::Button, name);
     control(scene.registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
 }
@@ -72,7 +72,7 @@ fn title_bar(scene: Scene<'_>) -> Div {
         .child(control(
             scene.registry,
             new_session.clone(),
-            label_button(&new_session, Some(IconName::Plus), NEW_SESSION)
+            label_button(&new_session, Some(RemixIcon::ChatNew), NEW_SESSION)
                 .on_click(scene.on_click_intent(Intent::NewSession)),
         ))
 }
@@ -128,11 +128,11 @@ fn footer(scene: Scene<'_>) -> Div {
         .items_center()
         .justify_between()
         .px(px(8.))
-        .child(button(scene, SETTINGS, IconName::Settings))
+        .child(button(scene, SETTINGS, RemixIcon::Settings3))
         .child(control(
             scene.registry,
             instance.clone(),
-            label_button(&instance, Some(IconName::HardDrive), "Local"),
+            label_button(&instance, Some(RemixIcon::Server), "Local"),
         ))
 }
 

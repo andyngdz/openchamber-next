@@ -1,7 +1,6 @@
 //! The Work status panel: one 300 px card with the Session, Project, Context sources and Turn
 //! stats sections. Everything here is inert; values are placeholders.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
@@ -11,6 +10,7 @@ use oc_state::{SessionStatus, State};
 use super::turn_stats::{StatRow, stat_rows};
 use super::turns::turns;
 use super::{Scene, icon_button, label_button, project_name};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
 use crate::theme::{DARK, card};
 
@@ -46,11 +46,11 @@ fn panel_mode(state: &State) -> PanelMode {
 }
 
 /// `(name, icon, label)` of the section buttons above Context sources.
-fn session_rows() -> [(&'static str, IconName, &'static str); 3] {
+fn session_rows() -> [(&'static str, RemixIcon, &'static str); 3] {
     [
-        ("Open context panel", IconName::LoaderCircle, "Context"),
-        ("Open Git panel", IconName::Network, "Branch"),
-        ("Open changes", IconName::FileText, "Changes"),
+        ("Open context panel", RemixIcon::DonutChart, "Context"),
+        ("Open Git panel", RemixIcon::GitBranch, "Branch"),
+        ("Open changes", RemixIcon::FileEdit, "Changes"),
     ]
 }
 
@@ -74,7 +74,7 @@ pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
                 .items_center()
                 .justify_between()
                 .child(section("Session", cx))
-                .child(button(scene, "Choose sections", IconName::Settings2)),
+                .child(button(scene, "Choose sections", RemixIcon::Equalizer2)),
         )
         .children(project_section(scene, mode, cx))
         .child(context_sources(scene, cx))
@@ -123,7 +123,7 @@ fn context_sources(scene: Scene<'_>, cx: &App) -> Div {
         .justify_between()
         .child(labeled(
             scene,
-            (CONTEXT_SOURCES, IconName::Inbox, "Context sources"),
+            (CONTEXT_SOURCES, RemixIcon::Stack, "Context sources"),
         ))
         .child(
             div()
@@ -137,24 +137,27 @@ fn context_sources(scene: Scene<'_>, cx: &App) -> Div {
 fn turn_stats(scene: Scene<'_>, mode: PanelMode) -> Vec<AnyElement> {
     match mode {
         PanelMode::Empty => Vec::new(),
-        PanelMode::Running => vec![labeled(scene, (TURN_STATS, IconName::ChartPie, TURN_STATS))],
+        PanelMode::Running => vec![labeled(
+            scene,
+            (TURN_STATS, RemixIcon::BarChart2, TURN_STATS),
+        )],
         PanelMode::Finished => std::iter::once(labeled(
             scene,
-            (TURN_STATS_RATE, IconName::ChartPie, TURN_STATS),
+            (TURN_STATS_RATE, RemixIcon::BarChart2, TURN_STATS),
         ))
         .chain(finished_turn_rows(scene))
         .collect(),
     }
 }
 
-fn button(scene: Scene<'_>, name: &'static str, icon: IconName) -> AnyElement {
+fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
     control(scene.registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
 }
 
 fn labeled(
     scene: Scene<'_>,
-    (name, icon, label): (&'static str, IconName, &'static str),
+    (name, icon, label): (&'static str, RemixIcon, &'static str),
 ) -> AnyElement {
     let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
     control(
