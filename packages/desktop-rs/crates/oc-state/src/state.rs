@@ -1,10 +1,12 @@
 //! Everything the window draws, in one value the app replaces through [`State::apply`] and
 //! [`State::apply_sidebar`].
 
+use crate::abort::AbortWindow;
 use crate::auto_accept::AutoAccept;
 use crate::ids::SessionId;
 use crate::loaded::Loaded;
 use crate::message::ChatMessage;
+use crate::queue::Queues;
 use crate::recoverable::Recoverable;
 use crate::requests::Requests;
 use crate::session_entry::SessionEntry;
@@ -69,6 +71,10 @@ pub struct State {
     pub(crate) auto_accept: AutoAccept,
     /// Recovered-question evidence and tombstones.
     pub(crate) recoverable: Recoverable,
+    /// The server-owned message queue, by session.
+    pub(crate) queues: Queues,
+    /// The Escape-twice abort window.
+    pub(crate) abort: AbortWindow,
 }
 
 impl State {
@@ -92,6 +98,8 @@ impl State {
             requests: Requests::default(),
             auto_accept: AutoAccept::default(),
             recoverable: Recoverable::default(),
+            queues: Queues::default(),
+            abort: AbortWindow::default(),
         }
     }
 

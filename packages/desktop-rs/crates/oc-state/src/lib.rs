@@ -7,10 +7,13 @@
 //! [`State::apply_sidebar`], and [`State::sidebar_model`] derives the sidebar from them. No
 //! I/O, no clock and no GPUI, so a fixture replay gives the same state every run.
 
+mod abort;
 mod action;
 mod auto_accept;
 mod control;
 mod events;
+#[cfg(test)]
+mod fixture_queue_test;
 #[cfg(test)]
 mod fixture_test;
 mod form;
@@ -26,6 +29,7 @@ mod message_events;
 mod permission_mode;
 mod permission_patterns;
 mod permission_summary;
+mod queue;
 mod recoverable;
 mod requests;
 mod retry;
@@ -33,6 +37,8 @@ mod safety_hold;
 mod scope;
 pub mod search;
 mod selection;
+mod send;
+mod send_plan;
 mod session_entry;
 mod session_list;
 mod session_requests;
@@ -45,6 +51,7 @@ mod tool_events;
 mod turn_actions;
 mod websearch;
 
+pub use abort::ABORT_WINDOW_MS;
 pub use action::Action;
 pub use form::{
     ExternalLinks, FieldValue, FormEvaluation, FormValues, build_form_answer, evaluate_form,
@@ -58,6 +65,7 @@ pub use message::{
     AssistantMessage, ChatMessage, Delivery, Item, StepTiming, TextItem, ToolItem, UserMessage,
 };
 pub use oc_client::filesystem::Home;
+pub use oc_client::follow_up::FollowUpBehavior;
 pub use oc_client::types::{ModelRef, ToolStatus, WorkState};
 pub use oc_client::{Project, ProjectPatch, Settings, SettingsPatch};
 pub use permission_mode::{SafetyNet, displayed_permission_mode, next_permission_mode};
@@ -77,6 +85,11 @@ pub use selection::{
     ProviderModels, ProviderSection, Selection, SelectionAction, SelectionSource, SendSteps,
     is_same_model_ref, model_sections, ranked_agents, ranked_projects, resolve_send_selection,
     should_submit_enter, wire_model,
+};
+pub use send::{SendDecision, SendInput, SendKey, decide_send};
+pub use send_plan::{
+    DismissKind, DismissTarget, SendNowPlan, SendPlan, SendPrompt, join_queue_text, plan_send_now,
+    taken_texts,
 };
 pub use session_entry::{PendingRequest, SessionEntry};
 pub use session_list::SessionList;
