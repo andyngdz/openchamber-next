@@ -14,7 +14,7 @@
 //! frequent color inside them, since its glyphs cover a small part of the box.
 //!
 //! Only pixels the screen can show are read: a draw is clipped to its region's bounds, and a
-//! draw under the open popup, outside the popup region, is skipped.
+//! draw under the open popup or its floating shadow, outside the popup region, is skipped.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -28,6 +28,9 @@ use serde_json::Value;
 const CHANNEL_TOLERANCE: u8 = 1;
 /// The region a popup draws in; it covers the regions under it.
 const POPOVER: &str = "popover";
+/// How far a popup's floating shadow reaches past its box, in logical pixels: its 28 px
+/// offset plus its 64 px blur, rounded up. The shadow tints what is drawn there.
+const POPOVER_SHADOW_REACH: f64 = 96.;
 /// The draw kinds a control records, and whether the kind is a mark.
 const DRAW_KINDS: [(&str, bool); 3] = [("icons", false), ("marks", true), ("texts", false)];
 
@@ -68,6 +71,17 @@ impl PixelBox {
             top: self.top.max(other.top),
             right: self.right.min(other.right),
             bottom: self.bottom.min(other.bottom),
+        }
+    }
+
+    /// The box grown by `logical` pixels on every side.
+    fn grow(self, logical: f64, scale: f64) -> Self {
+        let by = (logical * scale).ceil() as i32;
+        Self {
+            left: self.left - by,
+            top: self.top - by,
+            right: self.right + by,
+            bottom: self.bottom + by,
         }
     }
 
@@ -163,7 +177,13 @@ struct Target {
 fn target(rendered: &Rendered, region: &str, control: &Value, draw: &Value) -> Option<Target> {
     let bounds = PixelBox::read(&draw["bounds"], rendered.scale);
     let popup = rendered.region_box(POPOVER);
-    if region != POPOVER && popup.is_some_and(|popup| popup.overlaps(bounds)) {
+    if region != POPOVER
+        && popup.is_some_and(|popup| {
+            popup
+                .grow(POPOVER_SHADOW_REACH, rendered.scale)
+                .overlaps(bounds)
+        })
+    {
         return None;
     }
     let clip = rendered.region_box(region)?;

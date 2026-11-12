@@ -16,7 +16,7 @@ const WINDOW_RADIUS: f32 = 12.;
 
 /// Colors that depend on the mode and the palette (`--lit`, `--ring`, `--glass`, ...).
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct DepthColors {
+pub(crate) struct DepthColors {
     /// `--lit`: the 1 px line along the top inner edge of a raised or floating surface.
     pub(crate) lit: Hsla,
     /// `--ring`: the 0.5 px inner ring of every edge.
@@ -39,7 +39,7 @@ pub struct DepthColors {
 
 /// The theme palette and everything derived from it for one mode.
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Tokens {
+pub(crate) struct Tokens {
     pub(crate) mode: Mode,
     pub(crate) palette: Palette,
     pub(crate) depth: DepthColors,
@@ -90,14 +90,14 @@ impl Tokens {
     }
 
     /// The tokens `apply` stored for this app.
-    pub fn of(cx: &App) -> &Self {
+    pub(crate) fn of(cx: &App) -> &Self {
         cx.global::<Self>()
     }
 
     /// `--sh-raised` with the edge: the shadow list of a raised control or surface.
     ///
     /// Inset shadows draw the ring and the lit line; GPUI paints them with the fill.
-    pub fn raised_shadows(&self) -> Vec<BoxShadow> {
+    pub(crate) fn raised_shadows(&self) -> Vec<BoxShadow> {
         let (near, far) = match self.mode {
             Mode::Dark => (0.4, 0.5),
             Mode::Light => (0.05, 0.14),
@@ -113,7 +113,7 @@ impl Tokens {
     }
 
     /// `--sh-float` with the edge: the shadow list of a menu, popover or dialog.
-    pub fn floating_shadows(&self) -> Vec<BoxShadow> {
+    pub(crate) fn floating_shadows(&self) -> Vec<BoxShadow> {
         let (near, far) = match self.mode {
             Mode::Dark => (0.45, 0.65),
             Mode::Light => (0.08, 0.25),
@@ -129,7 +129,7 @@ impl Tokens {
     }
 
     /// The edge alone: the dark outer ring, the 0.5 px inner ring and the 1 px lit top line.
-    pub fn edge(&self) -> Vec<BoxShadow> {
+    pub(crate) fn edge(&self) -> Vec<BoxShadow> {
         vec![
             BoxShadow::new(px(0.), px(0.), self.depth.ring_out).spread_radius(px(0.5)),
             BoxShadow::new(px(0.), px(0.), self.depth.ring)

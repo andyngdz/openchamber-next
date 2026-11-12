@@ -14,7 +14,7 @@ use super::turns::turns;
 use super::{Scene, icon_button, project_name};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::{self, card};
+use crate::theme::{DepthStyle, Tokens};
 
 /// The card's name; every control in it sits under it.
 const WORK_STATUS: &str = "Work status";
@@ -58,7 +58,6 @@ fn session_rows() -> [(&'static str, RemixIcon, &'static str); 3] {
 
 /// The 320 px column holding the card.
 pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
-    let theme = cx.theme();
     let mode = panel_mode(scene.state);
     let card_body = div()
         .w(px(300.))
@@ -66,10 +65,7 @@ pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
         .flex_col()
         .gap(px(6.))
         .p(px(12.))
-        .rounded(px(12.))
-        .border_1()
-        .border_color(theme.border)
-        .bg(card(theme::palette()))
+        .tile(Tokens::of(cx), false)
         .child(div().flex().items_center().justify_end().child(button(
             scene,
             "Choose sections",

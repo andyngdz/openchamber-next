@@ -14,6 +14,7 @@ use trigger_content::{content_selector, label_selector};
 mod trigger_content;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::theme::{DepthStyle, Tokens};
 use crate::views::popover::trigger_control;
 use crate::views::{Intent, Scene, icon_button};
 
@@ -70,7 +71,7 @@ pub(super) fn right_group(
         let slot = match tool {
             Tool::Trigger { .. } => trigger(scene, tool, window, cx),
             Tool::Icon(name, icon) => icon_control(name, *icon, registry),
-            Tool::Send | Tool::Stop => action_control(scene, tool, registry),
+            Tool::Send | Tool::Stop => action_control(scene, tool, registry, cx),
         };
         let gap = if index == 0 {
             0.
@@ -99,7 +100,12 @@ fn icon_control(name: &str, icon: RemixIcon, registry: &LayoutRegistry) -> AnyEl
     .into_any_element()
 }
 
-fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> AnyElement {
+fn action_control(
+    scene: Scene<'_>,
+    tool: &Tool,
+    registry: &LayoutRegistry,
+    cx: &App,
+) -> AnyElement {
     let name = tool_name(tool).unwrap_or_default();
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
     let palette = crate::theme::palette();
@@ -131,9 +137,15 @@ fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> A
             } else {
                 crate::theme::faded(palette.foreground.into(), 0.3)
             };
-            icon_button(registry, &spec, RemixIcon::SendPlane2, color)
+            // A send that can go out is a raised control; the disabled one stays flat.
+            let send = icon_button(registry, &spec, RemixIcon::SendPlane2, color)
                 .disabled(!enabled)
-                .on_click(scene.on_click_intent(Intent::SendPrompt))
+                .on_click(scene.on_click_intent(Intent::SendPrompt));
+            if enabled {
+                send.raised_control(Tokens::of(cx))
+            } else {
+                send
+            }
         }
     };
     control(registry, spec, button).into_any_element()

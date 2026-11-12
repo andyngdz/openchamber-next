@@ -17,7 +17,7 @@ pub(crate) const SURFACE_RADIUS: f32 = 10.;
 const FLOATING_FILL: f32 = 0.97;
 
 /// Depth styling for any styled element.
-pub trait DepthStyle: Styled + Sized {
+pub(crate) trait DepthStyle: Styled + Sized {
     /// A raised control (button, input): the `--ctl` fill, radius 6, the edge and a 1 px
     /// contact shadow.
     fn raised_control(self, tokens: &Tokens) -> Self {

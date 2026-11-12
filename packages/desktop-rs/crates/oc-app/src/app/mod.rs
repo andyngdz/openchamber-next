@@ -142,6 +142,7 @@ fn open(
             let registry = LayoutRegistry::default();
             let view_registry = registry.clone();
             let opened = open_window(window_options(cx), cx, move |window, cx| {
+                theme::follow_system(window, cx);
                 cx.new(|cx| {
                     let mut view = RootView::new(state, popover, view_registry, link, window, cx);
                     if let Some(started) = started {

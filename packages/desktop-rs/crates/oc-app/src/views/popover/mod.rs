@@ -29,6 +29,7 @@ use oc_state::State;
 
 use super::{Dispatch, Scene};
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::theme::{DepthStyle, Tokens};
 
 pub(crate) use labels::{
     selected_agent_label, selected_model, selected_model_label, selected_model_variants,
@@ -186,17 +187,20 @@ fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button, cx: &App) -> Pop
 fn placed(popover: Popover, kind: PopoverKind) -> Popover {
     match kind {
         PopoverKind::Project => popover
+            .appearance(false)
             .anchor(Anchor::TopLeft)
             .offset(px(4.))
             .p(px(0.))
             .w(px(project::WIDTH)),
         PopoverKind::Model => popover
+            .appearance(false)
             .anchor(Anchor::BottomRight)
             .offset(px(4.))
             .p(px(0.))
             .w(px(model::WIDTH))
             .max_h(px(model::MAX_HEIGHT)),
         PopoverKind::Agent => popover
+            .appearance(false)
             .anchor(Anchor::BottomRight)
             .offset(px(4.))
             .p(px(0.))
@@ -216,13 +220,24 @@ fn content(
     lists: &PopoverLists,
     cx: &App,
 ) -> AnyElement {
+    let tokens = *Tokens::of(cx);
     let body = match kind {
         PopoverKind::Project => project::content(state, dispatch, registry, &lists.project, cx),
         PopoverKind::Model => model::content(state, dispatch, registry, &lists.model, cx),
         PopoverKind::Agent => agent::content(state, dispatch, registry, &lists.agent, cx),
         PopoverKind::Thinking => lists.thinking.clone().into_any_element(),
     };
-    crate::layout::region(registry, Area::Popover, div().w_full().child(body)).into_any_element()
+    // The Thinking menu is a `PopupMenu`, which draws its own surface; the pickers get the
+    // floating level here.
+    let body = match kind {
+        PopoverKind::Thinking => div().w_full().child(body),
+        PopoverKind::Project | PopoverKind::Model | PopoverKind::Agent => div()
+            .w_full()
+            .overflow_hidden()
+            .floating_surface(&tokens)
+            .child(body),
+    };
+    crate::layout::region(registry, Area::Popover, body).into_any_element()
 }
 
 /// The Thinking menu rows for the current model.

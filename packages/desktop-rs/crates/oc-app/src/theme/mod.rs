@@ -13,6 +13,7 @@ use serde::Deserialize;
 
 use crate::logging::APP;
 
+mod appearance;
 mod depth;
 mod highlight;
 mod oklab;
@@ -20,8 +21,9 @@ mod palette;
 mod shade;
 mod tokens;
 
-pub use depth::DepthStyle;
-pub use tokens::{DepthColors, Tokens};
+pub(crate) use appearance::follow_system;
+pub(crate) use depth::DepthStyle;
+pub(crate) use tokens::Tokens;
 
 /// `color-mix(in oklab, first 50%, second)` for two opaque colors, as `oc-title-rest`
 /// mixes the foreground and the muted foreground (`packages/ui/src/index.css:217-219`).
@@ -41,7 +43,7 @@ pub(crate) const LIGHT_THEME: &str = include_str!(concat!(
 
 /// Whether a theme is dark or light; the depth tokens differ per mode.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Mode {
+pub(crate) enum Mode {
     /// A dark theme.
     Dark,
     /// A light theme.
