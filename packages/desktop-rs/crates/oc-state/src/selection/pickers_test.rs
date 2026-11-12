@@ -1,10 +1,11 @@
 //! The model sections, the ranked agent list and the ranked project list.
 
+use oc_client::catalog::ModelKind;
 use serde_json::json;
 
 use super::{model_sections, ranked_agents, ranked_projects};
 use crate::fixture_test::{
-    api_catalog, api_settings, catalog_with, config, described_agent, settings,
+    api_catalog, api_models, api_settings, catalog_with, config, described_agent, settings,
 };
 
 fn ids(entries: &[super::ModelEntry]) -> Vec<&str> {
@@ -25,10 +26,29 @@ fn the_fixture_sections_list_favorites_then_recent_then_providers() {
         .iter()
         .map(|section| (section.provider_id.as_str(), section.models.len()))
         .collect();
-    assert_eq!(
-        providers,
-        [("opencode", 10), ("perf", 22), ("perf-second", 3)]
-    );
+    let models = api_models();
+    let settings = api_settings();
+    let expected: Vec<(&str, usize)> = catalog
+        .providers()
+        .iter()
+        .map(|provider| {
+            let id = provider.provider.id.as_str();
+            let visible = models
+                .iter()
+                .filter(|model| {
+                    model.provider_id == id
+                        && model.enabled
+                        && model.kind != ModelKind::Image
+                        && !settings
+                            .hidden_models
+                            .iter()
+                            .any(|hidden| hidden.provider_id == id && hidden.model_id == model.id)
+                })
+                .count();
+            (id, visible)
+        })
+        .collect();
+    assert_eq!(providers, expected);
     assert!(
         sections
             .providers

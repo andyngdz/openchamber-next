@@ -1,0 +1,137 @@
+{
+  "data": [
+    {
+      "id": "msg_1cb4851a9001Ct9kMjisCg43z9",
+      "time": {
+        "created": 1794411876777
+      },
+      "type": "idle",
+      "outcome": "interrupted"
+    },
+    {
+      "id": "msg_1cb485178001oe3KKy2yeMgEvv",
+      "time": {
+        "created": 1794411876731,
+        "streamed": 1794411876766,
+        "completed": 1794411876775
+      },
+      "type": "assistant",
+      "agent": "capture-secondary",
+      "model": {
+        "id": "question-1200cps",
+        "providerID": "perf",
+        "variant": "default"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Calling the fixture question tool.\n\n"
+        },
+        {
+          "type": "tool",
+          "id": "call_fixture_question",
+          "name": "question",
+          "executed": false,
+          "state": {
+            "status": "error",
+            "input": {
+              "questions": [
+                {
+                  "header": "Fixture choice",
+                  "question": "Which fixture option should the capture answer?",
+                  "options": [
+                    {
+                      "label": "First option",
+                      "description": "The first fixture choice"
+                    },
+                    {
+                      "label": "Second option",
+                      "description": "The second fixture choice"
+                    },
+                    {
+                      "label": "Third option",
+                      "description": "The third fixture choice"
+                    }
+                  ]
+                },
+                {
+                  "header": "Fixture multiselect",
+                  "question": "Which fixture details should the capture select?",
+                  "options": [
+                    {
+                      "label": "Alpha detail",
+                      "description": "The first selectable detail"
+                    },
+                    {
+                      "label": "Beta detail",
+                      "description": "The second selectable detail"
+                    }
+                  ],
+                  "multiple": true
+                },
+                {
+                  "header": "Fixture free text",
+                  "question": "What free text should the capture answer with?",
+                  "options": []
+                }
+              ]
+            },
+            "error": {
+              "type": "aborted",
+              "message": "Tool execution interrupted"
+            }
+          },
+          "time": {
+            "created": 1794411876762,
+            "ran": 1794411876765,
+            "completed": 1794411876771
+          }
+        }
+      ],
+      "snapshot": {
+        "start": "86dd5df4eb929de3900ea4bf48ca9f032179b51e",
+        "end": "86dd5df4eb929de3900ea4bf48ca9f032179b51e",
+        "files": []
+      },
+      "finish": "error",
+      "rawFinish": "tool_calls",
+      "cost": 0,
+      "tokens": {
+        "input": 1,
+        "output": 9,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "error": {
+        "type": "aborted",
+        "message": "Step interrupted"
+      }
+    },
+    {
+      "id": "msg_1cb485169001wYZDvra91nmtSD",
+      "time": {
+        "created": 1794411876721
+      },
+      "text": "Ask a question, then I stop you.",
+      "type": "user"
+    },
+    {
+      "id": "msg_1cb485167001TNT0Hj14yb2Pfq",
+      "time": {
+        "created": 1794411876711
+      },
+      "type": "model-switched",
+      "model": {
+        "id": "question-1200cps",
+        "providerID": "perf"
+      }
+    }
+  ],
+  "cursor": {
+    "previous": "eyJpZCI6Im1zZ18xY2I0ODUxYTkwMDFDdDlrTWppc0NnNDN6OSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
+    "next": "eyJpZCI6Im1zZ18xY2I0ODUxNjcwMDFUTlQwSGoxNHliMlBmcSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
+  }
+}

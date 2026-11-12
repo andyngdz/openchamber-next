@@ -1,0 +1,28 @@
+{
+  "data": {
+    "id": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+    "projectID": "global",
+    "model": {
+      "id": "stream-100cps",
+      "providerID": "perf",
+      "variant": "default"
+    },
+    "cost": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "time": {
+      "created": 1794411876789,
+      "updated": 1794411876789
+    },
+    "location": {
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    }
+  }
+}

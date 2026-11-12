@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb482a9b001j1O47CIih9WtTX",
+    "sessionID": "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+    "time": {
+      "created": 1794411866782
+    },
+    "type": "user",
+    "payload": {
+      "text": "Fetch the fixture page."
+    },
+    "delivery": "steer"
+  }
+}

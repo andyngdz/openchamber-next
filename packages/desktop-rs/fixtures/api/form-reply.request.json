@@ -1,0 +1,10 @@
+{
+  "answer": {
+    "q0": "First option",
+    "q1": [
+      "Alpha detail",
+      "Beta detail"
+    ],
+    "q2": "A free text fixture answer."
+  }
+}

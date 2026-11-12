@@ -211,18 +211,21 @@ fn asked(at: u64) -> oc_client::Event {
 }
 
 #[test]
-fn a_reload_of_an_idle_session_drops_its_pending_request() {
+fn a_reload_of_an_idle_session_keeps_its_pending_request() {
     let mut state = opened("ses_a");
     replay(&mut state, &[started(100), asked(110)]);
     assert!(state.open_is_waiting());
 
-    // The reply and the turn's end were missed while the event stream was down.
+    // Only the session list reloaded; the request store is still authoritative until a
+    // reply or a permission list settles the request.
     state.apply(Action::SessionsLoaded(vec![turn_session(
         "ses_a",
         Some(100),
         Some(200),
     )]));
 
+    assert!(state.open_is_waiting());
+    state.permissions_loaded(&crate::fixture_test::directory(), Vec::new());
     assert!(!state.open_is_waiting());
 }
 

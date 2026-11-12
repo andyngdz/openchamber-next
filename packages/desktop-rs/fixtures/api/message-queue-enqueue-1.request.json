@@ -1,0 +1,12 @@
+{
+  "directory": "/tmp/oc-desktop-rs-capture/project",
+  "item": {
+    "content": "First queued fixture message.",
+    "text": "First queued fixture message.",
+    "sendConfig": {
+      "providerID": "perf",
+      "modelID": "stream-1200cps",
+      "agent": "capture-primary"
+    }
+  }
+}

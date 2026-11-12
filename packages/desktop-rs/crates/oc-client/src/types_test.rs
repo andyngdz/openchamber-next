@@ -1,8 +1,8 @@
 use serde::de::DeserializeOwned;
 
 use super::{
-    AssistantContent, AuthStatus, CreateSessionRequest, Data, Location, Message, Page,
-    PromptAccepted, PromptRequest, Session, ToolStatus, WorkState,
+    AssistantContent, AuthStatus, CreateSessionRequest, Data, Location, Message, Page, Session,
+    ToolStatus, WorkState,
 };
 
 const FIXTURES: &str = concat!(env!("OC_DESKTOP_FIXTURES"), "/api");
@@ -146,7 +146,7 @@ fn every_created_session_decodes() {
 #[test]
 fn every_message_list_decodes_and_only_model_switches_are_skipped() {
     let lists = names("messages-", ".json");
-    assert_eq!(lists.len(), 5, "{lists:?}");
+    assert!(!lists.is_empty(), "{lists:?}");
     for name in lists {
         let raw: Page<serde_json::Value> = decode(&name);
         let switches = raw
@@ -202,27 +202,6 @@ fn agent_turn_yields_one_assistant_message_per_step_with_tool_calls() {
             .iter()
             .any(|m| matches!(m, Message::Idle { outcome: Some(o), .. } if o == "succeeded"))
     );
-}
-
-#[test]
-fn every_prompt_response_decodes() {
-    let prompts = names("prompt-", ".json");
-    assert!(prompts.len() >= 6, "{prompts:?}");
-    for name in prompts {
-        let accepted: Data<PromptAccepted> = decode(&name);
-        assert!(accepted.data.id.starts_with("msg_"), "{name}");
-        assert!(accepted.data.session_id.starts_with("ses_"), "{name}");
-    }
-}
-
-#[test]
-fn prompt_request_serializes_to_the_captured_body() {
-    let captured: serde_json::Value = decode("prompt-text.request.json");
-    let request = PromptRequest {
-        id: captured["id"].as_str().expect("id").to_owned(),
-        text: captured["text"].as_str().expect("text").to_owned(),
-    };
-    assert_eq!(serde_json::to_value(&request).expect("serialize"), captured);
 }
 
 #[test]

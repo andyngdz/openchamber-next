@@ -16,6 +16,8 @@ pub use crate::metadata::MetadataUpdated;
 pub use crate::payload::*;
 pub use crate::tool_payload::*;
 
+use crate::types::Location;
+
 /// One decoded frame.
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(try_from = "RawEvent")]
@@ -23,6 +25,9 @@ pub struct Event {
     pub id: String,
     /// Milliseconds since the epoch; `server.connected` has none.
     pub created: Option<u64>,
+    /// Where the event's session lives, when the envelope carries a directory.
+    #[serde(default)]
+    pub location: Location,
     pub data: EventData,
 }
 
@@ -32,6 +37,8 @@ struct RawEvent {
     id: String,
     #[serde(default)]
     created: Option<u64>,
+    #[serde(default)]
+    location: Location,
     #[serde(rename = "type")]
     kind: String,
     #[serde(default)]
@@ -85,6 +92,7 @@ impl TryFrom<RawEvent> for Event {
         Ok(Self {
             id: raw.id,
             created: raw.created,
+            location: raw.location,
             data,
         })
     }
@@ -133,3 +141,7 @@ impl EventData {
 #[cfg(test)]
 #[path = "event_test.rs"]
 mod event_test;
+
+#[cfg(test)]
+#[path = "event_location_test.rs"]
+mod event_location_test;

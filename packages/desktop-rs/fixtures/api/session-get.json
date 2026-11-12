@@ -1,6 +1,6 @@
 {
   "data": {
-    "id": "ses_e3b04a30effeHztg8aof3G7IFv",
+    "id": "ses_e34b7feeeffer6XaswwgEVQDoV",
     "projectID": "global",
     "agent": "capture-primary",
     "model": {
@@ -19,8 +19,8 @@
       }
     },
     "time": {
-      "created": 1794306170103,
-      "updated": 1794306170103
+      "created": 1794411856150,
+      "updated": 1794411856150
     },
     "location": {
       "directory": "/tmp/oc-desktop-rs-capture/project"

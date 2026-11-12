@@ -12,9 +12,11 @@ use reqwest::header::ACCEPT;
 use reqwest::{RequestBuilder, Response};
 use serde::de::DeserializeOwned;
 
+use crate::control::ControlEvent;
 use crate::directory::Directory;
 use crate::error::{ByteError, ClientError};
 use crate::event::Event;
+use crate::sse::until_idle;
 use crate::types::AuthStatus;
 use crate::uri_component::encode_uri_component;
 
@@ -24,9 +26,16 @@ const REQUEST_TIMEOUT: Duration = Duration::from_secs(15);
 /// (`DEFAULT_SSE_HEARTBEAT_INTERVAL_MS` in `packages/web/server/lib/opencode/proxy.js`). Three
 /// missed heartbeats in a row mean the connection is dead even when the socket never says so.
 const EVENT_IDLE_TIMEOUT: Duration = Duration::from_secs(3 * 20);
+/// The control stream counts 45 s without a frame as a drop
+/// (`HEARTBEAT_TIMEOUT_MS` in `packages/ui/src/lib/openchamberEvents.ts`).
+const CONTROL_IDLE_TIMEOUT: Duration = Duration::from_secs(45);
 
 /// Decoded events of `GET /api/event`. Dropping the stream closes the connection.
 pub type EventStream = Pin<Box<dyn Stream<Item = Result<Event, ClientError>> + Send>>;
+
+/// Decoded events of `GET /api/openchamber/events`. Dropping the stream closes the
+/// connection.
+pub type ControlStream = Pin<Box<dyn Stream<Item = Result<ControlEvent, ClientError>> + Send>>;
 
 /// One server. Scoped calls carry the directory they run in; the event stream is global.
 #[derive(Debug, Clone)]
@@ -35,6 +44,7 @@ pub struct Client {
     base_url: String,
     timeout: Duration,
     event_idle: Duration,
+    control_idle: Duration,
 }
 
 impl Client {
@@ -62,12 +72,20 @@ impl Client {
             base_url: base_url.into().trim_end_matches('/').to_owned(),
             timeout,
             event_idle: EVENT_IDLE_TIMEOUT,
+            control_idle: CONTROL_IDLE_TIMEOUT,
         })
     }
 
     /// The same client with another event-stream idle limit, see [`Client::events`].
     pub fn with_event_idle_timeout(mut self, idle: Duration) -> Self {
         self.event_idle = idle;
+        self
+    }
+
+    /// The same client with another control-stream idle limit, see
+    /// [`Client::control_events`].
+    pub fn with_control_idle_timeout(mut self, idle: Duration) -> Self {
+        self.control_idle = idle;
         self
     }
 
@@ -89,9 +107,35 @@ impl Client {
     /// the idle limit, 60 s unless [`Client::with_event_idle_timeout`] set another. A frame
     /// that fails to decode is an `Err` item and the stream continues.
     pub async fn events(&self) -> Result<EventStream, ClientError> {
+        self.stream("/api/event", self.event_idle, |frame| {
+            serde_json::from_str::<Event>(frame).map_err(ClientError::Decode)
+        })
+        .await
+    }
+
+    /// `GET /api/openchamber/events`: the server's own control stream, with the same auth
+    /// and connection rules as [`Client::events`]. Frames are `data:` lines only, each a
+    /// flat `{type, properties}`. The stream ends with [`ClientError::EventsIdle`] when no
+    /// frame arrives for 45 s, unless [`Client::with_control_idle_timeout`] set another. An
+    /// older server without the stream answers 404, which is [`ClientError::NotFound`].
+    pub async fn control_events(&self) -> Result<ControlStream, ClientError> {
+        self.stream("/api/openchamber/events", self.control_idle, |frame| {
+            serde_json::from_str::<ControlEvent>(frame).map_err(ClientError::Decode)
+        })
+        .await
+    }
+
+    /// Opens an SSE stream and decodes every `data:` frame with `decode`. A frame that
+    /// fails to decode is an `Err` item and the stream continues.
+    async fn stream<T: Send + 'static>(
+        &self,
+        path: &str,
+        idle: Duration,
+        decode: fn(&str) -> Result<T, ClientError>,
+    ) -> Result<Pin<Box<dyn Stream<Item = Result<T, ClientError>> + Send>>, ClientError> {
         let request = self
             .http
-            .get(self.url("/api/event"))
+            .get(self.url(path))
             .header(ACCEPT, "text/event-stream");
         let response = tokio::time::timeout(self.timeout, request.send())
             .await
@@ -100,13 +144,10 @@ impl Client {
             })?
             .map_err(ClientError::Transport)?;
         let response = ensure_success(response).await?;
-        let idle = self.event_idle;
         let frames = until_idle(Box::pin(response.bytes_stream()), idle)
             .eventsource()
             .map(move |frame| match frame {
-                Ok(frame) => {
-                    serde_json::from_str::<Event>(&frame.data).map_err(ClientError::Decode)
-                }
+                Ok(frame) => decode(&frame.data),
                 Err(EventStreamError::Transport(ByteError::Transport(err))) => {
                     Err(ClientError::Transport(err))
                 }
@@ -147,6 +188,14 @@ impl Client {
         self.scoped(self.http.post(self.url(path)), directory)
     }
 
+    pub(crate) fn delete_unscoped(&self, path: &str) -> RequestBuilder {
+        self.request(self.http.delete(self.url(path)))
+    }
+
+    pub(crate) fn delete_scoped(&self, path: &str, directory: &Directory) -> RequestBuilder {
+        self.scoped(self.http.delete(self.url(path)), directory)
+    }
+
     pub(crate) async fn get_unscoped<T: DeserializeOwned>(
         &self,
         path: &str,
@@ -181,29 +230,15 @@ impl Client {
     }
 }
 
-/// The body's chunks, ending with [`ByteError::Idle`] when none arrives within `idle`. Bytes
-/// are counted before SSE parsing, so a heartbeat comment, which the parser drops, still
-/// counts as life.
-fn until_idle<S, B>(body: S, idle: Duration) -> impl Stream<Item = Result<B, ByteError>>
-where
-    S: Stream<Item = Result<B, reqwest::Error>> + Unpin,
-{
-    futures::stream::unfold(Some(body), move |body| async move {
-        let mut body = body?;
-        match tokio::time::timeout(idle, body.next()).await {
-            Ok(Some(chunk)) => Some((chunk.map_err(ByteError::Transport), Some(body))),
-            Ok(None) => None,
-            Err(_) => Some((Err(ByteError::Idle), None)),
-        }
-    })
-}
-
 async fn ensure_success(response: Response) -> Result<Response, ClientError> {
     let status = response.status();
     if status.is_success() {
         return Ok(response);
     }
     let body = response.text().await.unwrap_or_default();
+    if status == reqwest::StatusCode::NOT_FOUND {
+        return Err(ClientError::NotFound { body });
+    }
     Err(ClientError::Status {
         status: status.as_u16(),
         body,

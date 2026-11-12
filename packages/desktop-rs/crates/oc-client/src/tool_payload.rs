@@ -4,6 +4,8 @@
 use serde::Deserialize;
 use serde_json::Value;
 
+use crate::types::{ToolError, ToolErrorSource};
+
 /// The only tool event that carries the tool name.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct ToolInputStarted {
@@ -50,6 +52,30 @@ pub struct ToolFailed {
     pub assistant_message_id: String,
     /// Call id.
     pub id: String,
+    /// The failure OpenCode reported, as `{type, message}`.
     #[serde(default)]
-    pub error: Option<Value>,
+    pub error: Option<ToolError>,
+    /// A flat `errorType` some servers send beside the nested error.
+    #[serde(rename = "errorType", default)]
+    pub error_type: Option<String>,
+    /// `local` for a client-made interruption; absent from the API.
+    #[serde(rename = "errorSource", default)]
+    pub error_source: Option<ToolErrorSource>,
+}
+
+impl ToolFailed {
+    /// The failure's message.
+    pub fn error_message(&self) -> Option<&str> {
+        self.error
+            .as_ref()
+            .map(|error| error.message.as_str())
+            .filter(|message| !message.is_empty())
+    }
+
+    /// The failure's kind: the flat field first, then the nested `type`.
+    pub fn error_kind(&self) -> Option<&str> {
+        self.error_type
+            .as_deref()
+            .or_else(|| self.error.as_ref().and_then(|error| error.kind.as_deref()))
+    }
 }

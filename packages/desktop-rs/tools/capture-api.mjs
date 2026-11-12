@@ -17,6 +17,12 @@
  * request body, `index.json`) and `fixtures/events/` (one JSON array of parsed
  * `data:` payloads per scenario, `index.json`, `framing.json`, `summary.json`).
  *
+ * The turn-control scenarios at the end answer permissions for the fixture tool
+ * models, seed a location-scoped form through the server's own form route
+ * (OpenCode raises one itself only from a location-level MCP elicitation), queue
+ * messages behind a running turn, and read the control stream. They write
+ * `fixtures/events/turn-control.json` and `control.json`.
+ *
  * Usage: node packages/desktop-rs/tools/capture-api.mjs [--out <dir>] [--root <dir>]
  */
 
@@ -40,7 +46,7 @@ const REPO_ROOT = findRepoRoot(TOOL_DIR)
 const PACKAGE_ROOT = join(REPO_ROOT, "packages/desktop-rs")
 const importPerf = (name) => import(pathToFileURL(join(REPO_ROOT, "scripts/perf", name)).href)
 const { ensureProject, isolatedEnv, startFixture } = await importPerf("isolated-server.mjs")
-const { fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
+const { FIXTURE_EDIT_CONTENT, FIXTURE_EDIT_FILE, FIXTURE_TOOL_RATE, fixtureProviderConfig } = await importPerf("fixture-provider.mjs")
 
 const PROVIDER = "perf"
 // The same fixture provider is registered twice so the model picker has two
@@ -65,9 +71,10 @@ const FIXTURE_EPOCH = 1_800_000_000_000
 const parseArgs = (argv) => {
   const options = { out: join(PACKAGE_ROOT, "fixtures"), root: join(tmpdir(), "oc-desktop-rs-capture") }
   for (let index = 0; index < argv.length; index += 1) {
-    if (argv[index] === "--out") options.out = resolve(argv[++index])
-    else if (argv[index] === "--root") options.root = resolve(argv[++index])
-    else throw new Error(`Unknown option: ${argv[index]}`)
+    const value = argv[index]
+    if (value === "--out") options.out = resolve(argv[++index])
+    else if (value === "--root") options.root = resolve(argv[++index])
+    else throw new Error(`Unknown option: ${value}`)
   }
   return options
 }
@@ -118,7 +125,9 @@ const captureProviderConfig = (fixturePort) => {
     small_model: `${PROVIDER}/stream-1200cps`,
     autoupdate: false,
     share: "disabled",
-    permission: { glob: "ask" },
+    // The turn-control scenarios need the request bodies of these tools, not
+    // a decision the session rule already made.
+    permission: { glob: "ask", bash: "ask", edit: "ask", webfetch: "ask" },
   }
 }
 
@@ -347,11 +356,13 @@ const createRecorder = ({ url, directory, apiDir }) => {
 // SSE capture
 // ---------------------------------------------------------------------------
 
-/** One `/api/event` connection that keeps every frame in arrival order. */
-const openEventTap = async ({ url, directory }) => {
+/** One SSE connection that keeps every frame in arrival order. */
+const openEventTap = async ({ url, directory, path = "/api/event", directoryHeader = true }) => {
   const controller = new AbortController()
-  const response = await fetch(`${url}/api/event`, {
-    headers: { accept: "text/event-stream", "x-opencode-directory": encodeURIComponent(directory) },
+  const headers = { accept: "text/event-stream" }
+  if (directoryHeader) headers["x-opencode-directory"] = encodeURIComponent(directory)
+  const response = await fetch(`${url}${path}`, {
+    headers,
     signal: controller.signal,
   })
   const tap = {
@@ -405,6 +416,9 @@ const openEventTap = async ({ url, directory }) => {
   tap.close = () => controller.abort()
   return tap
 }
+
+/** The control stream: the same `data:` framing, no directory scoping. */
+const openControlTap = ({ url }) => openEventTap({ url, path: "/api/openchamber/events", directoryHeader: false })
 
 const sessionOf = (event) => event?.data?.sessionID
 const TURN_END = new Set(["session.execution.succeeded", "session.execution.interrupted", "session.execution.failed"])
@@ -711,6 +725,285 @@ const main = async () => {
       if (!firstTwoPages.some((session) => session.id === id)) throw new Error(`The ${label} session is not on the first two global pages.`)
     }
     if (!firstTwoPages.find((session) => session.id === archivedSession)?.time?.archived) throw new Error("The archived session carries no time.archived.")
+
+    // -------------------------------------------------------------------------
+    // Scenario G: turn control. Permissions, forms, the queue, auto-accept and
+    // the control stream, every one through the route design.md's client table
+    // names. The control stream is opened once for the whole scenario, so its
+    // ready frame, heartbeats and broadcasts arrive in the order a client sees.
+    // -------------------------------------------------------------------------
+    const controlTap = await openControlTap({ url: server.url })
+    expectRoute("GET /api/openchamber/events", { status: controlTap.status, contentType: controlTap.contentType })
+    const turnTap = await openEventTap({ url: server.url, directory: project })
+    await sleep(500)
+    const turnEnd = (sessionID, from, label) => turnTap.waitFor(isTurnEnd(sessionID), { from, label })
+    const waitPermission = (sessionID, from, label) => turnTap.waitFor(
+      (event) => event.type === "permission.asked" && sessionOf(event) === sessionID,
+      { from, label },
+    )
+    const replyPermission = async (name, sessionID, requestID, decision) => {
+      const reply = await call(name, "POST", `/api/session/${sessionID}/permission/${requestID}/reply`, { body: { decision } })
+      if (reply.status >= 300) throw new Error(`${name ?? "permission reply"} failed: ${reply.status} ${reply.text}`)
+      return reply
+    }
+
+    // A bash request and a question form are pending at the same time, so both
+    // list routes are saved with a live request and a live form.
+    const bashModel = `bash-${FIXTURE_TOOL_RATE}cps`
+    const questionModel = `question-${FIXTURE_TOOL_RATE}cps`
+    const questionSession = idOf(await createSession("session-create-question"))
+    await switchModel("switch-model-question", questionSession, questionModel)
+    const bashSession = idOf(await createSession("session-create-bash-ask"))
+    await switchModel("switch-model-bash", bashSession, bashModel)
+
+    const formFrom = turnTap.events.length
+    await sendPrompt("prompt-question", questionSession, "Ask the fixture questions.")
+    const formCreated = await turnTap.waitFor((event) => event.type === "form.created", { from: formFrom, label: "form.created for the question turn" })
+    const questionFormID = formCreated.data.form.id
+    if (formCreated.data.form.fields?.length !== 3) throw new Error(`The question form has ${formCreated.data.form.fields?.length} fields, not three.`)
+
+    // The location-scoped form has no session. OpenCode's form route accepts
+    // the `global` sentinel, which is how a server-side MCP elicitation lands
+    // in the same list.
+    const globalForm = {
+      id: "frm_fixture_global",
+      title: "Fixture global form",
+      metadata: { kind: "fixture.global" },
+      fields: [{ key: "note", type: "string", title: "Fixture note", description: "A location-scoped form", required: false }],
+    }
+    const globalFormSeed = await call("form-create-global", "POST", "/api/session/global/form", { body: globalForm })
+    expectRoute("POST /api/session/global/form", globalFormSeed)
+    if (globalFormSeed.status !== 200) throw new Error(`Seeding the global form failed: ${globalFormSeed.status} ${globalFormSeed.text}`)
+    if (globalFormSeed.json?.data?.sessionID !== "global") throw new Error(`The seeded form is not location-scoped: ${globalFormSeed.text.slice(0, 400)}`)
+    const globalFormID = globalFormSeed.json.data.id
+
+    const bashFrom = turnTap.events.length
+    await sendPrompt("prompt-bash", bashSession, "Run the fixture command.")
+    const bashAsked = await waitPermission(bashSession, bashFrom, "the bash permission request")
+    const bashRequestID = bashAsked.data.id
+
+    const permissionList = await call("permission-request-list", "GET", `/api/permission/request?location[directory]=${encodeURIComponent(project)}`)
+    expectRoute("GET /api/permission/request", permissionList)
+    if (!(permissionList.json?.data ?? []).some((request) => request.id === bashRequestID)) {
+      throw new Error(`The pending permission list does not carry ${bashRequestID}: ${permissionList.text.slice(0, 400)}`)
+    }
+    const formList = await call("form-list", "GET", `/api/form?location[directory]=${encodeURIComponent(project)}`)
+    expectRoute("GET /api/form", formList)
+    for (const formID of [questionFormID, globalFormID]) {
+      if (!(formList.json?.data ?? []).some((form) => form.id === formID)) {
+        throw new Error(`The pending form list does not carry ${formID}: ${formList.text.slice(0, 400)}`)
+      }
+    }
+
+    // Bash: allow once. The other two decisions are answered further down.
+    const bashReplied = turnTap.events.length
+    await replyPermission("permission-reply-once", bashSession, bashRequestID, "once")
+    await turnEnd(bashSession, bashReplied, "the end of the bash turn")
+    await call("messages-bash-turn", "GET", `/api/session/${bashSession}/message`)
+
+    // The global form is cancelled; the question form is answered with one
+    // answer per field, a list for the multiselect and text for the free field.
+    const globallyCancelled = await call("form-cancel", "DELETE", `/api/session/global/form/${globalFormID}`)
+    if (globallyCancelled.status !== 204) throw new Error(`Cancel of the global form failed: ${globallyCancelled.status} ${globallyCancelled.text}`)
+    const questionReplied = turnTap.events.length
+    const formReply = await call("form-reply", "POST", `/api/session/${questionSession}/form/${questionFormID}/reply`, {
+      body: { answer: { q0: "First option", q1: ["Alpha detail", "Beta detail"], q2: "A free text fixture answer." } },
+    })
+    if (formReply.status !== 204) throw new Error(`The form reply failed: ${formReply.status} ${formReply.text}`)
+    await turnEnd(questionSession, questionReplied, "the end of the question turn")
+    await call("messages-question-turn", "GET", `/api/session/${questionSession}/message`)
+
+    // A missing reply or cancel is the client's "already settled" answer.
+    const permissionReply404 = await call("permission-reply-404", "POST", `/api/session/${bashSession}/permission/per_fixture_missing/reply`, { body: { decision: "once" } })
+    if (permissionReply404.status !== 404) throw new Error(`A missing permission reply answered ${permissionReply404.status}, not 404.`)
+    const formReply404 = await call("form-reply-404", "POST", `/api/session/${questionSession}/form/frm_fixture_missing/reply`, { body: { answer: {} } })
+    if (formReply404.status !== 404) throw new Error(`A missing form reply answered ${formReply404.status}, not 404: ${formReply404.text}`)
+    const formCancel404 = await call("form-cancel-404", "DELETE", `/api/session/${questionSession}/form/frm_fixture_missing`)
+    if (formCancel404.status !== 404) throw new Error(`A missing form cancel answered ${formCancel404.status}, not 404: ${formCancel404.text}`)
+
+    // Edit: denied. The fixed patch targets the file seeded above.
+    writeFileSync(join(project, FIXTURE_EDIT_FILE), FIXTURE_EDIT_CONTENT)
+    const editSession = idOf(await createSession("session-create-edit-ask"))
+    await switchModel("switch-model-edit", editSession, `edit-${FIXTURE_TOOL_RATE}cps`)
+    const editFrom = turnTap.events.length
+    await sendPrompt("prompt-edit", editSession, "Edit the fixture file.")
+    const editAsked = await waitPermission(editSession, editFrom, "the edit permission request")
+    const editReplied = turnTap.events.length
+    await replyPermission("permission-reply-reject", editSession, editAsked.data.id, "reject")
+    await turnEnd(editSession, editReplied, "the end of the edit turn")
+    await call("messages-edit-turn", "GET", `/api/session/${editSession}/message`)
+
+    // Webfetch: allowed always. The URL is the fixture provider itself, which
+    // answers the page with a 404, so the capture needs no network.
+    const webfetchSession = idOf(await createSession("session-create-webfetch-ask"))
+    await switchModel("switch-model-webfetch", webfetchSession, `webfetch-${FIXTURE_TOOL_RATE}cps`)
+    const webfetchFrom = turnTap.events.length
+    await sendPrompt("prompt-webfetch", webfetchSession, "Fetch the fixture page.")
+    const webfetchAsked = await waitPermission(webfetchSession, webfetchFrom, "the webfetch permission request")
+    const webfetchReplied = turnTap.events.length
+    await replyPermission("permission-reply-always", webfetchSession, webfetchAsked.data.id, "always")
+    await turnEnd(webfetchSession, webfetchReplied, "the end of the webfetch turn")
+    await call("messages-webfetch-turn", "GET", `/api/session/${webfetchSession}/message`)
+
+    // Write: the write tool shares the edit permission action, so the config
+    // asks for this one too. The model exists for the states that show a
+    // write preview.
+    const writeSession = idOf(await createSession("session-create-write"))
+    await switchModel("switch-model-write", writeSession, `write-${FIXTURE_TOOL_RATE}cps`)
+    const writeFrom = turnTap.events.length
+    await sendPrompt("prompt-write", writeSession, "Write the fixture file.")
+    const writeOutcome = await turnTap.waitFor(
+      (event) => (event.type === "permission.asked" && sessionOf(event) === writeSession) || isTurnEnd(writeSession)(event),
+      { from: writeFrom, label: "the write turn or a permission request" },
+    )
+    if (writeOutcome.type === "permission.asked") {
+      const writeReplied = turnTap.events.length
+      await replyPermission("permission-reply-write", writeSession, writeOutcome.data.id, "once")
+      await turnEnd(writeSession, writeReplied, "the end of the write turn")
+    }
+    await call("messages-write-turn", "GET", `/api/session/${writeSession}/message`)
+
+    // A question whose turn is interrupted: the form is pending when the
+    // interrupt arrives, and the question tool part ends in an error.
+    const interruptedQuestionSession = idOf(await createSession("session-create-question-interrupt"))
+    await switchModel("switch-model-question-interrupt", interruptedQuestionSession, questionModel)
+    const interruptedQuestionFrom = turnTap.events.length
+    await sendPrompt("prompt-question-interrupt", interruptedQuestionSession, "Ask a question, then I stop you.")
+    await turnTap.waitFor((event) => event.type === "form.created", { from: interruptedQuestionFrom, label: "the interrupted question form" })
+    const questionInterrupted = await call("interrupt-question-turn", "POST", `/api/session/${interruptedQuestionSession}/interrupt`)
+    if (questionInterrupted.json?.interrupted !== true) throw new Error(`The question turn was not interrupted: ${questionInterrupted.text}`)
+    await turnEnd(interruptedQuestionSession, interruptedQuestionFrom, "the end of the interrupted question turn")
+    await call("messages-question-interrupted-turn", "GET", `/api/session/${interruptedQuestionSession}/message`)
+
+    // The queue: messages wait behind a running turn, then the server sends
+    // them itself. The send config is the composer's model, agent and variant.
+    const queueSession = idOf(await createSession("session-create-queue", { model: { providerID: PROVIDER, id: "stream-100cps" } }))
+    const queueStarted = turnTap.events.length
+    await sendPrompt("prompt-queue-busy", queueSession, "Start the fixture turn the queue waits behind.")
+    await turnTap.waitFor(
+      (event) => event.type === "session.execution.started" && sessionOf(event) === queueSession,
+      { from: queueStarted, label: "the queue session's turn start" },
+    )
+    // A plain prompt with steering delivery while the session is busy.
+    await call("prompt-steer", "POST", `/api/session/${queueSession}/prompt`, {
+      body: { id: messageId(), text: "Steer this into the running turn.", delivery: "steer" },
+    })
+
+    const queueItem = (text) => ({
+      content: text,
+      text,
+      sendConfig: { providerID: PROVIDER, modelID: "stream-1200cps", agent: "capture-primary" },
+    })
+    const enqueue = (name, item) => call(name, "POST", `/api/message-queue/sessions/${queueSession}/items`, {
+      body: { directory: project, item },
+    })
+    const first = await enqueue("message-queue-enqueue-1", queueItem("First queued fixture message."))
+    const second = await enqueue("message-queue-enqueue-2", queueItem("Second queued fixture message."))
+    const third = await enqueue("message-queue-enqueue-3", queueItem("Third queued fixture message."))
+    for (const [name, result] of [["first", first], ["second", second], ["third", third]]) {
+      if (result.status !== 200 || !result.json?.itemId) throw new Error(`Enqueueing the ${name} item failed: ${result.status} ${result.text}`)
+    }
+    await call("message-queue-list", "GET", "/api/message-queue")
+    const reorder = await call("message-queue-reorder", "PUT", `/api/message-queue/sessions/${queueSession}/order`, {
+      body: { itemIds: [third.json.itemId, first.json.itemId, second.json.itemId] },
+    })
+    if (reorder.status !== 200) throw new Error(`The queue reorder failed: ${reorder.status} ${reorder.text}`)
+    const takeOne = await call("message-queue-take-one", "POST", `/api/message-queue/sessions/${queueSession}/items/${second.json.itemId}/take`)
+    if (takeOne.status !== 200) throw new Error(`Taking one queued item failed: ${takeOne.status} ${takeOne.text}`)
+    const takeAll = await call("message-queue-take-all", "POST", `/api/message-queue/sessions/${queueSession}/take`)
+    if (takeAll.status !== 200) throw new Error(`Taking the queue failed: ${takeAll.status} ${takeAll.text}`)
+    const fourth = await enqueue("message-queue-enqueue-4", queueItem("Fourth queued fixture message."))
+    if (fourth.status !== 200) throw new Error(`Enqueueing the fourth item failed: ${fourth.status} ${fourth.text}`)
+    const removedItem = await call("message-queue-remove", "DELETE", `/api/message-queue/sessions/${queueSession}/items/${fourth.json.itemId}`)
+    if (removedItem.status !== 200) throw new Error(`Removing a queued item failed: ${removedItem.status} ${removedItem.text}`)
+
+    // A remove while the item is being sent answers 409. The item carries a
+    // context part, which makes the send admit a synthetic message first and
+    // widens the window a client can catch; that item is not saved.
+    const inFlightItem = {
+      ...queueItem("Queued message that is in flight."),
+      context: [{ kind: "synthetic", text: "Fixture context for the in-flight message." }],
+    }
+    const waitForSending = async (itemId, timeoutMs = 20_000) => {
+      const deadline = Date.now() + timeoutMs
+      while (Date.now() < deadline) {
+        const snapshot = await call(null, "GET", "/api/message-queue")
+        const session = (snapshot.json?.sessions ?? []).find((entry) => entry.sessionId === queueSession)
+        if (session?.sendingId === itemId) return true
+        if (!session) return false
+        await sleep(1)
+      }
+      return false
+    }
+    const queueInterrupted = await call("interrupt-queue-turn", "POST", `/api/session/${queueSession}/interrupt`)
+    if (queueInterrupted.json?.interrupted !== true) throw new Error(`The queue turn was not interrupted: ${queueInterrupted.text}`)
+    let inFlight = await call(null, "POST", `/api/message-queue/sessions/${queueSession}/items`, {
+      body: { directory: project, item: inFlightItem },
+    })
+    let inFlightStatus = 0
+    for (let attempt = 1; attempt <= 3 && inFlightStatus !== 409; attempt += 1) {
+      if (attempt > 1) {
+        await turnTap.waitFor(isTurnEnd(queueSession), { from: turnTap.events.length, timeoutMs: 60_000, label: "the queued turn before the next attempt" }).catch(() => undefined)
+        inFlight = await call(null, "POST", `/api/message-queue/sessions/${queueSession}/items`, {
+          body: { directory: project, item: inFlightItem },
+        })
+      }
+      if (!inFlight.json?.itemId) break
+      if (!(await waitForSending(inFlight.json.itemId))) continue
+      const conflict = await call(attempt === 1 ? "message-queue-remove-in-flight" : null, "DELETE", `/api/message-queue/sessions/${queueSession}/items/${inFlight.json.itemId}`)
+      inFlightStatus = conflict.status
+    }
+    if (inFlightStatus !== 409) throw new Error(`The queue never answered 409 for an item in flight (last status ${inFlightStatus}).`)
+    // The item the 409 kept is sent once the remove failed; let that turn end.
+    await turnTap.waitFor(isTurnEnd(queueSession), { from: turnTap.events.length, timeoutMs: 60_000, label: "the queued turn after the in-flight reply" }).catch(() => undefined)
+
+    // Auto-accept: the snapshot, then a session with an explicit safety mode.
+    // The safety net has no routing provider here, so the bash request is held
+    // and the server reports it left for the user on the control stream.
+    const autoAccept = await call("permission-auto-accept", "GET", "/api/permission-auto-accept", { directoryHeader: false })
+    expectRoute("GET /api/permission-auto-accept", autoAccept)
+    const safetySession = idOf(await createSession("session-create-safety"))
+    await switchModel("switch-model-safety", safetySession, bashModel)
+    const safetyUpdate = await call("permission-auto-accept-set", "PUT", `/api/permission-auto-accept/sessions/${safetySession}`, {
+      body: { mode: "safety", enabled: true, directory: project },
+    })
+    expectRoute("PUT /api/permission-auto-accept/sessions/:id", safetyUpdate)
+    if (safetyUpdate.json?.modes?.[safetySession] !== "safety") throw new Error(`The safety mode did not stick: ${safetyUpdate.text.slice(0, 400)}`)
+    const safetyFrom = turnTap.events.length
+    await sendPrompt("prompt-safety", safetySession, "Run the fixture command under the safety net.")
+    const safetyAsked = await waitPermission(safetySession, safetyFrom, "the safety permission request")
+    const leftForUser = await controlTap.waitFor(
+      (event) => event.type === "openchamber:permission-auto-accept.left-for-user" && event.properties?.permissionId === safetyAsked.data.id,
+      { label: "the safety net leaving the request for the user" },
+    )
+    if (leftForUser.properties?.sessionId !== safetySession) throw new Error(`left-for-user named ${leftForUser.properties?.sessionId}, not the safety session.`)
+    const safetyReplied = turnTap.events.length
+    await replyPermission("permission-reply-safety", safetySession, safetyAsked.data.id, "once")
+    await turnEnd(safetySession, safetyReplied, "the end of the safety turn")
+    await call("messages-safety-turn", "GET", `/api/session/${safetySession}/message`)
+
+    // Routing is an optional server feature: a 404 is the "unavailable" answer.
+    const routing = await call("routing", "GET", "/api/routing", { directoryHeader: false })
+    expectRoute("GET /api/routing", routing, { allow: true })
+
+    // A heartbeat arrives every 25 seconds; keep the control stream open until
+    // one is in the file, so the saved frames show the keep-alive.
+    if (!controlTap.events.some((event) => event.type === "openchamber:heartbeat")) {
+      await controlTap.waitFor((event) => event.type === "openchamber:heartbeat", { label: "the control heartbeat", timeoutMs: 35_000 })
+    }
+    await sleep(SETTLE_MS)
+    controlTap.close()
+    turnTap.close()
+    saveEvents("turn-control", turnTap, {
+      model: null,
+      sessions: [bashSession, questionSession, editSession, webfetchSession, writeSession, interruptedQuestionSession, queueSession, safetySession],
+      note: "permission requests and replies, the question and global forms, the interrupted question, a steer prompt, the message queue, and the safety-net turn",
+    })
+    saveEvents("control", controlTap, {
+      model: null,
+      sessions: [bashSession, questionSession, editSession, webfetchSession, writeSession, interruptedQuestionSession, queueSession, safetySession],
+      note: "the control stream: ready, a heartbeat, queue and auto-accept updates, and a request left for the user",
+    })
 
     // Summary of every event type seen: count and the keys of `data`.
     const summary = {}

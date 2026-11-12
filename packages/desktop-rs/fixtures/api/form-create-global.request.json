@@ -1,0 +1,16 @@
+{
+  "id": "frm_fixture_global",
+  "title": "Fixture global form",
+  "metadata": {
+    "kind": "fixture.global"
+  },
+  "fields": [
+    {
+      "key": "note",
+      "type": "string",
+      "title": "Fixture note",
+      "description": "A location-scoped form",
+      "required": false
+    }
+  ]
+}

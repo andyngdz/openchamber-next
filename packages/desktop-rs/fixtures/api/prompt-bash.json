@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb4804330017oTFQWyvau4e30",
+    "sessionID": "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+    "time": {
+      "created": 1794411856951
+    },
+    "type": "user",
+    "payload": {
+      "text": "Run the fixture command."
+    },
+    "delivery": "steer"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb4803f7001GtuveHBcQfZOby",
+    "sessionID": "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+    "time": {
+      "created": 1794411856889
+    },
+    "type": "user",
+    "payload": {
+      "text": "Ask the fixture questions."
+    },
+    "delivery": "steer"
+  }
+}

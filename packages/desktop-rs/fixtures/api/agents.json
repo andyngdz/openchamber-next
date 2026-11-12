@@ -39,6 +39,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -81,6 +96,21 @@
         },
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }
@@ -130,6 +160,21 @@
         },
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }
@@ -232,6 +277,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -268,6 +328,21 @@
         },
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }
@@ -318,6 +393,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -360,6 +450,21 @@
         },
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }
@@ -416,6 +521,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -459,6 +579,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -498,6 +633,21 @@
           "action": "glob",
           "resource": "*",
           "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
+          "resource": "*",
+          "effect": "ask"
         }
       ]
     },
@@ -535,6 +685,21 @@
         },
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }

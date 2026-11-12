@@ -1,22 +1,22 @@
 {
   "data": [
     {
-      "id": "msg_1c3a2b76e001ElTsVgHMLLn7IW",
+      "id": "msg_1cb46ccb4001ec0AoIsd6B3OOa",
       "time": {
-        "created": 1794283583342
+        "created": 1794411777204
       },
       "type": "idle",
       "outcome": "succeeded"
     },
     {
-      "id": "msg_1c3a26c86001j2dTCh1tqtdffi",
+      "id": "msg_1cb4681d7001HeBzw9orUivJPo",
       "time": {
-        "created": 1794283564170,
-        "streamed": 1794283583327,
-        "completed": 1794283583337
+        "created": 1794411758043,
+        "streamed": 1794411777194,
+        "completed": 1794411777201
       },
       "type": "assistant",
-      "agent": "build",
+      "agent": "capture-secondary",
       "model": {
         "id": "stream-300cps",
         "providerID": "perf"
@@ -46,16 +46,16 @@
       }
     },
     {
-      "id": "msg_1c3a26ac6001vZsrMu25Y5Yz7r",
+      "id": "msg_1cb4681b4001fOMm1uaU8F5L6z",
       "time": {
-        "created": 1794283564151
+        "created": 1794411758023
       },
       "text": "Reply with the fixture text.",
       "type": "user"
     }
   ],
   "cursor": {
-    "previous": "eyJpZCI6Im1zZ18xYzNhMmI3NmUwMDFFbFRzVmdITUxMbjdJVyIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
-    "next": "eyJpZCI6Im1zZ18xYzNhMjZhYzYwMDF2WnNyTXUyNVk1WXo3ciIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
+    "previous": "eyJpZCI6Im1zZ18xY2I0NmNjYjQwMDFlYzBBb0lzZDZCM09PYSIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6InByZXZpb3VzIn0",
+    "next": "eyJpZCI6Im1zZ18xY2I0NjgxYjQwMDFmT01tMXVhVThGNUw2eiIsIm9yZGVyIjoiZGVzYyIsImRpcmVjdGlvbiI6Im5leHQifQ"
   }
 }

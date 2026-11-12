@@ -4,12 +4,13 @@
 //! the server adds later are ignored.
 
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 pub use crate::metadata::{SessionMetadata, WorkState};
+pub use crate::prompt::{Delivery, PromptAccepted, PromptRequest};
 pub use crate::requests::{
     CreateSessionRequest, SessionRecord, SwitchAgentRequest, SwitchModelRequest,
 };
+pub use crate::tool_state::{ToolError, ToolErrorSource, ToolState, ToolStatus};
 
 /// `GET /auth/session`.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -108,25 +109,6 @@ pub struct Session {
     pub parent_id: Option<String>,
 }
 
-/// Body of `POST /api/session/:id/prompt`; the plain composer send carries nothing else.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct PromptRequest {
-    /// Client-minted `msg_…` id, see [`crate::new_message_id`].
-    pub id: String,
-    /// What the user typed.
-    pub text: String,
-}
-
-/// The accepted prompt, echoed back by the server as the user message.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-pub struct PromptAccepted {
-    /// The `msg_…` id the client sent.
-    pub id: String,
-    /// Session the prompt went to.
-    #[serde(rename = "sessionID", default)]
-    pub session_id: String,
-}
-
 /// The model a step, message or request names; a catalog `id` plus its provider.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize, Serialize)]
 pub struct ModelRef {
@@ -177,34 +159,6 @@ pub enum AssistantContent {
     Other,
 }
 
-/// State of a tool call: its status and its input.
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct ToolState {
-    /// Where the call is in its life.
-    pub status: ToolStatus,
-    /// The tool's arguments; missing while the input still streams.
-    #[serde(default)]
-    pub input: Value,
-}
-
-/// Status of a tool call as the message list reports it. A status the spike does not
-/// know decodes to [`ToolStatus::Other`] so a newer server does not break the list.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ToolStatus {
-    /// Input is still streaming.
-    Pending,
-    /// The tool is executing.
-    Running,
-    /// The tool returned a result.
-    Completed,
-    /// The tool failed.
-    Error,
-    /// A status this client does not know.
-    #[serde(other)]
-    Other,
-}
-
 /// One entry of `GET /api/session/:id/message`. Entries are newest first by default.
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(tag = "type")]
@@ -239,6 +193,13 @@ pub enum Message {
     /// `model-switched` and any type the spike does not draw.
     #[serde(other)]
     Other,
+}
+
+/// `POST /api/session/:id/interrupt`: whether a running turn was stopped.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+pub struct InterruptResult {
+    /// `true` when a turn was running and the interrupt was sent.
+    pub interrupted: bool,
 }
 
 #[cfg(test)]

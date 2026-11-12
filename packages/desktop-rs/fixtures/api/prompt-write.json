@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "msg_1cb483dcd001ARlyPgDxN3quwS",
+    "sessionID": "ses_e34b7c245ffeNORZ7U30pPtcUl",
+    "time": {
+      "created": 1794411871700
+    },
+    "type": "user",
+    "payload": {
+      "text": "Write the fixture file."
+    },
+    "delivery": "steer"
+  }
+}

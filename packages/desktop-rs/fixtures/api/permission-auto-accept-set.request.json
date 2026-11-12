@@ -1,0 +1,5 @@
+{
+  "mode": "safety",
+  "enabled": true,
+  "directory": "/tmp/oc-desktop-rs-capture/project"
+}

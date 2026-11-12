@@ -1,0 +1,9 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "model": {
+    "providerID": "perf",
+    "id": "stream-100cps"
+  }
+}

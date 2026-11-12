@@ -1,0 +1,705 @@
+[
+  {
+    "type": "openchamber:event-stream-ready",
+    "properties": {
+      "connectedAt": 1794411856364,
+      "connectionId": "afdb49b8-cbc9-4334-a8fb-aa3579eeb535"
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411856914,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411856974,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411856974,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411861832,
+            "durationMs": 4880
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b8c81dffeaomwN59VEsyj0s",
+      "directory": null,
+      "pending": false
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7fc1affeXRbxDTG3rYyHoj",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411856914,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411866658,
+            "durationMs": 9768
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7d5bfffe1EFItrF9nlaaDX",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411866728,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411866808,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b92d5affeYoB7elm7Rl4agt",
+      "directory": null,
+      "pending": false
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7d56dffexPKY6Kdt3lJJrc",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411866808,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411871657,
+            "durationMs": 4874
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7c245ffeNORZ7U30pPtcUl",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411871860,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7c245ffeNORZ7U30pPtcUl",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7c245ffeNORZ7U30pPtcUl",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411871860,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411876683,
+            "durationMs": 4981
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411876743,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7aea6ffeCJMHK9rWnYmsIt",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411876743,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411876777,
+            "durationMs": 59
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 1,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876819-n7akkd7",
+            "createdAt": 1794411876819,
+            "content": "First queued fixture message.",
+            "text": "First queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 2,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876819-n7akkd7",
+            "createdAt": 1794411876819,
+            "content": "First queued fixture message.",
+            "text": "First queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876823-labbrd8",
+            "createdAt": 1794411876823,
+            "content": "Second queued fixture message.",
+            "text": "Second queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 3,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876819-n7akkd7",
+            "createdAt": 1794411876819,
+            "content": "First queued fixture message.",
+            "text": "First queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876823-labbrd8",
+            "createdAt": 1794411876823,
+            "content": "Second queued fixture message.",
+            "text": "Second queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876827-hl7evt1",
+            "createdAt": 1794411876827,
+            "content": "Third queued fixture message.",
+            "text": "Third queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411876825,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 4,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876827-hl7evt1",
+            "createdAt": 1794411876827,
+            "content": "Third queued fixture message.",
+            "text": "Third queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876819-n7akkd7",
+            "createdAt": 1794411876819,
+            "content": "First queued fixture message.",
+            "text": "First queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876823-labbrd8",
+            "createdAt": 1794411876823,
+            "content": "Second queued fixture message.",
+            "text": "Second queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 5,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876827-hl7evt1",
+            "createdAt": 1794411876827,
+            "content": "Third queued fixture message.",
+            "text": "Third queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          },
+          {
+            "id": "queued-1794411876819-n7akkd7",
+            "createdAt": 1794411876819,
+            "content": "First queued fixture message.",
+            "text": "First queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 6,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 7,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876843-1nvu3s5",
+            "createdAt": 1794411876843,
+            "content": "Fourth queued fixture message.",
+            "text": "Fourth queued fixture message.",
+            "attachments": [],
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 8,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 9,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876864-ytvyc3i",
+            "createdAt": 1794411876864,
+            "content": "Queued message that is in flight.",
+            "text": "Queued message that is in flight.",
+            "attachments": [],
+            "contextPreview": "Fixture context for the in-flight message.",
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411876825,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411876872,
+            "durationMs": 76
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 9,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [
+          {
+            "id": "queued-1794411876864-ytvyc3i",
+            "createdAt": 1794411876864,
+            "content": "Queued message that is in flight.",
+            "text": "Queued message that is in flight.",
+            "attachments": [],
+            "contextPreview": "Fixture context for the in-flight message.",
+            "sendConfig": {
+              "providerID": "perf",
+              "modelID": "stream-1200cps",
+              "agent": "capture-primary"
+            }
+          }
+        ],
+        "sendingId": "queued-1794411876864-ytvyc3i"
+      }
+    }
+  },
+  {
+    "type": "openchamber:message-queue.updated",
+    "properties": {
+      "revision": 10,
+      "session": {
+        "sessionId": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+        "directory": "/tmp/oc-desktop-rs-capture/project",
+        "items": [],
+        "sendingId": null
+      }
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "directory": null,
+      "pending": false
+    }
+  },
+  {
+    "type": "openchamber:heartbeat",
+    "properties": {
+      "timestamp": 1794411881364
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7ae4bffe3nFisYHmCqzWWC",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411876825,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411883734,
+            "durationMs": 4813
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:permission-auto-accept.updated",
+    "properties": {
+      "sessions": {
+        "ses_e34b7931affewIJVeTC3knAJ62": true
+      },
+      "modes": {
+        "ses_e34b7931affewIJVeTC3knAJ62": "safety"
+      },
+      "revision": 1
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7931affewIJVeTC3knAJ62",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411883792,
+            "openedBy": "auto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "openchamber:permission-auto-accept.left-for-user",
+    "properties": {
+      "permissionId": "per_1cb486d2b001eVCXDvfcua39Gi",
+      "sessionId": "ses_e34b7931affewIJVeTC3knAJ62",
+      "directory": "/tmp/oc-desktop-rs-capture/project"
+    }
+  },
+  {
+    "type": "openchamber:session-assist",
+    "properties": {
+      "sessionID": "ses_e34b7931affewIJVeTC3knAJ62",
+      "directory": null,
+      "pending": true
+    }
+  },
+  {
+    "type": "openchamber:session-metadata",
+    "properties": {
+      "sessionID": "ses_e34b7931affewIJVeTC3knAJ62",
+      "metadata": {
+        "openchamber": {
+          "work": {
+            "state": "open",
+            "openedAt": 1794411883792,
+            "openedBy": "auto"
+          },
+          "turn": {
+            "endedAt": 1794411888644,
+            "durationMs": 4873
+          }
+        }
+      }
+    }
+  }
+]

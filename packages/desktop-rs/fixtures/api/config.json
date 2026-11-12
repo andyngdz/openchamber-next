@@ -5,21 +5,21 @@
   },
   {
     "type": "document",
-    "path": "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/opencode.managed.json",
+    "path": "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/2782208/opencode.managed.json",
     "info": {
       "skills": [
-        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/skills"
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/2782208/skills"
       ],
       "commands": {
         "new-extension": {
-          "template": "Read /tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/skills/openchamber-extensions/SKILL.md and follow it to build this extension:\n\n$ARGUMENTS",
+          "template": "Read /tmp/oc-desktop-rs-capture/state/oc-data/run/instances/2782208/skills/openchamber-extensions/SKILL.md and follow it to build this extension:\n\n$ARGUMENTS",
           "description": "Build an OpenChamber extension"
         }
       },
       "plugins": [
         "-opencode.browser",
-        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/agent-tool/openchamber-agent-tool",
-        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/809904/session-title/openchamber-session-title"
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/2782208/agent-tool/openchamber-agent-tool",
+        "/tmp/oc-desktop-rs-capture/state/oc-data/run/instances/2782208/session-title/openchamber-session-title"
       ]
     }
   },
@@ -36,6 +36,21 @@
       "permissions": [
         {
           "action": "glob",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "shell",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        },
+        {
+          "action": "webfetch",
           "resource": "*",
           "effect": "ask"
         }
@@ -167,6 +182,26 @@
             },
             "agent-40reads-20000cps": {
               "name": "Fixture agent, 40 file reads then 20000 characters/s",
+              "variants": []
+            },
+            "bash-1200cps": {
+              "name": "Fixture bash tool call, then 1200 characters/s",
+              "variants": []
+            },
+            "edit-1200cps": {
+              "name": "Fixture edit tool call, then 1200 characters/s",
+              "variants": []
+            },
+            "write-1200cps": {
+              "name": "Fixture write tool call, then 1200 characters/s",
+              "variants": []
+            },
+            "webfetch-1200cps": {
+              "name": "Fixture webfetch tool call, then 1200 characters/s",
+              "variants": []
+            },
+            "question-1200cps": {
+              "name": "Fixture question tool call, then 1200 characters/s",
               "variants": []
             },
             "agent-100tools-x5-300cps": {

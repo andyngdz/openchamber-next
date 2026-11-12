@@ -28,7 +28,11 @@
  * answer streams, which is the shape a long agentic turn has and what the
  * cost of re-rendering a whole turn per delta depends on. `agent-*reads-*`
  * reads large files instead, and `agent-100tools-x5-*` makes its calls five
- * at a time, so one step's message carries five tool parts.
+ * at a time, so one step's message carries five tool parts. `bash-*`,
+ * `edit-*`, `write-*`, `webfetch-*` and `question-*` call that one tool, then
+ * stream the document: the permission and form requests the desktop app has
+ * to answer. Each call is fixed, so a capture reads the same command, patch,
+ * file content, URL and questions every run.
  * `unicode-300cps` streams prose with em dashes, curly quotes and Cyrillic
  * paragraphs and a 150-line TypeScript fence whose comments and strings carry
  * the same characters. A string with any character above Latin-1 is stored by
@@ -56,6 +60,64 @@ const FIXTURE_AGENT_PARALLEL = [{ calls: 100, parallel: 5 }]
 const FIXTURE_AGENT_RATES = [300, FIXTURE_SEED_RATE]
 const THINK_ANSWER = "Done."
 const CHUNK_CHARACTERS = 4
+// The tool models exist for request fixtures, not for timing, so they stream
+// their answer at one fixed rate.
+export const FIXTURE_TOOL_RATE = 1200
+const FIXTURE_TOOL_NAMES = ["bash", "edit", "write", "webfetch", "question"]
+
+// The file the `edit-*` model patches. The capture writes it with
+// FIXTURE_EDIT_CONTENT before the turn, so the fixed old string is present.
+export const FIXTURE_EDIT_FILE = "fixture-edit.txt"
+export const FIXTURE_EDIT_OLD_STRING = "fixture line two"
+export const FIXTURE_EDIT_CONTENT = `fixture line one
+${FIXTURE_EDIT_OLD_STRING}
+fixture line three
+`
+
+// One fixed call per tool. `webfetch` gets its URL from the running port in
+// `toolCallFor`, because the fixture provider is what answers it.
+const FIXTURE_TOOL_CALLS = {
+  bash: { command: "echo fixture-permission", description: "Print the fixture line" },
+  edit: { path: FIXTURE_EDIT_FILE, oldString: FIXTURE_EDIT_OLD_STRING, newString: `${FIXTURE_EDIT_OLD_STRING}, edited` },
+  write: { path: "fixture-write.txt", content: "fixture write content\n" },
+  question: {
+    questions: [
+      {
+        header: "Fixture choice",
+        question: "Which fixture option should the capture answer?",
+        options: [
+          { label: "First option", description: "The first fixture choice" },
+          { label: "Second option", description: "The second fixture choice" },
+          { label: "Third option", description: "The third fixture choice" },
+        ],
+      },
+      {
+        header: "Fixture multiselect",
+        question: "Which fixture details should the capture select?",
+        options: [
+          { label: "Alpha detail", description: "The first selectable detail" },
+          { label: "Beta detail", description: "The second selectable detail" },
+        ],
+        multiple: true,
+      },
+      {
+        header: "Fixture free text",
+        question: "What free text should the capture answer with?",
+        options: [],
+      },
+    ],
+  },
+}
+
+const toolCallFor = (name, port) => ({
+  id: `call_fixture_${name}`,
+  name,
+  arguments: name === "webfetch"
+    ? { url: `http://127.0.0.1:${port}/fixture-page`, format: "text" }
+    : FIXTURE_TOOL_CALLS[name],
+})
+
+const TOOL_STEP_TEXT = (name) => `Calling the fixture ${name} tool.\n\n`
 
 // Read-only lookups over the session's directory: small results, no
 // permission prompt, and a different one on each step.
@@ -299,6 +361,16 @@ const FIXTURE_SHOWCASE_DOCUMENT = [
 const parseModel = (model) => {
   const think = /think-(\d+)s/.exec(String(model ?? ""))
   if (think) return { delayMs: Number(think[1]) * 1000, charactersPerSecond: 1200, document: THINK_ANSWER, toolSteps: 0 }
+  const tool = /^(bash|edit|write|webfetch|question)-(\d+)cps$/.exec(String(model ?? ""))
+  if (tool) {
+    return {
+      delayMs: 0,
+      charactersPerSecond: Math.max(1, Number(tool[2])),
+      document: FIXTURE_DOCUMENT,
+      toolSteps: 1,
+      tool: tool[1],
+    }
+  }
   const agent = /agent-(\d+)(tools|reads)(?:-x(\d+))?-(\d+)cps/.exec(String(model ?? ""))
   if (agent) {
     return {
@@ -327,12 +399,15 @@ const parseModel = (model) => {
  * streams the document. Counting from the last prompt makes every turn of a
  * long session agentic, not only the first.
  */
-const planResponse = (model, body) => {
-  const { delayMs, charactersPerSecond, document, toolSteps, reads, parallel = 1 } = parseModel(model)
+const planResponse = (model, body, port) => {
+  const { delayMs, charactersPerSecond, document, toolSteps, reads, parallel = 1, tool } = parseModel(model)
   const messages = Array.isArray(body.messages) ? body.messages : []
   const lastPrompt = messages.findLastIndex((message) => message?.role === "user")
   const toolResults = messages.slice(lastPrompt + 1).filter((message) => message?.role === "tool").length
   if (toolSteps > 0 && toolResults < toolSteps) {
+    if (tool) {
+      return { delayMs, charactersPerSecond, text: TOOL_STEP_TEXT(tool), toolCalls: [toolCallFor(tool, port)] }
+    }
     const calls = Array.from({ length: Math.min(parallel, toolSteps - toolResults) }, (_, offset) => {
       const call = toolResults + offset
       return reads
@@ -394,8 +469,8 @@ const streamText = (response, model, text, { delayMs, charactersPerSecond }) => 
   })
 })
 
-const streamCompletion = async (response, model, body) => {
-  const plan = planResponse(model, body)
+const streamCompletion = async (response, model, body, port) => {
+  const plan = planResponse(model, body, port)
   response.write(sseFrame(chunkFrame(model, { role: "assistant", content: "" })))
   try {
     await streamText(response, model, plan.text, plan)
@@ -438,7 +513,7 @@ const startFixtureProvider = (port) => new Promise((resolveServer, reject) => {
       return
     }
     response.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache", connection: "keep-alive" })
-    void streamCompletion(response, body.model, body)
+    void streamCompletion(response, body.model, body, port)
   })
   server.on("error", reject)
   server.listen(port, "127.0.0.1", () => resolveServer(server))
@@ -461,6 +536,12 @@ export const fixtureProviderConfig = (port) => ({
           [`agent-${steps}tools-${rate}cps`, { name: `Fixture agent, ${steps} tool calls then ${rate} characters/s`, tool_call: true }],
           [`agent-${steps}reads-${rate}cps`, { name: `Fixture agent, ${steps} file reads then ${rate} characters/s`, tool_call: true }],
         ])),
+        // One tool call, then the document: the permission and form requests
+        // the turn-control capture reads.
+        ...FIXTURE_TOOL_NAMES.map((name) => [
+          `${name}-${FIXTURE_TOOL_RATE}cps`,
+          { name: `Fixture ${name} tool call, then ${FIXTURE_TOOL_RATE} characters/s`, tool_call: true },
+        ]),
         // Parallel calls: a step that makes several calls at once is one
         // message with that many tool parts.
         ...FIXTURE_AGENT_PARALLEL.flatMap(({ calls, parallel }) => FIXTURE_AGENT_RATES.map((rate) => [

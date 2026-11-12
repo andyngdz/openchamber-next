@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "id": "ses_e3c5d9768ffeustSm1lMVapzHJ",
+      "id": "ses_e34b9805fffeR1hoJh91dotmsT",
       "projectID": "global",
       "location": {
         "directory": "/tmp/oc-desktop-rs-capture/project"
@@ -17,13 +17,13 @@
         }
       },
       "time": {
-        "created": 1794283563183,
-        "updated": 1794283563183
+        "created": 1794411757474,
+        "updated": 1794411757474
       }
     }
   ],
   "cursor": {
-    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTYzMTgzLCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
-    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTNjNWQ5NzY4ZmZldXN0U20xbE1WYXB6SEoiLCJ0aW1lIjoxNzk0MjgzNTYzMTgzLCJkaXJlY3Rpb24iOiJuZXh0In19"
+    "previous": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTM0Yjk4MDVmZmZlUjFob0poOTFkb3Rtc1QiLCJ0aW1lIjoxNzk0NDExNzU3NDc0LCJkaXJlY3Rpb24iOiJwcmV2aW91cyJ9fQ",
+    "next": "eyJhbmNob3IiOnsiaWQiOiJzZXNfZTM0Yjk4MDVmZmZlUjFob0poOTFkb3Rtc1QiLCJ0aW1lIjoxNzk0NDExNzU3NDc0LCJkaXJlY3Rpb24iOiJuZXh0In19"
   }
 }

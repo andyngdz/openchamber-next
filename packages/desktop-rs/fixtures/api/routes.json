@@ -136,5 +136,47 @@
     "status": 200,
     "contentType": "application/json; charset=utf-8",
     "answered": true
+  },
+  {
+    "route": "GET /api/openchamber/events",
+    "status": 200,
+    "contentType": "text/event-stream; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "POST /api/session/global/form",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/permission/request",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/form",
+    "status": 200,
+    "contentType": "application/json",
+    "answered": true
+  },
+  {
+    "route": "GET /api/permission-auto-accept",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "PUT /api/permission-auto-accept/sessions/:id",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
+  },
+  {
+    "route": "GET /api/routing",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "answered": true
   }
 ]

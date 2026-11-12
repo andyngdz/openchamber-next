@@ -1,0 +1,23 @@
+{
+  "location": {
+    "directory": "/tmp/oc-desktop-rs-capture/project"
+  },
+  "data": [
+    {
+      "id": "per_1cb4804690015eG5h0PscnYugK",
+      "sessionID": "ses_e34b7fc10ffeAjpkl74xdwjCVE",
+      "action": "shell",
+      "resources": [
+        "echo fixture-permission"
+      ],
+      "save": [
+        "echo *"
+      ],
+      "source": {
+        "type": "tool",
+        "messageID": "msg_1cb480440001A81MSUBHJiPhh3",
+        "id": "call_fixture_bash"
+      }
+    }
+  ]
+}

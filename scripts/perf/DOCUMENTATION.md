@@ -331,6 +331,16 @@ globbing (`isolated-server.mjs` writes them into the project under
 `agent-100tools-x5-300cps` makes its hundred calls five at a time: twenty
 steps whose messages hold five tool parts each, the turn that windowing by
 messages left fully mounted.
+The five tool models each call one tool and then stream the usual document:
+`bash-1200cps` runs `echo fixture-permission`, `edit-1200cps` patches
+`fixture-edit.txt`, `write-1200cps` creates `fixture-write.txt`,
+`webfetch-1200cps` fetches the fixture provider's `/fixture-page`, and
+`question-1200cps` asks three fields (three options, a multiselect with
+custom, and free text). With OpenCode's config set to `ask`, bash, edit, write
+and webfetch each raise a permission request; write uses the `edit` action,
+and bash reports its action as `shell`. Seed `FIXTURE_EDIT_FILE` with
+`FIXTURE_EDIT_CONTENT` before running `edit-1200cps`, because the provider
+never writes that file itself.
 `perf/unicode-300cps` (and `unicode-1200cps`) streams prose with em dashes,
 curly quotes and whole Cyrillic paragraphs, and a 150-line TypeScript fence
 whose comments and strings carry the same characters. V8 stores a string with

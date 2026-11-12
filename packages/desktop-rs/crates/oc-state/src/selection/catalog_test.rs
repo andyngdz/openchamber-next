@@ -5,7 +5,8 @@ use oc_client::catalog::{AgentMode, ModelKind, ProviderActivation};
 use super::super::value::ModelKey;
 use super::Catalog;
 use crate::fixture_test::{
-    agent, api_catalog, catalog_with, chat_model, config, model, primary_agent, provider,
+    agent, api_catalog, api_models, catalog_with, chat_model, config, model, primary_agent,
+    provider,
 };
 
 #[test]
@@ -23,7 +24,19 @@ fn the_fixture_catalog_keeps_three_providers_and_their_chat_models() {
         .iter()
         .map(|provider| provider.models.len())
         .collect();
-    assert_eq!(counts, [10, 23, 3]);
+    let models = api_models();
+    let expected: Vec<usize> = ids
+        .iter()
+        .map(|id| {
+            models
+                .iter()
+                .filter(|model| {
+                    model.provider_id == *id && model.enabled && model.kind != ModelKind::Image
+                })
+                .count()
+        })
+        .collect();
+    assert_eq!(counts, expected);
 
     let key = ModelKey::new("perf", "stream-600cps");
     let model = catalog.model(&key).expect("stream-600cps");

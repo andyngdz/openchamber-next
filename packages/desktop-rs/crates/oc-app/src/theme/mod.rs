@@ -6,6 +6,8 @@
 use gpui_kit::component::{Theme, ThemeMode};
 use gpui_kit::{App, Hsla, rgb};
 
+mod highlight;
+
 /// The design-system tokens the window paints with, as `0xRRGGBB`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) struct Palette {
@@ -54,6 +56,7 @@ fn color(hex: u32) -> Hsla {
 /// Switches GPUI Kit to dark mode and puts the palette on its theme colors.
 pub(crate) fn apply(palette: Palette, cx: &mut App) {
     Theme::change(ThemeMode::Dark, None, cx);
+    let highlight_theme = highlight::dark();
     Theme::update(cx, |theme| {
         theme.background = color(palette.background);
         theme.foreground = color(palette.foreground);
@@ -81,6 +84,7 @@ pub(crate) fn apply(palette: Palette, cx: &mut App) {
         theme.sidebar_primary_foreground = color(palette.primary_foreground);
         theme.title_bar = color(palette.background);
         theme.title_bar_border = color(palette.border);
+        theme.highlight_theme = highlight_theme;
     });
 }
 
