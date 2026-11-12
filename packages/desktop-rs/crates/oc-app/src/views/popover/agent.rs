@@ -69,17 +69,17 @@ impl AgentList {
                     } else {
                         StarKind::Outline
                     },
-                    shown: true,
+                    shown: favorite,
                 };
                 Row {
                     name: STAR_LABEL.to_owned(),
                     label: agent_display_name(&agent.display_name, &agent.id),
                     icon: None,
                     logo: None,
-                    dot: Some(
+                    accent: Some(
                         crate::theme::agent_color(&agent.id, &crate::theme::palette(cx)).into(),
                     ),
-                    context: None,
+                    context: Some(agent.description.clone()).filter(|text| !text.is_empty()),
                     selected: false,
                     role: Role::Menuitem,
                     ancestors: Vec::new(),
