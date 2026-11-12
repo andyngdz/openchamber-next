@@ -2,7 +2,7 @@
 
 use oc_state::{Action, SessionId, SidebarRow, State};
 
-use super::{ARCHIVE, MARK_DONE, TRACK_WORK, is_open};
+use super::{ARCHIVE, MARK_DONE, RowState, TRACK_WORK, is_open, row_state};
 
 #[test]
 fn the_row_actions_match_the_reference() {
@@ -35,4 +35,14 @@ fn only_the_open_sessions_row_is_highlighted() {
         .map(|row| &row.id)
         .collect();
     assert_eq!(highlighted, vec![&SessionId::from("ses_b")]);
+}
+
+#[test]
+fn a_busy_row_shows_the_running_spinner_and_an_idle_row_nothing() {
+    let state = State::new("/tmp/project");
+    let mut busy = row("ses_a");
+    busy.busy = true;
+
+    assert_eq!(row_state(&state, &busy), RowState::Running);
+    assert_eq!(row_state(&state, &row("ses_b")), RowState::Idle);
 }
