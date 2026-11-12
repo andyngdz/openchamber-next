@@ -105,11 +105,12 @@
 - [ ] 13.2 Tests: `gen-theme-fixture.mjs` also writes the CSS variables `CSSVariableGenerator` produces for `openchamber-dark`, and every palette token equals its variable.
 - [ ] 13.3 Gate as in 2.4.
 
-## 14. Icon and indicator parity   [depends-on: 3, 12, 13] [writes: packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+## 14. Icon and indicator parity   [depends-on: 3, 12, 13] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-app/assets/, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/tools/gen-remix-icons.mjs, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
 
 - [ ] 14.1 The layout registry and `--dump-layout` record each control's `icons`, `marks` and `texts` with their bounds, as design.md says, from what the view draws. A gpui-kit component's own icons come from the substitution table, and its own marks and text colors from the component table in `src/layout/`. Every control registers them, the controls units 8 and 9 add included.
 - [ ] 14.2a The frame check of design.md runs over every fixture state headless and fails on any icon, text run or mark whose pixels do not show its reported color.
 - [ ] 14.2 `tests/parity.rs` compares `icons`, `marks` and `texts`, colors within 1 per channel, for every shown control of every existing state, and names the control, the expected value and the drawn one on failure.
+- [ ] 14.2b Port provider logos (bundled copies, `providerLogoIds` candidates, the models.dev load, the fallback icon), React's own SVG icons (`StopIcon`, `ContextRing`, `DiffViewIcon`), and project icons and colors from the settings, as design.md's Icons and palette says.
 - [ ] 14.3 Fix every existing surface until the gate passes: sidebar, header, empty state, composer and its triggers, the project, model, agent and Thinking popups, the work-status panel, the icon rail, the preset chips and the messages. That covers, for example, the agent color dots, the selected check, the variant color, the agent and project icons, and the send icon.
 - [ ] 14.4 Gate as in 2.4, plus `cargo test -p oc-app --test parity`, headless.
 
