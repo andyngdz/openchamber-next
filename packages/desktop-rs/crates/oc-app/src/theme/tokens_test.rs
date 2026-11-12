@@ -2,6 +2,7 @@ use gpui_kit::{Hsla, Rgba};
 
 use super::{Mode, Tokens};
 use crate::theme::{DARK_THEME, LIGHT_THEME, palette, tokens};
+use gpui_kit::TestAppContext;
 
 fn rgba_of(color: Hsla) -> Rgba {
     Rgba::from(color)
@@ -89,9 +90,15 @@ fn both_bundled_themes_derive() {
     }
 }
 
-#[test]
-fn the_default_palette_is_the_dark_tokens() {
-    assert_eq!(palette(), tokens(Mode::Dark).palette);
+#[gpui_kit::test]
+fn the_palette_follows_the_applied_mode(cx: &mut TestAppContext) {
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        tokens(Mode::Dark).apply(cx);
+        assert_eq!(palette(cx), tokens(Mode::Dark).palette);
+        tokens(Mode::Light).apply(cx);
+        assert_eq!(palette(cx), tokens(Mode::Light).palette);
+    });
 }
 
 #[test]

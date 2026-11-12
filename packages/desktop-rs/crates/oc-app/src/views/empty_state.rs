@@ -45,7 +45,7 @@ const CHIPS: [(&str, RemixIcon); 9] = [
 
 fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
-    let palette = crate::theme::palette();
+    let palette = scene.palette;
     let button = label_button(
         scene.registry,
         &spec,
@@ -76,7 +76,7 @@ fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
 /// A quick-action chip: smaller and outlined, so a row holds as many as React's.
 fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name);
-    let palette = crate::theme::palette();
+    let palette = scene.palette;
     let button = label_button(
         scene.registry,
         &spec,
@@ -135,7 +135,7 @@ pub(crate) fn empty_state(
                         scene.registry,
                         &starter,
                         RemixIcon::Add,
-                        crate::theme::palette().muted_foreground.into(),
+                        scene.palette.muted_foreground.into(),
                     ),
                 )),
         );

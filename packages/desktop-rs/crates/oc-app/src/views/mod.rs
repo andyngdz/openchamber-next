@@ -53,6 +53,7 @@ pub(crate) use work_status::work_status;
 use crate::icons::RemixIcon;
 use crate::layout::draw::{TextDraw, image, remix};
 use crate::layout::{ControlSpec, LayoutRegistry};
+use crate::theme::Palette;
 
 /// What a control asks the root view to do.
 #[derive(Debug, Clone, PartialEq)]
@@ -94,6 +95,8 @@ pub(crate) struct Scene<'a> {
     pub(crate) state_entity: &'a Entity<State>,
     /// The popup lists and menu, owned by the root view.
     pub(crate) lists: &'a PopoverLists,
+    /// The palette of the mode the window shows now.
+    pub(crate) palette: Palette,
 }
 
 impl Scene<'_> {

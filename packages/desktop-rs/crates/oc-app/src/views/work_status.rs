@@ -147,7 +147,7 @@ fn turn_stats(scene: Scene<'_>, mode: PanelMode) -> Vec<AnyElement> {
 
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
-    let muted = crate::theme::palette().muted_foreground.into();
+    let muted = scene.palette.muted_foreground.into();
     control(
         scene.registry,
         spec.clone(),

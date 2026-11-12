@@ -45,7 +45,7 @@ pub(crate) fn icon_rail(registry: &LayoutRegistry, cx: &App) -> Div {
         }
         for (name, icon) in group.iter() {
             let spec = ControlSpec::named(Area::IconRail, Role::Button, *name);
-            let muted = theme::palette().muted_foreground.into();
+            let muted = theme::palette(cx).muted_foreground.into();
             rail = rail.child(control(
                 registry,
                 spec.clone(),

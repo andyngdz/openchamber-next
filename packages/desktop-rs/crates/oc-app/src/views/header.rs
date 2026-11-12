@@ -178,7 +178,7 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
                 .children(restart_button(scene))
                 .into_any_element()
         }
-        HeaderItem::Window(name, icon, action) => window_control(registry, name, icon, action),
+        HeaderItem::Window(name, icon, action) => window_control(scene, name, icon, action),
     }
 }
 

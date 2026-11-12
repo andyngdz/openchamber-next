@@ -97,7 +97,7 @@ fn chats_header(scene: Scene<'_>, header: &ControlSpec, add: &ControlSpec) -> Di
                 header,
                 None,
                 CHATS,
-                crate::theme::palette().muted_foreground.into(),
+                scene.palette.muted_foreground.into(),
             ),
         ))
         .child(control(
@@ -150,7 +150,7 @@ pub(super) fn header_row(
                 button,
                 None,
                 label,
-                crate::theme::palette().muted_foreground.into(),
+                scene.palette.muted_foreground.into(),
             ),
         )),
     )
@@ -178,7 +178,7 @@ pub(super) fn show_more(
                 &spec,
                 None,
                 SHOW_MORE,
-                crate::theme::palette().muted_foreground.into(),
+                scene.palette.muted_foreground.into(),
             )
             .on_click(scene.on_click_intent(Intent::ApplySidebar(SidebarAction::ShowMore(more)))),
         )

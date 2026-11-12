@@ -14,7 +14,7 @@ use trigger_content::{content_selector, label_selector};
 mod trigger_content;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
-use crate::theme::{DepthStyle, Tokens};
+use crate::theme::{DepthStyle, Palette, Tokens};
 use crate::views::popover::trigger_control;
 use crate::views::{Intent, Scene, icon_button};
 
@@ -47,13 +47,13 @@ const MODEL_LABEL_MAX: f32 = 260.;
 const HOVER_OPACITY: f32 = 0.7;
 
 /// The left icon group.
-pub(super) fn left_group(tools: &[Tool], registry: &LayoutRegistry) -> Div {
+pub(super) fn left_group(scene: Scene<'_>, tools: &[Tool], registry: &LayoutRegistry) -> Div {
     div()
         .flex()
         .items_center()
         .gap(px(GAP_LEFT))
         .children(tools.iter().map(|tool| match tool {
-            Tool::Icon(name, icon) => icon_control(name, *icon, registry),
+            Tool::Icon(name, icon) => icon_control(scene, name, *icon, registry),
             _ => div().into_any_element(),
         }))
 }
@@ -70,7 +70,7 @@ pub(super) fn right_group(
     for (index, tool) in tools.iter().enumerate() {
         let slot = match tool {
             Tool::Trigger { .. } => trigger(scene, tool, window, cx),
-            Tool::Icon(name, icon) => icon_control(name, *icon, registry),
+            Tool::Icon(name, icon) => icon_control(scene, name, *icon, registry),
             Tool::Send | Tool::Stop => action_control(scene, tool, registry, cx),
         };
         let gap = if index == 0 {
@@ -89,9 +89,14 @@ pub(super) fn right_group(
     group
 }
 
-fn icon_control(name: &str, icon: RemixIcon, registry: &LayoutRegistry) -> AnyElement {
+fn icon_control(
+    scene: Scene<'_>,
+    name: &str,
+    icon: RemixIcon,
+    registry: &LayoutRegistry,
+) -> AnyElement {
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
-    let foreground = crate::theme::palette().foreground.into();
+    let foreground = scene.palette.foreground.into();
     control(
         registry,
         spec.clone(),
@@ -108,7 +113,7 @@ fn action_control(
 ) -> AnyElement {
     let name = tool_name(tool).unwrap_or_default();
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
-    let palette = crate::theme::palette();
+    let palette = scene.palette;
     let button = match tool {
         // React's own `StopIcon` (`components/icons/StopIcon.tsx`), in the error color.
         Tool::Stop => {
@@ -162,7 +167,7 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
         return div().into_any_element();
     };
     let spec = ControlSpec::named(Area::Composer, Role::Button, name.clone());
-    let paint = trigger_paint(scene.state, *layout);
+    let paint = trigger_paint(scene.state, scene.palette, *layout);
     let logo = match layout {
         TriggerKind::Model => crate::views::popover::selected_model(scene.state)
             .map(|(provider_id, _)| crate::icons::provider::provider_logo(&provider_id)),
@@ -198,19 +203,21 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
 /// The colors a trigger paints: `text-foreground` labels, the Thinking slash in
 /// `text-muted-foreground/60` and its label in `text-status-warning/75`, and the agent icon
 /// in the agent's color (`ModelControls.tsx:2358,2739,2855`).
-fn trigger_paint(state: &State, layout: TriggerKind) -> TriggerPaint {
-    let palette = crate::theme::palette();
+fn trigger_paint(state: &State, palette: Palette, layout: TriggerKind) -> TriggerPaint {
     let foreground = palette.foreground.into();
+    let muted = palette.muted_foreground.into();
     match layout {
         TriggerKind::Model => TriggerPaint {
             label: foreground,
             slash: foreground,
             icon: foreground,
+            muted,
         },
         TriggerKind::Thinking => TriggerPaint {
             label: crate::theme::faded(palette.status_warning.into(), 0.75),
             slash: crate::theme::faded(palette.muted_foreground.into(), 0.6),
             icon: foreground,
+            muted,
         },
         TriggerKind::Agent => TriggerPaint {
             label: foreground,
@@ -220,6 +227,7 @@ fn trigger_paint(state: &State, layout: TriggerKind) -> TriggerPaint {
                 &palette,
             )
             .into(),
+            muted,
         },
     }
 }

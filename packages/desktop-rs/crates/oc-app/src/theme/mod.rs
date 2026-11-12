@@ -8,7 +8,7 @@
 
 use std::sync::OnceLock;
 
-use gpui_kit::{Hsla, rgba};
+use gpui_kit::{App, Hsla, rgba};
 use serde::Deserialize;
 
 use crate::logging::APP;
@@ -155,9 +155,9 @@ pub(crate) struct Palette {
     pub(crate) syntax_variable: Color,
 }
 
-/// The Electron default dark theme's palette.
-pub(crate) fn palette() -> Palette {
-    tokens(Mode::Dark).palette
+/// The palette of the mode the window shows now, from the tokens `Tokens::apply` stored.
+pub(crate) fn palette(cx: &App) -> Palette {
+    Tokens::of(cx).palette
 }
 
 /// The tokens of the bundled theme for `mode`, parsed and derived once.

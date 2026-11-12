@@ -1,5 +1,6 @@
 //! The star toggle a picker row carries.
 
+use crate::theme::Palette;
 use gpui_kit::{
     App, Div, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, Window, div,
     px,
@@ -68,10 +69,10 @@ pub(super) fn suffix(
     } else {
         spec.revealed(Reveal::Hidden)
     };
-    move |_, _| {
+    move |_, cx| {
         let dispatch = dispatch.clone();
         let action = action.clone();
-        let glyph = star_glyph(&registry, &spec, kind);
+        let glyph = star_glyph(&registry, &spec, kind, crate::theme::palette(cx));
         control_element(
             &registry,
             spec.clone(),
@@ -92,8 +93,13 @@ pub(super) fn suffix(
 
 /// The star's glyph, recorded under its control while it shows. A hidden star is left out of
 /// the capture, as React's `opacity-0` toggle is.
-fn star_glyph(registry: &LayoutRegistry, spec: &ControlSpec, kind: StarKind) -> Div {
-    let (icon, color) = star_paint(kind);
+fn star_glyph(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    kind: StarKind,
+    palette: Palette,
+) -> Div {
+    let (icon, color) = star_paint(kind, palette);
     registry.begin_draws(&spec.key);
     let glyph = div()
         .size_full()
@@ -114,8 +120,7 @@ const STAR_SIZE: f32 = 14.;
 
 /// The icon and color a star paints: a filled star in `text-primary`, an outline star in
 /// `text-muted-foreground` (`ModelPickerList.tsx`).
-fn star_paint(kind: StarKind) -> (RemixIcon, gpui_kit::Hsla) {
-    let palette = crate::theme::palette();
+fn star_paint(kind: StarKind, palette: Palette) -> (RemixIcon, gpui_kit::Hsla) {
     match kind {
         StarKind::Filled => (RemixIcon::StarFill, palette.primary.into()),
         StarKind::Outline => (RemixIcon::Star, palette.muted_foreground.into()),

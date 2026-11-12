@@ -12,7 +12,6 @@ use super::window_chrome::{STRIP_HEIGHT, drag_region};
 use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme;
 
 /// Title-bar controls, left to right.
 const TITLE_BAR: [(&str, RemixIcon); 2] = [
@@ -33,9 +32,9 @@ const INSTANCE: &str = "Open instance, usage and MCP (current: Local)";
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::Sidebar, Role::Button, name);
     let color = if name == "Open sessions" {
-        theme::palette().foreground.into()
+        scene.palette.foreground.into()
     } else {
-        theme::palette().muted_foreground.into()
+        scene.palette.muted_foreground.into()
     };
     control(
         scene.registry,
@@ -82,7 +81,7 @@ fn title_bar(scene: Scene<'_>) -> Div {
         .px(px(8.))
         .children(TITLE_BAR.map(|(name, icon)| button(scene, name, icon)))
         .child(control(scene.registry, new_session.clone(), {
-            let muted = theme::palette().muted_foreground.into();
+            let muted = scene.palette.muted_foreground.into();
             label_button(
                 scene.registry,
                 &new_session,
@@ -148,7 +147,7 @@ fn footer(scene: Scene<'_>) -> Div {
         .px(px(8.))
         .child(button(scene, SETTINGS, RemixIcon::Settings3))
         .child(control(scene.registry, instance.clone(), {
-            let muted = theme::palette().muted_foreground.into();
+            let muted = scene.palette.muted_foreground.into();
             label_button(
                 scene.registry,
                 &instance,

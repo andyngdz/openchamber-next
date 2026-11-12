@@ -5,6 +5,7 @@ use crate::icons::RemixIcon;
 use crate::layout::{
     Area, ControlSpec, DrawSlot, LayoutRegistry, Role, control as control_element, placed,
 };
+use crate::theme::Palette;
 use crate::views::text_metrics;
 use gpui_kit::{
     AnyElement, Div, FontWeight, Hsla, IntoElement, ParentElement, SharedString, Styled, canvas,
@@ -19,11 +20,10 @@ const CHECK_ICON: f32 = 16.;
 const HEADER_WEIGHT: f32 = 600.;
 
 /// A section header, recorded under its group ancestors.
-pub(super) fn header(registry: &LayoutRegistry, header: &Header) -> Div {
+pub(super) fn header(registry: &LayoutRegistry, header: &Header, palette: Palette) -> Div {
     let ancestors = ancestors(header.ancestors.iter().map(String::as_str));
     let spec =
         ControlSpec::named(Area::Popover, Role::Button, header.name.clone()).under(&ancestors);
-    let palette = crate::theme::palette();
     let muted_color: Hsla = palette.muted_foreground.into();
     // The Favorites star is `text-primary` (`ModelPickerList.tsx`), every other mark muted.
     let icon_color: Hsla = match header.icon {
@@ -49,7 +49,12 @@ pub(super) fn header(registry: &LayoutRegistry, header: &Header) -> Div {
             .children(header.icon.zip(icon_slot).map(|(icon, slot)| {
                 placed(registry, slot, icon_box(icon, HEADER_ICON, icon_color))
             }))
-            .children(header.logo.as_ref().map(|id| logo_box(id, HEADER_ICON)))
+            .children(
+                header
+                    .logo
+                    .as_ref()
+                    .map(|id| logo_box(id, HEADER_ICON, muted_color)),
+            )
             .child(placed(
                 registry,
                 label_slot,
@@ -114,8 +119,12 @@ pub(super) fn record_logo(registry: &LayoutRegistry, control: &SharedString, pro
 }
 
 /// A provider logo box, drawn from the bundled set when the provider has one.
-pub(super) fn logo_box(id: &str, size: f32) -> AnyElement {
-    crate::views::provider_mark::provider_mark(size, &crate::icons::provider::provider_logo(id))
+pub(super) fn logo_box(id: &str, size: f32, muted: Hsla) -> AnyElement {
+    crate::views::provider_mark::provider_mark(
+        size,
+        &crate::icons::provider::provider_logo(id),
+        muted,
+    )
 }
 
 /// A row's context label, in the muted foreground.

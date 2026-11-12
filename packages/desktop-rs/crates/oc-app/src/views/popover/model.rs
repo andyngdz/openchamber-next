@@ -102,17 +102,20 @@ fn search_row(
         .px(px(8.))
         .py(px(4.))
         .child(control(registry, spec, group).flex_1())
-        .child(add_provider(registry, dispatch))
+        .child(add_provider(
+            registry,
+            dispatch,
+            crate::theme::palette(cx).muted_foreground.into(),
+        ))
         .capture_key_down(move |event, window, cx| {
             model_search::search_keys(&keys, &close, event, window, cx)
         })
 }
 
-fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
+fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch, muted: gpui_kit::Hsla) -> Div {
     let spec = ControlSpec::named(Area::Popover, Role::Button, model_rows::ADD_PROVIDER);
     let close = dispatch.clone();
     // `text-muted-foreground` on the icon and the label (`ModelPickerList.tsx`).
-    let muted: gpui_kit::Hsla = crate::theme::palette().muted_foreground.into();
     let button = super::super::label_button(
         registry,
         &spec,

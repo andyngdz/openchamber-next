@@ -160,6 +160,7 @@ impl Render for RootView {
             popover: self.popover,
             state_entity: &self.state,
             lists: &self.lists,
+            palette: crate::theme::palette(cx),
         };
         let theme = cx.theme();
         let tokens = *Tokens::of(cx);

@@ -124,7 +124,7 @@ struct RowPaint {
 
 /// Every color a row draws, read once from the palette and component style.
 fn row_paint(cx: &App) -> RowPaint {
-    let palette = crate::theme::palette();
+    let palette = crate::theme::palette(cx);
     RowPaint {
         label: crate::layout::ComponentStyle::read(cx).list_row_text,
         muted: palette.muted_foreground.into(),
@@ -194,7 +194,7 @@ fn row_content(
         .dot
         .map(|color| crate::layout::mark(registry, &spec.key, color, px(4.), px(4.)));
     let mark = match (&row.logo, row.icon, slots.icon) {
-        (Some(id), _, _) => Some(logo_box(id, ROW_ICON)),
+        (Some(id), _, _) => Some(logo_box(id, ROW_ICON, paint.muted)),
         (None, Some(icon), Some(slot)) => {
             Some(placed(registry, slot, icon_box(icon, ROW_ICON, paint.muted)).into_any_element())
         }

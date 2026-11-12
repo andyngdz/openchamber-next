@@ -77,7 +77,7 @@ impl AgentList {
                     icon: None,
                     logo: None,
                     dot: Some(
-                        crate::theme::agent_color(&agent.id, &crate::theme::palette()).into(),
+                        crate::theme::agent_color(&agent.id, &crate::theme::palette(cx)).into(),
                     ),
                     context: None,
                     selected: false,

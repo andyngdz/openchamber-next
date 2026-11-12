@@ -37,7 +37,7 @@ pub(super) fn session_row(
     } else {
         TitleTone::Resting
     };
-    let label = row_label(&button, row, tone, scene.registry);
+    let label = row_label(&button, row, tone, scene);
     let action_buttons = actions.iter().map(|action| {
         let spec = ControlSpec::named(Area::Sidebar, Role::Button, *action)
             .under(&[title.as_str()])
@@ -96,10 +96,10 @@ fn row_label(
     button: &ControlSpec,
     row: &SidebarRow,
     tone: TitleTone,
-    registry: &crate::layout::LayoutRegistry,
+    scene: Scene<'_>,
 ) -> AnyElement {
     let title = row.title.clone().unwrap_or_else(|| UNTITLED.to_owned());
-    let palette = crate::theme::palette();
+    let palette = scene.palette;
     let color = match tone {
         TitleTone::Emphasized => palette.foreground.into(),
         TitleTone::Resting => crate::theme::mix_oklab(
@@ -108,6 +108,7 @@ fn row_label(
             0.5,
         ),
     };
+    let registry = scene.registry;
     let slot = registry.record_text(
         &button.key,
         crate::layout::draw::TextDraw::new(title.clone(), color),

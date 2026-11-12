@@ -83,13 +83,13 @@ fn icon_for(group: &ProjectGroup) -> RemixIcon {
         .unwrap_or(RemixIcon::Folder)
 }
 
-fn icon_color(group: &ProjectGroup) -> Hsla {
+fn icon_color(scene: Scene<'_>, group: &ProjectGroup) -> Hsla {
     group
         .project
         .color
         .as_deref()
         .and_then(crate::theme::stored)
-        .unwrap_or_else(|| crate::theme::palette().muted_foreground.into())
+        .unwrap_or_else(|| scene.palette.muted_foreground.into())
 }
 
 /// The Projects heading and its groups.
@@ -180,9 +180,9 @@ fn project_title(scene: Scene<'_>, group: &ProjectGroup, name: &str, button: &Co
         label_button(
             scene.registry,
             button,
-            Some((icon_for(group), icon_color(group))),
+            Some((icon_for(group), icon_color(scene, group))),
             name.to_owned(),
-            crate::theme::palette().foreground.into(),
+            scene.palette.foreground.into(),
         ),
     )
     .flex_1()

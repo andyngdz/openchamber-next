@@ -12,7 +12,7 @@ use gpui_kit::{App, Div, Entity, InteractiveElement, ParentElement, Styled, Wind
 
 use super::Scene;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::{self, card};
+use crate::theme::card;
 
 use controls::{left_group, right_group};
 
@@ -53,7 +53,7 @@ pub(crate) fn composer(
         .rounded(px(12.))
         .border_1()
         .border_color(theme.border)
-        .bg(card(theme::palette()))
+        .bg(card(scene.palette))
         .pt(px(4.))
         .child(control(registry, text_spec, text).w_full())
         .child(
@@ -64,7 +64,7 @@ pub(crate) fn composer(
                 .justify_between()
                 .px(px(FOOTER_PADDING))
                 .py(px(FOOTER_VERTICAL))
-                .child(left_group(&tools[..3], registry))
+                .child(left_group(scene, &tools[..3], registry))
                 .child(right_group(scene, &tools[3..], registry, window, cx)),
         );
     let body = div().w(px(WIDTH)).h(px(HEIGHT)).flex_none().child(frame);

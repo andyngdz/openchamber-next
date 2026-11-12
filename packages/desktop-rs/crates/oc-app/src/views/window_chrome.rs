@@ -2,9 +2,9 @@
 //! with, and the panel header over the right-hand zone.
 
 use super::header::MAIN_NAVIGATION;
-use super::icon_button;
+use super::{Scene, icon_button};
 use crate::icons::RemixIcon;
-use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::layout::{Area, ControlSpec, Role, control};
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, MouseDownEvent,
@@ -66,26 +66,22 @@ const WINDOW_CONTROL_GROUP: &str = "Window controls";
 
 /// One 34x28 ghost window control; its name and place in the order come from the reference.
 pub(super) fn window_control(
-    registry: &LayoutRegistry,
+    scene: Scene<'_>,
     name: &'static str,
     icon: RemixIcon,
     action: WindowAction,
 ) -> AnyElement {
+    let registry = scene.registry;
     let spec = ControlSpec::named(Area::Header, Role::Button, name)
         .under(&[MAIN_NAVIGATION, WINDOW_CONTROL_GROUP]);
-    let button = icon_button(
-        registry,
-        &spec,
-        icon,
-        crate::theme::palette().muted_foreground.into(),
-    )
-    .w(px(34.))
-    .h(px(28.))
-    .on_click(move |_, window, _| match action {
-        WindowAction::Minimize => window.minimize_window(),
-        WindowAction::Maximize => window.zoom_window(),
-        WindowAction::Close => window.remove_window(),
-    });
+    let button = icon_button(registry, &spec, icon, scene.palette.muted_foreground.into())
+        .w(px(34.))
+        .h(px(28.))
+        .on_click(move |_, window, _| match action {
+            WindowAction::Minimize => window.minimize_window(),
+            WindowAction::Maximize => window.zoom_window(),
+            WindowAction::Close => window.remove_window(),
+        });
     control(registry, spec, button).into_any_element()
 }
 
