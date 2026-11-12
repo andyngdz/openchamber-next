@@ -13,6 +13,7 @@ mod model;
 mod model_list;
 mod model_rows;
 mod model_search;
+mod placement;
 mod project;
 mod star;
 mod thinking;
@@ -22,10 +23,12 @@ use gpui_kit::component::list::ListState;
 use gpui_kit::component::menu::PopupMenu;
 use gpui_kit::component::popover::{Popover, PopoverState};
 use gpui_kit::{
-    Anchor, AnyElement, App, AppContext as _, Context, Div, Entity, Focusable as _, IntoElement,
-    ParentElement, Styled, Window, div, px,
+    AnyElement, App, AppContext as _, Context, Div, Entity, Focusable as _, IntoElement,
+    ParentElement, Styled, Window, div,
 };
 use oc_state::State;
+
+use placement::placed;
 
 use super::{Dispatch, Scene};
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
@@ -181,35 +184,6 @@ fn popover(scene: Scene<'_>, kind: PopoverKind, button: Button, cx: &App) -> Pop
         PopoverKind::Project | PopoverKind::Agent | PopoverKind::Thinking => popover,
     };
     placed(popover, kind)
-}
-
-/// The popover's placement and surface for its kind.
-fn placed(popover: Popover, kind: PopoverKind) -> Popover {
-    match kind {
-        PopoverKind::Project => popover
-            .appearance(false)
-            .anchor(Anchor::TopLeft)
-            .offset(px(4.))
-            .p(px(0.))
-            .w(px(project::WIDTH)),
-        PopoverKind::Model => popover
-            .appearance(false)
-            .anchor(Anchor::BottomRight)
-            .offset(px(4.))
-            .p(px(0.))
-            .w(px(model::WIDTH))
-            .max_h(px(model::MAX_HEIGHT)),
-        PopoverKind::Agent => popover
-            .appearance(false)
-            .anchor(Anchor::BottomRight)
-            .offset(px(4.))
-            .p(px(0.))
-            .w(px(agent::WIDTH)),
-        PopoverKind::Thinking => popover
-            .appearance(false)
-            .anchor(Anchor::BottomRight)
-            .offset(px(4.)),
-    }
 }
 
 fn content(
