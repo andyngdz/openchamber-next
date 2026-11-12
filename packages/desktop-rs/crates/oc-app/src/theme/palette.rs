@@ -47,6 +47,9 @@ struct Surface {
 struct Interactive {
     border: Color,
     focus_ring: Option<Color>,
+    selection: Color,
+    hover: Color,
+    active: Color,
 }
 
 #[derive(Debug, Deserialize)]
@@ -64,6 +67,7 @@ struct Syntax {
 
 #[derive(Debug, Deserialize)]
 struct SyntaxBase {
+    comment: Color,
     keyword: Color,
     #[serde(rename = "type")]
     kind: Color,
@@ -108,12 +112,16 @@ impl Colors {
             border: self.interactive.border,
             input: self.interactive.border,
             ring,
+            hover: self.interactive.hover,
+            active: self.interactive.active,
+            selection: self.interactive.selection,
             sidebar: self.surface.muted,
             sidebar_accent: subtle,
             status_error: self.status.error,
             status_warning: self.status.warning,
             status_success: self.status.success,
             status_info: self.status.info,
+            syntax_comment: self.syntax.base.comment,
             syntax_keyword: self.syntax.base.keyword,
             syntax_type: self.syntax.base.kind,
             syntax_function: self.syntax.base.function,

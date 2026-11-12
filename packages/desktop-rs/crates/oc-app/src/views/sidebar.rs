@@ -1,4 +1,4 @@
-//! The 280 px sidebar: title-bar controls, toolbar, Chats, the session groups and the footer.
+//! The 264 px sidebar: title-bar controls, toolbar, Chats, the session groups and the footer.
 //! Live: session rows open their session. Everything else is inert.
 
 use gpui_kit::component::ActiveTheme;
@@ -8,6 +8,7 @@ use gpui_kit::{
 use oc_state::Region;
 
 use super::sidebar_list::session_list;
+use super::window_chrome::{STRIP_HEIGHT, drag_region};
 use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
@@ -54,14 +55,13 @@ pub(crate) fn sidebar(scene: Scene<'_>, cx: &App) -> Div {
         .px(px(8.))
         .children(TOOLBAR.map(|(name, icon)| button(scene, name, icon)));
     let column = div()
-        .w(px(280.))
+        .w(px(264.))
         .h_full()
         .flex_none()
         .flex()
         .flex_col()
-        .bg(cx.theme().sidebar)
-        .child(title_bar(scene))
-        .child(resize_handle(scene, cx))
+        .child(drag_region(title_bar(scene)))
+        .child(resize_handle(scene))
         .child(toolbar)
         .children(create_line(scene, cx))
         .child(session_list(scene, cx))
@@ -74,7 +74,8 @@ fn title_bar(scene: Scene<'_>) -> Div {
     // The title bar's and the Chats row's New session share a name; the reference numbers them.
     let new_session = ControlSpec::named(Area::Sidebar, Role::Button, NEW_SESSION).repeated(1);
     div()
-        .h(px(48.))
+        .h(px(STRIP_HEIGHT))
+        .flex_none()
         .flex()
         .items_center()
         .gap(px(2.))
@@ -93,8 +94,9 @@ fn title_bar(scene: Scene<'_>) -> Div {
         }))
 }
 
-/// The resize handle on the sidebar's right edge, which also draws its border.
-fn resize_handle(scene: Scene<'_>, cx: &App) -> Div {
+/// The resize handle on the sidebar's right edge. It draws no line: the chat card's edge
+/// separates the zones.
+fn resize_handle(scene: Scene<'_>) -> Div {
     let resize = ControlSpec::named(Area::Sidebar, Role::Separator, RESIZE);
     control(
         scene.registry,
@@ -105,7 +107,7 @@ fn resize_handle(scene: Scene<'_>, cx: &App) -> Div {
             .h_full()
             .flex()
             .justify_end()
-            .child(div().w(px(1.)).h_full().bg(cx.theme().sidebar_border)),
+            .child(div().w(px(1.)).h_full()),
     )
     .absolute()
     .top_0()

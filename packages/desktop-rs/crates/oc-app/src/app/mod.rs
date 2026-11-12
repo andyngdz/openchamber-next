@@ -16,8 +16,8 @@ use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
 use gpui_kit::{
-    App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions, application, init,
-    open_window, px, size,
+    App, AppContext, Bounds, WindowBackgroundAppearance, WindowBounds, WindowDecorations,
+    WindowOptions, application, init, open_window, px, size,
 };
 use oc_state::State;
 
@@ -138,7 +138,7 @@ fn open(
         .with_assets(crate::icons::AppAssets)
         .run(move |cx| {
             init(cx);
-            theme::apply(theme::palette(), cx);
+            theme::tokens(theme::Mode::Dark).apply(cx);
             let registry = LayoutRegistry::default();
             let view_registry = registry.clone();
             let opened = open_window(window_options(cx), cx, move |window, cx| {
@@ -165,7 +165,10 @@ fn window_options(cx: &App) -> WindowOptions {
     WindowOptions {
         window_bounds: Some(WindowBounds::Windowed(bounds)),
         titlebar: None,
-        window_decorations: Some(WindowDecorations::Server),
+        // The app draws its own window controls and drag regions, and the glass zones need the
+        // OS to blur what is behind the window.
+        window_decorations: Some(WindowDecorations::Client),
+        window_background: WindowBackgroundAppearance::Blurred,
         app_id: Some("openchamber-desktop-rs".to_owned()),
         ..Default::default()
     }

@@ -1,5 +1,6 @@
-//! Layout parity with the Electron desktop (`fixtures/reference/`), and a check that the
-//! binary carries no build-machine path.
+//! Layout parity: region bounds from the mockup geometry, control names and order from the
+//! Electron desktop (`fixtures/reference/`), and a check that the binary carries no
+//! build-machine path.
 //!
 //! `--dump-layout` renders in a headless window, so these cases run without a display, in
 //! `cargo test --workspace`.

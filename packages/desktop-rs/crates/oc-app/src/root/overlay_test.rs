@@ -40,7 +40,10 @@ fn open<'a>(
     cx: &'a mut TestAppContext,
     fixture: &str,
 ) -> (Entity<RootView>, &'a mut VisualTestContext) {
-    cx.update(gpui_kit::init);
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        crate::theme::tokens(crate::theme::Mode::Dark).apply(cx);
+    });
     let (state, _) = StateScript::load(&state_path(fixture))
         .expect("fixture loads")
         .into_parts();
@@ -93,7 +96,7 @@ fn every_popup_closes_on_an_outside_press(cx: &mut TestAppContext) {
     for case in &KINDS {
         let (root, cx) = open(cx, case.fixture);
         open_from_trigger(&root, cx, case.kind);
-        cx.simulate_click(point(px(8.), px(8.)), Modifiers::default());
+        cx.simulate_click(point(px(8.), px(880.)), Modifiers::default());
         draw(cx);
         assert!(
             !popup_open(&root, cx),

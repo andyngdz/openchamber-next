@@ -1,4 +1,4 @@
-//! The chat column between the sidebar and the Work status panel: the empty state, or the
+//! The chat column under the card's header row: the empty state, or the
 //! open session's messages with the composer at the bottom.
 
 use gpui_kit::component::ActiveTheme;
@@ -23,7 +23,7 @@ pub(crate) fn chat_column(
     window: &mut Window,
     cx: &App,
 ) -> Div {
-    let column = div().flex_1().min_w_0().h_full();
+    let column = div().w_full().flex_1().min_h_0();
     let content = match scene.state.open() {
         None => column.child(empty_state(scene, draft, window, cx)),
         Some(_) => column

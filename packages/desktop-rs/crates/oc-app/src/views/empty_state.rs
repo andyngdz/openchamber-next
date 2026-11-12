@@ -18,8 +18,9 @@ use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control};
 
-/// Chat column width minus the composer width, halved: the composer's left edge.
-const LEFT: f32 = (792. - WIDTH) / 2.;
+/// Chat column width minus the composer width, halved: the composer's left edge. The column
+/// is the 804 px chat card.
+const LEFT: f32 = (804. - WIDTH) / 2.;
 /// Top of the heading block; heading, gaps and Choose project above the composer add up to
 /// its 100 px (`DraftTargetSelectors.tsx:284`, the row's `mb-1.5`).
 const TOP: f32 = 241.6;

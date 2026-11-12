@@ -8,15 +8,20 @@
 
 use std::sync::OnceLock;
 
-use gpui_kit::component::{Theme, ThemeMode};
-use gpui_kit::{App, Hsla, rgba};
+use gpui_kit::{Hsla, rgba};
 use serde::Deserialize;
 
 use crate::logging::APP;
 
+mod depth;
 mod highlight;
 mod oklab;
 mod palette;
+mod shade;
+mod tokens;
+
+pub use depth::DepthStyle;
+pub use tokens::{DepthColors, Tokens};
 
 /// `color-mix(in oklab, first 50%, second)` for two opaque colors, as `oc-title-rest`
 /// mixes the foreground and the muted foreground (`packages/ui/src/index.css:217-219`).
@@ -27,6 +32,21 @@ pub(crate) const DARK_THEME: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/themes/openchamber-dark.json"
 ));
+
+/// The Electron default light theme, copied from `packages/ui/src/lib/theme/themes/`.
+pub(crate) const LIGHT_THEME: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/themes/openchamber-light.json"
+));
+
+/// Whether a theme is dark or light; the depth tokens differ per mode.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Mode {
+    /// A dark theme.
+    Dark,
+    /// A light theme.
+    Light,
+}
 
 /// One theme color as `0xRRGGBBAA`, the form a CSS variable carries.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Deserialize)]
@@ -90,6 +110,9 @@ fn parse_hex(value: &str) -> Option<Color> {
 
 /// The design-system tokens the window paints with.
 ///
+/// The mockup's names map as: `elevated` is `card` and `popover`, `subtle` is `accent`, and
+/// `on_primary` is `primary_foreground`.
+///
 /// The status and syntax roles are the candidates the agent indicator picks from
 /// (`packages/ui/src/lib/agentColors.ts`): `status_success` for Build, then the syntax roles.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -108,12 +131,19 @@ pub(crate) struct Palette {
     pub(crate) border: Color,
     pub(crate) input: Color,
     pub(crate) ring: Color,
+    /// `interactive.hover`: the fill of a hovered row.
+    pub(crate) hover: Color,
+    /// `interactive.active`: the fill of a pressed or current row.
+    pub(crate) active: Color,
+    /// `interactive.selection`: the fill behind selected text.
+    pub(crate) selection: Color,
     pub(crate) sidebar: Color,
     pub(crate) sidebar_accent: Color,
     pub(crate) status_error: Color,
     pub(crate) status_warning: Color,
     pub(crate) status_success: Color,
     pub(crate) status_info: Color,
+    pub(crate) syntax_comment: Color,
     pub(crate) syntax_keyword: Color,
     pub(crate) syntax_type: Color,
     pub(crate) syntax_function: Color,
@@ -123,55 +153,30 @@ pub(crate) struct Palette {
     pub(crate) syntax_variable: Color,
 }
 
-/// The Electron default dark theme's palette, parsed once from the embedded JSON.
+/// The Electron default dark theme's palette.
 pub(crate) fn palette() -> Palette {
-    static PALETTE: OnceLock<Palette> = OnceLock::new();
-    *PALETTE.get_or_init(|| match palette::parse(DARK_THEME) {
-        Ok(palette) => palette,
+    tokens(Mode::Dark).palette
+}
+
+/// The tokens of the bundled theme for `mode`, parsed and derived once.
+pub(crate) fn tokens(mode: Mode) -> Tokens {
+    static DARK: OnceLock<Tokens> = OnceLock::new();
+    static LIGHT: OnceLock<Tokens> = OnceLock::new();
+    let (cell, source) = match mode {
+        Mode::Dark => (&DARK, DARK_THEME),
+        Mode::Light => (&LIGHT, LIGHT_THEME),
+    };
+    *cell.get_or_init(|| match palette::parse(source) {
+        Ok(palette) => Tokens::derive(mode, palette),
         Err(error) => {
             tracing::warn!(
                 target: APP,
                 %error,
                 "[APP] Embedded window palette did not parse"
             );
-            Palette::default()
+            Tokens::derive(mode, Palette::default())
         }
     })
-}
-
-/// Switches GPUI Kit to dark mode and puts the palette on its theme colors.
-pub(crate) fn apply(palette: Palette, cx: &mut App) {
-    Theme::change(ThemeMode::Dark, None, cx);
-    let highlight_theme = highlight::dark();
-    Theme::update(cx, |theme| {
-        theme.background = palette.background.into();
-        theme.foreground = palette.foreground.into();
-        theme.group_box = palette.card.into();
-        theme.popover = palette.popover.into();
-        theme.popover_foreground = palette.foreground.into();
-        theme.primary = palette.primary.into();
-        theme.primary_foreground = palette.primary_foreground.into();
-        theme.secondary = palette.secondary.into();
-        theme.secondary_foreground = palette.foreground.into();
-        theme.muted = palette.muted.into();
-        theme.muted_foreground = palette.muted_foreground.into();
-        theme.accent = palette.accent.into();
-        theme.accent_foreground = palette.foreground.into();
-        theme.danger = palette.destructive.into();
-        theme.border = palette.border.into();
-        theme.input = palette.input.into();
-        theme.ring = palette.ring.into();
-        theme.sidebar = palette.sidebar.into();
-        theme.sidebar_foreground = palette.foreground.into();
-        theme.sidebar_accent = palette.sidebar_accent.into();
-        theme.sidebar_accent_foreground = palette.foreground.into();
-        theme.sidebar_border = palette.border.into();
-        theme.sidebar_primary = palette.primary.into();
-        theme.sidebar_primary_foreground = palette.primary_foreground.into();
-        theme.title_bar = palette.background.into();
-        theme.title_bar_border = palette.border.into();
-        theme.highlight_theme = highlight_theme;
-    });
 }
 
 /// `hashName` from `packages/ui/src/lib/agentColors.ts`.

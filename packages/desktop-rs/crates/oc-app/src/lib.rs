@@ -15,7 +15,7 @@ mod live;
 mod logging;
 mod root;
 mod server;
-mod theme;
+pub mod theme;
 mod views;
 
 pub use app::{Launch, log_failure, run};

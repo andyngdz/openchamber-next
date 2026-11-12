@@ -56,7 +56,7 @@ fn session_rows() -> [(&'static str, RemixIcon, &'static str); 3] {
     ]
 }
 
-/// The 324 px column holding the card.
+/// The 320 px column holding the card.
 pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
     let theme = cx.theme();
     let mode = panel_mode(scene.state);
@@ -70,22 +70,19 @@ pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
         .border_1()
         .border_color(theme.border)
         .bg(card(theme::palette()))
-        .child(
-            div()
-                .flex()
-                .items_center()
-                .justify_between()
-                .child(section("Session", cx))
-                .child(button(scene, "Choose sections", RemixIcon::Equalizer2)),
-        )
+        .child(div().flex().items_center().justify_end().child(button(
+            scene,
+            "Choose sections",
+            RemixIcon::Equalizer2,
+        )))
         .children(project_section(scene, mode, cx))
         .child(context_sources(scene, cx))
         .children(turn_stats(scene, mode));
     let column = div()
-        .w(px(324.))
-        .h_full()
-        .flex_none()
-        .pt(px(16.))
+        .w(px(320.))
+        .flex_1()
+        .min_h_0()
+        .pt(px(8.))
         .pl(px(8.))
         .child(card_body);
     region(scene.registry, Area::WorkStatusPanel, column)

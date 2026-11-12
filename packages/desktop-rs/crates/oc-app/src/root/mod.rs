@@ -17,8 +17,8 @@ pub(crate) use live::Started;
 use std::collections::BTreeSet;
 use std::rc::Rc;
 
-use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::input::{Enter, InputEvent, TextareaState};
+use gpui_kit::component::{ActiveTheme, window_border, window_corner_radii};
 use gpui_kit::{
     AppContext, Context, DismissEvent, Entity, InteractiveElement, IntoElement, KeyDownEvent,
     ParentElement, Render, ScrollHandle, Styled, Subscription, Task, Window, div, px,
@@ -27,10 +27,22 @@ use oc_state::{Action, State};
 
 use crate::layout::{LayoutRegistry, content};
 use crate::live::ServerLink;
+use crate::theme::{DepthStyle, Tokens};
 use crate::views::{
-    Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, Scene, chat_column, filter_model_list,
-    header, icon_rail, model_search_field, sidebar, work_status,
+    Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, STRIP_HEIGHT, Scene, chat_column,
+    filter_model_list, header, icon_rail, model_search_field, panel_header, sidebar,
+    window_controls, work_status,
 };
+
+/// Gap above and below the chat card.
+const CARD_INSET: f32 = 8.;
+/// Width of the right-hand zone, which holds the Work status panel.
+const PANEL_WIDTH: f32 = 320.;
+/// Title of the right-hand zone's header row.
+const PANEL_TITLE: &str = "Session";
+/// Width of the icon rail, and its gap from the panel.
+const RAIL_WIDTH: f32 = 44.;
+const RAIL_GAP: f32 = 8.;
 
 /// The whole window.
 pub(crate) struct RootView {
@@ -147,37 +159,56 @@ impl Render for RootView {
             lists: &self.lists,
         };
         let theme = cx.theme();
-        let body = div()
+        let tokens = *Tokens::of(cx);
+        let radii = window_corner_radii(window, cx);
+        let card = div()
             .flex_1()
-            .min_h_0()
+            .min_w_0()
+            .my(px(CARD_INSET))
             .flex()
-            .child(chat_column(scene, &self.draft, &self.scroll, window, cx))
-            .child(work_status(scene, cx))
+            .flex_col()
+            .overflow_hidden()
+            .raised_surface(&tokens)
+            .child(header(scene, cx))
+            .child(chat_column(scene, &self.draft, &self.scroll, window, cx));
+        let panel = div()
+            .w(px(PANEL_WIDTH))
+            .h_full()
+            .flex_none()
+            .flex()
+            .flex_col()
+            .child(panel_header(PANEL_TITLE, cx))
+            .child(work_status(scene, cx));
+        let rail = div()
+            .w(px(RAIL_WIDTH))
+            .h_full()
+            .flex_none()
+            .ml(px(RAIL_GAP))
+            .pt(px(STRIP_HEIGHT))
             .child(icon_rail(&self.registry, cx));
         let root = div()
             .size_full()
             .flex()
-            .bg(theme.background)
+            .overflow_hidden()
+            .rounded_tl(radii.top_left)
+            .rounded_tr(radii.top_right)
+            .rounded_bl(radii.bottom_left)
+            .rounded_br(radii.bottom_right)
+            .bg(tokens.depth.glass)
             .text_color(theme.foreground)
             .child(sidebar(scene, cx))
-            .child(
-                div()
-                    .flex_1()
-                    .min_w_0()
-                    .h_full()
-                    .flex()
-                    .flex_col()
-                    .child(header(scene, cx))
-                    .child(body),
-            );
-        content(&self.registry, root)
-            .capture_action(cx.listener(|this, action: &Enter, window, cx| {
-                this.composer_enter(action, window, cx)
-            }))
-            .capture_key_down(
-                cx.listener(|this, event: &KeyDownEvent, window, cx| {
+            .child(card)
+            .child(panel)
+            .child(rail)
+            .child(window_controls(scene, cx));
+        let window_content =
+            content(&self.registry, root)
+                .capture_action(cx.listener(|this, action: &Enter, window, cx| {
+                    this.composer_enter(action, window, cx)
+                }))
+                .capture_key_down(cx.listener(|this, event: &KeyDownEvent, window, cx| {
                     this.on_key(event, window, cx)
-                }),
-            )
+                }));
+        window_border().shadow_size(px(0.)).child(window_content)
     }
 }

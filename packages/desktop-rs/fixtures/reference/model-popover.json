@@ -51,7 +51,7 @@
       "bounds": {
         "x": 0,
         "y": 0,
-        "width": 280,
+        "width": 264,
         "height": 900
       },
       "controls": [
@@ -957,10 +957,10 @@
     },
     "header": {
       "bounds": {
-        "x": 280,
-        "y": 0,
-        "width": 1160,
-        "height": 48
+        "x": 264,
+        "y": 8,
+        "width": 804,
+        "height": 44
       },
       "controls": [
         {
@@ -1097,10 +1097,10 @@
     },
     "chatColumn": {
       "bounds": {
-        "x": 280,
-        "y": 48,
-        "width": 792,
-        "height": 852
+        "x": 264,
+        "y": 52,
+        "width": 804,
+        "height": 840
       },
       "controls": [
         {
@@ -1503,8 +1503,8 @@
     },
     "composer": {
       "bounds": {
-        "x": 315.75,
-        "y": 388,
+        "x": 305.5,
+        "y": 391.5,
         "width": 720.5,
         "height": 100
       },
@@ -1767,10 +1767,10 @@
     },
     "workStatusPanel": {
       "bounds": {
-        "x": 1072,
-        "y": 48,
-        "width": 324,
-        "height": 852
+        "x": 1068,
+        "y": 44,
+        "width": 320,
+        "height": 856
       },
       "controls": [
         {
@@ -1861,9 +1861,9 @@
     "iconRail": {
       "bounds": {
         "x": 1396,
-        "y": 48,
+        "y": 44,
         "width": 44,
-        "height": 852
+        "height": 856
       },
       "controls": [
         {

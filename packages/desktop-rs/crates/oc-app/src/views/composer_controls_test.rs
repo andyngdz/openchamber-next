@@ -48,7 +48,10 @@ fn every_trigger_label_is_drawn_whole(cx: &mut TestAppContext) {
         3,
         "the fixture shows model, Thinking and agent"
     );
-    cx.update(gpui_kit::init);
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        crate::theme::tokens(crate::theme::Mode::Dark).apply(cx);
+    });
     let (_, cx) = cx.add_window_view(move |window, cx| {
         RootView::new(state, None, LayoutRegistry::default(), None, window, cx)
     });
