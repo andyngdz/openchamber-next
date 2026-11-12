@@ -1,0 +1,2463 @@
+{
+  "state": "form-multiselect",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "widths": {
+    "sidebar": {
+      "set": 280,
+      "measured": 280
+    },
+    "workStatusPanel": {
+      "default": 324,
+      "measured": 324,
+      "card": 300
+    }
+  },
+  "selectors": {
+    "dock": {
+      "selector": "form[data-prompt-history-search-owner] [role=dialog], [data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain]) > div > div[role=group]",
+      "optional": true,
+      "union": true
+    },
+    "composer": {
+      "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
+      "parent": true
+    },
+    "workStatusPanel": {
+      "selector": "[data-right-slot]"
+    },
+    "iconRail": {
+      "selector": "nav:has([data-context-surface])"
+    },
+    "header": {
+      "selector": "[data-page-scroll-lock] > header"
+    },
+    "sidebar": {
+      "selector": "[data-left-sidebar]",
+      "also": "[data-titlebar-left-controls]"
+    },
+    "chatColumn": {
+      "selector": "[data-workspace-chat]"
+    },
+    "popover": {
+      "selector": "[role=dialog], [role=menu]",
+      "popup": true
+    }
+  },
+  "regions": {
+    "sidebar": {
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open OpenChamber menu",
+          "key": "sidebar/Open OpenChamber menu",
+          "shown": true,
+          "bounds": {
+            "x": 12,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "menu-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open sessions",
+          "key": "sidebar/Open sessions",
+          "shown": true,
+          "bounds": {
+            "x": 44,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "layout-left",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 48,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#1",
+          "shown": true,
+          "bounds": {
+            "x": 72,
+            "y": 12,
+            "width": 112.73,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "chat-new",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 76,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "New session",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 100,
+                "y": 15,
+                "width": 78.73,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "separator",
+          "name": "Resize left panel",
+          "key": "sidebar/Resize left panel",
+          "shown": true,
+          "bounds": {
+            "x": 277,
+            "y": 0,
+            "width": 3,
+            "height": 900
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Search sessions",
+          "key": "sidebar/Search sessions",
+          "shown": true,
+          "bounds": {
+            "x": 13,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "search",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 17,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Add project",
+          "key": "sidebar/Add project",
+          "shown": true,
+          "bounds": {
+            "x": 43,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "folder-add",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 47,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Display mode",
+          "key": "sidebar/Display mode",
+          "shown": true,
+          "bounds": {
+            "x": 73,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 77,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "More",
+          "key": "sidebar/More",
+          "shown": true,
+          "bounds": {
+            "x": 103,
+            "y": 56,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "more",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 107,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Chats",
+          "key": "sidebar/Chats",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 88,
+            "width": 274,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Chats",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 93,
+                "width": 36.5,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "New session",
+          "key": "sidebar/New session#2",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 90,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "button",
+          "key": "sidebar/button",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 88,
+            "width": 256,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat two",
+          "key": "sidebar/Reference: chat two (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat two",
+          "key": "sidebar/Reference: chat two",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 122,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat two",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 123,
+                "width": 125.19,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: chat two/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 124,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat one",
+          "key": "sidebar/Reference: chat one (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 149,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: chat one",
+          "key": "sidebar/Reference: chat one",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 154,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat one",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 155,
+                "width": 125.67,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: chat one/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 156,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 196,
+            "width": 256,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "In work",
+          "key": "sidebar/In work",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 196,
+            "width": 274,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "In work",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 201,
+                "width": 49.16,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Reference: in work",
+          "key": "sidebar/Reference: in work (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 225,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: in work",
+          "key": "sidebar/Reference: in work",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 230,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: in work",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 231,
+                "width": 117.66,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Mark done",
+          "key": "sidebar/Reference: in work/Mark done",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: in work/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 232,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 272,
+            "width": 256,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Projects",
+          "key": "sidebar/Projects",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 272,
+            "width": 274,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Projects",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 277,
+                "width": 51.69,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 300,
+            "width": 274,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference",
+          "key": "sidebar/desktop-rs-reference",
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 304,
+            "width": 244,
+            "height": 22
+          },
+          "icons": [
+            {
+              "name": "folder",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 308,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 305,
+                "width": 149.72,
+                "height": 20
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "New worktree",
+          "key": "sidebar/desktop-rs-reference/New worktree",
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 303,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "New draft session",
+          "key": "sidebar/desktop-rs-reference/New draft session",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 302,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Turn: forms",
+          "key": "sidebar/Turn: forms (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 331,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Turn: forms",
+          "key": "sidebar/Turn: forms",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 336,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Turn: forms",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 337,
+                "width": 73.7,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Track as in work",
+          "key": "sidebar/Turn: forms/Track as in work",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 338,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Turn: forms/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 338,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 363,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: streaming turn",
+          "key": "sidebar/Reference: streaming turn",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 368,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: streaming turn",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 369,
+                "width": 165.98,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Track as in work",
+          "key": "sidebar/Reference: streaming turn/Track as in work",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: streaming turn/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 370,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn (draggable)",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 395,
+            "width": 256,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Reference: finished turn",
+          "key": "sidebar/Reference: finished turn",
+          "shown": true,
+          "bounds": {
+            "x": 36,
+            "y": 400,
+            "width": 220,
+            "height": 20
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: finished turn",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 401,
+                "width": 152.08,
+                "height": 18
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Track as in work",
+          "key": "sidebar/Reference: finished turn/Track as in work",
+          "shown": false,
+          "bounds": {
+            "x": 228,
+            "y": 402,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Archive",
+          "key": "sidebar/Reference: finished turn/Archive",
+          "shown": false,
+          "bounds": {
+            "x": 246,
+            "y": 402,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference-second",
+          "key": "sidebar/desktop-rs-reference-second (sortable)",
+          "shown": true,
+          "bounds": {
+            "x": 0,
+            "y": 438,
+            "width": 274,
+            "height": 30
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "desktop-rs-reference-second",
+          "key": "sidebar/desktop-rs-reference-second",
+          "shown": true,
+          "bounds": {
+            "x": 16,
+            "y": 442,
+            "width": 244,
+            "height": 22
+          },
+          "icons": [
+            {
+              "name": "code-box",
+              "color": "#3e63ddff",
+              "bounds": {
+                "x": 16,
+                "y": 446,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference-second",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 443,
+                "width": 205.67,
+                "height": 20
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "New worktree",
+          "key": "sidebar/desktop-rs-reference-second/New worktree",
+          "shown": false,
+          "bounds": {
+            "x": 222,
+            "y": 441,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "New draft session",
+          "key": "sidebar/desktop-rs-reference-second/New draft session",
+          "shown": false,
+          "bounds": {
+            "x": 248,
+            "y": 440,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Settings",
+          "key": "sidebar/Settings",
+          "shown": true,
+          "bounds": {
+            "x": 10,
+            "y": 868,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "settings-3",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 14,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open instance, usage and MCP (current: Local)",
+          "key": "sidebar/Open instance, usage and MCP (current: Local)",
+          "shown": true,
+          "bounds": {
+            "x": 199.22,
+            "y": 868,
+            "width": 70.78,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "server",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 207.22,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Local",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 229.22,
+                "y": 871,
+                "width": 32.78,
+                "height": 18
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "header": {
+      "bounds": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 48
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Open session actions",
+          "key": "header/Main navigation/Open session actions",
+          "shown": true,
+          "bounds": {
+            "x": 378.44,
+            "y": 15,
+            "width": 24,
+            "height": 18
+          },
+          "icons": [
+            {
+              "name": "more",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 382.44,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open in File Manager",
+          "key": "header/Main navigation/Open in File Manager",
+          "shown": true,
+          "bounds": {
+            "x": 1176,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "folder",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1180,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Run Auto-discover dev server",
+          "key": "header/Main navigation/Run Auto-discover dev server",
+          "shown": true,
+          "bounds": {
+            "x": 1208,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "scan-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1212,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open current session in Mini Chat",
+          "key": "header/Main navigation/Open current session in Mini Chat",
+          "shown": true,
+          "bounds": {
+            "x": 1240,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "picture-in-picture-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1244,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Toggle work-status panel",
+          "key": "header/Main navigation/Toggle work-status panel",
+          "shown": true,
+          "bounds": {
+            "x": 1272,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "list-indefinite",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1276,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Minimize window",
+          "key": "header/Main navigation/Window controls/Minimize window",
+          "shown": true,
+          "bounds": {
+            "x": 1308,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          },
+          "icons": [
+            {
+              "name": "subtract",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1322,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Maximize window",
+          "key": "header/Main navigation/Window controls/Maximize window",
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          },
+          "icons": [
+            {
+              "name": "checkbox-blank",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1367,
+                "y": 17,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Close window",
+          "key": "header/Main navigation/Window controls/Close window",
+          "shown": true,
+          "bounds": {
+            "x": 1396,
+            "y": 0,
+            "width": 44,
+            "height": 48
+          },
+          "icons": [
+            {
+              "name": "close",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1410,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        }
+      ]
+    },
+    "chatColumn": {
+      "bounds": {
+        "x": 280,
+        "y": 48,
+        "width": 792,
+        "height": 852
+      },
+      "controls": []
+    },
+    "composer": {
+      "bounds": {
+        "x": 315.75,
+        "y": 784,
+        "width": 720.5,
+        "height": 100
+      },
+      "controls": [
+        {
+          "role": "textbox",
+          "name": "Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "key": "composer/Plan, build, or ask. @ to mention, $ for skills, / for commands",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 804,
+            "width": 696.5,
+            "height": 21
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Add attachment",
+          "key": "composer/Add attachment",
+          "shown": true,
+          "bounds": {
+            "x": 325.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "add-circle",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 329.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Permissions: ask every time",
+          "key": "composer/Permissions: ask every time",
+          "shown": true,
+          "bounds": {
+            "x": 355.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "shield-user",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 359.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Start a goal with the next message",
+          "key": "composer/Start a goal with the next message",
+          "shown": true,
+          "bounds": {
+            "x": 385.75,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "target",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 389.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "perf logo Fixture stream, 300 characters/s",
+          "key": "composer/perf logo Fixture stream, 300 characters/s",
+          "shown": true,
+          "bounds": {
+            "x": 634.02,
+            "y": 846,
+            "width": 214.95,
+            "height": 32
+          },
+          "icons": [
+            {
+              "name": "img:perf",
+              "bounds": {
+                "x": 634.02,
+                "y": 853.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Fixture stream, 300 characters/s",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 657.02,
+                "y": 853,
+                "width": 191.95,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Thinking: High, this model's default",
+          "key": "composer/Thinking: High, this model's default",
+          "shown": true,
+          "bounds": {
+            "x": 852.97,
+            "y": 846,
+            "width": 36.77,
+            "height": 32
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "/",
+              "color": "#89857b99",
+              "bounds": {
+                "x": 852.97,
+                "y": 851,
+                "width": 5.95,
+                "height": 22
+              }
+            },
+            {
+              "text": "High",
+              "color": "#c67f13bf",
+              "bounds": {
+                "x": 862.92,
+                "y": 853,
+                "width": 26.81,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Build",
+          "key": "composer/Build",
+          "shown": true,
+          "bounds": {
+            "x": 901.73,
+            "y": 846,
+            "width": 52.52,
+            "height": 32
+          },
+          "icons": [
+            {
+              "name": "ai-agent",
+              "color": "#76ad4fff",
+              "bounds": {
+                "x": 901.73,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Build",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 923.73,
+                "y": 853,
+                "width": 30.52,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Start dictation",
+          "key": "composer/Start dictation",
+          "shown": true,
+          "bounds": {
+            "x": 966.25,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "mic",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 970.25,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Send message",
+          "key": "composer/Send message",
+          "shown": true,
+          "bounds": {
+            "x": 1002.25,
+            "y": 850,
+            "width": 24,
+            "height": 24
+          },
+          "icons": [
+            {
+              "name": "send-plane-2",
+              "color": "#dbd7cc4d",
+              "bounds": {
+                "x": 1006.25,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        }
+      ]
+    },
+    "dock": {
+      "bounds": {
+        "x": 292,
+        "y": 538,
+        "width": 768,
+        "height": 234
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Collapse the question",
+          "key": "dock/Collapse the question",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 544,
+            "width": 576.5,
+            "height": 20
+          },
+          "icons": [
+            {
+              "name": "question",
+              "color": "#da7c47ff",
+              "bounds": {
+                "x": 327.75,
+                "y": 547,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-down-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 349.75,
+                "y": 546,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Questions",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 373.75,
+                "y": 545,
+                "width": 64.31,
+                "height": 18
+              }
+            },
+            {
+              "text": "1 of 3",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 446.06,
+                "y": 545.5,
+                "width": 31.36,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "tab",
+          "name": "Question 1: Fixture multiselect",
+          "key": "dock/Question 1: Fixture multiselect",
+          "shown": true,
+          "bounds": {
+            "x": 912.25,
+            "y": 546,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [
+            {
+              "color": "#da7c47ff",
+              "bounds": {
+                "x": 917.25,
+                "y": 551,
+                "width": 6,
+                "height": 6
+              }
+            }
+          ],
+          "texts": []
+        },
+        {
+          "role": "tab",
+          "name": "Question 2: Fixture choice",
+          "key": "dock/Question 2: Fixture choice",
+          "shown": true,
+          "bounds": {
+            "x": 932.25,
+            "y": 546,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [
+            {
+              "color": "#ddd7c926",
+              "bounds": {
+                "x": 937.25,
+                "y": 551,
+                "width": 6,
+                "height": 6
+              }
+            }
+          ],
+          "texts": []
+        },
+        {
+          "role": "tab",
+          "name": "Question 3: Fixture free text",
+          "key": "dock/Question 3: Fixture free text",
+          "shown": true,
+          "bounds": {
+            "x": 952.25,
+            "y": 546,
+            "width": 16,
+            "height": 16
+          },
+          "icons": [],
+          "marks": [
+            {
+              "color": "#ddd7c926",
+              "bounds": {
+                "x": 957.25,
+                "y": 551,
+                "width": 6,
+                "height": 6
+              }
+            }
+          ],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Copy as Markdown",
+          "key": "dock/Copy as Markdown",
+          "shown": true,
+          "bounds": {
+            "x": 976.25,
+            "y": 544,
+            "width": 20,
+            "height": 20
+          },
+          "icons": [
+            {
+              "name": "file-text",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 980.25,
+                "y": 548,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Copy as JSON",
+          "key": "dock/Copy as JSON",
+          "shown": true,
+          "bounds": {
+            "x": 1004.25,
+            "y": 544,
+            "width": 20,
+            "height": 20
+          },
+          "icons": [
+            {
+              "name": "code",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1008.25,
+                "y": 548,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "checkbox",
+          "key": "dock/checkbox (button)#1",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 616,
+            "width": 690.5,
+            "height": 43
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Alpha detail",
+              "color": "#dbd7cccc",
+              "bounds": {
+                "x": 355.75,
+                "y": 620,
+                "width": 69.61,
+                "height": 17
+              }
+            },
+            {
+              "text": "The first selectable detail",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 355.75,
+                "y": 638,
+                "width": 140.34,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "checkbox",
+          "name": "checkbox",
+          "key": "dock/checkbox#1",
+          "shown": true,
+          "bounds": {
+            "x": 333.75,
+            "y": 622,
+            "width": 14,
+            "height": 14
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "checkbox",
+          "key": "dock/checkbox (button)#2",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 661,
+            "width": 690.5,
+            "height": 43
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Beta detail",
+              "color": "#dbd7cccc",
+              "bounds": {
+                "x": 355.75,
+                "y": 665,
+                "width": 62.67,
+                "height": 17
+              }
+            },
+            {
+              "text": "The second selectable detail",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 355.75,
+                "y": 683,
+                "width": 158.41,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "checkbox",
+          "name": "checkbox",
+          "key": "dock/checkbox#2",
+          "shown": true,
+          "bounds": {
+            "x": 333.75,
+            "y": 667,
+            "width": 14,
+            "height": 14
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Other",
+          "key": "dock/Other",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 706,
+            "width": 690.5,
+            "height": 26
+          },
+          "icons": [
+            {
+              "name": "edit",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 333.75,
+                "y": 712,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Other",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 355.75,
+                "y": 710,
+                "width": 34.22,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Dismiss",
+          "key": "dock/Dismiss",
+          "shown": true,
+          "bounds": {
+            "x": 327.75,
+            "y": 740,
+            "width": 60.13,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Dismiss",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 335.75,
+                "y": 743.5,
+                "width": 44.13,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Next",
+          "key": "dock/Next",
+          "shown": true,
+          "bounds": {
+            "x": 981.17,
+            "y": 740,
+            "width": 43.08,
+            "height": 24
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Next",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 989.17,
+                "y": 743.5,
+                "width": 27.08,
+                "height": 17
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "workStatusPanel": {
+      "bounds": {
+        "x": 1072,
+        "y": 48,
+        "width": 324,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Choose sections",
+          "key": "workStatusPanel/Work status/Choose sections",
+          "shown": true,
+          "bounds": {
+            "x": 1352,
+            "y": 70,
+            "width": 20,
+            "height": 20
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1354,
+                "y": 72,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open Git panel",
+          "key": "workStatusPanel/Work status/Open Git panel",
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 128,
+            "width": 284,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Open changes",
+          "key": "workStatusPanel/Work status/Open changes",
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 156,
+            "width": 284,
+            "height": 28
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Context sources 3 skills",
+          "key": "workStatusPanel/Work status/Context sources 3 skills",
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 208,
+            "width": 284,
+            "height": 16
+          },
+          "icons": [
+            {
+              "name": "stack",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1092,
+                "y": 209,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-right-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1214.23,
+                "y": 209,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Context sources",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1112,
+                "y": 207,
+                "width": 96.23,
+                "height": 17
+              }
+            },
+            {
+              "text": "3 skills",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1330.81,
+                "y": 207,
+                "width": 37.19,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Turn stats",
+          "key": "workStatusPanel/Work status/Turn stats",
+          "shown": true,
+          "bounds": {
+            "x": 1088,
+            "y": 254,
+            "width": 284,
+            "height": 16
+          },
+          "icons": [
+            {
+              "name": "bar-chart-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1092,
+                "y": 255,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-down-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1178.06,
+                "y": 255,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Turn stats",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1112,
+                "y": 253,
+                "width": 60.06,
+                "height": 17
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "iconRail": {
+      "bounds": {
+        "x": 1396,
+        "y": 48,
+        "width": 44,
+        "height": 852
+      },
+      "controls": [
+        {
+          "role": "button",
+          "name": "Context",
+          "key": "iconRail/Context",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 56,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "donut-chart-fill",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 61.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Git",
+          "key": "iconRail/Git",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 101,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "git-branch",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 106.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Changes",
+          "key": "iconRail/Changes",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 137,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "layout-column",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 142.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [
+            {
+              "color": "#db5c4c40",
+              "bounds": {
+                "x": 1412.89,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            },
+            {
+              "color": "#78ab5040",
+              "bounds": {
+                "x": 1418.86,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            }
+          ],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Walkthrough",
+          "key": "iconRail/Walkthrough",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 173,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "route",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 178.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Files",
+          "key": "iconRail/Files",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 218,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "file-edit",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 223.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Terminal",
+          "key": "iconRail/Terminal",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 254,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "terminal-box",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 259.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Browser",
+          "key": "iconRail/Browser",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 290,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "global",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 295.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Project knowledge",
+          "key": "iconRail/Project knowledge",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 335,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "book-marked",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 340.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "Configure panels",
+          "key": "iconRail/Configure panels",
+          "shown": true,
+          "bounds": {
+            "x": 1404,
+            "y": 371,
+            "width": 28,
+            "height": 28
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 376.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
+        }
+      ]
+    }
+  },
+  "outside": [],
+  "accessibility": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/New session#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/button",
+      "role": "button",
+      "problem": "missing-name",
+      "nameSource": "role"
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox (button)#1",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox#1",
+      "role": "checkbox",
+      "problem": "missing-name",
+      "nameSource": "role"
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox (button)#2",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox#2",
+      "role": "checkbox",
+      "problem": "missing-name",
+      "nameSource": "role"
+    }
+  ],
+  "normalized": [
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: chat two (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: chat one (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: in work (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference (sortable)",
+      "rules": [
+        "container-name"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Turn: forms (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: streaming turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/Reference: finished turn (draggable)",
+      "rules": [
+        "session-title"
+      ]
+    },
+    {
+      "region": "sidebar",
+      "key": "sidebar/desktop-rs-reference-second (sortable)",
+      "rules": [
+        "container-name"
+      ]
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox (button)#1",
+      "rules": [
+        "container-name"
+      ]
+    },
+    {
+      "region": "dock",
+      "key": "dock/checkbox (button)#2",
+      "rules": [
+        "container-name"
+      ]
+    }
+  ]
+}

@@ -331,6 +331,14 @@ globbing (`isolated-server.mjs` writes them into the project under
 `agent-100tools-x5-300cps` makes its hundred calls five at a time: twenty
 steps whose messages hold five tool parts each, the turn that windowing by
 messages left fully mounted.
+`agent-20tools-hold` is the same agent turn stopped at a fixed point: after
+twenty `glob` calls it streams the document's first heading and its whole
+opening paragraph, then holds the response open with no finish frame and no
+`[DONE]` until the client aborts the turn. The stream ends on a finished
+markdown block: the app reveals a streaming reply a block at a time, so a
+paragraph cut mid-sentence would stay hidden. A screen reading it cannot
+change while a capture runs; the desktop reference's `streaming` state uses it
+and interrupts the turn afterwards as cleanup.
 The five tool models each call one tool and then stream the usual document:
 `bash-1200cps` runs `echo fixture-permission`, `edit-1200cps` patches
 `fixture-edit.txt`, `write-1200cps` creates `fixture-write.txt`,

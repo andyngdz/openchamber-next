@@ -32,7 +32,11 @@
  * `edit-*`, `write-*`, `webfetch-*` and `question-*` call that one tool, then
  * stream the document: the permission and form requests the desktop app has
  * to answer. Each call is fixed, so a capture reads the same command, patch,
- * file content, URL and questions every run.
+ * file content, URL and questions every run. `agent-20tools-hold` makes the
+ * same twenty `glob` calls, streams the document's first heading and its
+ * opening paragraph, then holds the response open with no finish frame and no
+ * `[DONE]` until the client aborts the turn: a stable screen for a capture of
+ * the mid-stream state.
  * `unicode-300cps` streams prose with em dashes, curly quotes and Cyrillic
  * paragraphs and a 150-line TypeScript fence whose comments and strings carry
  * the same characters. A string with any character above Latin-1 is stored by
@@ -64,6 +68,12 @@ const CHUNK_CHARACTERS = 4
 // their answer at one fixed rate.
 export const FIXTURE_TOOL_RATE = 1200
 const FIXTURE_TOOL_NAMES = ["bash", "edit", "write", "webfetch", "question"]
+// An agent model whose answer stops after the document's first paragraph and
+// keeps the response open (no finish, no [DONE]) until the client aborts. A
+// screen reading its text is stable: the stream cannot advance while the
+// capture runs.
+const FIXTURE_HOLD_STEPS = 20
+const FIXTURE_HOLD_RATE = 300
 
 // The file the `edit-*` model patches. The capture writes it with
 // FIXTURE_EDIT_CONTENT before the turn, so the fixed old string is present.
@@ -191,6 +201,12 @@ the instruction pointer is restored from the saved return address.
 `
 
 const FIXTURE_DOCUMENT = [1, 2, 3].map(SECTION).join("")
+
+// The first section's heading and its whole opening paragraph, up to the blank
+// line before the first list. Ending on a finished block matters: the app
+// reveals a streaming reply a block at a time, so a paragraph cut mid-sentence
+// would stay hidden until the block closed.
+export const FIXTURE_HELD_TEXT = FIXTURE_DOCUMENT.slice(0, FIXTURE_DOCUMENT.indexOf("1. The compiler emits"))
 
 const FENCE = "```"
 
@@ -371,6 +387,16 @@ const parseModel = (model) => {
       tool: tool[1],
     }
   }
+  const hold = /^agent-(\d+)tools-hold$/.exec(String(model ?? ""))
+  if (hold) {
+    return {
+      delayMs: 0,
+      charactersPerSecond: FIXTURE_HOLD_RATE,
+      document: FIXTURE_HELD_TEXT,
+      toolSteps: Number(hold[1]),
+      hold: true,
+    }
+  }
   const agent = /agent-(\d+)(tools|reads)(?:-x(\d+))?-(\d+)cps/.exec(String(model ?? ""))
   if (agent) {
     return {
@@ -400,7 +426,7 @@ const parseModel = (model) => {
  * long session agentic, not only the first.
  */
 const planResponse = (model, body, port) => {
-  const { delayMs, charactersPerSecond, document, toolSteps, reads, parallel = 1, tool } = parseModel(model)
+  const { delayMs, charactersPerSecond, document, toolSteps, reads, parallel = 1, tool, hold } = parseModel(model)
   const messages = Array.isArray(body.messages) ? body.messages : []
   const lastPrompt = messages.findLastIndex((message) => message?.role === "user")
   const toolResults = messages.slice(lastPrompt + 1).filter((message) => message?.role === "tool").length
@@ -416,7 +442,7 @@ const planResponse = (model, body, port) => {
     })
     return { delayMs, charactersPerSecond, text: AGENT_STEP_TEXT(toolResults + 1, toolSteps), toolCalls: calls }
   }
-  return { delayMs, charactersPerSecond, text: document, toolCalls: [] }
+  return { delayMs, charactersPerSecond, text: document, toolCalls: [], hold }
 }
 
 const chunkFrame = (model, delta, finishReason = null) => ({
@@ -475,6 +501,15 @@ const streamCompletion = async (response, model, body, port) => {
   try {
     await streamText(response, model, plan.text, plan)
   } catch {
+    return
+  }
+  if (plan.hold) {
+    // Keep the response open with no finish frame or [DONE] until the client
+    // aborts the turn, so the captured text cannot advance.
+    await new Promise((resolveHold) => {
+      if (response.destroyed || response.writableEnded) { resolveHold(); return }
+      response.once("close", resolveHold)
+    })
     return
   }
   if (plan.toolCalls.length > 0) {
@@ -542,6 +577,9 @@ export const fixtureProviderConfig = (port) => ({
           `${name}-${FIXTURE_TOOL_RATE}cps`,
           { name: `Fixture ${name} tool call, then ${FIXTURE_TOOL_RATE} characters/s`, tool_call: true },
         ]),
+        // The same agent turn as agent-20tools-300cps, stopped after the first
+        // paragraph with the response held open: the stable streaming screen.
+        [`agent-${FIXTURE_HOLD_STEPS}tools-hold`, { name: `Fixture agent, ${FIXTURE_HOLD_STEPS} tool calls then ${FIXTURE_HOLD_RATE} characters/s`, tool_call: true }],
         // Parallel calls: a step that makes several calls at once is one
         // message with that many tool parts.
         ...FIXTURE_AGENT_PARALLEL.flatMap(({ calls, parallel }) => FIXTURE_AGENT_RATES.map((rate) => [

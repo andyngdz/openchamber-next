@@ -16,6 +16,11 @@
     }
   },
   "selectors": {
+    "dock": {
+      "selector": "form[data-prompt-history-search-owner] [role=dialog], [data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain]) > div > div[role=group]",
+      "optional": true,
+      "union": true
+    },
     "composer": {
       "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
       "parent": true
@@ -60,7 +65,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "menu-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -72,7 +91,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "layout-left",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 48,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -82,9 +115,34 @@
           "bounds": {
             "x": 72,
             "y": 12,
-            "width": 115.16,
+            "width": 112.73,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "chat-new",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 76,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "New session",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 100,
+                "y": 15,
+                "width": 78.73,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "separator",
@@ -96,7 +154,10 @@
             "y": 0,
             "width": 3,
             "height": 900
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -108,7 +169,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "search",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 17,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -120,7 +195,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "folder-add",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 47,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -132,7 +221,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 77,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -144,7 +247,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "more",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 107,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -156,7 +273,21 @@
             "y": 88,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Chats",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 93,
+                "width": 36.5,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -168,7 +299,10 @@
             "y": 90,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -180,7 +314,10 @@
             "y": 88,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -192,7 +329,10 @@
             "y": 117,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -204,7 +344,21 @@
             "y": 122,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat two",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 123,
+                "width": 125.19,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -216,7 +370,10 @@
             "y": 124,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -228,7 +385,10 @@
             "y": 149,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -240,7 +400,21 @@
             "y": 154,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat one",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 155,
+                "width": 125.67,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -252,7 +426,10 @@
             "y": 156,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -264,7 +441,10 @@
             "y": 196,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -276,7 +456,21 @@
             "y": 196,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "In work",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 201,
+                "width": 49.16,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -288,7 +482,10 @@
             "y": 225,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -300,7 +497,42 @@
             "y": 230,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [
+            {
+              "name": "circle",
+              "color": "#479fe6ff",
+              "bounds": {
+                "x": 220.52,
+                "y": 234,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: streaming turn",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 231,
+                "width": 165.98,
+                "height": 18
+              }
+            },
+            {
+              "text": "<duration>",
+              "color": "#479fe6ff",
+              "bounds": {
+                "x": 236.52,
+                "y": 231.5,
+                "width": 19.48,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -312,7 +544,10 @@
             "y": 232,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -324,7 +559,10 @@
             "y": 232,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -336,7 +574,10 @@
             "y": 257,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -348,7 +589,21 @@
             "y": 262,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: finished turn",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 263,
+                "width": 152.08,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -360,7 +615,10 @@
             "y": 264,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -372,7 +630,10 @@
             "y": 264,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -384,7 +645,10 @@
             "y": 289,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -396,7 +660,21 @@
             "y": 294,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: in work",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 295,
+                "width": 117.66,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -408,7 +686,10 @@
             "y": 296,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -420,7 +701,10 @@
             "y": 296,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -432,7 +716,10 @@
             "y": 336,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -444,7 +731,21 @@
             "y": 336,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Projects",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 341,
+                "width": 51.69,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -456,7 +757,10 @@
             "y": 364,
             "width": 274,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -468,7 +772,32 @@
             "y": 368,
             "width": 244,
             "height": 22
-          }
+          },
+          "icons": [
+            {
+              "name": "folder",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 372,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 369,
+                "width": 149.72,
+                "height": 20
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -480,7 +809,10 @@
             "y": 367,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -489,10 +821,13 @@
           "shown": false,
           "bounds": {
             "x": 248,
-            "y": 365.8,
+            "y": 366,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -504,7 +839,10 @@
             "y": 396,
             "width": 274,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -516,7 +854,32 @@
             "y": 400,
             "width": 244,
             "height": 22
-          }
+          },
+          "icons": [
+            {
+              "name": "code-box",
+              "color": "#3e63ddff",
+              "bounds": {
+                "x": 16,
+                "y": 404,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference-second",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 401,
+                "width": 205.67,
+                "height": 20
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -528,7 +891,10 @@
             "y": 399,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -537,10 +903,13 @@
           "shown": false,
           "bounds": {
             "x": 248,
-            "y": 397.8,
+            "y": 398,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -552,7 +921,21 @@
             "y": 868,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "settings-3",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 14,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -560,11 +943,36 @@
           "key": "sidebar/Open instance, usage and MCP (current: Local)",
           "shown": true,
           "bounds": {
-            "x": 197.15,
+            "x": 199.22,
             "y": 868,
-            "width": 72.85,
+            "width": 70.78,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "server",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 207.22,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Local",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 229.22,
+                "y": 871,
+                "width": 32.78,
+                "height": 18
+              }
+            }
+          ]
         }
       ]
     },
@@ -582,11 +990,25 @@
           "key": "header/Main navigation/Open session actions",
           "shown": true,
           "bounds": {
-            "x": 473.75,
+            "x": 474.14,
             "y": 15,
             "width": 24,
             "height": 18
-          }
+          },
+          "icons": [
+            {
+              "name": "more",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 478.14,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -594,11 +1016,36 @@
           "key": "header/Main navigation/Context usage",
           "shown": true,
           "bounds": {
-            "x": 1106.05,
+            "x": 1109.64,
             "y": 12,
-            "width": 61.95,
+            "width": 58.36,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "other",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1113.64,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "0.0%",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1135.64,
+                "y": 15,
+                "width": 28.36,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -610,7 +1057,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "folder",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1180,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -622,7 +1083,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "scan-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1212,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -634,7 +1109,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "picture-in-picture-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1244,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -646,7 +1135,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "list-indefinite",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1276,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -658,7 +1161,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "subtract",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1322,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -670,7 +1187,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "checkbox-blank",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1367,
+                "y": 17,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -682,7 +1213,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "close",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1410,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     },
@@ -704,31 +1249,296 @@
             "y": 48,
             "width": 792,
             "height": 852
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "List the files the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 749.08,
+                "y": -844,
+                "width": 266.17,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 2 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -705,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 3 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -638,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 4 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -571,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 5 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -504,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 6 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -437,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 7 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -370,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 8 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -303,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 9 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -236,
+                "width": 373.2,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 10 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -169,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 11 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -102,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 12 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": -35,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 13 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 32,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 14 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 99,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 15 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 166,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 16 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 233,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 17 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 300,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 18 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 367,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 19 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 434,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "Step 20 of 20: listing files that the answer should mention.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 501,
+                "width": 381.22,
+                "height": 19
+              }
+            },
+            {
+              "text": "1. Executing a call in a bytecode virtual machine",
+              "color": "#dbd7ccf2",
+              "bounds": {
+                "x": 315.75,
+                "y": 565,
+                "width": 429.39,
+                "height": 24
+              }
+            },
+            {
+              "text": "A bytecode virtual machine executes a function call by creating a new",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 601.78,
+                "width": 457.34,
+                "height": 19
+              }
+            },
+            {
+              "text": "activation record",
+              "color": "#dfdcd2ff",
+              "bounds": {
+                "x": 773.09,
+                "y": 601.78,
+                "width": 119.14,
+                "height": 19
+              }
+            },
+            {
+              "text": ", binding the arguments, and transferring control to the callee's first instruction. The caller's state is preserved so that execution resumes at the instruction after the call once the callee returns. Round 1 of this document repeats the explanation so that the response is long enough to measure.",
+              "color": "#dcd7cce6",
+              "bounds": {
+                "x": 315.75,
+                "y": 601.78,
+                "width": 710.41,
+                "height": 88
+              }
+            }
+          ]
         },
         {
           "role": "button",
-          "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
-          "shown": true,
+          "name": "Revert to this message",
+          "key": "chatColumn/Revert to this message",
+          "shown": false,
           "bounds": {
-            "x": 315.75,
-            "y": -311,
-            "width": 720.5,
-            "height": 36
-          }
+            "x": 946.25,
+            "y": -802,
+            "width": 26,
+            "height": 26
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
-          "name": "Find Files packages/*/package.json",
-          "key": "chatColumn/Find Files packages/*/package.json#1",
-          "shown": true,
+          "name": "Copy message text",
+          "key": "chatColumn/Copy message text",
+          "shown": false,
           "bounds": {
-            "x": 315.75,
-            "y": -244,
-            "width": 720.5,
-            "height": 36
-          }
+            "x": 978.25,
+            "y": -802,
+            "width": 26,
+            "height": 26
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
+        },
+        {
+          "role": "button",
+          "name": "More actions",
+          "key": "chatColumn/More actions",
+          "shown": false,
+          "bounds": {
+            "x": 1010.25,
+            "y": -802,
+            "width": 26,
+            "height": 26
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -737,10 +1547,45 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": -177,
+            "y": -680,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -669,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -671,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "scripts/perf/*.mjs",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -671,
+                "width": 103.2,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -749,34 +1594,139 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": -110,
+            "y": -613,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -602,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -604,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "*.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -604,
+                "width": 29.63,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": -43,
+            "y": -546,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -535,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -537,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": ".agents/skills/*/SKILL.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -537,
+                "width": 147.16,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
-          "key": "chatColumn/Find Files packages/*/package.json#2",
+          "key": "chatColumn/Find Files packages/*/package.json#1",
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 24,
+            "y": -479,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -468,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -470,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "packages/*/package.json",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -470,
+                "width": 148.28,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -785,10 +1735,45 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 91,
+            "y": -412,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -401,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -403,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "scripts/perf/*.mjs",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -403,
+                "width": 103.2,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -797,34 +1782,139 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 158,
+            "y": -345,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -334,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -336,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "*.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -336,
+                "width": 29.63,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
           "name": "Find Files .agents/skills/*/SKILL.md",
-          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 225,
+            "y": -278,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -267,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -269,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": ".agents/skills/*/SKILL.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -269,
+                "width": 147.16,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
           "name": "Find Files packages/*/package.json",
-          "key": "chatColumn/Find Files packages/*/package.json#3",
+          "key": "chatColumn/Find Files packages/*/package.json#2",
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 292,
+            "y": -211,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -200,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -202,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "packages/*/package.json",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -202,
+                "width": 148.28,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -833,10 +1923,45 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 359,
+            "y": -144,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -133,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -135,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "scripts/perf/*.mjs",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -135,
+                "width": 103.2,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -845,10 +1970,233 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 426,
+            "y": -77,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": -66,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -68,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "*.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -68,
+                "width": 29.63,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": -10,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 1,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": -1,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": ".agents/skills/*/SKILL.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": -1,
+                "width": 147.16,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files packages/*/package.json",
+          "key": "chatColumn/Find Files packages/*/package.json#3",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 57,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 68,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 66,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "packages/*/package.json",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 66,
+                "width": 148.28,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files scripts/perf/*.mjs",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#4",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 124,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 135,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 133,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "scripts/perf/*.mjs",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 133,
+                "width": 103.2,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files *.md",
+          "key": "chatColumn/Find Files *.md#4",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 191,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 202,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 200,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "*.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 200,
+                "width": 29.63,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -857,10 +2205,233 @@
           "shown": true,
           "bounds": {
             "x": 315.75,
-            "y": 493,
+            "y": 258,
             "width": 720.5,
             "height": 36
-          }
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 269,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 267,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": ".agents/skills/*/SKILL.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 267,
+                "width": 147.16,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files packages/*/package.json",
+          "key": "chatColumn/Find Files packages/*/package.json#4",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 325,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 336,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 334,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "packages/*/package.json",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 334,
+                "width": 148.28,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files scripts/perf/*.mjs",
+          "key": "chatColumn/Find Files scripts/perf/*.mjs#5",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 392,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 403,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 401,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "scripts/perf/*.mjs",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 401,
+                "width": 103.2,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files *.md",
+          "key": "chatColumn/Find Files *.md#5",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 459,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 470,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 468,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": "*.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 468,
+                "width": 29.63,
+                "height": 17
+              }
+            }
+          ]
+        },
+        {
+          "role": "button",
+          "name": "Find Files .agents/skills/*/SKILL.md",
+          "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#5",
+          "shown": true,
+          "bounds": {
+            "x": 315.75,
+            "y": 526,
+            "width": 720.5,
+            "height": 36
+          },
+          "icons": [
+            {
+              "name": "file-search",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 316.75,
+                "y": 537,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Find Files",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 336.75,
+                "y": 535,
+                "width": 55.42,
+                "height": 17
+              }
+            },
+            {
+              "text": ".agents/skills/*/SKILL.md",
+              "color": "#949187ff",
+              "bounds": {
+                "x": 398.17,
+                "y": 535,
+                "width": 147.16,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -868,11 +2439,14 @@
           "key": "chatColumn/Scroll to bottom",
           "shown": false,
           "bounds": {
-            "x": 316.55,
-            "y": 748.6,
+            "x": 316.75,
+            "y": 749,
             "width": 28,
             "height": 26
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         }
       ]
     },
@@ -894,7 +2468,10 @@
             "y": 804,
             "width": 696.5,
             "height": 21
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -906,7 +2483,21 @@
             "y": 850,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "add-circle",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 329.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -918,7 +2509,21 @@
             "y": 850,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "shield-user",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 359.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -930,7 +2535,21 @@
             "y": 850,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "target",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 389.75,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -938,11 +2557,35 @@
           "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
           "shown": true,
           "bounds": {
-            "x": 600.21,
+            "x": 603.61,
             "y": 846,
-            "width": 250.39,
+            "width": 245.36,
             "height": 32
-          }
+          },
+          "icons": [
+            {
+              "name": "img:perf",
+              "bounds": {
+                "x": 603.61,
+                "y": 853.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Fixture agent, 20 tool calls then 300...",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 626.61,
+                "y": 853,
+                "width": 222.36,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -950,11 +2593,35 @@
           "key": "composer/Thinking: High",
           "shown": true,
           "bounds": {
-            "x": 854.6,
+            "x": 852.97,
             "y": 846,
-            "width": 35.69,
+            "width": 36.77,
             "height": 32
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "/",
+              "color": "#89857b99",
+              "bounds": {
+                "x": 852.97,
+                "y": 851,
+                "width": 5.95,
+                "height": 22
+              }
+            },
+            {
+              "text": "High",
+              "color": "#c67f13bf",
+              "bounds": {
+                "x": 862.92,
+                "y": 853,
+                "width": 26.81,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -962,11 +2629,36 @@
           "key": "composer/Build",
           "shown": true,
           "bounds": {
-            "x": 902.29,
+            "x": 901.73,
             "y": 846,
-            "width": 51.96,
+            "width": 52.52,
             "height": 32
-          }
+          },
+          "icons": [
+            {
+              "name": "ai-agent",
+              "color": "#76ad4fff",
+              "bounds": {
+                "x": 901.73,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Build",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 923.73,
+                "y": 853,
+                "width": 30.52,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -978,7 +2670,21 @@
             "y": 850,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "mic",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 970.25,
+                "y": 854,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -990,7 +2696,21 @@
             "y": 850,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "other",
+              "color": "#da5b4aff",
+              "bounds": {
+                "x": 1004.25,
+                "y": 852,
+                "width": 20,
+                "height": 20
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     },
@@ -1012,7 +2732,21 @@
             "y": 70,
             "width": 20,
             "height": 20
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1354,
+                "y": 72,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1021,10 +2755,13 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 89.99,
+            "y": 90,
             "width": 284,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1033,10 +2770,13 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 191.98,
+            "y": 192,
             "width": 284,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1045,10 +2785,13 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 219.98,
+            "y": 220,
             "width": 284,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1057,10 +2800,55 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 271.98,
+            "y": 272,
             "width": 284,
-            "height": 15.99
-          }
+            "height": 16
+          },
+          "icons": [
+            {
+              "name": "stack",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1092,
+                "y": 273,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-right-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1214.23,
+                "y": 273,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Context sources",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1112,
+                "y": 271,
+                "width": 96.23,
+                "height": 17
+              }
+            },
+            {
+              "text": "3 skills",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1330.81,
+                "y": 271,
+                "width": 37.19,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -1069,10 +2857,45 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 317.98,
+            "y": 318,
             "width": 284,
-            "height": 15.99
-          }
+            "height": 16
+          },
+          "icons": [
+            {
+              "name": "bar-chart-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1092,
+                "y": 319,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-down-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1178.06,
+                "y": 319,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Turn stats",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1112,
+                "y": 317,
+                "width": 60.06,
+                "height": 17
+              }
+            }
+          ]
         }
       ]
     },
@@ -1094,7 +2917,21 @@
             "y": 56,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "donut-chart-fill",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 61.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1106,7 +2943,21 @@
             "y": 101,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "git-branch",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 106.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1118,7 +2969,40 @@
             "y": 137,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "layout-column",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 142.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [
+            {
+              "color": "#db5c4c40",
+              "bounds": {
+                "x": 1412.89,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            },
+            {
+              "color": "#78ab5040",
+              "bounds": {
+                "x": 1418.86,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            }
+          ],
+          "texts": []
         },
         {
           "role": "button",
@@ -1130,7 +3014,21 @@
             "y": 173,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "route",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 178.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1142,7 +3040,21 @@
             "y": 218,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "file-edit",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 223.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1154,7 +3066,21 @@
             "y": 254,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "terminal-box",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 259.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1166,7 +3092,21 @@
             "y": 290,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "global",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 295.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1178,7 +3118,21 @@
             "y": 335,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "book-marked",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 340.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1190,7 +3144,21 @@
             "y": 371,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 376.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     }
@@ -1227,20 +3195,6 @@
     },
     {
       "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
-      "role": "button",
-      "problem": "repeated-key",
-      "nameSource": "aria name"
-    },
-    {
-      "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#1",
-      "role": "button",
-      "problem": "repeated-key",
-      "nameSource": "aria name"
-    },
-    {
-      "region": "chatColumn",
       "key": "chatColumn/Find Files scripts/perf/*.mjs#1",
       "role": "button",
       "problem": "repeated-key",
@@ -1255,14 +3209,14 @@
     },
     {
       "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#1",
       "role": "button",
       "problem": "repeated-key",
       "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#2",
+      "key": "chatColumn/Find Files packages/*/package.json#1",
       "role": "button",
       "problem": "repeated-key",
       "nameSource": "aria name"
@@ -1283,14 +3237,14 @@
     },
     {
       "region": "chatColumn",
-      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#2",
       "role": "button",
       "problem": "repeated-key",
       "nameSource": "aria name"
     },
     {
       "region": "chatColumn",
-      "key": "chatColumn/Find Files packages/*/package.json#3",
+      "key": "chatColumn/Find Files packages/*/package.json#2",
       "role": "button",
       "problem": "repeated-key",
       "nameSource": "aria name"
@@ -1311,7 +3265,63 @@
     },
     {
       "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#3",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#4",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#4",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
       "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#4",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files packages/*/package.json#4",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files scripts/perf/*.mjs#5",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files *.md#5",
+      "role": "button",
+      "problem": "repeated-key",
+      "nameSource": "aria name"
+    },
+    {
+      "region": "chatColumn",
+      "key": "chatColumn/Find Files .agents/skills/*/SKILL.md#5",
       "role": "button",
       "problem": "repeated-key",
       "nameSource": "aria name"
