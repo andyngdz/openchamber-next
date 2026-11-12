@@ -1,18 +1,20 @@
 //! The composer footer's left icon group and right trigger/action group.
 
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::{ActiveTheme, Disableable};
-use gpui_kit::{
-    AnyElement, App, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Styled,
-    Window, div, px,
-};
+use gpui_kit::component::{Disableable, Sizable};
+use gpui_kit::{AnyElement, App, Div, IntoElement, ParentElement, Styled, Window, div, px};
 use oc_state::{ComposerStatus, ConnectionStatus, State};
 
 use super::slots::{Tool, TriggerKind, tool_name};
+use trigger_content::{TriggerPaint, label_width, record_trigger, trigger_content, trigger_width};
+#[cfg(test)]
+use trigger_content::{content_selector, label_selector};
+
+#[path = "composer_trigger_content.rs"]
+mod trigger_content;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 use crate::views::popover::trigger_control;
-use crate::views::text_metrics;
 use crate::views::{Intent, Scene, icon_button};
 
 /// `h-8` (`ModelControls.tsx:677`): 2rem.
@@ -88,17 +90,51 @@ pub(super) fn right_group(
 
 fn icon_control(name: &str, icon: RemixIcon, registry: &LayoutRegistry) -> AnyElement {
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
-    control(registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
+    let foreground = crate::theme::palette().foreground.into();
+    control(
+        registry,
+        spec.clone(),
+        icon_button(registry, &spec, icon, foreground),
+    )
+    .into_any_element()
 }
 
 fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> AnyElement {
     let name = tool_name(tool).unwrap_or_default();
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
+    let palette = crate::theme::palette();
     let button = match tool {
-        Tool::Stop => icon_button(&spec, RemixIcon::Stop),
-        _ => icon_button(&spec, RemixIcon::SendPlane2)
-            .disabled(!can_send(scene.state))
-            .on_click(scene.on_click_intent(Intent::SendPrompt)),
+        // React's own `StopIcon` (`components/icons/StopIcon.tsx`), in the error color.
+        Tool::Stop => {
+            registry.record_icon(
+                &spec.key,
+                crate::layout::draw::IconDraw::Custom {
+                    color: palette.destructive.into(),
+                },
+            );
+            let danger: gpui_kit::Hsla = palette.destructive.into();
+            Button::new(spec.key.clone())
+                .ghost()
+                .small()
+                .text_color(danger)
+                .icon(gpui_kit::component::Icon::new(
+                    crate::icons::CustomIcon::Stop,
+                ))
+                .tooltip(spec.name.clone())
+        }
+        // `text-primary` while sending is possible, else the foreground at 30% (`opacity-30`)
+        // (`ComposerActionButtons.tsx:77-82`).
+        _ => {
+            let enabled = can_send(scene.state);
+            let color = if enabled {
+                palette.primary.into()
+            } else {
+                crate::theme::faded(palette.foreground.into(), 0.3)
+            };
+            icon_button(registry, &spec, RemixIcon::SendPlane2, color)
+                .disabled(!enabled)
+                .on_click(scene.on_click_intent(Intent::SendPrompt))
+        }
     };
     control(registry, spec, button).into_any_element()
 }
@@ -114,112 +150,66 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
         return div().into_any_element();
     };
     let spec = ControlSpec::named(Area::Composer, Role::Button, name.clone());
-    let label_width = label_width(*layout, label, window, cx);
+    let paint = trigger_paint(scene.state, *layout);
+    let logo = match layout {
+        TriggerKind::Model => crate::views::popover::selected_model(scene.state)
+            .map(|(provider_id, _)| crate::icons::provider::provider_logo(&provider_id)),
+        TriggerKind::Thinking | TriggerKind::Agent => None,
+    };
+    let draws = record_trigger(scene.registry, &spec, *layout, label, paint, logo.as_ref());
+    // The Thinking label carries `lowercase` (`ModelControls.tsx:2678`); the capture records
+    // the text node, so the record keeps the original case.
+    let shown = match layout {
+        TriggerKind::Thinking => label.to_lowercase(),
+        TriggerKind::Model | TriggerKind::Agent => label.clone(),
+    };
+    let label_width = label_width(*layout, &shown, window, cx);
     let width = trigger_width(*layout, label_width, window, cx);
     // `text` is gpui-kit's padless button with no background. A padded variant clips the label,
     // because the width below holds only the content. Its own text colors dim at rest and
-    // brighten on hover, so the content row sets the reference's colors itself.
+    // brighten on hover, so the content row paints the reference's colors itself.
     let button = Button::new(spec.key.clone())
         .text()
         .w(px(width))
         .h(px(TRIGGER_HEIGHT))
         .accessibility_label(name.clone())
-        .child(trigger_content(*layout, label, label_width, cx));
+        .child(trigger_content(
+            *layout,
+            &shown,
+            label_width,
+            &draws,
+            logo.as_ref(),
+        ));
     trigger_control(scene, *kind, button, cx).into_any_element()
 }
 
-/// The label's width: its shaped line, the model label capped at the reference's maximum,
-/// rounded up to the device grid so layout never snaps the box below the line and ellipsizes it.
-fn label_width(layout: TriggerKind, label: &str, window: &mut Window, cx: &App) -> f32 {
-    let shaped = crate::views::line_width(window, cx, label, text_metrics::META, LABEL_WEIGHT);
-    let width = match layout {
-        TriggerKind::Model => shaped.min(MODEL_LABEL_MAX),
-        TriggerKind::Thinking | TriggerKind::Agent => shaped,
-    };
-    let scale = window.scale_factor();
-    (width * scale).ceil() / scale
-}
-
-/// `text-foreground` at rest; the model and agent triggers add `hover:opacity-70`
-/// (`ModelControls.tsx:2358,2855`), the Thinking trigger has no hover style (`2739`).
-fn trigger_content(layout: TriggerKind, label: &str, label_width: f32, cx: &App) -> Div {
-    let row = div()
-        .w_full()
-        .h_full()
-        .flex()
-        .items_center()
-        .text_color(cx.theme().foreground)
-        .debug_selector(|| content_selector(layout).to_owned());
+/// The colors a trigger paints: `text-foreground` labels, the Thinking slash in
+/// `text-muted-foreground/60` and its label in `text-status-warning/75`, and the agent icon
+/// in the agent's color (`ModelControls.tsx:2358,2739,2855`).
+fn trigger_paint(state: &State, layout: TriggerKind) -> TriggerPaint {
+    let palette = crate::theme::palette();
+    let foreground = palette.foreground.into();
     match layout {
-        TriggerKind::Model => row
-            .hover(|style| style.opacity(HOVER_OPACITY))
-            .gap(px(GAP_MODEL))
-            .child(icon_box(LOGO_SIZE, RemixIcon::Sparkling2))
-            .child(label_box(layout, label, label_width)),
-        TriggerKind::Thinking => row
-            .gap(px(GAP_THINKING))
-            .child(
-                div()
-                    .text_size(px(SLASH_SIZE))
-                    .line_height(px(SLASH_LINE_HEIGHT))
-                    .child("/"),
+        TriggerKind::Model => TriggerPaint {
+            label: foreground,
+            slash: foreground,
+            icon: foreground,
+        },
+        TriggerKind::Thinking => TriggerPaint {
+            label: crate::theme::faded(palette.status_warning.into(), 0.75),
+            slash: crate::theme::faded(palette.muted_foreground.into(), 0.6),
+            icon: foreground,
+        },
+        TriggerKind::Agent => TriggerPaint {
+            label: foreground,
+            slash: foreground,
+            icon: crate::theme::agent_color(
+                &crate::views::popover::shown_agent_id(state),
+                &palette,
             )
-            .child(label_box(layout, label, label_width)),
-        TriggerKind::Agent => row
-            .hover(|style| style.opacity(HOVER_OPACITY))
-            .gap(px(GAP_AGENT))
-            .child(icon_box(ICON_SIZE, RemixIcon::AiAgent))
-            .child(label_box(layout, label, label_width)),
+            .into(),
+        },
     }
-}
-
-/// Test lookup keys for a trigger's content row and its label.
-fn content_selector(layout: TriggerKind) -> &'static str {
-    match layout {
-        TriggerKind::Model => "composer-trigger/model",
-        TriggerKind::Thinking => "composer-trigger/thinking",
-        TriggerKind::Agent => "composer-trigger/agent",
-    }
-}
-
-fn label_selector(layout: TriggerKind) -> &'static str {
-    match layout {
-        TriggerKind::Model => "composer-trigger/model/label",
-        TriggerKind::Thinking => "composer-trigger/thinking/label",
-        TriggerKind::Agent => "composer-trigger/agent/label",
-    }
-}
-
-fn trigger_width(layout: TriggerKind, label_width: f32, window: &mut Window, cx: &App) -> f32 {
-    match layout {
-        TriggerKind::Model => LOGO_SIZE + GAP_MODEL + label_width,
-        TriggerKind::Thinking => {
-            crate::views::line_width(window, cx, "/", SLASH_SIZE, SLASH_WEIGHT)
-                + GAP_THINKING
-                + label_width
-        }
-        TriggerKind::Agent => ICON_SIZE + GAP_AGENT + label_width,
-    }
-}
-
-fn label_box(layout: TriggerKind, label: &str, width: f32) -> Div {
-    div()
-        .debug_selector(|| label_selector(layout).to_owned())
-        .w(px(width))
-        .flex_shrink_0()
-        .truncate()
-        .text_size(px(text_metrics::META))
-        .line_height(px(text_metrics::line_height(text_metrics::META)))
-        .font_weight(FontWeight(LABEL_WEIGHT))
-        .child(label.to_owned())
-}
-
-fn icon_box(size: f32, icon: RemixIcon) -> Div {
-    div()
-        .w(px(size))
-        .h(px(size))
-        .text_size(px(size))
-        .child(icon)
 }
 
 fn can_send(state: &State) -> bool {

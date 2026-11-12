@@ -17,10 +17,6 @@ pub(super) const ADD_PROVIDER: &str = "Add new provider";
 pub(super) const RUN_ON_SEVERAL: &str = "Run on several models";
 const FAVORITES: &str = "Favorites";
 const RECENT: &str = "Recent";
-/// The provider mark the reference draws from its logo set; the spike bundles no provider
-/// logos, so one neutral glyph stands in for every provider.
-const PROVIDER_ICON: RemixIcon = RemixIcon::Robot2;
-
 /// Whether a row is the session's current model.
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Selected {
@@ -50,8 +46,12 @@ impl SectionKind {
         !matches!(self, Self::Provider)
     }
 
-    fn icon(self) -> Option<RemixIcon> {
-        self.shows_provider().then_some(PROVIDER_ICON)
+    fn header_icon(self) -> Option<RemixIcon> {
+        match self {
+            Self::Favorites => Some(RemixIcon::StarFill),
+            Self::Recent => Some(RemixIcon::Time),
+            Self::Provider => None,
+        }
     }
 }
 
@@ -85,6 +85,8 @@ pub(super) fn leading_row() -> Row {
         name: RUN_ON_SEVERAL.to_owned(),
         label: RUN_ON_SEVERAL.to_owned(),
         icon: None,
+        logo: None,
+        dot: None,
         context: None,
         selected: false,
         role: Role::Option,
@@ -113,7 +115,8 @@ fn provider_section(provider: &oc_state::ProviderSection, state: &State) -> Sect
                 provider.name.to_uppercase()
             ),
             label: provider.name.to_uppercase(),
-            icon: Some(PROVIDER_ICON),
+            icon: None,
+            logo: Some(provider.provider_id.clone()),
             ancestors: vec![MODELS_GROUP.to_owned(), provider.name.clone()],
         }),
         rows: provider
@@ -135,11 +138,8 @@ fn group(
         header: Some(Header {
             name: header_name.to_owned(),
             label: label.to_uppercase(),
-            icon: Some(match kind {
-                SectionKind::Favorites => RemixIcon::StarFill,
-                SectionKind::Recent => RemixIcon::Time,
-                SectionKind::Provider => PROVIDER_ICON,
-            }),
+            icon: kind.header_icon(),
+            logo: None,
             ancestors: vec![MODELS_GROUP.to_owned(), label.to_owned()],
         }),
         rows: entries
@@ -158,7 +158,9 @@ fn model_row(entry: &ModelEntry, group: &str, kind: SectionKind, state: &State) 
     Row {
         name: accessible_name(entry, kind, selected, state),
         label: model_display_name(&entry.name, &entry.model_id),
-        icon: kind.icon(),
+        icon: None,
+        logo: kind.shows_provider().then(|| entry.provider_id.clone()),
+        dot: None,
         context: entry.context.map(compact_tokens),
         selected: selected.is_selected(),
         role: Role::Option,

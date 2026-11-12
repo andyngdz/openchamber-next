@@ -105,7 +105,7 @@ fn thinking_tool(state: &State) -> Option<Tool> {
         kind: PopoverKind::Thinking,
         layout: TriggerKind::Thinking,
         name,
-        label: label.to_lowercase(),
+        label,
     })
 }
 

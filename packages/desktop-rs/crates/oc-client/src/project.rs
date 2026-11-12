@@ -16,6 +16,8 @@ enum Field {
     DefaultAgent,
     DefaultModel,
     DefaultVariant,
+    Icon,
+    Color,
     AddedAt,
     LastOpenedAt,
     SidebarCollapsed,
@@ -30,6 +32,8 @@ impl Field {
             Self::DefaultAgent => "defaultAgent",
             Self::DefaultModel => "defaultModel",
             Self::DefaultVariant => "defaultVariant",
+            Self::Icon => "icon",
+            Self::Color => "color",
             Self::AddedAt => "addedAt",
             Self::LastOpenedAt => "lastOpenedAt",
             Self::SidebarCollapsed => "sidebarCollapsed",
@@ -88,6 +92,16 @@ impl Project {
     /// The variant that belongs to the default model.
     pub fn default_variant(&self) -> Option<&str> {
         self.text(Field::DefaultVariant)
+    }
+
+    /// The stored project icon key (`PROJECT_ICONS` in `lib/projectMeta.ts`).
+    pub fn icon(&self) -> Option<&str> {
+        self.text(Field::Icon)
+    }
+
+    /// The stored project color, a hex color.
+    pub fn color(&self) -> Option<&str> {
+        self.text(Field::Color)
     }
 
     /// When the project was added, in milliseconds since the epoch.

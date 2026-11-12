@@ -75,6 +75,10 @@ impl AgentList {
                     name: STAR_LABEL.to_owned(),
                     label: agent_display_name(&agent.display_name, &agent.id),
                     icon: None,
+                    logo: None,
+                    dot: Some(
+                        crate::theme::agent_color(&agent.id, &crate::theme::palette()).into(),
+                    ),
                     context: None,
                     selected: false,
                     role: Role::Menuitem,

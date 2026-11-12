@@ -121,6 +121,8 @@ fn project_group(index: usize, context: &Context<'_>) -> ProjectGroup {
             label: display_label(project, &context.home.home),
             path: project.path().unwrap_or_default().to_owned(),
             collapsed: project.sidebar_collapsed().unwrap_or(false),
+            icon: project.icon().map(str::to_owned),
+            color: project.color().map(str::to_owned),
         },
         rows,
         shown,

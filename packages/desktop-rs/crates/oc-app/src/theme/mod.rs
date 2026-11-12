@@ -15,7 +15,12 @@ use serde::Deserialize;
 use crate::logging::APP;
 
 mod highlight;
+mod oklab;
 mod palette;
+
+/// `color-mix(in oklab, first 50%, second)` for two opaque colors, as `oc-title-rest`
+/// mixes the foreground and the muted foreground (`packages/ui/src/index.css:217-219`).
+pub(crate) use oklab::mix as mix_oklab;
 
 /// The Electron default dark theme, copied from `packages/ui/src/lib/theme/themes/`.
 pub(crate) const DARK_THEME: &str = include_str!(concat!(
@@ -32,7 +37,7 @@ impl TryFrom<String> for Color {
     type Error = String;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
-        hex(&value).ok_or_else(|| format!("{value} is not a hex color"))
+        parse_hex(&value).ok_or_else(|| format!("{value} is not a hex color"))
     }
 }
 
@@ -42,8 +47,33 @@ impl From<Color> for Hsla {
     }
 }
 
+/// `#rrggbbaa` in sRGB, the form the parity reference records a color in.
+pub(crate) fn hex(color: Hsla) -> String {
+    let rgb = color.to_rgb();
+    let channel = |value: f32| (value.clamp(0., 1.) * 255.).round() as u8;
+    format!(
+        "#{:02x}{:02x}{:02x}{:02x}",
+        channel(rgb.r),
+        channel(rgb.g),
+        channel(rgb.b),
+        channel(rgb.a)
+    )
+}
+
+/// A stored hex color as a paint color.
+pub(crate) fn stored(value: &str) -> Option<Hsla> {
+    parse_hex(value).map(Into::into)
+}
+
+/// The same color at `alpha` times its own alpha, as a view's opacity multiplies into it.
+pub(crate) fn faded(color: Hsla, alpha: f32) -> Hsla {
+    let mut faded = color;
+    faded.a *= alpha;
+    faded
+}
+
 /// A hex color: `#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`, as `color.ts` accepts.
-fn hex(value: &str) -> Option<Color> {
+fn parse_hex(value: &str) -> Option<Color> {
     let digits = value.trim().strip_prefix('#')?;
     let full = match digits.len() {
         3 | 4 => digits.chars().flat_map(|digit| [digit, digit]).collect(),
@@ -142,6 +172,34 @@ pub(crate) fn apply(palette: Palette, cx: &mut App) {
         theme.title_bar_border = palette.border.into();
         theme.highlight_theme = highlight_theme;
     });
+}
+
+/// `hashName` from `packages/ui/src/lib/agentColors.ts`.
+fn hash_name(name: &str) -> u32 {
+    let mut hash: i32 = 0;
+    for byte in name.bytes() {
+        hash = hash.wrapping_mul(31).wrapping_add(i32::from(byte));
+    }
+    hash as u32
+}
+
+/// An agent's dot color, as `createAgentColorResolver` allocates it.
+///
+/// Build owns `status.success`. The remaining colors are the greedy oklab allocation the
+/// resolver makes over this theme's visible syntax roles: operator, type, variable, keyword
+/// (`packages/ui/src/lib/agentColors.ts:75-104`). A theme change recomputes that order; the
+/// allocation is fixed for the app's one dark theme.
+pub(crate) fn agent_color(name: &str, palette: &Palette) -> Color {
+    if name.is_empty() || name == "build" {
+        return palette.status_success;
+    }
+    let colors = [
+        palette.syntax_operator,
+        palette.syntax_type,
+        palette.syntax_variable,
+        palette.syntax_keyword,
+    ];
+    colors[(hash_name(name) as usize) % colors.len()]
 }
 
 /// The card background of the Work status panel and the composer.

@@ -182,6 +182,10 @@ fn every_state_asks_only_for_substituted_gpui_kit_icons() {
                 requested.insert(asset);
                 continue;
             }
+            // The app serves React's own inline SVGs itself; they are not gpui-kit paths.
+            if asset.starts_with("icons/custom/") {
+                continue;
+            }
             if asset.starts_with("icons/") && !table.contains(&asset.as_str()) {
                 unknown.insert(asset);
             }

@@ -8,6 +8,8 @@ fn a_row_keeps_its_accessible_name_apart_from_what_it_draws() {
         name: "Fixture model 200K".to_owned(),
         label: "Fixture model".to_owned(),
         icon: None,
+        logo: None,
+        dot: None,
         context: Some("200K".to_owned()),
         selected: false,
         role: crate::layout::Role::Option,

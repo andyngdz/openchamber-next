@@ -19,8 +19,10 @@ pub const REGIONS: [&str; 7] = [
 ];
 
 mod chat_window;
+mod draws;
 
 use chat_window::chat_column_difference;
+pub use draws::{DRAWN_REGIONS, draw_differences};
 
 /// The key and role of each control of a region, in order.
 fn controls(layout: &Value, region: &str) -> Vec<(String, String)> {

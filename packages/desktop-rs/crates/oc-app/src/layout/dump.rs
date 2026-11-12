@@ -5,6 +5,7 @@ use serde::Serialize;
 
 use super::registry::{Area, LayoutRegistry, PlacedControl, Reveal, Role};
 use crate::errors::AppError;
+use crate::theme;
 
 /// One frame's regions and controls, as the parity test reads them.
 #[derive(Debug, Serialize)]
@@ -57,6 +58,30 @@ struct ControlDump {
     name: String,
     key: String,
     shown: bool,
+    bounds: BoundsDump,
+    icons: Vec<IconDump>,
+    marks: Vec<MarkDump>,
+    texts: Vec<TextDump>,
+}
+
+#[derive(Debug, Serialize)]
+struct IconDump {
+    name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    color: Option<String>,
+    bounds: BoundsDump,
+}
+
+#[derive(Debug, Serialize)]
+struct MarkDump {
+    color: String,
+    bounds: BoundsDump,
+}
+
+#[derive(Debug, Serialize)]
+struct TextDump {
+    text: String,
+    color: String,
     bounds: BoundsDump,
 }
 
@@ -116,7 +141,7 @@ fn region_dump(
         controls: registry
             .controls_in(area)
             .into_iter()
-            .map(|placed| control_dump(placed, origin))
+            .map(|placed| control_dump(placed, origin, registry))
             .collect(),
     })
 }
@@ -136,17 +161,54 @@ fn hundredths(value: Pixels) -> f64 {
     (f64::from(f32::from(value)) * 100.).round() / 100.
 }
 
-fn control_dump(placed: PlacedControl, origin: Point<Pixels>) -> ControlDump {
+fn control_dump(
+    placed: PlacedControl,
+    origin: Point<Pixels>,
+    registry: &LayoutRegistry,
+) -> ControlDump {
     let shown = match placed.spec.reveal {
         Reveal::Always => true,
         Reveal::OnHover(_) | Reveal::Hidden => false,
     };
+    let bounds = bounds_dump(placed.bounds, origin);
+    let icons = registry
+        .icons_of(placed.spec.key.as_ref())
+        .iter()
+        .map(|(icon, painted)| IconDump {
+            name: icon.name(),
+            color: icon.color(),
+            bounds: bounds_dump(painted.unwrap_or(placed.bounds), origin),
+        })
+        .collect();
+    // An icon or run the view paints itself carries the bounds it was painted at; one inside a
+    // gpui-kit component keeps the control's bounds, since the view cannot know the
+    // component's inner box (design.md, "Frame check").
+    let texts = registry
+        .texts_of(placed.spec.key.as_ref())
+        .iter()
+        .map(|(text, painted)| TextDump {
+            text: text.text.to_string(),
+            color: text.color(),
+            bounds: bounds_dump(painted.unwrap_or(placed.bounds), origin),
+        })
+        .collect();
+    let marks = registry
+        .marks_of(placed.spec.key.as_ref())
+        .into_iter()
+        .map(|mark| MarkDump {
+            color: theme::hex(mark.color),
+            bounds: bounds_dump(mark.bounds, origin),
+        })
+        .collect();
     ControlDump {
         role: placed.spec.role,
         name: placed.spec.name.to_string(),
         key: placed.spec.key.to_string(),
         shown,
-        bounds: bounds_dump(placed.bounds, origin),
+        bounds,
+        icons,
+        marks,
+        texts,
     }
 }
 

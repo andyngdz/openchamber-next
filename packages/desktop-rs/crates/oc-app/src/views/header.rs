@@ -3,8 +3,8 @@
 
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
-    AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled, div,
-    px,
+    AnyElement, App, Div, Hsla, InteractiveElement, IntoElement, MouseButton, ParentElement,
+    Styled, div, px,
 };
 use oc_state::{ConnectionStatus, ServerExit};
 
@@ -128,33 +128,33 @@ pub(crate) fn header(scene: Scene<'_>, cx: &App) -> Div {
 fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
     let registry = scene.registry;
     let theme = cx.theme();
-    let server = server_label(scene.state.connection());
     match item {
-        HeaderItem::Title => {
-            let title = scene
-                .state
-                .open_entry()
-                .and_then(|entry| entry.title.clone())
-                .unwrap_or_default();
-            div().text_sm().truncate().child(title).into_any_element()
+        HeaderItem::Title => title(scene),
+        HeaderItem::Tool(name, icon) => {
+            // "Toggle work-status panel" draws the foreground; the rest the muted foreground.
+            let color = if name == "Toggle work-status panel" {
+                theme.foreground
+            } else {
+                theme.muted_foreground
+            };
+            tool_button(registry, name, icon, color)
         }
-        HeaderItem::Tool(name, icon) => tool(registry, name, icon),
-        HeaderItem::Spacer => div()
-            .flex_1()
-            .h_full()
-            .on_mouse_down(MouseButton::Left, |_, window, _| window.start_window_move())
-            .into_any_element(),
+        HeaderItem::Spacer => drag_spacer(),
         HeaderItem::ServerState => div()
             .max_w(px(360.))
             .truncate()
             .text_xs()
             .text_color(theme.muted_foreground)
-            .child(server)
+            .child(server_label(scene.state.connection()))
             .into_any_element(),
         HeaderItem::ContextUsage => {
             let spec = ControlSpec::named(Area::Header, Role::Button, CONTEXT_USAGE)
                 .under(&[MAIN_NAVIGATION]);
-            let button = label_button(&spec, Some(RemixIcon::DonutChart), server);
+            // React draws its own `ContextRing` (`HeaderContextUsage.tsx`) before the label; it
+            // is not ported yet, so nothing records it until the header unit draws it.
+            let muted = theme.muted_foreground;
+            let server = server_label(scene.state.connection());
+            let button = label_button(registry, &spec, None, server, muted);
             div()
                 .flex()
                 .items_center()
@@ -165,6 +165,25 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
         }
         HeaderItem::Window(name, icon, action) => window_control(registry, name, icon, action),
     }
+}
+
+/// The open session's title, or nothing in the empty state.
+fn title(scene: Scene<'_>) -> AnyElement {
+    let title = scene
+        .state
+        .open_entry()
+        .and_then(|entry| entry.title.clone())
+        .unwrap_or_default();
+    div().text_sm().truncate().child(title).into_any_element()
+}
+
+/// The gap between the header's groups; dragging it moves the window.
+fn drag_spacer() -> AnyElement {
+    div()
+        .flex_1()
+        .h_full()
+        .on_mouse_down(MouseButton::Left, |_, window, _| window.start_window_move())
+        .into_any_element()
 }
 
 /// Restarts a server that exited or failed; the empty state shows its own Retry instead.
@@ -181,9 +200,19 @@ fn restart_button(scene: Scene<'_>) -> Option<AnyElement> {
     }
 }
 
-fn tool(registry: &LayoutRegistry, name: &'static str, icon: RemixIcon) -> AnyElement {
+fn tool_button(
+    registry: &LayoutRegistry,
+    name: &'static str,
+    icon: RemixIcon,
+    color: Hsla,
+) -> AnyElement {
     let spec = ControlSpec::named(Area::Header, Role::Button, name).under(&[MAIN_NAVIGATION]);
-    control(registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
+    control(
+        registry,
+        spec.clone(),
+        icon_button(registry, &spec, icon, color),
+    )
+    .into_any_element()
 }
 
 fn window_control(
@@ -194,7 +223,13 @@ fn window_control(
 ) -> AnyElement {
     let spec = ControlSpec::named(Area::Header, Role::Button, name)
         .under(&[MAIN_NAVIGATION, WINDOW_CONTROL_GROUP]);
-    let button = icon_button(&spec, icon).on_click(move |_, window, _| match action {
+    let button = icon_button(
+        registry,
+        &spec,
+        icon,
+        crate::theme::palette().muted_foreground.into(),
+    )
+    .on_click(move |_, window, _| match action {
         WindowAction::Minimize => window.minimize_window(),
         WindowAction::Maximize => window.zoom_window(),
         WindowAction::Close => window.remove_window(),

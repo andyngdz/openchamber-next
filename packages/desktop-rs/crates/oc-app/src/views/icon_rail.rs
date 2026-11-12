@@ -6,6 +6,7 @@ use gpui_kit::{App, Div, ParentElement, Styled, div, px};
 use super::icon_button;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control, region};
+use crate::theme;
 
 /// The rail's buttons in reference order, in groups split by a divider.
 const GROUPS: [&[(&str, RemixIcon)]; 3] = [
@@ -44,7 +45,12 @@ pub(crate) fn icon_rail(registry: &LayoutRegistry, cx: &App) -> Div {
         }
         for (name, icon) in group.iter() {
             let spec = ControlSpec::named(Area::IconRail, Role::Button, *name);
-            rail = rail.child(control(registry, spec.clone(), icon_button(&spec, *icon)));
+            let muted = theme::palette().muted_foreground.into();
+            rail = rail.child(control(
+                registry,
+                spec.clone(),
+                icon_button(registry, &spec, *icon, muted),
+            ));
         }
     }
     region(registry, Area::IconRail, rail)

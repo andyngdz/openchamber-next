@@ -10,7 +10,7 @@ use gpui_kit::SharedString;
 use super::registry::{Area, Reveal, Role};
 
 /// One control: region, role, accessible name, where it sits, and its visibility.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct ControlSpec {
     pub(crate) area: Area,
     pub(crate) role: Role,

@@ -1,11 +1,17 @@
-//! Remix icons, generated from `packages/ui/src/components/icon/sprite.ts`.
+//! Remix icons, generated from `packages/ui/src/components/icon/sprite.ts`; do not edit.
 //!
 //! Do not edit by hand: `node tools/gen-remix-icons.mjs` rewrites this file and the SVG
-//! files it points at. Names are React's sprite symbols, one per icon file.
+//! files it points at. Names are React's sprite symbols, one per icon file. The sprite order
+//! lives in `remix_all.rs` and the name match in `remix_names.rs`.
 
 use gpui_kit::SharedString;
 use gpui_kit::component::{Icon, IconNamed};
 use gpui_kit::{App, IntoElement, RenderOnce, Window};
+
+#[path = "remix_all.rs"]
+mod remix_all;
+#[path = "remix_names.rs"]
+mod remix_names;
 
 /// One symbol of React's Remix sprite.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, IntoElement)]
@@ -56,155 +62,10 @@ pub(crate) enum RemixIcon {
     ZoomOut,
 }
 
-impl RemixIcon {
-    /// Every icon, in sprite order.
-    #[rustfmt::skip]
-    pub(crate) const ALL: &[RemixIcon] = &[
-        RemixIcon::Add, RemixIcon::AddCircle, RemixIcon::AiAgent, RemixIcon::AiAgentFill, RemixIcon::AiGenerate2,
-        RemixIcon::AlarmWarning, RemixIcon::Alert, RemixIcon::Android, RemixIcon::AppAndroidStudio, RemixIcon::AppAntigravity,
-        RemixIcon::AppCursor, RemixIcon::AppEclipse, RemixIcon::AppGhostty, RemixIcon::AppIntellij, RemixIcon::AppIterm2,
-        RemixIcon::AppKiro, RemixIcon::AppPhpstorm, RemixIcon::AppPycharm, RemixIcon::AppRider, RemixIcon::AppRustrover,
-        RemixIcon::AppSublimeText, RemixIcon::AppTrae, RemixIcon::AppVisualStudio, RemixIcon::AppVscode, RemixIcon::AppVscodium,
-        RemixIcon::AppWebstorm, RemixIcon::AppWindsurf, RemixIcon::AppXcode, RemixIcon::AppZed, RemixIcon::Apple,
-        RemixIcon::Apps, RemixIcon::Archive, RemixIcon::ArchiveStack, RemixIcon::ArrowDown, RemixIcon::ArrowDownS,
-        RemixIcon::ArrowGoBack, RemixIcon::ArrowLeft, RemixIcon::ArrowLeftRight, RemixIcon::ArrowLeftS, RemixIcon::ArrowRight,
-        RemixIcon::ArrowRightS, RemixIcon::ArrowUp, RemixIcon::ArrowUpDouble, RemixIcon::ArrowUpDown, RemixIcon::ArrowUpS,
-        RemixIcon::Attachment2, RemixIcon::Bank, RemixIcon::BankCard, RemixIcon::BarChart, RemixIcon::BarChart2,
-        RemixIcon::BarChartBox, RemixIcon::Book, RemixIcon::BookMarked, RemixIcon::BookOpen, RemixIcon::Booklet,
-        RemixIcon::Box3, RemixIcon::Braces, RemixIcon::Brain, RemixIcon::Brain4, RemixIcon::BrainAi3,
-        RemixIcon::Briefcase, RemixIcon::Brush, RemixIcon::Bug, RemixIcon::Calendar, RemixIcon::CalendarEvent,
-        RemixIcon::CalendarSchedule, RemixIcon::Camera, RemixIcon::Chat1, RemixIcon::Chat3, RemixIcon::Chat4,
-        RemixIcon::ChatAi3, RemixIcon::ChatCheck, RemixIcon::ChatForward, RemixIcon::ChatHistory, RemixIcon::ChatNew,
-        RemixIcon::ChatOff, RemixIcon::ChatThread, RemixIcon::Check, RemixIcon::CheckDouble, RemixIcon::Checkbox,
-        RemixIcon::CheckboxBlank, RemixIcon::CheckboxBlankCircle, RemixIcon::CheckboxBlankCircleFill, RemixIcon::CheckboxCircle, RemixIcon::CheckboxMultiple,
-        RemixIcon::Circle, RemixIcon::Clipboard, RemixIcon::Close, RemixIcon::CloseCircle, RemixIcon::Cloud,
-        RemixIcon::CloudOff, RemixIcon::Cloudflare, RemixIcon::Code, RemixIcon::CodeAi, RemixIcon::CodeBox,
-        RemixIcon::CodeSslash, RemixIcon::CollapseVertical, RemixIcon::Command, RemixIcon::Compass3, RemixIcon::Computer,
-        RemixIcon::ContactsBook, RemixIcon::ContractUpDown, RemixIcon::CornerDownLeft, RemixIcon::CornerDownRight, RemixIcon::Cpu,
-        RemixIcon::Cup, RemixIcon::CustomerService2, RemixIcon::Database2, RemixIcon::DeleteBin, RemixIcon::DeleteBin2,
-        RemixIcon::DiscordFill, RemixIcon::Discuss, RemixIcon::DonutChart, RemixIcon::DonutChartFill, RemixIcon::DoubleQuotesL,
-        RemixIcon::Download, RemixIcon::DownloadCloud, RemixIcon::DownloadCloud2, RemixIcon::DragMove2, RemixIcon::Draggable,
-        RemixIcon::Edit, RemixIcon::Edit2, RemixIcon::EmotionHappy, RemixIcon::Equalizer2, RemixIcon::ErrorWarning,
-        RemixIcon::ExpandHorizontal, RemixIcon::ExpandLeft, RemixIcon::ExpandRight, RemixIcon::ExpandUpDown, RemixIcon::ExternalLink,
-        RemixIcon::Eye, RemixIcon::EyeOff, RemixIcon::Feedback, RemixIcon::File, RemixIcon::FileAdd,
-        RemixIcon::FileCode, RemixIcon::FileCopy, RemixIcon::FileCopy2, RemixIcon::FileEdit, RemixIcon::FileForbid,
-        RemixIcon::FileImage, RemixIcon::FileList2, RemixIcon::FileMusic, RemixIcon::FilePaper2, RemixIcon::FilePdf,
-        RemixIcon::FileSearch, RemixIcon::FileText, RemixIcon::FileUpload, RemixIcon::FileVideo, RemixIcon::Film,
-        RemixIcon::Filter3, RemixIcon::Finder, RemixIcon::Fingerprint, RemixIcon::Fire, RemixIcon::FireFill,
-        RemixIcon::Flag, RemixIcon::Flashlight, RemixIcon::Flask, RemixIcon::FlowChart, RemixIcon::Focus3,
-        RemixIcon::Folder, RemixIcon::Folder3, RemixIcon::Folder3Fill, RemixIcon::Folder6, RemixIcon::FolderAdd,
-        RemixIcon::FolderOpen, RemixIcon::FolderOpenFill, RemixIcon::FolderReceived, RemixIcon::FolderShared, RemixIcon::Folders,
-        RemixIcon::Fullscreen, RemixIcon::FullscreenExit, RemixIcon::Gamepad, RemixIcon::Gift, RemixIcon::GitBranch,
-        RemixIcon::GitClosePullRequest, RemixIcon::GitCommit, RemixIcon::GitMerge, RemixIcon::GitPrDraft, RemixIcon::GitPullRequest,
-        RemixIcon::GitRepository, RemixIcon::Github, RemixIcon::GithubFill, RemixIcon::Gitlab, RemixIcon::Global,
-        RemixIcon::GraduationCap, RemixIcon::Hammer, RemixIcon::HardDrive2, RemixIcon::Hashtag, RemixIcon::Heart,
-        RemixIcon::History, RemixIcon::Home, RemixIcon::HomeOffice, RemixIcon::Image, RemixIcon::Image2,
-        RemixIcon::ImageDownload, RemixIcon::InboxArchive, RemixIcon::InboxUnarchive, RemixIcon::InboxUnarchiveFill, RemixIcon::Information,
-        RemixIcon::Instance, RemixIcon::Key, RemixIcon::Keyboard, RemixIcon::Layout, RemixIcon::LayoutBottom,
-        RemixIcon::LayoutColumn, RemixIcon::LayoutLeft, RemixIcon::LayoutRight, RemixIcon::Leaf, RemixIcon::Lightbulb,
-        RemixIcon::LineChart, RemixIcon::Linear, RemixIcon::Link, RemixIcon::ListCheck2, RemixIcon::ListIndefinite,
-        RemixIcon::ListUnordered, RemixIcon::Loader, RemixIcon::Loader4, RemixIcon::Lock, RemixIcon::LockUnlock,
-        RemixIcon::LoopLeft, RemixIcon::LoopRight, RemixIcon::LoopRightAi, RemixIcon::Macbook, RemixIcon::Mail,
-        RemixIcon::MapPin2, RemixIcon::Markup, RemixIcon::Menu2, RemixIcon::MenuSearch, RemixIcon::Mic,
-        RemixIcon::MoneyDollarCircle, RemixIcon::Moon, RemixIcon::More, RemixIcon::More2, RemixIcon::More2Fill,
-        RemixIcon::MoreFill, RemixIcon::Music, RemixIcon::NodeTree, RemixIcon::Notification3, RemixIcon::Npmjs,
-        RemixIcon::Openchamber, RemixIcon::Opencode, RemixIcon::Palette, RemixIcon::Pause, RemixIcon::PenNib,
-        RemixIcon::Pencil, RemixIcon::PencilAi, RemixIcon::PencilAi2, RemixIcon::PencilRuler2, RemixIcon::PictureInPicture2,
-        RemixIcon::PieChart, RemixIcon::Plane, RemixIcon::Planet, RemixIcon::Play, RemixIcon::Plug,
-        RemixIcon::Plug2, RemixIcon::Pulse, RemixIcon::Pushpin, RemixIcon::Pushpin2, RemixIcon::Pushpin2Fill,
-        RemixIcon::Puzzle, RemixIcon::Puzzle2, RemixIcon::Question, RemixIcon::QuillPen, RemixIcon::RecordCircle,
-        RemixIcon::Refresh, RemixIcon::Restart, RemixIcon::Robot, RemixIcon::Robot2, RemixIcon::Rocket,
-        RemixIcon::Route, RemixIcon::Save3, RemixIcon::Scales3, RemixIcon::Scan2, RemixIcon::Scissors,
-        RemixIcon::Search, RemixIcon::SearchEye, RemixIcon::SendPlane, RemixIcon::SendPlane2, RemixIcon::Server,
-        RemixIcon::Settings3, RemixIcon::Shield, RemixIcon::ShieldCheck, RemixIcon::ShieldKeyhole, RemixIcon::ShieldStar,
-        RemixIcon::ShieldUser, RemixIcon::Shuffle, RemixIcon::Signpost, RemixIcon::SlashCommands2, RemixIcon::Smartphone,
-        RemixIcon::Space, RemixIcon::Sparkling, RemixIcon::Sparkling2, RemixIcon::SpeedUp, RemixIcon::SplitCellsHorizontal,
-        RemixIcon::Stack, RemixIcon::Star, RemixIcon::StarFill, RemixIcon::StickyNote, RemixIcon::Stop,
-        RemixIcon::StopLarge, RemixIcon::Store2, RemixIcon::Subtract, RemixIcon::Sun, RemixIcon::Survey,
-        RemixIcon::Table2, RemixIcon::Target, RemixIcon::TargetFill, RemixIcon::Task, RemixIcon::Team,
-        RemixIcon::Terminal, RemixIcon::TerminalBox, RemixIcon::TerminalWindow, RemixIcon::TestTube, RemixIcon::Text,
-        RemixIcon::TextWrap, RemixIcon::ThumbUp, RemixIcon::Ticket2, RemixIcon::Time, RemixIcon::Timer,
-        RemixIcon::Tools, RemixIcon::Trophy, RemixIcon::TwitterXfill, RemixIcon::Ubuntu, RemixIcon::Unpin,
-        RemixIcon::Upload2, RemixIcon::UploadCloud2, RemixIcon::User, RemixIcon::User3, RemixIcon::UserSearch,
-        RemixIcon::VerifiedBadge, RemixIcon::VolumeUp, RemixIcon::Window, RemixIcon::Windows, RemixIcon::Worktree,
-        RemixIcon::ZoomIn, RemixIcon::ZoomOut,
-    ];
-}
-
 impl IconNamed for RemixIcon {
     #[rustfmt::skip]
     fn path(self) -> SharedString {
-        let name = match self {
-            Self::Add => "add", Self::AddCircle => "add-circle", Self::AiAgent => "ai-agent", Self::AiAgentFill => "ai-agent-fill", Self::AiGenerate2 => "ai-generate-2",
-            Self::AlarmWarning => "alarm-warning", Self::Alert => "alert", Self::Android => "android", Self::AppAndroidStudio => "app-android-studio", Self::AppAntigravity => "app-antigravity",
-            Self::AppCursor => "app-cursor", Self::AppEclipse => "app-eclipse", Self::AppGhostty => "app-ghostty", Self::AppIntellij => "app-intellij", Self::AppIterm2 => "app-iterm2",
-            Self::AppKiro => "app-kiro", Self::AppPhpstorm => "app-phpstorm", Self::AppPycharm => "app-pycharm", Self::AppRider => "app-rider", Self::AppRustrover => "app-rustrover",
-            Self::AppSublimeText => "app-sublime-text", Self::AppTrae => "app-trae", Self::AppVisualStudio => "app-visual-studio", Self::AppVscode => "app-vscode", Self::AppVscodium => "app-vscodium",
-            Self::AppWebstorm => "app-webstorm", Self::AppWindsurf => "app-windsurf", Self::AppXcode => "app-xcode", Self::AppZed => "app-zed", Self::Apple => "apple",
-            Self::Apps => "apps", Self::Archive => "archive", Self::ArchiveStack => "archive-stack", Self::ArrowDown => "arrow-down", Self::ArrowDownS => "arrow-down-s",
-            Self::ArrowGoBack => "arrow-go-back", Self::ArrowLeft => "arrow-left", Self::ArrowLeftRight => "arrow-left-right", Self::ArrowLeftS => "arrow-left-s", Self::ArrowRight => "arrow-right",
-            Self::ArrowRightS => "arrow-right-s", Self::ArrowUp => "arrow-up", Self::ArrowUpDouble => "arrow-up-double", Self::ArrowUpDown => "arrow-up-down", Self::ArrowUpS => "arrow-up-s",
-            Self::Attachment2 => "attachment-2", Self::Bank => "bank", Self::BankCard => "bank-card", Self::BarChart => "bar-chart", Self::BarChart2 => "bar-chart-2",
-            Self::BarChartBox => "bar-chart-box", Self::Book => "book", Self::BookMarked => "book-marked", Self::BookOpen => "book-open", Self::Booklet => "booklet",
-            Self::Box3 => "box-3", Self::Braces => "braces", Self::Brain => "brain", Self::Brain4 => "brain-4", Self::BrainAi3 => "brain-ai-3",
-            Self::Briefcase => "briefcase", Self::Brush => "brush", Self::Bug => "bug", Self::Calendar => "calendar", Self::CalendarEvent => "calendar-event",
-            Self::CalendarSchedule => "calendar-schedule", Self::Camera => "camera", Self::Chat1 => "chat-1", Self::Chat3 => "chat-3", Self::Chat4 => "chat-4",
-            Self::ChatAi3 => "chat-ai-3", Self::ChatCheck => "chat-check", Self::ChatForward => "chat-forward", Self::ChatHistory => "chat-history", Self::ChatNew => "chat-new",
-            Self::ChatOff => "chat-off", Self::ChatThread => "chat-thread", Self::Check => "check", Self::CheckDouble => "check-double", Self::Checkbox => "checkbox",
-            Self::CheckboxBlank => "checkbox-blank", Self::CheckboxBlankCircle => "checkbox-blank-circle", Self::CheckboxBlankCircleFill => "checkbox-blank-circle-fill", Self::CheckboxCircle => "checkbox-circle", Self::CheckboxMultiple => "checkbox-multiple",
-            Self::Circle => "circle", Self::Clipboard => "clipboard", Self::Close => "close", Self::CloseCircle => "close-circle", Self::Cloud => "cloud",
-            Self::CloudOff => "cloud-off", Self::Cloudflare => "cloudflare", Self::Code => "code", Self::CodeAi => "code-ai", Self::CodeBox => "code-box",
-            Self::CodeSslash => "code-sslash", Self::CollapseVertical => "collapse-vertical", Self::Command => "command", Self::Compass3 => "compass-3", Self::Computer => "computer",
-            Self::ContactsBook => "contacts-book", Self::ContractUpDown => "contract-up-down", Self::CornerDownLeft => "corner-down-left", Self::CornerDownRight => "corner-down-right", Self::Cpu => "cpu",
-            Self::Cup => "cup", Self::CustomerService2 => "customer-service-2", Self::Database2 => "database-2", Self::DeleteBin => "delete-bin", Self::DeleteBin2 => "delete-bin-2",
-            Self::DiscordFill => "discord-fill", Self::Discuss => "discuss", Self::DonutChart => "donut-chart", Self::DonutChartFill => "donut-chart-fill", Self::DoubleQuotesL => "double-quotes-l",
-            Self::Download => "download", Self::DownloadCloud => "download-cloud", Self::DownloadCloud2 => "download-cloud-2", Self::DragMove2 => "drag-move-2", Self::Draggable => "draggable",
-            Self::Edit => "edit", Self::Edit2 => "edit-2", Self::EmotionHappy => "emotion-happy", Self::Equalizer2 => "equalizer-2", Self::ErrorWarning => "error-warning",
-            Self::ExpandHorizontal => "expand-horizontal", Self::ExpandLeft => "expand-left", Self::ExpandRight => "expand-right", Self::ExpandUpDown => "expand-up-down", Self::ExternalLink => "external-link",
-            Self::Eye => "eye", Self::EyeOff => "eye-off", Self::Feedback => "feedback", Self::File => "file", Self::FileAdd => "file-add",
-            Self::FileCode => "file-code", Self::FileCopy => "file-copy", Self::FileCopy2 => "file-copy-2", Self::FileEdit => "file-edit", Self::FileForbid => "file-forbid",
-            Self::FileImage => "file-image", Self::FileList2 => "file-list-2", Self::FileMusic => "file-music", Self::FilePaper2 => "file-paper-2", Self::FilePdf => "file-pdf",
-            Self::FileSearch => "file-search", Self::FileText => "file-text", Self::FileUpload => "file-upload", Self::FileVideo => "file-video", Self::Film => "film",
-            Self::Filter3 => "filter-3", Self::Finder => "finder", Self::Fingerprint => "fingerprint", Self::Fire => "fire", Self::FireFill => "fire-fill",
-            Self::Flag => "flag", Self::Flashlight => "flashlight", Self::Flask => "flask", Self::FlowChart => "flow-chart", Self::Focus3 => "focus-3",
-            Self::Folder => "folder", Self::Folder3 => "folder-3", Self::Folder3Fill => "folder-3-fill", Self::Folder6 => "folder-6", Self::FolderAdd => "folder-add",
-            Self::FolderOpen => "folder-open", Self::FolderOpenFill => "folder-open-fill", Self::FolderReceived => "folder-received", Self::FolderShared => "folder-shared", Self::Folders => "folders",
-            Self::Fullscreen => "fullscreen", Self::FullscreenExit => "fullscreen-exit", Self::Gamepad => "gamepad", Self::Gift => "gift", Self::GitBranch => "git-branch",
-            Self::GitClosePullRequest => "git-close-pull-request", Self::GitCommit => "git-commit", Self::GitMerge => "git-merge", Self::GitPrDraft => "git-pr-draft", Self::GitPullRequest => "git-pull-request",
-            Self::GitRepository => "git-repository", Self::Github => "github", Self::GithubFill => "github-fill", Self::Gitlab => "gitlab", Self::Global => "global",
-            Self::GraduationCap => "graduation-cap", Self::Hammer => "hammer", Self::HardDrive2 => "hard-drive-2", Self::Hashtag => "hashtag", Self::Heart => "heart",
-            Self::History => "history", Self::Home => "home", Self::HomeOffice => "home-office", Self::Image => "image", Self::Image2 => "image-2",
-            Self::ImageDownload => "image-download", Self::InboxArchive => "inbox-archive", Self::InboxUnarchive => "inbox-unarchive", Self::InboxUnarchiveFill => "inbox-unarchive-fill", Self::Information => "information",
-            Self::Instance => "instance", Self::Key => "key", Self::Keyboard => "keyboard", Self::Layout => "layout", Self::LayoutBottom => "layout-bottom",
-            Self::LayoutColumn => "layout-column", Self::LayoutLeft => "layout-left", Self::LayoutRight => "layout-right", Self::Leaf => "leaf", Self::Lightbulb => "lightbulb",
-            Self::LineChart => "line-chart", Self::Linear => "linear", Self::Link => "link", Self::ListCheck2 => "list-check-2", Self::ListIndefinite => "list-indefinite",
-            Self::ListUnordered => "list-unordered", Self::Loader => "loader", Self::Loader4 => "loader-4", Self::Lock => "lock", Self::LockUnlock => "lock-unlock",
-            Self::LoopLeft => "loop-left", Self::LoopRight => "loop-right", Self::LoopRightAi => "loop-right-ai", Self::Macbook => "macbook", Self::Mail => "mail",
-            Self::MapPin2 => "map-pin-2", Self::Markup => "markup", Self::Menu2 => "menu-2", Self::MenuSearch => "menu-search", Self::Mic => "mic",
-            Self::MoneyDollarCircle => "money-dollar-circle", Self::Moon => "moon", Self::More => "more", Self::More2 => "more-2", Self::More2Fill => "more-2-fill",
-            Self::MoreFill => "more-fill", Self::Music => "music", Self::NodeTree => "node-tree", Self::Notification3 => "notification-3", Self::Npmjs => "npmjs",
-            Self::Openchamber => "openchamber", Self::Opencode => "opencode", Self::Palette => "palette", Self::Pause => "pause", Self::PenNib => "pen-nib",
-            Self::Pencil => "pencil", Self::PencilAi => "pencil-ai", Self::PencilAi2 => "pencil-ai-2", Self::PencilRuler2 => "pencil-ruler-2", Self::PictureInPicture2 => "picture-in-picture-2",
-            Self::PieChart => "pie-chart", Self::Plane => "plane", Self::Planet => "planet", Self::Play => "play", Self::Plug => "plug",
-            Self::Plug2 => "plug-2", Self::Pulse => "pulse", Self::Pushpin => "pushpin", Self::Pushpin2 => "pushpin-2", Self::Pushpin2Fill => "pushpin-2-fill",
-            Self::Puzzle => "puzzle", Self::Puzzle2 => "puzzle-2", Self::Question => "question", Self::QuillPen => "quill-pen", Self::RecordCircle => "record-circle",
-            Self::Refresh => "refresh", Self::Restart => "restart", Self::Robot => "robot", Self::Robot2 => "robot-2", Self::Rocket => "rocket",
-            Self::Route => "route", Self::Save3 => "save-3", Self::Scales3 => "scales-3", Self::Scan2 => "scan-2", Self::Scissors => "scissors",
-            Self::Search => "search", Self::SearchEye => "search-eye", Self::SendPlane => "send-plane", Self::SendPlane2 => "send-plane-2", Self::Server => "server",
-            Self::Settings3 => "settings-3", Self::Shield => "shield", Self::ShieldCheck => "shield-check", Self::ShieldKeyhole => "shield-keyhole", Self::ShieldStar => "shield-star",
-            Self::ShieldUser => "shield-user", Self::Shuffle => "shuffle", Self::Signpost => "signpost", Self::SlashCommands2 => "slash-commands-2", Self::Smartphone => "smartphone",
-            Self::Space => "space", Self::Sparkling => "sparkling", Self::Sparkling2 => "sparkling-2", Self::SpeedUp => "speed-up", Self::SplitCellsHorizontal => "split-cells-horizontal",
-            Self::Stack => "stack", Self::Star => "star", Self::StarFill => "star-fill", Self::StickyNote => "sticky-note", Self::Stop => "stop",
-            Self::StopLarge => "stop-large", Self::Store2 => "store-2", Self::Subtract => "subtract", Self::Sun => "sun", Self::Survey => "survey",
-            Self::Table2 => "table-2", Self::Target => "target", Self::TargetFill => "target-fill", Self::Task => "task", Self::Team => "team",
-            Self::Terminal => "terminal", Self::TerminalBox => "terminal-box", Self::TerminalWindow => "terminal-window", Self::TestTube => "test-tube", Self::Text => "text",
-            Self::TextWrap => "text-wrap", Self::ThumbUp => "thumb-up", Self::Ticket2 => "ticket-2", Self::Time => "time", Self::Timer => "timer",
-            Self::Tools => "tools", Self::Trophy => "trophy", Self::TwitterXfill => "twitter-xfill", Self::Ubuntu => "ubuntu", Self::Unpin => "unpin",
-            Self::Upload2 => "upload-2", Self::UploadCloud2 => "upload-cloud-2", Self::User => "user", Self::User3 => "user-3", Self::UserSearch => "user-search",
-            Self::VerifiedBadge => "verified-badge", Self::VolumeUp => "volume-up", Self::Window => "window", Self::Windows => "windows", Self::Worktree => "worktree",
-            Self::ZoomIn => "zoom-in", Self::ZoomOut => "zoom-out",
-        };
-        format!("icons/remix/{name}.svg").into()
+        format!("icons/remix/{}.svg", self.name()).into()
     }
 }
 

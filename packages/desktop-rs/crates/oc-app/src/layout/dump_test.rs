@@ -56,7 +56,10 @@ fn dump_has_the_reference_shape() {
             "name": "Archive",
             "key": "sidebar/Projects/Reference: finished turn/Archive",
             "shown": false,
-            "bounds": {"x": -21.0, "y": -21.0, "width": 0.0, "height": 0.0}
+            "bounds": {"x": -21.0, "y": -21.0, "width": 0.0, "height": 0.0},
+            "icons": [],
+            "marks": [],
+            "texts": []
         })
     );
     assert!(dump.ends_with('\n'));

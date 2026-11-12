@@ -6,11 +6,16 @@ use std::borrow::Cow;
 use gpui_kit::component::IconNamed;
 use gpui_kit::{AssetSource, Result, SharedString};
 
-use super::RemixIcon;
+use super::provider_logos;
 use super::remix_files::FILES;
+use super::{CustomIcon, RemixIcon};
 
 /// The folder the generated Remix files live under.
 const REMIX_PREFIX: &str = "icons/remix/";
+/// The folder React's own inline SVGs live under.
+const CUSTOM_PREFIX: &str = "icons/custom/";
+/// The folder the bundled provider logos live under.
+const LOGO_PREFIX: &str = "provider-logos/";
 /// The extension every icon asset carries.
 const SVG_SUFFIX: &str = ".svg";
 
@@ -60,6 +65,24 @@ impl AssetSource for AppAssets {
         super::icons_test::record(path);
         if let Some(name) = remix_name(path) {
             return Ok(remix_bytes(name).map(Cow::Borrowed));
+        }
+        if let Some(name) = path
+            .strip_prefix(CUSTOM_PREFIX)
+            .and_then(|rest| rest.strip_suffix(SVG_SUFFIX))
+        {
+            return Ok(CustomIcon::ALL
+                .iter()
+                .find(|icon| icon.name() == name)
+                .map(|icon| Cow::Borrowed(icon.bytes())));
+        }
+        if let Some(id) = path
+            .strip_prefix(LOGO_PREFIX)
+            .and_then(|rest| rest.strip_suffix(SVG_SUFFIX))
+        {
+            return Ok(provider_logos::FILES
+                .iter()
+                .find(|(name, _)| *name == id)
+                .map(|(_, bytes)| Cow::Borrowed(*bytes)));
         }
         if let Some((_, icon)) = SUBSTITUTIONS
             .iter()
