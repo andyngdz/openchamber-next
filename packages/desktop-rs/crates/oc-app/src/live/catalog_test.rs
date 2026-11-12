@@ -7,6 +7,8 @@ use super::load;
 use crate::live::fake_server_test::FakeServer;
 
 const DIRECTORY: &str = "/tmp/project";
+const PERMISSIONS: &str = r#"{"location":{"directory":"/tmp/project"},"data":[]}"#;
+const FORMS: &str = r#"{"location":{"directory":"/tmp/project"},"data":[]}"#;
 
 fn catalog_replies() -> Vec<(&'static str, &'static str)> {
     vec![
@@ -23,12 +25,14 @@ fn catalog_replies() -> Vec<(&'static str, &'static str)> {
             "200 OK",
             r#"{"data":[{"id":"build","name":"Build","mode":"primary"}]}"#,
         ),
+        ("200 OK", PERMISSIONS),
+        ("200 OK", FORMS),
     ]
 }
 
 async fn run(replies: Vec<(&'static str, &'static str)>) -> (Vec<Update>, Vec<String>) {
     let server = FakeServer::start(replies);
-    let (mut sender, receiver) = mpsc::channel(4);
+    let (mut sender, receiver) = mpsc::channel(8);
     load(&server.client, DIRECTORY, &mut sender)
         .await
         .expect("window open");
@@ -39,19 +43,32 @@ async fn run(replies: Vec<(&'static str, &'static str)>) -> (Vec<Update>, Vec<St
 }
 
 #[tokio::test]
-async fn all_four_answers_become_one_catalog() {
+async fn all_four_answers_become_one_catalog_and_its_pending_lists() {
     let (updates, paths) = run(catalog_replies()).await;
 
-    let [Update::Selection(SelectionAction::CatalogLoaded { directory, catalog })] =
-        updates.as_slice()
+    let [
+        Update::Selection(SelectionAction::CatalogLoaded { directory, catalog }),
+        Update::Permissions {
+            directory: permissions_dir,
+            result: Ok(permissions),
+        },
+        Update::Forms {
+            directory: forms_dir,
+            result: Ok(forms),
+        },
+    ] = updates.as_slice()
     else {
-        panic!("a catalog expected, got {updates:?}");
+        panic!("a catalog and two lists expected, got {updates:?}");
     };
     assert_eq!(directory, DIRECTORY);
     assert_eq!(catalog.providers().len(), 1);
     assert_eq!(catalog.providers()[0].models[0].id, "m");
     assert_eq!(catalog.picker_agents()[0].id, "build");
-    assert_eq!(paths.len(), 4);
+    assert_eq!(permissions_dir, DIRECTORY);
+    assert_eq!(forms_dir, DIRECTORY);
+    assert!(permissions.is_empty());
+    assert!(forms.is_empty());
+    assert_eq!(paths.len(), 6);
 }
 
 #[tokio::test]
@@ -61,11 +78,16 @@ async fn a_failed_answer_is_a_catalog_error_with_its_directory() {
 
     let (updates, _) = run(replies).await;
 
-    let [Update::Selection(SelectionAction::CatalogFailed { directory, message })] =
-        updates.as_slice()
+    let Update::Selection(SelectionAction::CatalogFailed { directory, message }) = &updates[0]
     else {
         panic!("a catalog failure expected, got {updates:?}");
     };
     assert_eq!(directory, DIRECTORY);
     assert!(message.contains("500"), "{message}");
+    assert!(
+        updates
+            .iter()
+            .any(|update| matches!(update, Update::Permissions { .. })),
+        "the pending lists are read even when the catalog failed: {updates:?}"
+    );
 }

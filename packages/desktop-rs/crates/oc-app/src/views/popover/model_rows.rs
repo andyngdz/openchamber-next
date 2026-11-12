@@ -4,11 +4,11 @@
 //! and lays out every section with it, so a section without a header would draw every header
 //! at zero height, over the row below it.
 
-use gpui_kit::assets::IconName;
 use oc_state::{ModelEntry, ModelSections, State, model_sections};
 
 use super::list::RowAction;
 use super::list::{Header, Row, Section, Star, StarKind};
+use crate::icons::RemixIcon;
 use crate::layout::Role;
 use crate::views::model_names::{compact_tokens, model_display_name};
 
@@ -19,7 +19,7 @@ const FAVORITES: &str = "Favorites";
 const RECENT: &str = "Recent";
 /// The provider mark the reference draws from its logo set; the spike bundles no provider
 /// logos, so one neutral glyph stands in for every provider.
-const PROVIDER_ICON: IconName = IconName::Asterisk;
+const PROVIDER_ICON: RemixIcon = RemixIcon::Robot2;
 
 /// Whether a row is the session's current model.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -50,7 +50,7 @@ impl SectionKind {
         !matches!(self, Self::Provider)
     }
 
-    fn icon(self) -> Option<IconName> {
+    fn icon(self) -> Option<RemixIcon> {
         self.shows_provider().then_some(PROVIDER_ICON)
     }
 }
@@ -135,7 +135,11 @@ fn group(
         header: Some(Header {
             name: header_name.to_owned(),
             label: label.to_uppercase(),
-            icon: (kind == SectionKind::Favorites).then_some(IconName::StarFill),
+            icon: Some(match kind {
+                SectionKind::Favorites => RemixIcon::StarFill,
+                SectionKind::Recent => RemixIcon::Time,
+                SectionKind::Provider => PROVIDER_ICON,
+            }),
             ancestors: vec![MODELS_GROUP.to_owned(), label.to_owned()],
         }),
         rows: entries

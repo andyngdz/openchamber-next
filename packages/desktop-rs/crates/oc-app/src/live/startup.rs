@@ -46,6 +46,11 @@ pub(crate) async fn refetch(
 ) -> Result<(), Closed> {
     load_settings(client, updates).await?;
     load_global(client, updates).await?;
+    if let Some(open) = &open
+        && !catalogs.contains(&open.directory)
+    {
+        catalog::load_requests(client, &open.directory, updates).await?;
+    }
     for directory in catalogs {
         catalog::load(client, &directory, updates).await?;
     }

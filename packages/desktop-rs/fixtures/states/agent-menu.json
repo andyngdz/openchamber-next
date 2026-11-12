@@ -83,6 +83,12 @@
         "modelID": "stream-300cps"
       }
     ],
+    "hiddenModels": [
+      {
+        "providerID": "perf",
+        "modelID": "agent-20tools-hold"
+      }
+    ],
     "collapsedModelProviders": [
       "perf-alt"
     ],
@@ -168,6 +174,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -588,6 +607,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -783,73 +869,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -1088,6 +1107,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -1637,7 +1708,7 @@
           "location": {
             "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
           },
-          "title": "Reference: in work",
+          "title": "Reference: finished turn",
           "cost": 0,
           "tokens": {
             "input": 0,
@@ -1649,17 +1720,8 @@
             }
           },
           "time": {
-            "created": 1794300003000,
-            "updated": 1794300004000
-          },
-          "metadata": {
-            "openchamber": {
-              "work": {
-                "state": "open",
-                "openedAt": 1794300000000,
-                "openedBy": "user"
-              }
-            }
+            "created": 1794300000000,
+            "updated": 1794300000001
           }
         },
         {
@@ -1680,8 +1742,8 @@
             }
           },
           "time": {
-            "created": 1794300002000,
-            "updated": 1794300002000
+            "created": 1794300001000,
+            "updated": 1794300001001
           }
         },
         {
@@ -1690,7 +1752,7 @@
           "location": {
             "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
           },
-          "title": "Reference: finished turn",
+          "title": "Reference: in work",
           "cost": 0,
           "tokens": {
             "input": 0,
@@ -1702,8 +1764,17 @@
             }
           },
           "time": {
-            "created": 1794300001000,
-            "updated": 1794300001000
+            "created": 1794300002000,
+            "updated": 1794300002001
+          },
+          "metadata": {
+            "openchamber": {
+              "work": {
+                "state": "open",
+                "openedAt": 1794300003000,
+                "openedBy": "user"
+              }
+            }
           }
         }
       ]
@@ -1765,6 +1836,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -2185,6 +2269,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -2380,73 +2531,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -2685,6 +2769,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -3246,8 +3382,8 @@
             }
           },
           "time": {
-            "created": 1794300005000,
-            "updated": 1794300005000
+            "created": 1794300004000,
+            "updated": 1794300004001
           }
         }
       ]
@@ -3309,6 +3445,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -3729,6 +3878,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -3924,73 +4140,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -4229,6 +4378,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -4790,8 +4991,8 @@
             }
           },
           "time": {
-            "created": 1794300006000,
-            "updated": 1794300006000
+            "created": 1794300005000,
+            "updated": 1794300005001
           }
         }
       ]
@@ -4853,6 +5054,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -5273,6 +5487,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -5468,73 +5749,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -5773,6 +5987,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -6334,8 +6600,8 @@
             }
           },
           "time": {
-            "created": 1794300007000,
-            "updated": 1794300007000
+            "created": 1794300006000,
+            "updated": 1794300006001
           }
         }
       ]

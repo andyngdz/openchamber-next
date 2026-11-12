@@ -27,7 +27,6 @@ mod reference_test;
 
 use std::rc::Rc;
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
@@ -46,6 +45,7 @@ pub(crate) use popover::{open_model_picker, thinking_items, thinking_rows};
 pub(crate) use sidebar::sidebar;
 pub(crate) use work_status::work_status;
 
+use crate::icons::RemixIcon;
 use crate::layout::{ControlSpec, LayoutRegistry};
 
 /// What a control asks the root view to do.
@@ -115,7 +115,7 @@ impl Scene<'_> {
 }
 
 /// A ghost icon button; the accessible name is its tooltip. Without a click handler it is inert.
-fn icon_button(spec: &ControlSpec, icon: IconName) -> Button {
+fn icon_button(spec: &ControlSpec, icon: RemixIcon) -> Button {
     Button::new(spec.key.clone())
         .ghost()
         .small()
@@ -126,7 +126,7 @@ fn icon_button(spec: &ControlSpec, icon: IconName) -> Button {
 /// A ghost button with a visible label and an optional leading icon.
 fn label_button(
     spec: &ControlSpec,
-    icon: Option<IconName>,
+    icon: Option<RemixIcon>,
     label: impl Into<SharedString>,
 ) -> Button {
     let button = Button::new(spec.key.clone()).ghost().small().label(label);

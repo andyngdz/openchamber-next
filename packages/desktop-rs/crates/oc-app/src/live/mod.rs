@@ -9,10 +9,13 @@
 
 mod catalog;
 mod chat_folder;
+mod control;
+mod execution;
 mod protocol;
 mod reconnect;
 mod runtime;
 mod send;
+mod sending;
 mod session;
 mod startup;
 mod writer;
@@ -37,9 +40,10 @@ use tokio::task::JoinHandle;
 
 pub use chat_folder::chat_folder_for;
 pub(crate) use chat_folder::new_chat_folder;
+pub(crate) use execution::{DismissCall, SendExecution, from_plan, restored_event, settled_event};
 pub(crate) use protocol::{
-    Command, CreateDraftPrompt, CreateSessionRequest, CreateTarget, OpenMessages, SendRequest,
-    SettingsCommand, Update,
+    Command, CreateDraftPrompt, CreateSessionRequest, CreateTarget, OpenMessages, SettingsCommand,
+    Update,
 };
 pub(crate) use runtime::IoRuntime;
 
@@ -82,6 +86,8 @@ struct Connection {
     settings: Sender<SettingsCommand>,
     task: JoinHandle<()>,
     settings_task: JoinHandle<()>,
+    /// The server answered 404 for the control stream, so its queue and modes stay off.
+    control_missing: bool,
     _updates: Task<()>,
 }
 
@@ -149,6 +155,7 @@ impl ServerLink {
             settings,
             task,
             settings_task,
+            control_missing: false,
             _updates: read_updates(updates),
         });
         Ok(())
@@ -157,6 +164,22 @@ impl ServerLink {
     /// Stops the session tasks and the window's reader.
     pub(crate) fn disconnect(&mut self) {
         self.connection.borrow_mut().take();
+    }
+
+    /// Records that the server has no `/api/openchamber/events`, so the window shows no queue
+    /// strip and no shield modes and keeps sending plain prompts.
+    pub(crate) fn mark_control_missing(&self) {
+        if let Some(connection) = self.connection.borrow_mut().as_mut() {
+            connection.control_missing = true;
+        }
+    }
+
+    /// Whether the server answered 404 for the control stream.
+    pub(crate) fn control_stream_missing(&self) -> bool {
+        self.connection
+            .borrow()
+            .as_ref()
+            .is_some_and(|connection| connection.control_missing)
     }
 
     /// Queues a request. With no session, or a full queue, the request comes back unsent.

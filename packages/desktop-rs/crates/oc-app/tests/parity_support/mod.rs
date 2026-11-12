@@ -1,5 +1,8 @@
 //! How the parity test compares a region's controls with the reference: exact keys in order,
-//! and the chat column's tool rows as one run that virtualization may have cut.
+//! and the chat column as one contiguous window of the dump's controls. React virtualizes the
+//! message list, so the reference holds only the messages mounted around the viewport; the
+//! dump holds every message. Earlier and later messages' chrome may therefore sit outside the
+//! reference's window, while a control missing from the window itself still fails.
 
 use std::collections::HashSet;
 
@@ -14,6 +17,10 @@ pub const REGIONS: [&str; 7] = [
     "iconRail",
     "popover",
 ];
+
+mod chat_window;
+
+use chat_window::chat_column_difference;
 
 /// The key and role of each control of a region, in order.
 fn controls(layout: &Value, region: &str) -> Vec<(String, String)> {
@@ -101,8 +108,10 @@ fn token(key: &str, role: &str) -> Token {
 }
 
 /// Reference controls missing from the dump, and regions whose shared controls are out of
-/// order. Exact keys must appear in the reference order; the reference's tool rows must sit
-/// in their place among them as one unbroken run of the dump's tool rows, by base key.
+/// order. Every region but the chat column compares exactly, with the popover list's rendered
+/// prefix allowed. The chat column's reference is a window of React's virtualized message
+/// list, so its controls (message actions included) must appear as one contiguous window of
+/// the dump's chat column, in order.
 pub fn control_differences(
     expected: &Value,
     actual: &Value,
@@ -120,7 +129,11 @@ pub fn control_differences(
                 .iter()
                 .map(|(key, role)| token(key, role))
                 .collect();
-            region_order(region, &wanted, &dumped)
+            if region == "chatColumn" {
+                chat_column_difference(&wanted, &dumped)
+            } else {
+                region_order(region, &wanted, &dumped)
+            }
         })
         .collect()
 }
@@ -287,10 +300,15 @@ mod tests {
         assert!(order_differences("popover", &wanted, dumped).is_empty());
 
         // A missing exact control is still a failure.
-        let without_add = [wanted[0], wanted[2], wanted[3], wanted[4]];
+        let search = wanted[0];
+        let add = wanted[1];
+        let run_on = wanted[2];
+        let favorites = wanted[3];
+        let first = wanted[4];
+        let without_add = [search, run_on, favorites, first];
         assert!(!order_differences("popover", &wanted, &without_add).is_empty());
         // The virtualized run must start at the same row, not later in the list.
-        let skips_run = [wanted[0], wanted[1], wanted[3], wanted[4]];
+        let skips_run = [search, add, favorites, first];
         assert!(!order_differences("popover", &wanted, &skips_run).is_empty());
     }
 

@@ -1,6 +1,5 @@
 //! One sidebar section: Chats, Pinned, In work or the project groups.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
@@ -8,6 +7,7 @@ use oc_state::{MoreKey, SidebarAction, SidebarRow, SidebarSectionModel};
 
 use super::LIST_LEAD;
 use super::rows::session_row;
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 use crate::views::{Intent, Scene, icon_button, label_button};
 
@@ -97,7 +97,7 @@ fn chats_header(scene: Scene<'_>, header: &ControlSpec, add: &ControlSpec) -> Di
         .child(control(
             scene.registry,
             add.clone(),
-            icon_button(add, IconName::Plus).on_click(scene.on_click_intent(Intent::NewSession)),
+            icon_button(add, RemixIcon::Add).on_click(scene.on_click_intent(Intent::NewSession)),
         ))
 }
 

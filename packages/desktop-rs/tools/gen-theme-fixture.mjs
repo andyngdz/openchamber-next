@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 /**
- * Generates the theme fixture the Rust port of `buildZedThemeFromAppTheme` is checked against.
+ * Generates the theme fixtures the Rust port of the Electron theme is checked against.
  *
- * Runs the React implementation (`packages/ui/src/lib/shiki/zedThemeFromAppTheme.ts`) over the
- * two `packages/ui/src/lib/theme/themes/*.json` files the port covers, after `requireTheme`
+ * Runs the React implementations over the theme files the Rust app covers, after `requireTheme`
  * resolves each theme the way the app does, and writes:
  *
  * - `fixtures/theme/zed-tokens.json`: per theme, the appearance, the editor colors and the
- *   `style.syntax` table exactly as the TypeScript function builds it. The Rust test compares
- *   every token's color, bold and italic against it.
+ *   `style.syntax` table exactly as `buildZedThemeFromAppTheme` builds it
+ *   (`packages/ui/src/lib/shiki/zedThemeFromAppTheme.ts`). The Rust test compares every token's
+ *   color, bold and italic against it.
+ * - `fixtures/theme/palette-variables.json`: every CSS variable `CSSVariableGenerator` emits for
+ *   `openchamber-dark` (`packages/ui/src/lib/theme/cssGenerator.ts`). The Rust test compares every
+ *   window-palette token with its variable.
  *
- * TypeScript runs through Node's type stripping. `zedThemeFromAppTheme.ts` and `definition.ts`
- * import their siblings without file extensions, so a small resolve hook appends `.ts` to a
- * relative specifier Node cannot find as written.
+ * TypeScript runs through Node's type stripping. The UI sources import their siblings without
+ * file extensions and use the `@/` alias, and `package.json` is a JSON import, so resolve and
+ * load hooks fill those in.
  *
  * Usage: node packages/desktop-rs/tools/gen-theme-fixture.mjs
  */
@@ -25,6 +28,7 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 import process from "node:process"
 
 const THEME_IDS = ["openchamber-dark", "openchamber-light"]
+const DARK_THEME_ID = "openchamber-dark"
 
 const findRepoRoot = (start) => {
   for (let dir = start; ; dir = dirname(dir)) {
@@ -37,21 +41,51 @@ const TOOL_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = findRepoRoot(TOOL_DIR)
 const PACKAGE_ROOT = join(REPO_ROOT, "packages/desktop-rs")
 const UI_ROOT = join(REPO_ROOT, "packages/ui")
+const UI_SOURCE = join(UI_ROOT, "src")
+
+const withExtension = (specifier, context, nextResolve) => {
+  try {
+    return nextResolve(specifier, context)
+  } catch (error) {
+    if (!/\.[a-z0-9]+$/i.test(specifier)) return nextResolve(`${specifier}.ts`, context)
+    throw error
+  }
+}
+
+/** A JSON import as an ES module: `package.json` needs a named `version` export. */
+const jsonModule = (value) => {
+  const reserved = new Set([
+    "break", "case", "catch", "class", "const", "continue", "debugger", "default", "delete",
+    "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if",
+    "import", "in", "instanceof", "new", "null", "return", "super", "switch", "this", "throw",
+    "true", "try", "typeof", "var", "void", "while", "with", "yield", "let", "static", "await",
+    "private", "public", "protected", "implements", "interface", "package",
+  ])
+  const named = Object.entries(value)
+    .filter(([key]) => /^[A-Za-z_$][\w$]*$/.test(key) && !reserved.has(key))
+    .map(([key, item]) => `export const ${key} = ${JSON.stringify(item)};`)
+    .join("\n")
+  return `${named}\nexport default ${JSON.stringify(value)};`
+}
 
 registerHooks({
   resolve(specifier, context, nextResolve) {
-    try {
-      return nextResolve(specifier, context)
-    } catch (error) {
-      if (specifier.startsWith(".") && !/\.[a-z0-9]+$/i.test(specifier)) {
-        return nextResolve(`${specifier}.ts`, context)
-      }
-      throw error
+    if (specifier.startsWith("@/")) {
+      return withExtension(pathToFileURL(join(UI_SOURCE, specifier.slice(2))).href, context, nextResolve)
     }
+    if (specifier.startsWith(".")) return withExtension(specifier, context, nextResolve)
+    return nextResolve(specifier, context)
+  },
+  load(url, context, nextLoad) {
+    if (url.endsWith(".json")) {
+      const value = JSON.parse(readFileSync(new URL(url), "utf8"))
+      return { format: "module", shortCircuit: true, source: jsonModule(value) }
+    }
+    return nextLoad(url, context)
   },
 })
 
-const loadTypescript = async (relativePath) => import(pathToFileURL(join(UI_ROOT, relativePath)).href)
+const loadTypescript = async (relativePath) => import(pathToFileURL(join(UI_SOURCE, relativePath)).href)
 
 const assertNoPersonalPaths = (content) => {
   const username = userInfo().username
@@ -69,11 +103,12 @@ const assertNoPersonalPaths = (content) => {
   if (hits.length > 0) throw new Error(`Refusing to write a fixture with ${hits.join(", ")}`)
 }
 
+const readTheme = (id) => JSON.parse(readFileSync(join(UI_ROOT, "src/lib/theme/themes", `${id}.json`), "utf8"))
+
 const themeFixture = (requireTheme, buildZedThemeFromAppTheme) => {
   const themes = {}
   for (const id of THEME_IDS) {
-    const raw = JSON.parse(readFileSync(join(UI_ROOT, "src/lib/theme/themes", `${id}.json`), "utf8"))
-    const zed = buildZedThemeFromAppTheme(requireTheme(raw))
+    const zed = buildZedThemeFromAppTheme(requireTheme(readTheme(id)))
     themes[id] = { syntax: zed.style.syntax }
   }
   return {
@@ -83,16 +118,37 @@ const themeFixture = (requireTheme, buildZedThemeFromAppTheme) => {
   }
 }
 
-const main = async () => {
-  const { requireTheme } = await loadTypescript("src/lib/theme/definition.ts")
-  const { buildZedThemeFromAppTheme } = await loadTypescript("src/lib/shiki/zedThemeFromAppTheme.ts")
-  const output = `${JSON.stringify(themeFixture(requireTheme, buildZedThemeFromAppTheme), null, 2)}\n`
+const paletteFixture = (requireTheme, CSSVariableGenerator) => {
+  const css = new CSSVariableGenerator().generate(requireTheme(readTheme(DARK_THEME_ID)))
+  const variables = {}
+  for (const line of css.split("\n")) {
+    const match = /^--([a-z0-9-]+):\s*(.+?);?$/.exec(line.trim())
+    if (match) variables[`--${match[1]}`] = match[2]
+  }
+  return {
+    note: "Generated by packages/desktop-rs/tools/gen-theme-fixture.mjs; do not edit by hand.",
+    source: "packages/ui/src/lib/theme/cssGenerator.ts",
+    theme: DARK_THEME_ID,
+    variables,
+  }
+}
+
+const write = (name, fixture) => {
+  const output = `${JSON.stringify(fixture, null, 2)}\n`
   assertNoPersonalPaths(output)
   const themeDir = join(PACKAGE_ROOT, "fixtures", "theme")
   mkdirSync(themeDir, { recursive: true })
-  const target = join(themeDir, "zed-tokens.json")
+  const target = join(themeDir, name)
   writeFileSync(target, output)
   console.log(`Wrote ${target}`)
+}
+
+const main = async () => {
+  const { requireTheme } = await loadTypescript("lib/theme/definition.ts")
+  const { buildZedThemeFromAppTheme } = await loadTypescript("lib/shiki/zedThemeFromAppTheme.ts")
+  const { CSSVariableGenerator } = await loadTypescript("lib/theme/cssGenerator.ts")
+  write("zed-tokens.json", themeFixture(requireTheme, buildZedThemeFromAppTheme))
+  write("palette-variables.json", paletteFixture(requireTheme, CSSVariableGenerator))
 }
 
 main().catch((error) => {

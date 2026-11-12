@@ -1,6 +1,6 @@
 //! The composer footer's slot list, in reference order.
 
-use gpui_kit::assets::IconName;
+use crate::icons::RemixIcon;
 use oc_state::{LoadStatus, SessionStatus, State};
 
 use crate::views::popover::{
@@ -21,7 +21,7 @@ pub(super) enum TriggerKind {
 /// One footer slot, left to right.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(super) enum Tool {
-    Icon(&'static str, IconName),
+    Icon(&'static str, RemixIcon),
     Trigger {
         kind: PopoverKind,
         layout: TriggerKind,
@@ -35,16 +35,16 @@ pub(super) enum Tool {
 /// The footer slots in reference order.
 pub(super) fn toolbar(state: &State) -> Vec<Tool> {
     let mut tools = vec![
-        Tool::Icon("Add attachment", IconName::Plus),
-        Tool::Icon("Permissions: ask every time", IconName::CircleCheck),
-        Tool::Icon("Start a goal with the next message", IconName::Star),
+        Tool::Icon("Add attachment", RemixIcon::AddCircle),
+        Tool::Icon("Permissions: ask every time", RemixIcon::ShieldUser),
+        Tool::Icon("Start a goal with the next message", RemixIcon::Target),
         model_tool(state),
     ];
     if let Some(tool) = thinking_tool(state) {
         tools.push(tool);
     }
     tools.push(agent_tool(state));
-    tools.push(Tool::Icon("Start dictation", IconName::Mic));
+    tools.push(Tool::Icon("Start dictation", RemixIcon::Mic));
     tools.push(match state.open_status() {
         SessionStatus::Busy => Tool::Stop,
         SessionStatus::Idle | SessionStatus::Error => Tool::Send,

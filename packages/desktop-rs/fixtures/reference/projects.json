@@ -16,6 +16,11 @@
     }
   },
   "selectors": {
+    "dock": {
+      "selector": "form[data-prompt-history-search-owner] [role=dialog], [data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain]) > div > div[role=group]",
+      "optional": true,
+      "union": true
+    },
     "composer": {
       "selector": "[data-dictation-chain]:not([data-dictation-chain] [data-dictation-chain])",
       "parent": true
@@ -60,7 +65,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "menu-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -72,7 +91,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "layout-left",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 48,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -82,9 +115,34 @@
           "bounds": {
             "x": 72,
             "y": 12,
-            "width": 115.16,
+            "width": 112.73,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "chat-new",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 76,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "New session",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 100,
+                "y": 15,
+                "width": 78.73,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "separator",
@@ -96,7 +154,10 @@
             "y": 0,
             "width": 3,
             "height": 900
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -108,7 +169,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "search",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 17,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -120,7 +195,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "folder-add",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 47,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -132,7 +221,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 77,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -144,7 +247,21 @@
             "y": 56,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "more",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 107,
+                "y": 60,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -156,7 +273,21 @@
             "y": 88,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Chats",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 93,
+                "width": 36.5,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -168,7 +299,10 @@
             "y": 90,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -180,7 +314,10 @@
             "y": 88,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -192,7 +329,10 @@
             "y": 117,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -204,7 +344,21 @@
             "y": 122,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat two",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 123,
+                "width": 125.19,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -216,7 +370,10 @@
             "y": 124,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -228,7 +385,10 @@
             "y": 149,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -240,7 +400,21 @@
             "y": 154,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: chat one",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 155,
+                "width": 125.67,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -252,7 +426,10 @@
             "y": 156,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -264,7 +441,10 @@
             "y": 196,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -276,7 +456,21 @@
             "y": 196,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "In work",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 201,
+                "width": 49.16,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -288,7 +482,10 @@
             "y": 225,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -300,7 +497,21 @@
             "y": 230,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: in work",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 231,
+                "width": 117.66,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -312,7 +523,10 @@
             "y": 232,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -324,7 +538,10 @@
             "y": 232,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -336,7 +553,10 @@
             "y": 272,
             "width": 256,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -348,7 +568,21 @@
             "y": 272,
             "width": 274,
             "height": 28
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Projects",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 277,
+                "width": 51.69,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -360,7 +594,10 @@
             "y": 300,
             "width": 274,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -372,7 +609,32 @@
             "y": 304,
             "width": 244,
             "height": 22
-          }
+          },
+          "icons": [
+            {
+              "name": "folder",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 16,
+                "y": 308,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 305,
+                "width": 149.72,
+                "height": 20
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -384,7 +646,10 @@
             "y": 303,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -393,10 +658,13 @@
           "shown": false,
           "bounds": {
             "x": 248,
-            "y": 301.8,
+            "y": 302,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -408,7 +676,10 @@
             "y": 331,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -420,7 +691,21 @@
             "y": 336,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: streaming turn",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 337,
+                "width": 165.98,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -432,7 +717,10 @@
             "y": 338,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -444,7 +732,10 @@
             "y": 338,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -456,7 +747,10 @@
             "y": 363,
             "width": 256,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -468,7 +762,21 @@
             "y": 368,
             "width": 220,
             "height": 20
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Reference: finished turn",
+              "color": "#b1aea3ff",
+              "bounds": {
+                "x": 36,
+                "y": 369,
+                "width": 152.08,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -480,7 +788,10 @@
             "y": 370,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -492,7 +803,10 @@
             "y": 370,
             "width": 16,
             "height": 16
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -504,7 +818,10 @@
             "y": 406,
             "width": 274,
             "height": 30
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -516,7 +833,32 @@
             "y": 410,
             "width": 244,
             "height": 22
-          }
+          },
+          "icons": [
+            {
+              "name": "code-box",
+              "color": "#3e63ddff",
+              "bounds": {
+                "x": 16,
+                "y": 414,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "desktop-rs-reference-second",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 36,
+                "y": 411,
+                "width": 205.67,
+                "height": 20
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -528,7 +870,10 @@
             "y": 409,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -537,10 +882,13 @@
           "shown": false,
           "bounds": {
             "x": 248,
-            "y": 407.8,
+            "y": 408,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -552,7 +900,21 @@
             "y": 868,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "settings-3",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 14,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -560,11 +922,36 @@
           "key": "sidebar/Open instance, usage and MCP (current: Local)",
           "shown": true,
           "bounds": {
-            "x": 197.15,
+            "x": 199.22,
             "y": 868,
-            "width": 72.85,
+            "width": 70.78,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "server",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 207.22,
+                "y": 872,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Local",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 229.22,
+                "y": 871,
+                "width": 32.78,
+                "height": 18
+              }
+            }
+          ]
         }
       ]
     },
@@ -586,7 +973,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "picture-in-picture-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1244,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -598,7 +999,21 @@
             "y": 12,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "list-indefinite",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1276,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -610,7 +1025,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "subtract",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1322,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -622,7 +1051,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "checkbox-blank",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1367,
+                "y": 17,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -634,7 +1077,21 @@
             "y": 0,
             "width": 44,
             "height": 48
-          }
+          },
+          "icons": [
+            {
+              "name": "close",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1410,
+                "y": 16,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     },
@@ -653,10 +1110,35 @@
           "shown": true,
           "bounds": {
             "x": 317.75,
-            "y": 353.6,
-            "width": 132.23,
+            "y": 354,
+            "width": 130.61,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "arrow-down-s",
+              "color": "#dbd7cc80",
+              "bounds": {
+                "x": 426.36,
+                "y": 360,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Choose project",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 323.75,
+                "y": 359,
+                "width": 96.61,
+                "height": 18
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -664,11 +1146,36 @@
           "key": "chatColumn/Explore the codebase",
           "shown": true,
           "bounds": {
-            "x": 369.35,
-            "y": 503.6,
-            "width": 168.06,
+            "x": 369.66,
+            "y": 504,
+            "width": 165.83,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "compass-3",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 380.66,
+                "y": 510,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Explore the codebase",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 398.66,
+                "y": 507,
+                "width": 125.83,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -676,11 +1183,36 @@
           "key": "chatColumn/Catch me up",
           "shown": true,
           "bounds": {
-            "x": 543.41,
-            "y": 503.6,
-            "width": 114.5,
+            "x": 541.48,
+            "y": 504,
+            "width": 113.81,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "history",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 552.48,
+                "y": 510,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Catch me up",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 570.48,
+                "y": 507,
+                "width": 73.82,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -688,11 +1220,36 @@
           "key": "chatColumn/Weigh my options",
           "shown": true,
           "bounds": {
-            "x": 663.91,
-            "y": 503.6,
-            "width": 145.13,
+            "x": 661.3,
+            "y": 504,
+            "width": 145.89,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "scales-3",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 672.3,
+                "y": 510,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Weigh my options",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 690.3,
+                "y": 507,
+                "width": 105.89,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -700,11 +1257,36 @@
           "key": "chatColumn/Start feature planning",
           "shown": true,
           "bounds": {
-            "x": 815.04,
-            "y": 503.6,
-            "width": 167.61,
+            "x": 813.19,
+            "y": 504,
+            "width": 169.14,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "survey",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 824.19,
+                "y": 510,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Start feature planning",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 842.19,
+                "y": 507,
+                "width": 129.14,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -712,11 +1294,36 @@
           "key": "chatColumn/Craft a Goal",
           "shown": true,
           "bounds": {
-            "x": 322.83,
+            "x": 326.5,
             "y": 534,
-            "width": 110.14,
+            "width": 109.06,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "target",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 337.5,
+                "y": 540,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Craft a Goal",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 355.5,
+                "y": 537,
+                "width": 69.06,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -724,11 +1331,36 @@
           "key": "chatColumn/Schedule a Task",
           "shown": true,
           "bounds": {
-            "x": 438.96,
+            "x": 441.56,
             "y": 534,
-            "width": 136.63,
+            "width": 132.47,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "calendar-schedule",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 452.56,
+                "y": 540,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Schedule a Task",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 470.56,
+                "y": 537,
+                "width": 92.47,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -736,11 +1368,36 @@
           "key": "chatColumn/Debug an issue",
           "shown": true,
           "bounds": {
-            "x": 581.59,
+            "x": 580.03,
             "y": 534,
-            "width": 130.88,
+            "width": 130.5,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "bug",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 591.03,
+                "y": 540,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Debug an issue",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 609.03,
+                "y": 537,
+                "width": 90.5,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -748,11 +1405,36 @@
           "key": "chatColumn/Review my changes",
           "shown": true,
           "bounds": {
-            "x": 718.46,
+            "x": 716.53,
             "y": 534,
-            "width": 157.05,
+            "width": 154.53,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "search-eye",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 727.53,
+                "y": 540,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Review my changes",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 745.53,
+                "y": 537,
+                "width": 114.53,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -760,11 +1442,36 @@
           "key": "chatColumn/Build an extension",
           "shown": true,
           "bounds": {
-            "x": 881.51,
+            "x": 877.06,
             "y": 534,
-            "width": 147.66,
+            "width": 148.44,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "puzzle",
+              "color": "#89867cb3",
+              "bounds": {
+                "x": 888.06,
+                "y": 540,
+                "width": 12,
+                "height": 12
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Build an extension",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 906.06,
+                "y": 537,
+                "width": 108.44,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -773,17 +1480,31 @@
           "shown": true,
           "bounds": {
             "x": 664,
-            "y": 564.4,
+            "y": 564,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "add",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 669,
+                "y": 569,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     },
     "composer": {
       "bounds": {
         "x": 315.75,
-        "y": 387.6,
+        "y": 388,
         "width": 720.5,
         "height": 100
       },
@@ -795,10 +1516,13 @@
           "shown": true,
           "bounds": {
             "x": 327.75,
-            "y": 407.6,
+            "y": 408,
             "width": 696.5,
             "height": 21
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -807,10 +1531,24 @@
           "shown": true,
           "bounds": {
             "x": 325.75,
-            "y": 453.6,
+            "y": 454,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "add-circle",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 329.75,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -819,10 +1557,24 @@
           "shown": true,
           "bounds": {
             "x": 355.75,
-            "y": 453.6,
+            "y": 454,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "shield-user",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 359.75,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -831,10 +1583,24 @@
           "shown": true,
           "bounds": {
             "x": 385.75,
-            "y": 453.6,
+            "y": 454,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "target",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 389.75,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -842,11 +1608,35 @@
           "key": "composer/perf logo Fixture agent, 20 tool calls then 300...",
           "shown": true,
           "bounds": {
-            "x": 600.21,
-            "y": 449.6,
-            "width": 250.39,
+            "x": 603.61,
+            "y": 450,
+            "width": 245.36,
             "height": 32
-          }
+          },
+          "icons": [
+            {
+              "name": "img:perf",
+              "bounds": {
+                "x": 603.61,
+                "y": 457.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Fixture agent, 20 tool calls then 300...",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 626.61,
+                "y": 457,
+                "width": 222.36,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -854,11 +1644,35 @@
           "key": "composer/Thinking: High, last used with this model",
           "shown": true,
           "bounds": {
-            "x": 854.6,
-            "y": 449.6,
-            "width": 35.69,
+            "x": 852.97,
+            "y": 450,
+            "width": 36.77,
             "height": 32
-          }
+          },
+          "icons": [],
+          "marks": [],
+          "texts": [
+            {
+              "text": "/",
+              "color": "#89857b99",
+              "bounds": {
+                "x": 852.97,
+                "y": 455,
+                "width": 5.95,
+                "height": 22
+              }
+            },
+            {
+              "text": "High",
+              "color": "#c67f13bf",
+              "bounds": {
+                "x": 862.92,
+                "y": 457,
+                "width": 26.81,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -866,11 +1680,36 @@
           "key": "composer/Build",
           "shown": true,
           "bounds": {
-            "x": 902.29,
-            "y": 449.6,
-            "width": 51.96,
+            "x": 901.73,
+            "y": 450,
+            "width": 52.52,
             "height": 32
-          }
+          },
+          "icons": [
+            {
+              "name": "ai-agent",
+              "color": "#76ad4fff",
+              "bounds": {
+                "x": 901.73,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Build",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 923.73,
+                "y": 457,
+                "width": 30.52,
+                "height": 17
+              }
+            }
+          ]
         },
         {
           "role": "button",
@@ -879,10 +1718,24 @@
           "shown": true,
           "bounds": {
             "x": 966.25,
-            "y": 453.6,
+            "y": 454,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "mic",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 970.25,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -891,10 +1744,24 @@
           "shown": true,
           "bounds": {
             "x": 1002.25,
-            "y": 453.6,
+            "y": 454,
             "width": 24,
             "height": 24
-          }
+          },
+          "icons": [
+            {
+              "name": "send-plane-2",
+              "color": "#dbd7cc4d",
+              "bounds": {
+                "x": 1006.25,
+                "y": 458,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     },
@@ -916,7 +1783,21 @@
             "y": 70,
             "width": 20,
             "height": 20
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1354,
+                "y": 72,
+                "width": 16,
+                "height": 16
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -925,10 +1806,55 @@
           "shown": true,
           "bounds": {
             "x": 1088,
-            "y": 113.99,
+            "y": 114,
             "width": 284,
-            "height": 15.99
-          }
+            "height": 16
+          },
+          "icons": [
+            {
+              "name": "stack",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1092,
+                "y": 115,
+                "width": 14,
+                "height": 14
+              }
+            },
+            {
+              "name": "arrow-right-s",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1214.23,
+                "y": 115,
+                "width": 14,
+                "height": 14
+              }
+            }
+          ],
+          "marks": [],
+          "texts": [
+            {
+              "text": "Context sources",
+              "color": "#dbd7ccff",
+              "bounds": {
+                "x": 1112,
+                "y": 113,
+                "width": 96.23,
+                "height": 17
+              }
+            },
+            {
+              "text": "3 skills",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1330.81,
+                "y": 113,
+                "width": 37.19,
+                "height": 17
+              }
+            }
+          ]
         }
       ]
     },
@@ -950,7 +1876,21 @@
             "y": 56,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "donut-chart-fill",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 61.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -962,7 +1902,21 @@
             "y": 101,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "git-branch",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 106.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -974,7 +1928,40 @@
             "y": 137,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "layout-column",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 142.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [
+            {
+              "color": "#db5c4c40",
+              "bounds": {
+                "x": 1412.89,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            },
+            {
+              "color": "#78ab5040",
+              "bounds": {
+                "x": 1418.86,
+                "y": 145.89,
+                "width": 4.25,
+                "height": 10.19
+              }
+            }
+          ],
+          "texts": []
         },
         {
           "role": "button",
@@ -986,7 +1973,21 @@
             "y": 173,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "route",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 178.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -998,7 +1999,21 @@
             "y": 218,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "file-edit",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 223.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1010,7 +2025,21 @@
             "y": 254,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "terminal-box",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 259.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1022,7 +2051,21 @@
             "y": 290,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "global",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 295.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1034,7 +2077,21 @@
             "y": 335,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "book-marked",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 340.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         },
         {
           "role": "button",
@@ -1046,7 +2103,21 @@
             "y": 371,
             "width": 28,
             "height": 28
-          }
+          },
+          "icons": [
+            {
+              "name": "equalizer-2",
+              "color": "#89867cff",
+              "bounds": {
+                "x": 1409.5,
+                "y": 376.5,
+                "width": 17,
+                "height": 17
+              }
+            }
+          ],
+          "marks": [],
+          "texts": []
         }
       ]
     }

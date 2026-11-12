@@ -6,7 +6,7 @@
 //! stops the sidecar before the app quits. `--dump-layout` and `--screenshot` skip the server
 //! and draw a fixture's state in a headless window instead, so they need no display.
 
-mod headless;
+pub(crate) mod headless;
 mod live_start;
 mod quit;
 mod screenshot;
@@ -16,18 +16,18 @@ use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
 use gpui_kit::{
-    App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions, application, assets,
-    init, open_window, px, size,
+    App, AppContext, Bounds, WindowBounds, WindowDecorations, WindowOptions, application, init,
+    open_window, px, size,
 };
 use oc_state::State;
 
-use crate::errors::AppError;
+use crate::AppError;
 use crate::fixture::StateScript;
 use crate::layout::{LayoutDump, LayoutRegistry};
 use crate::live::ServerLink;
 use crate::root::{RootView, Started};
 use crate::server::ServerProcess;
-use crate::theme::{self, DARK};
+use crate::theme;
 
 /// The content size the parity reference was measured at.
 const WINDOW_WIDTH: f32 = 1440.;
@@ -134,27 +134,29 @@ fn open(
     };
     let outcome = Rc::new(RefCell::new(Ok(())));
     let final_outcome = outcome.clone();
-    application().with_assets(assets::Assets).run(move |cx| {
-        init(cx);
-        theme::apply(DARK, cx);
-        let registry = LayoutRegistry::default();
-        let view_registry = registry.clone();
-        let opened = open_window(window_options(cx), cx, move |window, cx| {
-            cx.new(|cx| {
-                let mut view = RootView::new(state, popover, view_registry, link, window, cx);
-                if let Some(started) = started {
-                    view.await_start(started, window, cx);
-                }
-                view
-            })
+    application()
+        .with_assets(crate::icons::AppAssets)
+        .run(move |cx| {
+            init(cx);
+            theme::apply(theme::palette(), cx);
+            let registry = LayoutRegistry::default();
+            let view_registry = registry.clone();
+            let opened = open_window(window_options(cx), cx, move |window, cx| {
+                cx.new(|cx| {
+                    let mut view = RootView::new(state, popover, view_registry, link, window, cx);
+                    if let Some(started) = started {
+                        view.await_start(started, window, cx);
+                    }
+                    view
+                })
+            });
+            if let Err(error) = opened {
+                *outcome.borrow_mut() = Err(AppError::OpenWindow(error.to_string()));
+                cx.quit();
+                return;
+            }
+            quit::quit_after_last_window(process, flush, cx);
         });
-        if let Err(error) = opened {
-            *outcome.borrow_mut() = Err(AppError::OpenWindow(error.to_string()));
-            cx.quit();
-            return;
-        }
-        quit::quit_after_last_window(process, flush, cx);
-    });
     final_outcome.replace(Ok(()))
 }
 

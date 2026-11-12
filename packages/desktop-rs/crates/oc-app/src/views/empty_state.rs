@@ -2,7 +2,6 @@
 //! quick-action chips, placed as the reference measures them. A server that failed to start or
 //! exited shows its error and a Retry that restarts it above, without moving the composer.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::input::TextareaState;
 use gpui_kit::component::{ActiveTheme, Sizable};
 use gpui_kit::{
@@ -16,6 +15,7 @@ use super::header::server_label;
 use super::composer::{WIDTH, composer};
 use super::popover::PopoverKind;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control};
 
 /// Chat column width minus the composer width, halved: the composer's left edge.
@@ -30,21 +30,21 @@ const ERROR_TOP: f32 = 24.;
 const ERROR_MAX_HEIGHT: f32 = TOP - ERROR_TOP - 16.;
 const CHOOSE_PROJECT: &str = "Choose project";
 const ADD_STARTER: &str = "Add a starter";
-const CHIPS: [(&str, IconName); 9] = [
-    ("Explore the codebase", IconName::Map),
-    ("Catch me up", IconName::Calendar),
-    ("Weigh my options", IconName::ChartPie),
-    ("Start feature planning", IconName::FileText),
-    ("Craft a Goal", IconName::Star),
-    ("Schedule a Task", IconName::Calendar),
-    ("Debug an issue", IconName::TriangleAlert),
-    ("Review my changes", IconName::Search),
-    ("Build an extension", IconName::LayoutDashboard),
+const CHIPS: [(&str, RemixIcon); 9] = [
+    ("Explore the codebase", RemixIcon::Compass3),
+    ("Catch me up", RemixIcon::History),
+    ("Weigh my options", RemixIcon::Scales3),
+    ("Start feature planning", RemixIcon::Survey),
+    ("Craft a Goal", RemixIcon::Target),
+    ("Schedule a Task", RemixIcon::CalendarSchedule),
+    ("Debug an issue", RemixIcon::Bug),
+    ("Review my changes", RemixIcon::SearchEye),
+    ("Build an extension", RemixIcon::Puzzle),
 ];
 
 fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
-    let button = label_button(&spec, Some(IconName::ChevronDown), CHOOSE_PROJECT)
+    let button = label_button(&spec, Some(RemixIcon::ArrowDownS), CHOOSE_PROJECT)
         // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
         .h(px(28.));
     // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`).
@@ -63,7 +63,7 @@ fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
 }
 
 /// A quick-action chip: smaller and outlined, so a row holds as many as React's.
-fn chip(scene: Scene<'_>, name: &'static str, icon: IconName) -> AnyElement {
+fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name);
     let button = label_button(&spec, Some(icon), name).outline().xsmall();
     control(scene.registry, spec, button).into_any_element()
@@ -108,7 +108,7 @@ pub(crate) fn empty_state(
                 .child(control(
                     scene.registry,
                     starter.clone(),
-                    icon_button(&starter, IconName::Plus),
+                    icon_button(&starter, RemixIcon::Add),
                 )),
         );
     div()

@@ -11,7 +11,8 @@ use oc_client::{Client, Directory};
 use oc_state::{Action, ConnectionStatus, SessionId};
 
 use super::{answer, run_session};
-use crate::live::protocol::{Command, CreateSessionRequest, CreateTarget, SendRequest, Update};
+use crate::live::execution::{SendAction, SendExecution};
+use crate::live::protocol::{Command, CreateSessionRequest, CreateTarget, Update};
 
 const TIMEOUT: Duration = Duration::from_secs(5);
 const DIRECTORY: &str = "/tmp/p";
@@ -76,13 +77,18 @@ fn project_target() -> CreateTarget {
 }
 
 fn prompt(text: &str) -> Command {
-    Command::SendPrompt(Box::new(SendRequest {
+    Command::Send(Box::new(SendExecution {
         session: SessionId::from("ses_a"),
         directory: DIRECTORY.to_owned(),
-        text: text.to_owned(),
         agent: None,
         model: None,
         record_model: None,
+        dismiss: Vec::new(),
+        action: SendAction::DismissThenSend {
+            take_queue: false,
+            text: text.to_owned(),
+            steer: false,
+        },
     }))
 }
 

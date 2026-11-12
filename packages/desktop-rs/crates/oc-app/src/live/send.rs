@@ -3,7 +3,7 @@
 //! and shows the composer's error.
 
 use futures::channel::mpsc::Sender;
-use oc_client::types::ModelRef;
+use oc_client::types::{Delivery, ModelRef};
 use oc_client::{Client, Directory};
 use oc_state::{Action, SelectionAction, SessionId, is_same_model_ref};
 
@@ -93,6 +93,8 @@ pub(crate) struct OpenSend<'a> {
     pub(crate) model: Option<&'a ModelRef>,
     /// The model the state's session record holds, which the model compare reads.
     pub(crate) record_model: Option<&'a ModelRef>,
+    /// `Steer` into the running turn, or `None` for a plain prompt.
+    pub(crate) delivery: Option<Delivery>,
 }
 
 /// Whether the send goes on to its next step.
@@ -100,20 +102,6 @@ pub(crate) struct OpenSend<'a> {
 enum Step {
     Next,
     Stop,
-}
-
-impl super::protocol::SendRequest {
-    /// Borrows the request as the send sequence reads it.
-    pub(crate) fn open(&self) -> OpenSend<'_> {
-        OpenSend {
-            session: &self.session,
-            directory: &self.directory,
-            text: &self.text,
-            agent: self.agent.as_deref(),
-            model: self.model.as_ref(),
-            record_model: self.record_model.as_ref(),
-        }
-    }
 }
 
 /// Switches an open session to the picked agent and model, then prompts.
@@ -133,11 +121,18 @@ pub(crate) async fn prompt(
         return Ok(());
     }
     let directory = Directory::new(open.directory.to_owned());
-    match client
-        .send_prompt(&directory, open.session.as_str(), open.text)
-        .await
-    {
-        Ok(_) => {
+    let accepted = match open.delivery {
+        Some(Delivery::Steer) => client
+            .steer_prompt(&directory, open.session.as_str(), open.text)
+            .await
+            .map(|_| ()),
+        Some(Delivery::Queue) | None => client
+            .send_prompt(&directory, open.session.as_str(), open.text)
+            .await
+            .map(|_| ()),
+    };
+    match accepted {
+        Ok(()) => {
             let update = Update::Sent {
                 text: open.text.to_owned(),
             };
@@ -230,6 +225,10 @@ async fn ensure_folder(client: &Client, target: &CreateTarget) -> Result<(), Str
         Err(error) => Err(format!("Could not create the chat folder: {error}")),
     }
 }
+
+#[cfg(test)]
+#[path = "create_test.rs"]
+mod create_test;
 
 #[cfg(test)]
 #[path = "send_test.rs"]

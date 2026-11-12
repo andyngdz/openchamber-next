@@ -83,6 +83,12 @@
         "modelID": "stream-300cps"
       }
     ],
+    "hiddenModels": [
+      {
+        "providerID": "perf",
+        "modelID": "agent-20tools-hold"
+      }
+    ],
     "collapsedModelProviders": [
       "perf-alt"
     ],
@@ -168,6 +174,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -588,6 +607,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -783,73 +869,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -1088,6 +1107,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -1637,17 +1708,11 @@
           "location": {
             "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
           },
-          "title": "Reference: streaming turn",
-          "agent": "build",
-          "model": {
-            "id": "agent-20tools-300cps",
-            "providerID": "perf",
-            "variant": "high"
-          },
+          "title": "Reference: in work",
           "cost": 0,
           "tokens": {
-            "input": 20,
-            "output": 320,
+            "input": 0,
+            "output": 0,
             "reasoning": 0,
             "cache": {
               "read": 0,
@@ -1655,16 +1720,15 @@
             }
           },
           "time": {
-            "created": 1794300002000,
-            "updated": 1794300138000,
-            "busy": 1794300014000
+            "created": 1794300000000,
+            "updated": 1794300000001
           },
           "metadata": {
             "openchamber": {
               "work": {
                 "state": "open",
-                "openedAt": 1794300017000,
-                "openedBy": "auto"
+                "openedAt": 1794300001000,
+                "openedBy": "user"
               }
             }
           }
@@ -1694,21 +1758,21 @@
           },
           "outcome": "succeeded",
           "time": {
-            "created": 1794300001000,
-            "updated": 1794300011000,
-            "busy": 1794300008000,
-            "idle": 1794300010000,
-            "viewed": 1794300010000
+            "created": 1794300002000,
+            "updated": 1794300002004,
+            "busy": 1794300002001,
+            "idle": 1794300002002,
+            "viewed": 1794300002003
           },
           "metadata": {
             "openchamber": {
               "work": {
                 "state": "open",
-                "openedAt": 1794300009000,
+                "openedAt": 1794300003000,
                 "openedBy": "auto"
               },
               "turn": {
-                "endedAt": 1794300010000,
+                "endedAt": 1794300004000,
                 "durationMs": 2500
               }
             }
@@ -1720,11 +1784,16 @@
           "location": {
             "directory": "/tmp/oc-desktop-rs-reference/desktop-rs-reference"
           },
-          "title": "Reference: in work",
+          "title": "Reference: streaming turn",
+          "model": {
+            "id": "agent-20tools-hold",
+            "providerID": "perf",
+            "variant": "high"
+          },
           "cost": 0,
           "tokens": {
-            "input": 0,
-            "output": 0,
+            "input": 20,
+            "output": 320,
             "reasoning": 0,
             "cache": {
               "read": 0,
@@ -1732,15 +1801,16 @@
             }
           },
           "time": {
-            "created": 1794300003000,
-            "updated": 1794300004000
+            "created": 1794300005000,
+            "updated": 1794300005002,
+            "busy": 1794300005001
           },
           "metadata": {
             "openchamber": {
               "work": {
                 "state": "open",
-                "openedAt": 1794300000000,
-                "openedBy": "user"
+                "openedAt": 1794300006000,
+                "openedBy": "auto"
               }
             }
           }
@@ -1804,6 +1874,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -2224,6 +2307,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -2419,73 +2569,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -2724,6 +2807,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -3285,8 +3420,8 @@
             }
           },
           "time": {
-            "created": 1794300005000,
-            "updated": 1794300005000
+            "created": 1794300007000,
+            "updated": 1794300007001
           }
         }
       ]
@@ -3348,6 +3483,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -3768,6 +3916,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -3963,73 +4178,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -4268,6 +4416,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -4829,8 +5029,8 @@
             }
           },
           "time": {
-            "created": 1794300006000,
-            "updated": 1794300006000
+            "created": 1794300008000,
+            "updated": 1794300008001
           }
         }
       ]
@@ -4892,6 +5092,19 @@
                   },
                   "code-1200cps": {
                     "name": "Fixture code block, 1200 characters/s"
+                  },
+                  "agent-20tools-hold": {
+                    "name": "Fixture agent, 20 tool calls then 300 characters/s",
+                    "capabilities": {
+                      "tools": true,
+                      "input": [
+                        "text",
+                        "image"
+                      ],
+                      "output": [
+                        "text"
+                      ]
+                    }
                   },
                   "agent-20tools-300cps": {
                     "name": "Fixture agent, 20 tool calls then 300 characters/s",
@@ -5312,6 +5525,73 @@
           }
         },
         {
+          "id": "deepseek-v4.1-flash-free",
+          "modelID": "deepseek-v4.1-flash-free",
+          "providerID": "opencode",
+          "type": "chat",
+          "family": "deepseek-flash",
+          "name": "DeepSeek V4.1 Flash Free",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "public",
+            "baseURL": "https://opencode.ai/inference/openai/v1",
+            "provider": "opencode"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ],
+            "temperature": true
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "time": {
+            "released": 1792195200000
+          },
+          "cost": [
+            {
+              "input": 0,
+              "output": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            }
+          ],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
           "id": "nemotron-3.5-super-vl-free",
           "modelID": "nemotron-3.5-super-vl-free",
           "providerID": "opencode",
@@ -5507,73 +5787,6 @@
           "variants": [],
           "time": {
             "released": 1790035200000
-          },
-          "cost": [
-            {
-              "input": 0,
-              "output": 0,
-              "cache": {
-                "read": 0,
-                "write": 0
-              }
-            }
-          ],
-          "status": "active",
-          "enabled": true,
-          "limit": {
-            "context": 200000,
-            "output": 32000
-          }
-        },
-        {
-          "id": "deepseek-v4.1-flash-free",
-          "modelID": "deepseek-v4.1-flash-free",
-          "providerID": "opencode",
-          "type": "chat",
-          "family": "deepseek-flash",
-          "name": "DeepSeek V4.1 Flash Free",
-          "compatibility": {
-            "reasoningField": "reasoning_content"
-          },
-          "package": "@opencode/ai/providers/openai-compatible",
-          "settings": {
-            "apiKey": "public",
-            "baseURL": "https://opencode.ai/inference/openai/v1",
-            "provider": "opencode"
-          },
-          "capabilities": {
-            "tools": true,
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ],
-            "temperature": true
-          },
-          "variants": [
-            {
-              "id": "low",
-              "settings": {
-                "reasoningEffort": "low"
-              }
-            },
-            {
-              "id": "high",
-              "settings": {
-                "reasoningEffort": "high"
-              }
-            },
-            {
-              "id": "max",
-              "settings": {
-                "reasoningEffort": "max"
-              }
-            }
-          ],
-          "time": {
-            "released": 1788998400000
           },
           "cost": [
             {
@@ -5812,6 +6025,58 @@
           "modelID": "code-1200cps",
           "providerID": "perf",
           "name": "Fixture code block, 1200 characters/s",
+          "package": "@opencode/ai/providers/openai-compatible",
+          "settings": {
+            "apiKey": "unused",
+            "baseURL": "http://127.0.0.1:4601/v1",
+            "provider": "perf"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
+          "time": {
+            "released": 0
+          },
+          "cost": [],
+          "status": "active",
+          "enabled": true,
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        {
+          "id": "agent-20tools-hold",
+          "modelID": "agent-20tools-hold",
+          "providerID": "perf",
+          "name": "Fixture agent, 20 tool calls then 300 characters/s",
           "package": "@opencode/ai/providers/openai-compatible",
           "settings": {
             "apiKey": "unused",
@@ -6373,8 +6638,8 @@
             }
           },
           "time": {
-            "created": 1794300007000,
-            "updated": 1794300007000
+            "created": 1794300009000,
+            "updated": 1794300009001
           }
         }
       ]
@@ -6392,70 +6657,45 @@
     },
     {
       "type": "openSession",
-      "session": "ses_reference_1"
+      "session": "ses_reference_3"
     },
     {
       "type": "messagesLoaded",
-      "session": "ses_reference_1",
+      "session": "ses_reference_3",
       "messages": [
         {
           "id": "msg_reference_1",
           "time": {
-            "created": 1794300141000
-          },
-          "type": "idle",
-          "outcome": "succeeded",
-          "content": []
-        },
-        {
-          "id": "msg_reference_2",
-          "time": {
-            "created": 1794300137000,
-            "streamed": 1794300139000,
-            "completed": 1794300140000
+            "created": 1794300052000
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
           "content": [
             {
               "type": "text",
-              "text": "## 1. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 1 of this document\nrepeats the explanation so t"
+              "text": "## 1. Executing a call in a bytecode virtual machine\n\nA bytecode virtual machine executes a function call by creating a new **activation record**, binding the\narguments, and transferring control to the callee's first instruction. The caller's state is preserved so that\nexecution resumes at the instruction after the call once the callee returns. Round 1 of this document\nrepeats the explanation so that the response is long enough to measure.\n\n"
             }
           ],
           "snapshot": {
-            "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
-            "end": "0f944a76adfa56dda2f5106665b4b5519328f4cf",
-            "files": []
-          },
-          "finish": "stop",
-          "rawFinish": "stop",
-          "cost": 0,
-          "tokens": {
-            "input": 1,
-            "output": 1436,
-            "reasoning": 0,
-            "cache": {
-              "read": 0,
-              "write": 0
-            }
+            "start": "0f944a76adfa56dda2f5106665b4b5519328f4cf"
           }
         },
         {
-          "id": "msg_reference_3",
+          "id": "msg_reference_2",
           "time": {
-            "created": 1794300131000,
-            "streamed": 1794300134000,
-            "completed": 1794300136000
+            "created": 1794300051000,
+            "streamed": 1794300051001,
+            "completed": 1794300051002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6486,9 +6726,9 @@
                 }
               },
               "time": {
-                "created": 1794300132000,
-                "ran": 1794300133000,
-                "completed": 1794300135000
+                "created": 1794300050000,
+                "ran": 1794300050001,
+                "completed": 1794300050002
               }
             }
           ],
@@ -6511,16 +6751,16 @@
           }
         },
         {
-          "id": "msg_reference_4",
+          "id": "msg_reference_3",
           "time": {
-            "created": 1794300125000,
-            "streamed": 1794300128000,
-            "completed": 1794300130000
+            "created": 1794300049000,
+            "streamed": 1794300049001,
+            "completed": 1794300049002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6551,9 +6791,9 @@
                 }
               },
               "time": {
-                "created": 1794300126000,
-                "ran": 1794300127000,
-                "completed": 1794300129000
+                "created": 1794300048000,
+                "ran": 1794300048001,
+                "completed": 1794300048002
               }
             }
           ],
@@ -6576,16 +6816,16 @@
           }
         },
         {
-          "id": "msg_reference_5",
+          "id": "msg_reference_4",
           "time": {
-            "created": 1794300119000,
-            "streamed": 1794300122000,
-            "completed": 1794300124000
+            "created": 1794300047000,
+            "streamed": 1794300047001,
+            "completed": 1794300047002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6616,9 +6856,9 @@
                 }
               },
               "time": {
-                "created": 1794300120000,
-                "ran": 1794300121000,
-                "completed": 1794300123000
+                "created": 1794300046000,
+                "ran": 1794300046001,
+                "completed": 1794300046002
               }
             }
           ],
@@ -6641,16 +6881,16 @@
           }
         },
         {
-          "id": "msg_reference_6",
+          "id": "msg_reference_5",
           "time": {
-            "created": 1794300113000,
-            "streamed": 1794300116000,
-            "completed": 1794300118000
+            "created": 1794300045000,
+            "streamed": 1794300045001,
+            "completed": 1794300045002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6681,9 +6921,9 @@
                 }
               },
               "time": {
-                "created": 1794300114000,
-                "ran": 1794300115000,
-                "completed": 1794300117000
+                "created": 1794300044000,
+                "ran": 1794300044001,
+                "completed": 1794300044002
               }
             }
           ],
@@ -6706,16 +6946,16 @@
           }
         },
         {
-          "id": "msg_reference_7",
+          "id": "msg_reference_6",
           "time": {
-            "created": 1794300107000,
-            "streamed": 1794300110000,
-            "completed": 1794300112000
+            "created": 1794300043000,
+            "streamed": 1794300043001,
+            "completed": 1794300043002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6746,9 +6986,9 @@
                 }
               },
               "time": {
-                "created": 1794300108000,
-                "ran": 1794300109000,
-                "completed": 1794300111000
+                "created": 1794300042000,
+                "ran": 1794300042001,
+                "completed": 1794300042002
               }
             }
           ],
@@ -6771,16 +7011,16 @@
           }
         },
         {
-          "id": "msg_reference_8",
+          "id": "msg_reference_7",
           "time": {
-            "created": 1794300101000,
-            "streamed": 1794300104000,
-            "completed": 1794300106000
+            "created": 1794300041000,
+            "streamed": 1794300041001,
+            "completed": 1794300041002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6811,9 +7051,9 @@
                 }
               },
               "time": {
-                "created": 1794300102000,
-                "ran": 1794300103000,
-                "completed": 1794300105000
+                "created": 1794300040000,
+                "ran": 1794300040001,
+                "completed": 1794300040002
               }
             }
           ],
@@ -6836,16 +7076,16 @@
           }
         },
         {
-          "id": "msg_reference_9",
+          "id": "msg_reference_8",
           "time": {
-            "created": 1794300095000,
-            "streamed": 1794300098000,
-            "completed": 1794300100000
+            "created": 1794300039000,
+            "streamed": 1794300039001,
+            "completed": 1794300039002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6876,9 +7116,9 @@
                 }
               },
               "time": {
-                "created": 1794300096000,
-                "ran": 1794300097000,
-                "completed": 1794300099000
+                "created": 1794300038000,
+                "ran": 1794300038001,
+                "completed": 1794300038002
               }
             }
           ],
@@ -6901,16 +7141,16 @@
           }
         },
         {
-          "id": "msg_reference_10",
+          "id": "msg_reference_9",
           "time": {
-            "created": 1794300089000,
-            "streamed": 1794300092000,
-            "completed": 1794300094000
+            "created": 1794300037000,
+            "streamed": 1794300037001,
+            "completed": 1794300037002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -6941,9 +7181,9 @@
                 }
               },
               "time": {
-                "created": 1794300090000,
-                "ran": 1794300091000,
-                "completed": 1794300093000
+                "created": 1794300036000,
+                "ran": 1794300036001,
+                "completed": 1794300036002
               }
             }
           ],
@@ -6966,16 +7206,16 @@
           }
         },
         {
-          "id": "msg_reference_11",
+          "id": "msg_reference_10",
           "time": {
-            "created": 1794300083000,
-            "streamed": 1794300086000,
-            "completed": 1794300088000
+            "created": 1794300035000,
+            "streamed": 1794300035001,
+            "completed": 1794300035002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7006,9 +7246,9 @@
                 }
               },
               "time": {
-                "created": 1794300084000,
-                "ran": 1794300085000,
-                "completed": 1794300087000
+                "created": 1794300034000,
+                "ran": 1794300034001,
+                "completed": 1794300034002
               }
             }
           ],
@@ -7031,16 +7271,16 @@
           }
         },
         {
-          "id": "msg_reference_12",
+          "id": "msg_reference_11",
           "time": {
-            "created": 1794300077000,
-            "streamed": 1794300080000,
-            "completed": 1794300082000
+            "created": 1794300033000,
+            "streamed": 1794300033001,
+            "completed": 1794300033002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7071,9 +7311,9 @@
                 }
               },
               "time": {
-                "created": 1794300078000,
-                "ran": 1794300079000,
-                "completed": 1794300081000
+                "created": 1794300032000,
+                "ran": 1794300032001,
+                "completed": 1794300032002
               }
             }
           ],
@@ -7096,16 +7336,16 @@
           }
         },
         {
-          "id": "msg_reference_13",
+          "id": "msg_reference_12",
           "time": {
-            "created": 1794300071000,
-            "streamed": 1794300074000,
-            "completed": 1794300076000
+            "created": 1794300031000,
+            "streamed": 1794300031001,
+            "completed": 1794300031002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7136,9 +7376,9 @@
                 }
               },
               "time": {
-                "created": 1794300072000,
-                "ran": 1794300073000,
-                "completed": 1794300075000
+                "created": 1794300030000,
+                "ran": 1794300030001,
+                "completed": 1794300030002
               }
             }
           ],
@@ -7161,16 +7401,16 @@
           }
         },
         {
-          "id": "msg_reference_14",
+          "id": "msg_reference_13",
           "time": {
-            "created": 1794300065000,
-            "streamed": 1794300068000,
-            "completed": 1794300070000
+            "created": 1794300029000,
+            "streamed": 1794300029001,
+            "completed": 1794300029002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7201,9 +7441,9 @@
                 }
               },
               "time": {
-                "created": 1794300066000,
-                "ran": 1794300067000,
-                "completed": 1794300069000
+                "created": 1794300028000,
+                "ran": 1794300028001,
+                "completed": 1794300028002
               }
             }
           ],
@@ -7226,16 +7466,16 @@
           }
         },
         {
-          "id": "msg_reference_15",
+          "id": "msg_reference_14",
           "time": {
-            "created": 1794300059000,
-            "streamed": 1794300062000,
-            "completed": 1794300064000
+            "created": 1794300027000,
+            "streamed": 1794300027001,
+            "completed": 1794300027002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7266,9 +7506,9 @@
                 }
               },
               "time": {
-                "created": 1794300060000,
-                "ran": 1794300061000,
-                "completed": 1794300063000
+                "created": 1794300026000,
+                "ran": 1794300026001,
+                "completed": 1794300026002
               }
             }
           ],
@@ -7291,16 +7531,16 @@
           }
         },
         {
-          "id": "msg_reference_16",
+          "id": "msg_reference_15",
           "time": {
-            "created": 1794300053000,
-            "streamed": 1794300056000,
-            "completed": 1794300058000
+            "created": 1794300025000,
+            "streamed": 1794300025001,
+            "completed": 1794300025002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7331,9 +7571,9 @@
                 }
               },
               "time": {
-                "created": 1794300054000,
-                "ran": 1794300055000,
-                "completed": 1794300057000
+                "created": 1794300024000,
+                "ran": 1794300024001,
+                "completed": 1794300024002
               }
             }
           ],
@@ -7356,16 +7596,16 @@
           }
         },
         {
-          "id": "msg_reference_17",
+          "id": "msg_reference_16",
           "time": {
-            "created": 1794300047000,
-            "streamed": 1794300050000,
-            "completed": 1794300052000
+            "created": 1794300023000,
+            "streamed": 1794300023001,
+            "completed": 1794300023002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7396,9 +7636,9 @@
                 }
               },
               "time": {
-                "created": 1794300048000,
-                "ran": 1794300049000,
-                "completed": 1794300051000
+                "created": 1794300022000,
+                "ran": 1794300022001,
+                "completed": 1794300022002
               }
             }
           ],
@@ -7421,16 +7661,16 @@
           }
         },
         {
-          "id": "msg_reference_18",
+          "id": "msg_reference_17",
           "time": {
-            "created": 1794300041000,
-            "streamed": 1794300044000,
-            "completed": 1794300046000
+            "created": 1794300021000,
+            "streamed": 1794300021001,
+            "completed": 1794300021002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7461,9 +7701,9 @@
                 }
               },
               "time": {
-                "created": 1794300042000,
-                "ran": 1794300043000,
-                "completed": 1794300045000
+                "created": 1794300020000,
+                "ran": 1794300020001,
+                "completed": 1794300020002
               }
             }
           ],
@@ -7486,16 +7726,16 @@
           }
         },
         {
-          "id": "msg_reference_19",
+          "id": "msg_reference_18",
           "time": {
-            "created": 1794300035000,
-            "streamed": 1794300038000,
-            "completed": 1794300040000
+            "created": 1794300019000,
+            "streamed": 1794300019001,
+            "completed": 1794300019002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7526,9 +7766,9 @@
                 }
               },
               "time": {
-                "created": 1794300036000,
-                "ran": 1794300037000,
-                "completed": 1794300039000
+                "created": 1794300018000,
+                "ran": 1794300018001,
+                "completed": 1794300018002
               }
             }
           ],
@@ -7551,16 +7791,16 @@
           }
         },
         {
-          "id": "msg_reference_20",
+          "id": "msg_reference_19",
           "time": {
-            "created": 1794300029000,
-            "streamed": 1794300032000,
-            "completed": 1794300034000
+            "created": 1794300017000,
+            "streamed": 1794300017001,
+            "completed": 1794300017002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7591,9 +7831,9 @@
                 }
               },
               "time": {
-                "created": 1794300030000,
-                "ran": 1794300031000,
-                "completed": 1794300033000
+                "created": 1794300016000,
+                "ran": 1794300016001,
+                "completed": 1794300016002
               }
             }
           ],
@@ -7616,16 +7856,16 @@
           }
         },
         {
-          "id": "msg_reference_21",
+          "id": "msg_reference_20",
           "time": {
-            "created": 1794300023000,
-            "streamed": 1794300026000,
-            "completed": 1794300028000
+            "created": 1794300015000,
+            "streamed": 1794300015001,
+            "completed": 1794300015002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7656,9 +7896,9 @@
                 }
               },
               "time": {
-                "created": 1794300024000,
-                "ran": 1794300025000,
-                "completed": 1794300027000
+                "created": 1794300014000,
+                "ran": 1794300014001,
+                "completed": 1794300014002
               }
             }
           ],
@@ -7681,16 +7921,16 @@
           }
         },
         {
-          "id": "msg_reference_22",
+          "id": "msg_reference_21",
           "time": {
-            "created": 1794300016000,
-            "streamed": 1794300020000,
-            "completed": 1794300022000
+            "created": 1794300013000,
+            "streamed": 1794300013001,
+            "completed": 1794300013002
           },
           "type": "assistant",
           "agent": "build",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
           },
@@ -7721,9 +7961,9 @@
                 }
               },
               "time": {
-                "created": 1794300018000,
-                "ran": 1794300019000,
-                "completed": 1794300021000
+                "created": 1794300012000,
+                "ran": 1794300012001,
+                "completed": 1794300012002
               }
             }
           ],
@@ -7746,35 +7986,24 @@
           }
         },
         {
-          "id": "msg_reference_23",
+          "id": "msg_reference_22",
           "time": {
-            "created": 1794300015000
+            "created": 1794300011000
           },
           "text": "List the files the answer should mention.",
-          "type": "user",
-          "content": []
+          "type": "user"
         },
         {
-          "id": "msg_reference_24",
+          "id": "msg_reference_23",
           "time": {
-            "created": 1794300013000
-          },
-          "type": "agent-switched",
-          "agent": "build",
-          "content": []
-        },
-        {
-          "id": "msg_reference_25",
-          "time": {
-            "created": 1794300012000
+            "created": 1794300010000
           },
           "type": "model-switched",
           "model": {
-            "id": "agent-20tools-300cps",
+            "id": "agent-20tools-hold",
             "providerID": "perf",
             "variant": "high"
-          },
-          "content": []
+          }
         }
       ]
     }

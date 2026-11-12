@@ -1,28 +1,28 @@
 //! The icon rail on the right edge: panel switches, all inert in the spike.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::{App, Div, ParentElement, Styled, div, px};
 
 use super::icon_button;
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control, region};
 
 /// The rail's buttons in reference order, in groups split by a divider.
-const GROUPS: [&[(&str, IconName)]; 3] = [
+const GROUPS: [&[(&str, RemixIcon)]; 3] = [
     &[
-        ("Context", IconName::LoaderCircle),
-        ("Git", IconName::Network),
-        ("Changes", IconName::PanelRight),
-        ("Walkthrough", IconName::Map),
+        ("Context", RemixIcon::DonutChartFill),
+        ("Git", RemixIcon::GitBranch),
+        ("Changes", RemixIcon::LayoutColumn),
+        ("Walkthrough", RemixIcon::Route),
     ],
     &[
-        ("Files", IconName::File),
-        ("Terminal", IconName::SquareTerminal),
-        ("Browser", IconName::Globe),
+        ("Files", RemixIcon::FileEdit),
+        ("Terminal", RemixIcon::TerminalBox),
+        ("Browser", RemixIcon::Global),
     ],
     &[
-        ("Project knowledge", IconName::BookOpen),
-        ("Configure panels", IconName::Settings2),
+        ("Project knowledge", RemixIcon::BookMarked),
+        ("Configure panels", RemixIcon::Equalizer2),
     ],
 ];
 

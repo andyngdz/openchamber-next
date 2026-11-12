@@ -87,6 +87,31 @@ server.
 
 The directory has no `package.json`, so Bun ignores it.
 
+### Turn control
+
+Next reads the server's control stream at `/api/openchamber/events` beside the event
+stream. It carries the message queue, the permission auto-accept snapshot and the
+routing state. Every ready frame re-reads all three, and a dropped stream reconnects
+after 1 second, doubling up to 30. An older server answers 404 for that route: the
+window then shows no queue strip and no shield modes, and every send is a plain
+prompt.
+
+While a turn runs, Enter queues the composer text when `followUpBehavior` is `queue`
+(the default) and steers it into the turn when it is `steer`. Ctrl+Enter and Cmd+Enter
+always send a plain prompt, and with `enterToSend` off they are the only send keys. A
+send first rejects the open session tree's pending permissions and cancels its pending
+forms; when that removed anything, the text is queued instead of racing the turn it
+unblocked. The queue strip shows the server's queue, and a row's send now takes that
+item and steers it, or sends it as a prompt when the session is idle.
+
+### Syntax highlighting
+
+The bash command and the diff previews in the permission dock are highlighted with
+tree-sitter through GPUI Kit's `tree-sitter-languages` feature, colored from the syntax
+colors of the embedded `openchamber-dark` theme. That feature adds 37 crates, grows the
+stripped binary from 49.3 MB to 100.0 MB, and brings 38 languages. A language without a
+grammar shows unhighlighted.
+
 ### Fixture states
 
 `--state <file>` opens the window on a state fixture instead of a server: the

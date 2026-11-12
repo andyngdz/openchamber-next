@@ -9,6 +9,7 @@
 mod app;
 mod errors;
 mod fixture;
+mod icons;
 mod layout;
 mod live;
 mod logging;

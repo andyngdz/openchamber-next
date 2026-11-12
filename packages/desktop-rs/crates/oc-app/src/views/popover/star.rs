@@ -7,6 +7,7 @@ use gpui_kit::{
 use oc_state::SelectionAction;
 
 use super::list::Row;
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Reveal, Role, control as control_element};
 use crate::views::Intent;
 
@@ -78,8 +79,8 @@ pub(super) fn suffix(
                 .w(px(16.))
                 .h(px(16.))
                 .child(match kind {
-                    StarKind::Filled => gpui_kit::assets::IconName::StarFill,
-                    StarKind::Outline => gpui_kit::assets::IconName::Star,
+                    StarKind::Filled => RemixIcon::StarFill,
+                    StarKind::Outline => RemixIcon::Star,
                 })
                 .on_click(move |_, window, cx| {
                     dispatch(&Intent::ApplySelection(action.clone()), window, cx);

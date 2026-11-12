@@ -1,6 +1,5 @@
 //! One session row under a section or project group.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
@@ -9,6 +8,7 @@ use gpui_kit::{
 };
 use oc_state::{Action, SidebarRow, State};
 
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 use crate::views::{Scene, icon_button};
 
@@ -32,22 +32,12 @@ pub(super) fn session_row(
     let button = ControlSpec::named(Area::Sidebar, Role::Button, title.clone());
     let hover_group: SharedString = container.key.clone();
     let label = row_label(&button, row, cx);
-    let icon = |index: usize| {
-        if index == 0 {
-            IconName::CircleCheck
-        } else {
-            IconName::Inbox
-        }
-    };
-    let action_buttons = actions.iter().enumerate().map(|(index, action)| {
+    let action_buttons = actions.iter().map(|action| {
         let spec = ControlSpec::named(Area::Sidebar, Role::Button, *action)
             .under(&[title.as_str()])
             .revealed(Reveal::OnHover(hover_group.clone()));
-        control(
-            scene.registry,
-            spec.clone(),
-            icon_button(&spec, icon(index)),
-        )
+        let icon = action_icon(action);
+        control(scene.registry, spec.clone(), icon_button(&spec, icon))
     });
     let body = div()
         .id(container.key.clone())
@@ -71,6 +61,17 @@ pub(super) fn session_row(
         .into_any_element()
 }
 
+/// The icon React draws on a row's hover action.
+fn action_icon(action: &str) -> RemixIcon {
+    if action == TRACK_WORK {
+        RemixIcon::Eye
+    } else if action == MARK_DONE {
+        RemixIcon::Check
+    } else {
+        RemixIcon::Archive
+    }
+}
+
 /// The title, with a spinner while the session runs a turn.
 fn row_label(button: &ControlSpec, row: &SidebarRow, cx: &App) -> AnyElement {
     let title = row.title.clone().unwrap_or_else(|| UNTITLED.to_owned());
@@ -86,7 +87,7 @@ fn row_label(button: &ControlSpec, row: &SidebarRow, cx: &App) -> AnyElement {
         .children(row.busy.then(|| {
             div()
                 .text_color(cx.theme().primary)
-                .child(IconName::LoaderCircle)
+                .child(RemixIcon::Loader4)
         }))
         .into_any_element()
 }

@@ -1,8 +1,8 @@
 //! The open session's messages: user messages on the right, assistant text as plain text, tool
 //! calls under an Activity row, and a meta row with hover actions under each finished turn.
 
-use gpui_kit::assets::IconName;
 use gpui_kit::component::ActiveTheme;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, ScrollHandle,
     SharedString, StatefulInteractiveElement, Styled, div, px,
@@ -13,6 +13,7 @@ use super::composer::WIDTH;
 use super::tool_rows::{ToolSpecs, activity, tool_row_specs};
 use super::turns::{Block, Turn, TurnMeta, turns};
 use super::{Scene, icon_button, retry_button};
+use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 
 /// The message scroller. React gives it no name, and its text is the whole transcript, so the
@@ -20,11 +21,23 @@ use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 const SCROLLER: &str = "generic";
 const SCROLL_TO_BOTTOM: &str = "Scroll to bottom";
 /// Hover actions of a finished turn's meta row.
-const META_ACTIONS: [(&str, IconName); 4] = [
-    ("Copy message text", IconName::Copy),
-    ("Continue from this answer", IconName::ArrowRight),
-    ("Pin into context (survives compaction)", IconName::StarOff),
-    ("More actions", IconName::Ellipsis),
+const META_ACTIONS: [(&str, RemixIcon); 4] = [
+    ("Copy message text", RemixIcon::FileCopy),
+    ("Continue from this answer", RemixIcon::ChatForward),
+    (
+        "Pin into context (survives compaction)",
+        RemixIcon::Pushpin2,
+    ),
+    ("More actions", RemixIcon::More),
+];
+/// Hover actions of a user message. React mounts them on every rendered user
+/// message (`MessageBody.tsx`, `actionsBlock`) and reveals them on hover; the
+/// idle reference lacks them only because its transcript is virtualized and
+/// the message has scrolled out of the rendered window.
+const USER_ACTIONS: [(&str, RemixIcon); 3] = [
+    ("Revert to this message", RemixIcon::ArrowGoBack),
+    ("Copy message text", RemixIcon::FileCopy),
+    ("More actions", RemixIcon::More),
 ];
 
 /// The scrolling message list and its Scroll to bottom button.
@@ -76,7 +89,7 @@ fn scroll_to_bottom(scene: Scene<'_>, scroll: &ScrollHandle) -> Div {
         ControlSpec::named(Area::ChatColumn, Role::Button, SCROLL_TO_BOTTOM).revealed(reveal);
     let handle = scroll.clone();
     let button =
-        icon_button(&spec, IconName::ArrowDown).on_click(move |_, _, _| handle.scroll_to_bottom());
+        icon_button(&spec, RemixIcon::ArrowDown).on_click(move |_, _, _| handle.scroll_to_bottom());
     div()
         .absolute()
         .bottom(px(8.))
@@ -98,7 +111,10 @@ fn turn_view(
         .flex()
         .flex_col()
         .gap(px(8.))
-        .children(turn.user_text.map(|text| user_bubble(text, cx)))
+        .children(
+            turn.user_text
+                .map(|text| user_bubble(scene, index, text, cx)),
+        )
         .children(
             turn.blocks()
                 .into_iter()
@@ -108,17 +124,41 @@ fn turn_view(
         .into_any_element()
 }
 
-fn user_bubble(text: &str, cx: &App) -> Div {
-    div().flex().justify_end().child(
-        div()
-            .max_w(px(560.))
-            .px(px(12.))
-            .py(px(8.))
-            .rounded(px(12.))
-            .bg(cx.theme().secondary)
-            .text_sm()
-            .child(text.to_owned()),
-    )
+/// The user's bubble, with the revert/copy/more row React mounts above every
+/// user message and reveals on hover.
+fn user_bubble(scene: Scene<'_>, index: usize, text: &str, cx: &App) -> Div {
+    let group: SharedString = format!("user-{index}").into();
+    let copyable = !text.trim().is_empty();
+    div()
+        .flex()
+        .flex_col()
+        .items_end()
+        .gap(px(4.))
+        .group(group.clone())
+        .when(copyable, |row| {
+            row.child(
+                div()
+                    .flex()
+                    .items_center()
+                    .justify_end()
+                    .gap(px(6.))
+                    .children(USER_ACTIONS.map(|(name, icon)| {
+                        let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name)
+                            .revealed(Reveal::OnHover(group.clone()));
+                        control(scene.registry, spec.clone(), icon_button(&spec, icon))
+                    })),
+            )
+        })
+        .child(
+            div()
+                .max_w(px(560.))
+                .px(px(12.))
+                .py(px(8.))
+                .rounded(px(12.))
+                .bg(cx.theme().secondary)
+                .text_sm()
+                .child(text.to_owned()),
+        )
 }
 
 fn block_view(
