@@ -9,7 +9,7 @@ use super::LIST_LEAD;
 use super::rows::session_row;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
-use crate::views::{Intent, Scene, icon_button, label_button};
+use crate::views::{Intent, Scene, label_button};
 
 pub(crate) const CHATS: &str = "Chats";
 pub(crate) const PINNED: &str = "Pinned";
@@ -92,12 +92,19 @@ fn chats_header(scene: Scene<'_>, header: &ControlSpec, add: &ControlSpec) -> Di
         .child(control(
             scene.registry,
             header.clone(),
-            label_button(header, None, CHATS),
+            label_button(
+                scene.registry,
+                header,
+                None,
+                CHATS,
+                crate::theme::palette().muted_foreground.into(),
+            ),
         ))
         .child(control(
             scene.registry,
             add.clone(),
-            icon_button(add, RemixIcon::Add).on_click(scene.on_click_intent(Intent::NewSession)),
+            crate::views::plain_icon_button(add, RemixIcon::Add)
+                .on_click(scene.on_click_intent(Intent::NewSession)),
         ))
 }
 
@@ -138,7 +145,13 @@ pub(super) fn header_row(
         div().id(container.key.clone()).w_full().child(control(
             scene.registry,
             button.clone(),
-            label_button(button, None, label),
+            label_button(
+                scene.registry,
+                button,
+                None,
+                label,
+                crate::theme::palette().muted_foreground.into(),
+            ),
         )),
     )
     .w_full()
@@ -160,9 +173,14 @@ pub(super) fn show_more(
         control(
             scene.registry,
             spec.clone(),
-            label_button(&spec, None, SHOW_MORE).on_click(
-                scene.on_click_intent(Intent::ApplySidebar(SidebarAction::ShowMore(more))),
-            ),
+            label_button(
+                scene.registry,
+                &spec,
+                None,
+                SHOW_MORE,
+                crate::theme::palette().muted_foreground.into(),
+            )
+            .on_click(scene.on_click_intent(Intent::ApplySidebar(SidebarAction::ShowMore(more)))),
         )
         .w_full()
         .into_any_element(),

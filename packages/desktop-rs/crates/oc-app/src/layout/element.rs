@@ -1,9 +1,11 @@
 //! Elements that report their bounds to the [`LayoutRegistry`] while the frame is prepainted.
 
 use gpui_kit::base::ElementExt;
-use gpui_kit::{Div, InteractiveElement, IntoElement, ParentElement, Styled, canvas, div};
+use gpui_kit::{
+    Div, Hsla, InteractiveElement, IntoElement, ParentElement, SharedString, Styled, canvas, div,
+};
 
-use super::registry::{Area, ControlSpec, LayoutRegistry, Reveal};
+use super::registry::{Area, ControlSpec, DrawSlot, LayoutRegistry, Reveal};
 
 /// Wraps the app's root element, whose bounds are the content area.
 pub(crate) fn content(registry: &LayoutRegistry, root: Div) -> Div {
@@ -58,6 +60,50 @@ fn recorded_control(
         Reveal::OnHover(group) => wrapper.group_hover(group, |style| style.opacity(1.)),
         Reveal::Always | Reveal::Hidden => wrapper,
     }
+}
+
+/// A small filled mark a control draws, recorded where it is painted.
+pub(crate) fn mark(
+    registry: &LayoutRegistry,
+    control: &SharedString,
+    color: Hsla,
+    width: gpui_kit::Pixels,
+    height: gpui_kit::Pixels,
+) -> Div {
+    let registry = registry.clone();
+    let recorded = control.clone();
+    div()
+        .relative()
+        .flex_none()
+        .w(width)
+        .h(height)
+        .bg(color)
+        .child(
+            canvas(
+                move |bounds, _, _| registry.record_mark(&recorded, color, bounds),
+                |_, _, _, _| {},
+            )
+            .absolute()
+            .top_0()
+            .left_0()
+            .size_full(),
+        )
+}
+
+/// Reports where `painted`, the element that draws a recorded icon or text run, lands. The
+/// probe is an absolute child, so the element keeps its own layout.
+pub(crate) fn placed(registry: &LayoutRegistry, slot: DrawSlot, painted: Div) -> Div {
+    let registry = registry.clone();
+    painted.relative().child(
+        canvas(
+            move |bounds, _, _| registry.place(slot, bounds),
+            |_, _, _, _| {},
+        )
+        .absolute()
+        .top_0()
+        .left_0()
+        .size_full(),
+    )
 }
 
 /// Opacity of a control while the pointer is elsewhere.

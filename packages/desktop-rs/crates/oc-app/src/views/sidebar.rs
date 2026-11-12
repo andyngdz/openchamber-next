@@ -11,6 +11,7 @@ use super::sidebar_list::session_list;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
+use crate::theme;
 
 /// Title-bar controls, left to right.
 const TITLE_BAR: [(&str, RemixIcon); 2] = [
@@ -30,7 +31,17 @@ const INSTANCE: &str = "Open instance, usage and MCP (current: Local)";
 
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::Sidebar, Role::Button, name);
-    control(scene.registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
+    let color = if name == "Open sessions" {
+        theme::palette().foreground.into()
+    } else {
+        theme::palette().muted_foreground.into()
+    };
+    control(
+        scene.registry,
+        spec.clone(),
+        icon_button(scene.registry, &spec, icon, color),
+    )
+    .into_any_element()
 }
 
 /// The sidebar column.
@@ -69,12 +80,17 @@ fn title_bar(scene: Scene<'_>) -> Div {
         .gap(px(2.))
         .px(px(8.))
         .children(TITLE_BAR.map(|(name, icon)| button(scene, name, icon)))
-        .child(control(
-            scene.registry,
-            new_session.clone(),
-            label_button(&new_session, Some(RemixIcon::ChatNew), NEW_SESSION)
-                .on_click(scene.on_click_intent(Intent::NewSession)),
-        ))
+        .child(control(scene.registry, new_session.clone(), {
+            let muted = theme::palette().muted_foreground.into();
+            label_button(
+                scene.registry,
+                &new_session,
+                Some((RemixIcon::ChatNew, muted)),
+                NEW_SESSION,
+                muted,
+            )
+            .on_click(scene.on_click_intent(Intent::NewSession))
+        }))
 }
 
 /// The resize handle on the sidebar's right edge, which also draws its border.
@@ -129,11 +145,16 @@ fn footer(scene: Scene<'_>) -> Div {
         .justify_between()
         .px(px(8.))
         .child(button(scene, SETTINGS, RemixIcon::Settings3))
-        .child(control(
-            scene.registry,
-            instance.clone(),
-            label_button(&instance, Some(RemixIcon::Server), "Local"),
-        ))
+        .child(control(scene.registry, instance.clone(), {
+            let muted = theme::palette().muted_foreground.into();
+            label_button(
+                scene.registry,
+                &instance,
+                Some((RemixIcon::Server, muted)),
+                "Local",
+                muted,
+            )
+        }))
 }
 
 #[cfg(test)]

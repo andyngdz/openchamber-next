@@ -9,9 +9,10 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use gpui_kit::{Bounds, Pixels, SharedString};
+use gpui_kit::{Bounds, Hsla, Pixels, SharedString};
 
 pub(crate) use super::control_spec::ControlSpec;
+use super::draw::{IconDraw, MarkDraw, TextDraw};
 use serde::Serialize;
 
 /// The six regions the parity reference measures.
@@ -78,6 +79,9 @@ struct Frame {
     content: Option<Bounds<Pixels>>,
     regions: BTreeMap<Area, Bounds<Pixels>>,
     controls: Vec<PlacedControl>,
+    marks: Vec<MarkDraw>,
+    icons: Vec<Recorded<IconDraw>>,
+    texts: Vec<Recorded<TextDraw>>,
 }
 
 /// Bounds of every region and control of the last frame, shared by the elements that fill it.
@@ -93,6 +97,9 @@ impl LayoutRegistry {
         frame.content = None;
         frame.regions.clear();
         frame.controls.clear();
+        frame.marks.clear();
+        frame.icons.clear();
+        frame.texts.clear();
     }
 
     /// Records the bounds of the app's root element: the content area every other bound is
@@ -120,6 +127,95 @@ impl LayoutRegistry {
             .push(PlacedControl { spec, bounds });
     }
 
+    /// Drops the icons and text runs recorded so far for `control` in this frame. A view that
+    /// can render one control more than once per frame calls it first: gpui-kit's `List`
+    /// renders a row again while it measures, and only the last render is the row on screen.
+    /// Slots of the dropped draws stay valid and place nothing that is dumped.
+    pub(crate) fn begin_draws(&self, control: &str) {
+        let mut frame = self.frame.borrow_mut();
+        let frame = &mut *frame;
+        for entry in frame
+            .icons
+            .iter_mut()
+            .filter(|entry| entry.control.as_ref() == control)
+        {
+            entry.live = false;
+        }
+        for entry in frame
+            .texts
+            .iter_mut()
+            .filter(|entry| entry.control.as_ref() == control)
+        {
+            entry.live = false;
+        }
+    }
+
+    /// Records one icon a control draws, in drawing order.
+    pub(crate) fn record_icon(&self, control: &SharedString, icon: IconDraw) -> DrawSlot {
+        let mut frame = self.frame.borrow_mut();
+        frame.icons.push(Recorded::new(control, icon));
+        DrawSlot::Icon(frame.icons.len() - 1)
+    }
+
+    /// Records one run of text a control draws, in drawing order.
+    pub(crate) fn record_text(&self, control: &SharedString, text: TextDraw) -> DrawSlot {
+        let mut frame = self.frame.borrow_mut();
+        frame.texts.push(Recorded::new(control, text));
+        DrawSlot::Text(frame.texts.len() - 1)
+    }
+
+    /// Records where a recorded icon or text run was painted.
+    pub(crate) fn place(&self, slot: DrawSlot, bounds: Bounds<Pixels>) {
+        let mut frame = self.frame.borrow_mut();
+        let placed = match slot {
+            DrawSlot::Icon(index) => frame.icons.get_mut(index).map(|entry| &mut entry.bounds),
+            DrawSlot::Text(index) => frame.texts.get_mut(index).map(|entry| &mut entry.bounds),
+        };
+        if let Some(placed) = placed {
+            *placed = Some(bounds);
+        }
+    }
+
+    /// The icons of one control, in drawing order, with their painted bounds when known.
+    pub(crate) fn icons_of(&self, control: &str) -> Vec<(IconDraw, Option<Bounds<Pixels>>)> {
+        let frame = self.frame.borrow();
+        frame
+            .icons
+            .iter()
+            .filter_map(|entry| entry.of(control))
+            .collect()
+    }
+
+    /// The text runs of one control, in drawing order, with their painted bounds when known.
+    pub(crate) fn texts_of(&self, control: &str) -> Vec<(TextDraw, Option<Bounds<Pixels>>)> {
+        let frame = self.frame.borrow();
+        frame
+            .texts
+            .iter()
+            .filter_map(|entry| entry.of(control))
+            .collect()
+    }
+
+    /// Records a mark's painted bounds under its control.
+    pub(crate) fn record_mark(&self, control: &SharedString, color: Hsla, bounds: Bounds<Pixels>) {
+        self.frame.borrow_mut().marks.push(MarkDraw {
+            control: control.clone(),
+            color,
+            bounds,
+        });
+    }
+
+    /// The marks of one control, in drawing order.
+    pub(crate) fn marks_of(&self, control: &str) -> Vec<MarkDraw> {
+        self.frame
+            .borrow()
+            .marks
+            .iter()
+            .filter(|mark| mark.control.as_ref() == control)
+            .cloned()
+            .collect()
+    }
+
     /// Bounds of a region, if it was laid out.
     pub(crate) fn region(&self, area: Area) -> Option<Bounds<Pixels>> {
         self.frame.borrow().regions.get(&area).copied()
@@ -136,6 +232,12 @@ impl LayoutRegistry {
             .collect()
     }
 }
+
+#[path = "registry_recorded.rs"]
+mod recorded;
+
+pub(crate) use recorded::DrawSlot;
+use recorded::Recorded;
 
 #[cfg(test)]
 #[path = "registry_test.rs"]

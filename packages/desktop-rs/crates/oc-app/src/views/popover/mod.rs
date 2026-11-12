@@ -8,6 +8,7 @@
 mod agent;
 mod labels;
 mod list;
+mod list_parts;
 mod model;
 mod model_list;
 mod model_rows;
@@ -30,7 +31,8 @@ use super::{Dispatch, Scene};
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
 
 pub(crate) use labels::{
-    selected_agent_label, selected_model_label, selected_model_variants, selection_directory,
+    selected_agent_label, selected_model, selected_model_label, selected_model_variants,
+    selection_directory, shown_agent, shown_agent_id,
 };
 pub(crate) use model_search::{filter_model_list, model_search_field, open_model_picker};
 pub(crate) use types::{Pick, PopoverKind};
@@ -129,7 +131,7 @@ fn trigger_name(kind: PopoverKind, state: &State) -> String {
         PopoverKind::Model => {
             selected_model_label(state).unwrap_or_else(|| DEFAULT_MODEL.to_owned())
         }
-        PopoverKind::Agent => selected_agent_label(state).unwrap_or_else(|| "Build".to_owned()),
+        PopoverKind::Agent => shown_agent(state),
         PopoverKind::Thinking => {
             let label = state
                 .current_selection()

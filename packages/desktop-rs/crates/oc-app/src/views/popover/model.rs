@@ -1,6 +1,5 @@
 //! The model picker panel: the search row with its action, the leading action, and the list.
 
-use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::{InputGroup, InputGroupAddon, InputGroupInput, InputState};
 use gpui_kit::component::list::{List, ListState};
 use gpui_kit::component::{ActiveTheme, Icon, Sizable};
@@ -112,14 +111,18 @@ fn search_row(
 fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
     let spec = ControlSpec::named(Area::Popover, Role::Button, model_rows::ADD_PROVIDER);
     let close = dispatch.clone();
-    let button = Button::new(spec.key.clone())
-        .ghost()
-        .small()
-        .compact()
-        .icon(Icon::new(RemixIcon::Add))
-        .label(model_rows::ADD_PROVIDER)
-        .accessibility_label(model_rows::ADD_PROVIDER)
-        .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx));
+    // `text-muted-foreground` on the icon and the label (`ModelPickerList.tsx`).
+    let muted: gpui_kit::Hsla = crate::theme::palette().muted_foreground.into();
+    let button = super::super::label_button(
+        registry,
+        &spec,
+        Some((RemixIcon::Add, muted)),
+        model_rows::ADD_PROVIDER,
+        muted,
+    )
+    .compact()
+    .accessibility_label(model_rows::ADD_PROVIDER)
+    .on_click(move |_, window, cx| close(&Intent::ClosePopover, window, cx));
     control(registry, spec, button)
 }
 

@@ -71,6 +71,24 @@ pub(crate) fn selected_agent_label(state: &State) -> Option<String> {
     ))
 }
 
+/// The agent React's composer shows when the session picked none.
+const DEFAULT_AGENT: &str = "Build";
+
+/// The agent the composer's agent trigger shows: the selected one, or the default.
+pub(crate) fn shown_agent(state: &State) -> String {
+    selected_agent_label(state).unwrap_or_else(|| DEFAULT_AGENT.to_owned())
+}
+
+/// The id of the agent the composer's agent trigger shows; empty when the session picked none,
+/// which `agent_color` paints as the default `build` agent.
+pub(crate) fn shown_agent_id(state: &State) -> String {
+    state
+        .current_selection()
+        .and_then(|selection| selection.agent())
+        .map(ToString::to_string)
+        .unwrap_or_default()
+}
+
 #[cfg(test)]
 #[path = "labels_test.rs"]
 mod labels_test;

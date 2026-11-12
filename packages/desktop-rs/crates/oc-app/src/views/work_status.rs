@@ -2,6 +2,8 @@
 //! stats sections. Everything here is inert; values are placeholders.
 
 use gpui_kit::component::ActiveTheme;
+use gpui_kit::component::Sizable;
+use gpui_kit::component::button::ButtonVariants;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
@@ -9,7 +11,7 @@ use oc_state::{SessionStatus, State};
 
 use super::turn_stats::{StatRow, stat_rows};
 use super::turns::turns;
-use super::{Scene, icon_button, label_button, project_name};
+use super::{Scene, icon_button, project_name};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
 use crate::theme::{self, card};
@@ -152,7 +154,13 @@ fn turn_stats(scene: Scene<'_>, mode: PanelMode) -> Vec<AnyElement> {
 
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
-    control(scene.registry, spec.clone(), icon_button(&spec, icon)).into_any_element()
+    let muted = crate::theme::palette().muted_foreground.into();
+    control(
+        scene.registry,
+        spec.clone(),
+        icon_button(scene.registry, &spec, icon, muted),
+    )
+    .into_any_element()
 }
 
 fn labeled(
@@ -160,12 +168,31 @@ fn labeled(
     (name, icon, label): (&'static str, RemixIcon, &'static str),
 ) -> AnyElement {
     let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
+    // These rows are a button stretched under the visible content in React
+    // (`WorkStatusPrimitives.tsx:218-231`), so the capture records neither an icon nor a
+    // text run for them and neither does the dump.
     control(
         scene.registry,
         spec.clone(),
-        label_button(&spec, Some(icon), label),
+        label_button_without_draw(&spec, Some(icon), label),
     )
     .into_any_element()
+}
+
+/// A ghost label button that registers no draw fields.
+fn label_button_without_draw(
+    spec: &ControlSpec,
+    icon: Option<RemixIcon>,
+    label: &'static str,
+) -> gpui_kit::component::button::Button {
+    let button = gpui_kit::component::button::Button::new(spec.key.clone())
+        .ghost()
+        .small()
+        .label(label);
+    match icon {
+        Some(icon) => button.icon(gpui_kit::component::Icon::new(icon)),
+        None => button,
+    }
 }
 
 /// A Turn stats row; React leaves it unnamed, so it is named by its visible label.

@@ -27,6 +27,10 @@ pub struct SidebarProject {
     pub path: String,
     /// `sidebarCollapsed`: the group's rows are hidden until the header is clicked.
     pub collapsed: bool,
+    /// The stored icon key, when the project configures one.
+    pub icon: Option<String>,
+    /// The stored color, when the project configures one.
+    pub color: Option<String>,
 }
 
 /// One project group and the rows it shows.

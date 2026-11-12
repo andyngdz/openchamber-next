@@ -15,7 +15,9 @@ use serde_json::Value;
 
 mod parity_support;
 
-use parity_support::{POPOVER_LIST_PREFIX, REGIONS, control_differences};
+use parity_support::{
+    DRAWN_REGIONS, POPOVER_LIST_PREFIX, REGIONS, control_differences, draw_differences,
+};
 
 fn fixtures() -> &'static Path {
     Path::new(env!("OC_DESKTOP_FIXTURES"))
@@ -166,6 +168,7 @@ fn assert_parity(state: &str) {
         &actual,
         &content_controls(state),
     ));
+    differences.extend(draw_differences(&expected, &actual, DRAWN_REGIONS));
     assert!(
         differences.is_empty(),
         "{state} differs from the reference:\n{}",

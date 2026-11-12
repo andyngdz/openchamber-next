@@ -1,26 +1,20 @@
-//! Shared rows, section headers and the recorded search field for the picker lists.
+//! Shared rows for the picker lists: their specs, their recorded colors and their content.
 
 use super::Pick;
 use crate::icons::RemixIcon;
-use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control as control_element};
+use crate::layout::{Area, ControlSpec, DrawSlot, LayoutRegistry, Role, placed};
 use crate::views::text_metrics;
-use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::list::ListItem;
-use gpui_kit::prelude::FluentBuilder as _;
-use gpui_kit::{App, Div, FontWeight, IntoElement, ParentElement, Styled, canvas, div, px};
+use gpui_kit::{App, Div, FontWeight, Hsla, IntoElement, ParentElement, Styled, div, px};
+
+use super::list_parts::{check_icon, icon_box, logo_box, muted, probe, record_logo};
 
 /// The provider mark on a Favorites or Recent row, `size-3.5` (`ModelPickerList.tsx:1054`).
 const ROW_ICON: f32 = 14.;
-/// The provider mark on a section header, `h-4 w-4` (`ModelPickerList.tsx:1104`).
-const HEADER_ICON: f32 = 16.;
-/// The check after the current model, `h-4 w-4` (`ModelPickerList.tsx:1063`).
-const CHECK_ICON: f32 = 16.;
 /// `gap-1.5` between a row's mark, name, context and check (`ModelPickerList.tsx:1052`).
-const GAP: f32 = 6.;
+pub(super) const GAP: f32 = 6.;
 /// `font-medium` on a model name (`ModelPickerList.tsx:1055`).
 const ROW_WEIGHT: f32 = 500.;
-/// `font-semibold` on a section label (`ModelPickerList.tsx:942`).
-const HEADER_WEIGHT: f32 = 600.;
 
 /// One row's action when the list confirms it.
 #[derive(Clone, PartialEq, Eq)]
@@ -38,6 +32,10 @@ pub(super) struct Row {
     pub(super) name: String,
     pub(super) label: String,
     pub(super) icon: Option<RemixIcon>,
+    /// A provider logo instead of a Remix icon, as `img:<id>`.
+    pub(super) logo: Option<String>,
+    /// An agent's color dot, drawn as a 4 px mark.
+    pub(super) dot: Option<gpui_kit::Hsla>,
     pub(super) context: Option<String>,
     pub(super) selected: bool,
     pub(super) role: Role,
@@ -60,8 +58,12 @@ pub(super) struct Header {
     pub(super) name: String,
     pub(super) label: String,
     pub(super) icon: Option<RemixIcon>,
+    /// A provider logo instead of a Remix icon, as `img:<id>`.
+    pub(super) logo: Option<String>,
     pub(super) ancestors: Vec<String>,
 }
+
+pub(super) use super::list_parts::{header, search};
 
 /// A row as the list draws it, with its accessible name and recorded bounds.
 ///
@@ -74,32 +76,10 @@ pub(super) fn row_item(
     row: &Row,
     cx: &App,
 ) -> ListItem {
-    let ancestors = ancestors(row.ancestors.iter().map(String::as_str));
-    let mut spec = ControlSpec::named(Area::Popover, row.role, row.name.clone()).under(&ancestors);
-    if let Some(description) = row.described {
-        spec = spec.described(description);
-    }
-    if let Some(index) = row.repeat {
-        spec = spec.repeated(index);
-    }
-    let content = div()
-        .relative()
-        .w_full()
-        .flex()
-        .items_center()
-        .gap(px(GAP))
-        .child(probe(registry, spec))
-        .children(row.icon.map(|icon| icon_box(icon, ROW_ICON, cx)))
-        .child(
-            div()
-                .flex_1()
-                .min_w_0()
-                .truncate()
-                .font_weight(FontWeight(ROW_WEIGHT))
-                .child(row.label.clone()),
-        )
-        .children(row.context.as_ref().map(|context| muted(context, cx)))
-        .when(row.selected, |this| this.child(check_icon()));
+    let spec = row_spec(row);
+    let paint = row_paint(cx);
+    let slots = record_row(registry, &spec, row, paint);
+    let content = row_content(registry, spec, row, paint, &slots);
     let mut list_item = ListItem::new(row.name.clone())
         .accessibility_label(row.name.clone())
         .px(px(8.))
@@ -118,78 +98,135 @@ pub(super) fn row_item(
     list_item
 }
 
-/// A section header, recorded under its group ancestors.
-pub(super) fn header(registry: &LayoutRegistry, header: &Header, cx: &App) -> Div {
-    let ancestors = ancestors(header.ancestors.iter().map(String::as_str));
-    let spec =
-        ControlSpec::named(Area::Popover, Role::Button, header.name.clone()).under(&ancestors);
-    let line = text_metrics::line_height(text_metrics::MICRO);
-    let content = div()
-        .h(px(line))
+/// The spec a row records under: its ancestors, role and name, plus any description.
+fn row_spec(row: &Row) -> ControlSpec {
+    let ancestors = ancestors(row.ancestors.iter().map(String::as_str));
+    let mut spec = ControlSpec::named(Area::Popover, row.role, row.name.clone()).under(&ancestors);
+    if let Some(description) = row.described {
+        spec = spec.described(description);
+    }
+    if let Some(index) = row.repeat {
+        spec = spec.repeated(index);
+    }
+    spec
+}
+
+/// The colors one row paints, the same values it records.
+#[derive(Debug, Clone, Copy)]
+struct RowPaint {
+    /// The model name, in the component's list row text color.
+    label: Hsla,
+    /// The mark and the context, `text-muted-foreground`.
+    muted: Hsla,
+    /// The check after the current model, `text-foreground`.
+    check: Hsla,
+}
+
+/// Every color a row draws, read once from the palette and component style.
+fn row_paint(cx: &App) -> RowPaint {
+    let palette = crate::theme::palette();
+    RowPaint {
+        label: crate::layout::ComponentStyle::read(cx).list_row_text,
+        muted: palette.muted_foreground.into(),
+        check: palette.foreground.into(),
+    }
+}
+
+/// Where a row's recorded draws sit, so the elements that paint them report their bounds.
+struct RowSlots {
+    icon: Option<DrawSlot>,
+    label: DrawSlot,
+    context: Option<DrawSlot>,
+    check: Option<DrawSlot>,
+}
+
+/// Records every draw of one row, in DOM order.
+fn record_row(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    row: &Row,
+    paint: RowPaint,
+) -> RowSlots {
+    registry.begin_draws(&spec.key);
+    let icon = match (&row.logo, row.icon) {
+        (Some(logo), _) => {
+            record_logo(registry, &spec.key, logo);
+            None
+        }
+        (None, Some(icon)) => {
+            Some(registry.record_icon(&spec.key, crate::layout::draw::remix(icon, paint.muted)))
+        }
+        (None, None) => None,
+    };
+    let label = registry.record_text(
+        &spec.key,
+        crate::layout::draw::TextDraw::new(row.label.clone(), paint.label),
+    );
+    let context = row.context.as_ref().map(|context| {
+        registry.record_text(
+            &spec.key,
+            crate::layout::draw::TextDraw::new(context.clone(), paint.muted),
+        )
+    });
+    let check = row.selected.then(|| {
+        registry.record_icon(
+            &spec.key,
+            crate::layout::draw::remix(RemixIcon::Check, paint.check),
+        )
+    });
+    RowSlots {
+        icon,
+        label,
+        context,
+        check,
+    }
+}
+
+/// The row's content, painted with the colors [`record_row`] recorded for it.
+fn row_content(
+    registry: &LayoutRegistry,
+    spec: ControlSpec,
+    row: &Row,
+    paint: RowPaint,
+    slots: &RowSlots,
+) -> Div {
+    let dot = row
+        .dot
+        .map(|color| crate::layout::mark(registry, &spec.key, color, px(4.), px(4.)));
+    let mark = match (&row.logo, row.icon, slots.icon) {
+        (Some(id), _, _) => Some(logo_box(id, ROW_ICON)),
+        (None, Some(icon), Some(slot)) => {
+            Some(placed(registry, slot, icon_box(icon, ROW_ICON, paint.muted)).into_any_element())
+        }
+        _ => None,
+    };
+    let label = div()
+        .flex_1()
+        .min_w_0()
+        .truncate()
+        .font_weight(FontWeight(ROW_WEIGHT))
+        .child(row.label.clone());
+    div()
+        .relative()
+        .w_full()
         .flex()
         .items_center()
         .gap(px(GAP))
-        .text_size(px(text_metrics::MICRO))
-        .line_height(px(line))
-        .font_weight(FontWeight(HEADER_WEIGHT))
-        .text_color(cx.theme().muted_foreground)
-        .children(header.icon.map(|icon| icon_box(icon, HEADER_ICON, cx)))
-        .child(header.label.clone());
-    control_element(registry, spec, content)
-        .px(px(8.))
-        .py(px(6.))
-        .w_full()
-}
-
-/// The list with the search field, recorded under the reference's search key.
-pub(super) fn search(
-    registry: &LayoutRegistry,
-    role: Role,
-    placeholder: &str,
-    list: impl IntoElement,
-) -> Div {
-    let spec = ControlSpec::named(Area::Popover, role, placeholder);
-    control_element(registry, spec, list).w_full()
-}
-
-fn icon_box(icon: RemixIcon, size: f32, cx: &App) -> Div {
-    div()
-        .flex_shrink_0()
-        .w(px(size))
-        .h(px(size))
-        .text_size(px(size))
-        .text_color(cx.theme().muted_foreground)
-        .child(icon)
-}
-
-fn muted(text: &str, cx: &App) -> Div {
-    div()
-        .flex_shrink_0()
-        .text_size(px(text_metrics::MICRO))
-        .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
-        .text_color(cx.theme().muted_foreground)
-        .child(text.to_owned())
-}
-
-fn check_icon() -> Div {
-    div()
-        .flex_shrink_0()
-        .w(px(CHECK_ICON))
-        .h(px(CHECK_ICON))
-        .text_size(px(CHECK_ICON))
-        .child(RemixIcon::Check)
-}
-
-fn probe(registry: &LayoutRegistry, spec: ControlSpec) -> impl IntoElement {
-    let registry = registry.clone();
-    canvas(
-        move |bounds, _, _| registry.record_control(spec.clone(), bounds),
-        |_, _, _, _| {},
-    )
-    .absolute()
-    .top_0()
-    .left_0()
-    .size_full()
+        .child(probe(registry, spec))
+        .children(dot)
+        .children(mark)
+        .child(placed(registry, slots.label, label))
+        .children(
+            row.context
+                .as_ref()
+                .zip(slots.context)
+                .map(|(context, slot)| placed(registry, slot, muted(context, paint.muted))),
+        )
+        .children(
+            slots
+                .check
+                .map(|slot| placed(registry, slot, check_icon(paint.check))),
+        )
 }
 
 /// The named ancestors, outermost first, with empty names left out.

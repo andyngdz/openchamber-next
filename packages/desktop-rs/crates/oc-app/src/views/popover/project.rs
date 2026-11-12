@@ -61,6 +61,8 @@ fn project_row(name: String, pick: super::Pick) -> Row {
         name: name.clone(),
         label: name,
         icon: None,
+        logo: None,
+        dot: None,
         context: None,
         selected: false,
         role: Role::Option,

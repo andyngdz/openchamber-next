@@ -44,9 +44,19 @@ const CHIPS: [(&str, RemixIcon); 9] = [
 
 fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, CHOOSE_PROJECT);
-    let button = label_button(&spec, Some(RemixIcon::ArrowDownS), CHOOSE_PROJECT)
-        // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
-        .h(px(28.));
+    let palette = crate::theme::palette();
+    let button = label_button(
+        scene.registry,
+        &spec,
+        Some((
+            RemixIcon::ArrowDownS,
+            crate::theme::faded(palette.foreground.into(), 0.5),
+        )),
+        CHOOSE_PROJECT,
+        palette.foreground.into(),
+    )
+    // `size="sm"` plus `h-7` on the trigger (`DraftTargetSelectors.tsx:330-333`: 1.75rem).
+    .h(px(28.));
     // `px-0.5` on the Choose project row (`DraftTargetSelectors.tsx:284`).
     div()
         .h(px(28.))
@@ -65,7 +75,19 @@ fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
 /// A quick-action chip: smaller and outlined, so a row holds as many as React's.
 fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name);
-    let button = label_button(&spec, Some(icon), name).outline().xsmall();
+    let palette = crate::theme::palette();
+    let button = label_button(
+        scene.registry,
+        &spec,
+        Some((
+            icon,
+            crate::theme::faded(palette.muted_foreground.into(), 0.7),
+        )),
+        name,
+        palette.muted_foreground.into(),
+    )
+    .outline()
+    .xsmall();
     control(scene.registry, spec, button).into_any_element()
 }
 
@@ -108,7 +130,12 @@ pub(crate) fn empty_state(
                 .child(control(
                     scene.registry,
                     starter.clone(),
-                    icon_button(&starter, RemixIcon::Add),
+                    icon_button(
+                        scene.registry,
+                        &starter,
+                        RemixIcon::Add,
+                        crate::theme::palette().muted_foreground.into(),
+                    ),
                 )),
         );
     div()

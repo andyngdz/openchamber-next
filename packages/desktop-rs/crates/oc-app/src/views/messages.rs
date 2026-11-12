@@ -12,7 +12,7 @@ use oc_state::{Action, LoadStatus, Region, SessionStatus};
 use super::composer::WIDTH;
 use super::tool_rows::{ToolSpecs, activity, tool_row_specs};
 use super::turns::{Block, Turn, TurnMeta, turns};
-use super::{Scene, icon_button, retry_button};
+use super::{Scene, plain_icon_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
 
@@ -88,8 +88,8 @@ fn scroll_to_bottom(scene: Scene<'_>, scroll: &ScrollHandle) -> Div {
     let spec =
         ControlSpec::named(Area::ChatColumn, Role::Button, SCROLL_TO_BOTTOM).revealed(reveal);
     let handle = scroll.clone();
-    let button =
-        icon_button(&spec, RemixIcon::ArrowDown).on_click(move |_, _, _| handle.scroll_to_bottom());
+    let button = plain_icon_button(&spec, RemixIcon::ArrowDown)
+        .on_click(move |_, _, _| handle.scroll_to_bottom());
     div()
         .absolute()
         .bottom(px(8.))
@@ -145,7 +145,7 @@ fn user_bubble(scene: Scene<'_>, index: usize, text: &str, cx: &App) -> Div {
                     .children(USER_ACTIONS.map(|(name, icon)| {
                         let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name)
                             .revealed(Reveal::OnHover(group.clone()));
-                        control(scene.registry, spec.clone(), icon_button(&spec, icon))
+                        control(scene.registry, spec.clone(), plain_icon_button(&spec, icon))
                     })),
             )
         })
@@ -190,7 +190,7 @@ fn meta_row(scene: Scene<'_>, index: usize, meta: &TurnMeta, cx: &App) -> Div {
         .children(META_ACTIONS.map(|(name, icon)| {
             let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name)
                 .revealed(Reveal::OnHover(group.clone()));
-            control(scene.registry, spec.clone(), icon_button(&spec, icon))
+            control(scene.registry, spec.clone(), plain_icon_button(&spec, icon))
         }))
 }
 

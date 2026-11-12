@@ -31,8 +31,8 @@ fn provider_sections_leave_the_provider_out() {
 }
 
 #[test]
-fn only_favorites_and_recent_rows_carry_the_provider_mark() {
-    assert!(SectionKind::Favorites.icon().is_some());
-    assert!(SectionKind::Recent.icon().is_some());
-    assert!(SectionKind::Provider.icon().is_none());
+fn only_favorites_and_recent_headers_carry_a_remix_icon() {
+    assert!(SectionKind::Favorites.header_icon().is_some());
+    assert!(SectionKind::Recent.header_icon().is_some());
+    assert!(SectionKind::Provider.header_icon().is_none());
 }

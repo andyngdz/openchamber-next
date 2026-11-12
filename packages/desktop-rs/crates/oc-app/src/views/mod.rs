@@ -12,6 +12,7 @@ mod icon_rail;
 mod messages;
 mod model_names;
 mod popover;
+mod provider_mark;
 mod sidebar;
 mod sidebar_list;
 mod text_metrics;
@@ -30,7 +31,9 @@ use std::rc::Rc;
 use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
-use gpui_kit::{App, ClickEvent, Entity, FontWeight, SharedString, TextRun, Window, px};
+use gpui_kit::{
+    App, ClickEvent, Entity, FontWeight, Hsla, SharedString, Styled, TextRun, Window, px,
+};
 use oc_state::{Action, SidebarAction, State};
 
 pub(crate) use chat::chat_column;
@@ -46,6 +49,7 @@ pub(crate) use sidebar::sidebar;
 pub(crate) use work_status::work_status;
 
 use crate::icons::RemixIcon;
+use crate::layout::draw::{TextDraw, image, remix};
 use crate::layout::{ControlSpec, LayoutRegistry};
 
 /// What a control asks the root view to do.
@@ -114,8 +118,49 @@ impl Scene<'_> {
     }
 }
 
+/// Records one icon a control draws, as the parity capture sees it.
+fn draw_icon(registry: &LayoutRegistry, spec: &ControlSpec, icon: RemixIcon, color: Hsla) {
+    registry.record_icon(&spec.key, remix(icon, color));
+}
+
+/// Records one provider logo a control draws, as `img:<id>`.
+pub(crate) fn draw_image(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    id: impl Into<SharedString>,
+) {
+    registry.record_icon(&spec.key, image(id));
+}
+
+/// Records one text run a control draws, with the color it is painted.
+fn draw_text(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    text: impl Into<SharedString>,
+    color: Hsla,
+) {
+    registry.record_text(&spec.key, TextDraw::new(text, color));
+}
+
 /// A ghost icon button; the accessible name is its tooltip. Without a click handler it is inert.
-fn icon_button(spec: &ControlSpec, icon: RemixIcon) -> Button {
+fn icon_button(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    icon: RemixIcon,
+    color: Hsla,
+) -> Button {
+    draw_icon(registry, spec, icon, color);
+    Button::new(spec.key.clone())
+        .ghost()
+        .small()
+        .text_color(color)
+        .icon(Icon::new(icon))
+        .tooltip(spec.name.clone())
+}
+
+/// A ghost icon button that draws no registered icon: a control hidden at rest, whose icon
+/// the capture leaves out.
+fn plain_icon_button(spec: &ControlSpec, icon: RemixIcon) -> Button {
     Button::new(spec.key.clone())
         .ghost()
         .small()
@@ -125,13 +170,24 @@ fn icon_button(spec: &ControlSpec, icon: RemixIcon) -> Button {
 
 /// A ghost button with a visible label and an optional leading icon.
 fn label_button(
+    registry: &LayoutRegistry,
     spec: &ControlSpec,
-    icon: Option<RemixIcon>,
+    icon: Option<(RemixIcon, Hsla)>,
     label: impl Into<SharedString>,
+    text_color: Hsla,
 ) -> Button {
-    let button = Button::new(spec.key.clone()).ghost().small().label(label);
+    let label = label.into();
+    draw_text(registry, spec, label.clone(), text_color);
+    let button = Button::new(spec.key.clone())
+        .ghost()
+        .small()
+        .text_color(text_color)
+        .label(label);
     match icon {
-        Some(icon) => button.icon(Icon::new(icon)),
+        Some((icon, color)) => {
+            draw_icon(registry, spec, icon, color);
+            button.icon(Icon::new(icon).text_color(color))
+        }
         None => button,
     }
 }
