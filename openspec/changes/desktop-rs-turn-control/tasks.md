@@ -65,13 +65,13 @@
 - [ ] 7.4 README: the control stream, what Enter does while a turn runs, and the highlighter feature with its binary cost and its 38 languages.
 - [ ] 7.5 Gate as in 2.4, plus `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`.
 
-## 8. Docks   [depends-on: 2, 7, 14] [writes: packages/desktop-rs/crates/oc-app/src/live/protocol.rs, packages/desktop-rs/crates/oc-app/src/live/execution.rs, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/views/dock/, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/layout/] [parallel-safe: no]
+## 8. Docks   [depends-on: 2, 7, 20] [writes: packages/desktop-rs/crates/oc-app/src/live/protocol.rs, packages/desktop-rs/crates/oc-app/src/live/execution.rs, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/views/dock/, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/root/mod.rs, packages/desktop-rs/crates/oc-app/src/root/keys.rs, packages/desktop-rs/crates/oc-app/src/layout/] [parallel-safe: no]
 
 - [ ] 8.1 Permission dock: the header with `Stepper` dots and the subagent badge, the safety-hold banner, the summary and message, the per-tool bodies (read-only `Editor` for the command, `Diff` with a height cap for edit and write, the webfetch block, a collapsed `metadata` block), the buttons with the Always label rules, the three Alt shortcuts caught before the composer, and the in-flight, 404 and failure behavior.
 - [ ] 8.2 Form dock on `QuestionnaireState`: every field type mapped as design.md says, `set_item_disabled` for `when` and `hidden`, the external `Link` flag, the header with count, dots, `more waiting` and the collapse toggle, Dismiss, Back, Next and Submit, the error line, and draft restore. Hidden while the permission scope is not empty.
 - [ ] 8.3 Web search consent card and recovered question, as design.md says. A recovered submit sends through 7.3's send sequence, which switches `/agent` and `/model` to the linked message's picks before the prompt.
 - [ ] 8.4 The `dock` layout region with its two roots: the floating panel above the composer that holds the permission or form dock, and the queue strip's row group inside the composer box, which unit 9 builds in `composer.rs`. The region's bounds are their union.
-- [ ] 8.4a Every dock control registers `icons`, `marks` and `texts` (14.1).
+- [ ] 8.4a Every dock control registers `icons`, `marks` and `texts` (14.1), and the `dock` region is compared from the start.
 - [ ] 8.5 Interaction tests through `gpui_kit::test`, generic over every dock kind. For each dock: open from state, buttons and shortcuts send the right command, in-flight disables, a 404 removes, and a failure keeps. For forms: navigation, every field type's answer, `when` skipping, external refusal and the consent buttons.
 - [ ] 8.6 Gate as in 2.4.
 
@@ -105,16 +105,48 @@
 - [ ] 13.2 Tests: `gen-theme-fixture.mjs` also writes the CSS variables `CSSVariableGenerator` produces for `openchamber-dark`, and every palette token equals its variable.
 - [ ] 13.3 Gate as in 2.4.
 
-## 14. Icon and indicator parity   [depends-on: 3, 12, 13] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-app/assets/, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/tools/gen-remix-icons.mjs, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+## 14. Draw records and frame check   [depends-on: 3, 12, 13] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-app/assets/, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/tools/gen-remix-icons.mjs, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/root/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
 
 - [ ] 14.1 The layout registry and `--dump-layout` record each control's `icons`, `marks` and `texts` with their bounds, as design.md says, from what the view draws. A gpui-kit component's own icons come from the substitution table, and its own marks and text colors from the component table in `src/layout/`. Every control registers them, the controls units 8 and 9 add included.
 - [ ] 14.2a The frame check of design.md runs over every fixture state headless and fails on any icon, text run or mark whose pixels do not show its reported color.
-- [ ] 14.2 `tests/parity.rs` compares `icons`, `marks` and `texts`, colors within 1 per channel, for every shown control of every existing state, and names the control, the expected value and the drawn one on failure.
-- [ ] 14.2b Port provider logos (bundled copies, `providerLogoIds` candidates, the models.dev load, the fallback icon), React's own SVG icons (`StopIcon`, `ContextRing`, `DiffViewIcon`), and project icons and colors from the settings, as design.md's Icons and palette says.
-- [ ] 14.3 Fix every existing surface until the gate passes: sidebar, header, empty state, composer and its triggers, the project, model, agent and Thinking popups, the work-status panel, the icon rail, the preset chips and the messages. That covers, for example, the agent color dots, the selected check, the variant color, the agent and project icons, and the send icon.
+- [ ] 14.2 `tests/parity.rs` compares `icons`, `marks` and `texts`, colors within 1 per channel, for every shown control of the regions in its comparison list, naming the control, the expected value and the drawn one on failure. The list holds the regions that already pass.
+- [ ] 14.2b Bundled provider logos, `providerLogoIds` candidates and the fallback icon, React's own SVG icons (`StopIcon`, `ContextRing`, `DiffViewIcon`), and project icons and colors from the settings, as design.md's Icons and palette says.
 - [ ] 14.4 Gate as in 2.4, plus `cargo test -p oc-app --test parity`, headless.
 
-## 11. Verification   [depends-on: 10, 14] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]
+## 15. Telemetry   [depends-on: 14] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-app/src/views/turn_stats.rs, packages/desktop-rs/crates/oc-app/src/views/turn_stats_test.rs, packages/desktop-rs/crates/oc-app/src/views/work_status.rs, packages/desktop-rs/crates/oc-app/src/views/work_status_test.rs] [parallel-safe: no]
+
+- [ ] 15.1 `oc-client` keeps the assistant message's `tokens`, `cost` and part timings, `oc-state` carries them, and the turn stats port `work-status/telemetry.ts` and `sections.ts`.
+- [ ] 15.2 Tests ported from `telemetry.test.ts` and `sections.test.ts`, values from fixtures.
+- [ ] 15.3 Gate as in 2.4.
+
+## 16. Remote provider logos   [depends-on: 15] [writes: packages/desktop-rs/crates/oc-client/src/, packages/desktop-rs/crates/oc-app/src/icons/, packages/desktop-rs/crates/oc-app/src/live/, packages/desktop-rs/crates/oc-app/src/root/updates.rs] [parallel-safe: no]
+
+- [ ] 16.1 A provider without a bundled logo loads the models.dev SVG through `oc-client`'s HTTP client on the live runtime, cached in memory, served through the asset source; a failed load falls back to the fallback icon. Fixture states use a logo stored in the fixture, so tests make no network call.
+- [ ] 16.2 Tests: the candidate order, the cache, the fallback on failure.
+- [ ] 16.3 Gate as in 2.4.
+
+## 17. Markdown   [depends-on: 16] [writes: packages/desktop-rs/crates/oc-app/src/views/messages.rs, packages/desktop-rs/crates/oc-app/src/views/messages_test.rs, packages/desktop-rs/crates/oc-app/src/views/markdown/, packages/desktop-rs/crates/oc-app/src/views/mod.rs, packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-state/src/] [parallel-safe: no]
+
+- [ ] 17.1 Assistant text renders through gpui-kit `TextView` markdown with the tree-sitter highlighter, the `colors.markdown` tokens and React's markdown typography.
+- [ ] 17.2 While a reply streams, only finished blocks show, as `commitStreamedText` decides; port its tests.
+- [ ] 17.3 Gate as in 2.4.
+
+## 18. Shell surfaces   [depends-on: 17] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+
+- [ ] 18.1 Sidebar, header, icon rail and the empty state match the references' `icons`, `marks` and `texts`, following React for each control; their regions join the comparison list.
+- [ ] 18.2 Gate as in 14.4.
+
+## 19. Composer and popup surfaces   [depends-on: 18] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+
+- [ ] 19.1 The composer and its triggers, and the project, model, agent and Thinking popups match: agent color dots, the selected check, the variant color, the agent icon, provider logos, the popover surface. Their regions join the comparison list.
+- [ ] 19.2 Gate as in 14.4.
+
+## 20. Chat and work-status surfaces   [depends-on: 19] [writes: packages/desktop-rs/crates/oc-app/src/views/, packages/desktop-rs/crates/oc-app/src/layout/, packages/desktop-rs/crates/oc-app/src/theme/, packages/desktop-rs/crates/oc-app/tests/parity.rs, packages/desktop-rs/crates/oc-app/tests/parity_support/] [parallel-safe: no]
+
+- [ ] 20.1 The chat column (markdown included) and the work-status panel match. The comparison list is removed, so every region of every state is compared.
+- [ ] 20.2 Gate as in 14.4.
+
+## 11. Verification   [depends-on: 10, 20] [writes: packages/desktop-rs/crates/oc-app/tests/] [parallel-safe: no]
 
 - [ ] 11.1 `sidecar_it` with the fixture provider: a bash permission answered once and the turn finishing; an edit denied; a question answered and the reply reaching the model; a message queued during a turn and sent by the server after it; Stop of a running turn and the session going idle.
 - [ ] 11.2 Full gate: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` (parity included, headless), `OC_DESKTOP_IT=1 cargo test -p oc-app --test sidecar_it`; from the repo root `passgate-engine rust` and `passgate-engine logging` on `packages/desktop-rs`, `bun run check:changed`, and `openspec validate desktop-rs-turn-control --strict`.

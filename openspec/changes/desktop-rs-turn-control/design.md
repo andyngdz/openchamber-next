@@ -16,6 +16,7 @@ The user's answers in the planning session:
 - Architecture: approach A below.
 - A form's free-text field uses `questionnaire`'s single-line input. Shift+Enter cannot insert a newline in a form answer, which React's `AutoGrowTextarea` allows (`packages/ui/src/components/chat/FormFieldControl.tsx:291-298`). Enter still advances, as in React.
 - Icons and indicators (added after implementation started): the user found the Rust app missing icons and indicators React shows, such as the agent color dots, the selected check mark, the orange variant text, the colored agent and project icons, and different composer, send and chip icons. The parity gate compared only role, name, order and bounds, so it could not see them. The user chose to fix this in this change. The capture, the dump and the parity test now record and compare each control's icons and color indicators, and the existing surfaces are fixed until the gate passes. This adds the Remix icon set and the Electron theme's palette to the change.
+- Markdown (added after implementation started): the parity gate compares the color of every text run, and React renders the agent's reply as markdown (698 colored runs in the `session` reference). The user chose to build markdown rendering in this change rather than exempt the transcript text from the comparison.
 - Standing decisions from earlier sessions that apply here: behavior follows the Electron app and React is the spec for clicks, keys and server writes. UI is built from gpui-kit components, and a component's own geometry may differ from React's. The parity gate compares popup controls but not popup bounds, and behavior is gated by headless interaction tests through `gpui_kit::test`. No check opens a visible window. Default to Electron's full behavior.
 
 ## Goals
@@ -30,7 +31,6 @@ The user's answers in the planning session:
 
 ## Non-Goals
 
-- Markdown rendering of replies. That is the next change, and it reuses this change's highlighter and theme mapping.
 - Attachments, `@` mentions, slash commands, goals and context chips in the composer or in queued items. Queued items carry text and the send config only.
 - Customizable shortcuts. The defaults from `packages/ui/src/lib/shortcuts/config.ts` are fixed.
 - Settings screens. `followUpBehavior` and the auto-accept default are read from the settings document, not edited.
@@ -123,6 +123,13 @@ Control stream: `control_events()` opens `GET /api/openchamber/events`. Frames a
   - every mark's center pixel equals its expected color within 1 per channel.
 
   The expected color is the claimed `#rrggbbaa` composited over the backdrop with source-over. The backdrop is the most frequent color of the one-pixel ring just outside the icon's, text run's or mark's bounds, which is the surface it sits on, also for a filled icon that covers most of its box. An opaque claim composites to itself, so translucent text such as `text-foreground/80` and the `opacity-60` hints is checked by the same rule. A text run inside a gpui-kit component whose run bounds the view does not know uses the control's bounds. There a same-colored icon or border can also satisfy the check, which makes it weaker, and the design accepts that.
+
+### Markdown, telemetry and remote logos
+
+- **Markdown.** Assistant text renders as markdown through gpui-kit's `TextView` (`gpui-component/src/text/`), with fenced code highlighted by this change's tree-sitter highlighter. Colors come from the theme's `colors.markdown` tokens (`link`, `inlineCode`, `inlineCodeBackground`, `blockquote`, `blockquoteBorder`, `listMarker`, `bold`, `italic`) through `CSSVariableGenerator` and the typography of React's `MarkdownRenderer` (`packages/ui/src/components/chat/MarkdownRenderer*.tsx`, `markdown/`). While a reply streams, only finished blocks are shown, as `commitStreamedText` decides (`packages/ui/src/components/chat/lib/streamTextCommit.ts`).
+- **Telemetry.** `oc-client` keeps the assistant message's `tokens`, `cost` and part timings, `oc-state` carries them, and the work-status turn stats port `packages/ui/src/components/chat/work-status/telemetry.ts` and `sections.ts`, so the panel shows React's figures.
+- **Remote provider logos.** A provider without a bundled logo loads `https://models.dev/logos/<id>.svg` through `oc-client`'s existing HTTP client on the live runtime, caches the bytes in memory, and serves them through the app's asset source, where GPUI renders the SVG. A failed load falls back to `getProviderLogoFallbackIcon`, as React does.
+- **Rollout of the comparison.** The parity test keeps a list of regions whose `icons`, `marks` and `texts` it compares. A unit that fixes a region adds it, so every commit stays green, and the last surface unit removes the list, after which every region is compared. The frame check covers every region from the start.
 
 ### App (`oc-app`)
 

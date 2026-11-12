@@ -228,3 +228,21 @@ The app SHALL draw icons from the same Remix set as React's `Icon`, including th
 - **WHEN** the model popover's search field is drawn
 - **THEN** its search icon is the Remix icon React draws there, and no gpui-kit icon file is loaded
 
+
+### Requirement: Markdown replies
+
+The app SHALL render the agent's reply text as markdown with the Electron theme's markdown colors and highlighted fenced code, and while a reply streams SHALL show only the blocks React's `commitStreamedText` has finished.
+
+#### Scenario: Streaming paragraph
+
+- **WHEN** a reply has streamed a heading and half of the next paragraph
+- **THEN** the heading shows and the unfinished paragraph does not, until its block ends
+
+### Requirement: Turn telemetry
+
+The work-status turn stats SHALL show the figures React's telemetry derives from the assistant messages' tokens, cost and part timings.
+
+#### Scenario: Finished turn
+
+- **WHEN** a session with one finished turn is open
+- **THEN** the turn stats show the same response time, steps and tokens as the Electron reference
