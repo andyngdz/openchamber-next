@@ -28,11 +28,45 @@ use serde_json::Value;
 const CHANNEL_TOLERANCE: u8 = 1;
 /// The region a popup draws in; it covers the regions under it.
 const POPOVER: &str = "popover";
-/// How far a popup's floating shadow reaches past its box, in logical pixels: its 28 px
-/// offset plus its 64 px blur, rounded up. The shadow tints what is drawn there.
-const POPOVER_SHADOW_REACH: f64 = 96.;
+/// The floating shadows of the dark theme as `(offset y, blur, spread)`, the values of
+/// `Tokens::floating_shadows` (`--sh-float`). The shadow tints what is drawn within its reach.
+const FLOATING_SHADOWS: [(f64, f64, f64); 2] = [(2., 8., 0.), (28., 64., -12.)];
+/// The edge ring around a floating surface, in logical pixels.
+const EDGE_RING: f64 = 0.5;
+/// How many standard deviations of a shadow's gaussian still tint a pixel. GPUI blurs with
+/// sigma equal to the blur radius (`shaders.wgsl`, `gaussian(y, shadow.blur_radius)`); past
+/// 2.5 sigma its alpha is under 1% of the shadow's, below one channel step on a text color.
+const SIGMAS: f64 = 2.5;
 /// The draw kinds a control records, and whether the kind is a mark.
 const DRAW_KINDS: [(&str, bool); 3] = [("icons", false), ("marks", true), ("texts", false)];
+
+/// How far shadows reach past a box, in logical pixels.
+#[derive(Debug, Clone, Copy)]
+struct Reach {
+    side: f64,
+    top: f64,
+    bottom: f64,
+}
+
+impl Reach {
+    /// The farthest each side of the box is reached by any of the shadows. A shadow with
+    /// offset `y`, `blur` and `spread` reaches `spread + 2.5 * blur` past the sides, that minus
+    /// `y` past the top and that plus `y` past the bottom; the edge ring adds to all three.
+    fn of_floating_shadows() -> Self {
+        let reach = |extra: fn(f64) -> f64| {
+            FLOATING_SHADOWS
+                .iter()
+                .map(|&(offset, blur, spread)| extra(offset) + SIGMAS * blur + spread)
+                .fold(0., f64::max)
+                + EDGE_RING
+        };
+        Self {
+            side: reach(|_| 0.),
+            top: reach(|offset| -offset),
+            bottom: reach(|offset| offset),
+        }
+    }
+}
 
 /// A box in device pixels, right and bottom exclusive.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -74,14 +108,14 @@ impl PixelBox {
         }
     }
 
-    /// The box grown by `logical` pixels on every side.
-    fn grow(self, logical: f64, scale: f64) -> Self {
-        let by = (logical * scale).ceil() as i32;
+    /// The box grown by `reach`, each side by its own logical distance.
+    fn grow(self, reach: Reach, scale: f64) -> Self {
+        let by = |logical: f64| (logical * scale).ceil() as i32;
         Self {
-            left: self.left - by,
-            top: self.top - by,
-            right: self.right + by,
-            bottom: self.bottom + by,
+            left: self.left - by(reach.side),
+            top: self.top - by(reach.top),
+            right: self.right + by(reach.side),
+            bottom: self.bottom + by(reach.bottom),
         }
     }
 
@@ -180,7 +214,7 @@ fn target(rendered: &Rendered, region: &str, control: &Value, draw: &Value) -> O
     if region != POPOVER
         && popup.is_some_and(|popup| {
             popup
-                .grow(POPOVER_SHADOW_REACH, rendered.scale)
+                .grow(Reach::of_floating_shadows(), rendered.scale)
                 .overlaps(bounds)
         })
     {
