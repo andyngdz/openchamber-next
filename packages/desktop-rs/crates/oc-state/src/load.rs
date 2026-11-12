@@ -2,12 +2,13 @@
 //! same identities the event reducer uses: text items by ordinal inside their message, tool
 //! rows by call id.
 
-use oc_client::types::{AssistantContent, Message, MessageTime, Session};
+use oc_client::types::{AssistantContent, Message, MessageTime, Session, ToolStatus};
 
 use crate::ids::{CallId, MessageId, SessionId};
 use crate::message::{
     AssistantMessage, ChatMessage, Delivery, Item, StepTiming, TextItem, ToolItem, UserMessage,
 };
+use crate::recoverable::RecordedOutcome;
 use crate::session_entry::SessionEntry;
 use crate::status::SessionStatus;
 
@@ -109,6 +110,65 @@ fn timing(time: &MessageTime) -> StepTiming {
         None => StepTiming::Running {
             started: time.created,
         },
+    }
+}
+
+/// How the loaded history recorded the end of its trailing turn, newest first
+/// (`sync-context.tsx:2795-2810`).
+pub(crate) fn recorded_turn(messages: &[Message]) -> Option<RecordedOutcome> {
+    let mut end = None;
+    for message in messages {
+        match message {
+            Message::User { .. } => return None,
+            Message::Assistant { .. } => return end,
+            Message::Idle { outcome, .. } => {
+                if end.is_none() {
+                    end = parse_outcome(outcome.as_deref());
+                }
+            }
+            Message::Other => {}
+        }
+    }
+    end
+}
+
+fn parse_outcome(outcome: Option<&str>) -> Option<RecordedOutcome> {
+    match outcome? {
+        "succeeded" => Some(RecordedOutcome::Succeeded),
+        "interrupted" => Some(RecordedOutcome::Interrupted),
+        "failed" => Some(RecordedOutcome::Failed),
+        _ => Some(RecordedOutcome::Other),
+    }
+}
+
+/// The newest assistant message before any newer user message, from a newest-first list.
+pub(crate) fn trailing_loaded(messages: &[Message]) -> Option<&Message> {
+    for message in messages {
+        match message {
+            Message::User { .. } => return None,
+            Message::Assistant { .. } => return Some(message),
+            Message::Idle { .. } | Message::Other => {}
+        }
+    }
+    None
+}
+
+/// Sets the loaded tool parts the history mark promoted to `error`.
+pub(crate) fn promote_loaded(messages: &mut [ChatMessage], promoted: &[(String, String)]) {
+    for message in messages {
+        let ChatMessage::Assistant(step) = message else {
+            continue;
+        };
+        for item in &mut step.items {
+            let Item::Tool(tool) = item else {
+                continue;
+            };
+            if promoted.iter().any(|(message_id, call_id)| {
+                message_id == step.id.as_str() && call_id == tool.call_id.as_str()
+            }) {
+                tool.status = ToolStatus::Error;
+            }
+        }
     }
 }
 

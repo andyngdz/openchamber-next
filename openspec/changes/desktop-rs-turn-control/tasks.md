@@ -38,7 +38,7 @@
 - [ ] 4.4 Tests: every unit 1 fixture decodes; `FormField` bounds accept numbers and the three strings; a request body matches its saved `.request.json`; an unknown control event decodes to `Other`; the silence timeout fires.
 - [ ] 4.5 Gate as in 2.4.
 
-## 5. Pending requests state   [depends-on: 4] [writes: packages/desktop-rs/crates/oc-state/src/] [parallel-safe: no]
+## 5. Pending requests state   [depends-on: 4] [writes: packages/desktop-rs/crates/oc-state/src/, packages/desktop-rs/crates/oc-client/src/] [parallel-safe: no]
 
 - [ ] 5.1 The `Requests` store: upsert and remove from events, list results replace one directory's entries including `global` forms, and a failed list keeps the old entries and marks the directory stale. Sidebar `PendingRequest` ids are derived from it.
 - [ ] 5.2 Scope: `scoped_permissions` and `scoped_forms` with design.md's order and the `from_subagent` mark.

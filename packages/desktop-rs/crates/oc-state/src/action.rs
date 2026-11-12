@@ -7,7 +7,7 @@ use crate::events::reduce_event;
 use crate::ids::SessionId;
 use crate::load::{chat_messages, session_entry};
 use crate::state::{OpenSession, State};
-use crate::status::{ComposerStatus, ConnectionStatus, LoadStatus, Region};
+use crate::status::{ComposerStatus, ConnectionStatus, LoadStatus, Region, SessionStatus};
 
 /// One change to the state.
 #[derive(Debug, Clone, PartialEq)]
@@ -93,6 +93,7 @@ impl State {
             .collect();
         self.sessions.replace(entries);
         self.sidebar = LoadStatus::Ready;
+        self.reflect_requests();
     }
 
     fn add_created_session(&mut self, session: &Session) {
@@ -106,6 +107,7 @@ impl State {
         }
         let id = SessionId::from(session.id.as_str());
         self.open_session(id, LoadStatus::Ready);
+        self.reflect_requests();
     }
 
     fn open_session(&mut self, id: SessionId, load: LoadStatus) {
@@ -121,7 +123,13 @@ impl State {
 
     /// A loaded list replaces the messages; a failure keeps what is on screen under the error.
     fn set_messages(&mut self, session: &SessionId, load: LoadStatus, loaded: Option<&[Message]>) {
-        let Some(open) = self.open.as_mut().filter(|open| open.id == *session) else {
+        let mark_allowed = self.open_status() == SessionStatus::Idle
+            && self.requests.forms_for(session.as_str()).is_empty()
+            && self.requests.permissions_for(session.as_str()).is_empty();
+        let State {
+            open, recoverable, ..
+        } = self;
+        let Some(open) = open.as_mut().filter(|open| open.id == *session) else {
             tracing::debug!(
                 target: crate::logging::STATE,
                 session = %session,
@@ -130,22 +138,16 @@ impl State {
             return;
         };
         if let Some(messages) = loaded {
+            let recorded = if mark_allowed {
+                crate::load::recorded_turn(messages)
+            } else {
+                None
+            };
+            let promoted = recoverable.evidence_mut().ingest_loaded(messages, recorded);
             open.messages = chat_messages(messages);
+            crate::load::promote_loaded(&mut open.messages, &promoted);
         }
         open.load = load;
-    }
-
-    fn retry(&mut self, region: Region) {
-        match region {
-            Region::Sidebar => self.sidebar = LoadStatus::Loading,
-            Region::Messages => {
-                if let Some(open) = self.open.as_mut() {
-                    open.load = LoadStatus::Loading;
-                }
-            }
-            Region::Composer => self.composer.status = ComposerStatus::Idle,
-            Region::NewSession => self.create_error = None,
-        }
     }
 }
 

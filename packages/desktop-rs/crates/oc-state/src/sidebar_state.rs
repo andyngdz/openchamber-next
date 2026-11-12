@@ -190,12 +190,14 @@ impl State {
         ) {
             self.global.status = GlobalStatus::ShowingFirstPage;
         }
+        self.reflect_requests();
     }
 
     fn complete_walk(&mut self, list: Vec<Session>) {
         let entries: Vec<SessionEntry> = list.iter().map(session_entry).collect();
         self.global.list.replace(entries);
         self.global.status = GlobalStatus::Complete;
+        self.reflect_requests();
     }
 
     fn fail_page(&mut self, message: String) {

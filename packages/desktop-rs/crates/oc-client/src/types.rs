@@ -4,13 +4,13 @@
 //! the server adds later are ignored.
 
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 pub use crate::metadata::{SessionMetadata, WorkState};
 pub use crate::prompt::{Delivery, PromptAccepted, PromptRequest};
 pub use crate::requests::{
     CreateSessionRequest, SessionRecord, SwitchAgentRequest, SwitchModelRequest,
 };
+pub use crate::tool_state::{ToolError, ToolErrorSource, ToolState, ToolStatus};
 
 /// `GET /auth/session`.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -155,34 +155,6 @@ pub enum AssistantContent {
         state: ToolState,
     },
     /// Content kinds the spike does not draw (reasoning, files).
-    #[serde(other)]
-    Other,
-}
-
-/// State of a tool call: its status and its input.
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct ToolState {
-    /// Where the call is in its life.
-    pub status: ToolStatus,
-    /// The tool's arguments; missing while the input still streams.
-    #[serde(default)]
-    pub input: Value,
-}
-
-/// Status of a tool call as the message list reports it. A status the spike does not
-/// know decodes to [`ToolStatus::Other`] so a newer server does not break the list.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ToolStatus {
-    /// Input is still streaming.
-    Pending,
-    /// The tool is executing.
-    Running,
-    /// The tool returned a result.
-    Completed,
-    /// The tool failed.
-    Error,
-    /// A status this client does not know.
     #[serde(other)]
     Other,
 }

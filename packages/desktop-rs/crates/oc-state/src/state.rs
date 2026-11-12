@@ -1,9 +1,12 @@
 //! Everything the window draws, in one value the app replaces through [`State::apply`] and
 //! [`State::apply_sidebar`].
 
+use crate::auto_accept::AutoAccept;
 use crate::ids::SessionId;
 use crate::loaded::Loaded;
 use crate::message::ChatMessage;
+use crate::recoverable::Recoverable;
+use crate::requests::Requests;
 use crate::session_entry::SessionEntry;
 use crate::session_list::SessionList;
 use crate::sidebar_state::GlobalSessions;
@@ -35,7 +38,7 @@ pub struct Composer {
 
 /// View state of one window: the scoped directory, the shared sidebar inputs, the open
 /// session, the server.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct State {
     pub(crate) directory: String,
     pub(crate) connection: ConnectionStatus,
@@ -60,6 +63,12 @@ pub struct State {
     pub(crate) settings_overlay: SettingsPatch,
     /// The catalogs, draft target and per-session selections.
     pub(crate) selection: crate::selection::SelectionState,
+    /// Pending permissions and forms, by session.
+    pub(crate) requests: Requests,
+    /// Auto-accept modes, routing availability, held-back requests and safety holds.
+    pub(crate) auto_accept: AutoAccept,
+    /// Recovered-question evidence and tombstones.
+    pub(crate) recoverable: Recoverable,
 }
 
 impl State {
@@ -80,6 +89,9 @@ impl State {
             settings_patch: None,
             settings_overlay: SettingsPatch::default(),
             selection: crate::selection::SelectionState::default(),
+            requests: Requests::default(),
+            auto_accept: AutoAccept::default(),
+            recoverable: Recoverable::default(),
         }
     }
 

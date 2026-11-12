@@ -4,7 +4,11 @@ use oc_client::catalog::{
     Agent, AgentMode, ConfigModel, Model, ModelVariant, OpenCodeConfig, Provider,
     ProviderActivation,
 };
+use oc_client::control::ControlEvent;
 use oc_client::filesystem::Home;
+use oc_client::form::FormInfo;
+use oc_client::permission::PermissionRequest;
+use oc_client::routing::{AutoAcceptSnapshot, RoutingState};
 use oc_client::settings::Settings;
 use oc_client::types::{Data, Located, Message, Page, Session};
 use oc_client::{Event, EventData};
@@ -26,6 +30,7 @@ pub(crate) const INTERRUPTED_TURN: &str = "interrupted-agent-turn";
 pub(crate) const PERMISSION_TURN: &str = "permission-asked-agent-turn";
 pub(crate) const TWO_SESSIONS: &str = "two-sessions-stream-300cps";
 pub(crate) const SESSION_LIFECYCLE: &str = "session-lifecycle";
+pub(crate) const TURN_CONTROL: &str = "turn-control";
 
 fn read_json<T: DeserializeOwned>(relative: &str) -> T {
     let path = format!("{FIXTURES}/{relative}");
@@ -74,6 +79,48 @@ pub(crate) fn api_sessions(name: &str) -> Vec<Session> {
 /// The captured settings document.
 pub(crate) fn api_settings() -> Settings {
     read_json("api/settings.json")
+}
+
+/// The pending permission list of `fixtures/api/<name>.json`.
+pub(crate) fn api_permissions(name: &str) -> Vec<PermissionRequest> {
+    let located: Located<Vec<PermissionRequest>> = read_json(&format!("api/{name}.json"));
+    located.data
+}
+
+/// The pending form list of `fixtures/api/<name>.json`, `global` forms included.
+pub(crate) fn api_forms(name: &str) -> Vec<FormInfo> {
+    let located: Located<Vec<FormInfo>> = read_json(&format!("api/{name}.json"));
+    located.data
+}
+
+/// The captured auto-accept snapshot.
+pub(crate) fn api_auto_accept() -> AutoAcceptSnapshot {
+    read_json("api/permission-auto-accept.json")
+}
+
+/// The captured routing state.
+pub(crate) fn api_routing() -> RoutingState {
+    read_json("api/routing.json")
+}
+
+/// The control-stream frames of `fixtures/events/control.json`.
+pub(crate) fn control_events() -> Vec<ControlEvent> {
+    read_json("events/control.json")
+}
+
+/// A hand-built form from a JSON object.
+pub(crate) fn form_from(value: Value) -> FormInfo {
+    serde_json::from_value(value).unwrap_or_else(|err| panic!("form: {err}"))
+}
+
+/// A hand-built pending session with a parent, for scope tests.
+pub(crate) fn child_session(id: &str, parent: &str) -> Session {
+    sidebar_from(json!({
+        "id": id,
+        "parentID": parent,
+        "location": {"directory": directory()},
+        "time": {"created": 1, "updated": 1},
+    }))
 }
 
 /// The captured home info.
@@ -275,6 +322,18 @@ pub(crate) fn session(id: &str, updated: u64) -> Session {
 /// A hand-built wire event, for types the fixture provider never sends.
 pub(crate) fn event(kind: &str, created: u64, data: Value) -> Event {
     let value = json!({"id": format!("evt_test_{created}"), "created": created, "type": kind, "data": data});
+    serde_json::from_value(value).unwrap_or_else(|err| panic!("{kind}: {err}"))
+}
+
+/// A hand-built wire event with an envelope directory.
+pub(crate) fn event_in(kind: &str, created: u64, directory: &str, data: Value) -> Event {
+    let value = json!({
+        "id": format!("evt_test_{created}"),
+        "created": created,
+        "type": kind,
+        "location": {"directory": directory},
+        "data": data
+    });
     serde_json::from_value(value).unwrap_or_else(|err| panic!("{kind}: {err}"))
 }
 

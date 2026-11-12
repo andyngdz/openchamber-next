@@ -11,10 +11,15 @@ use oc_client::event::{
 };
 use oc_client::{Event, EventData};
 
-use crate::ids::{RequestId, SessionId};
+use crate::ids::SessionId;
 use crate::message_events::reduce_message_event;
-use crate::session_entry::{PendingRequest, SessionEntry};
+use crate::requests::GLOBAL_SESSION;
+use crate::session_entry::SessionEntry;
 use crate::session_list::SessionList;
+use crate::session_requests::{
+    FormSettlement, form_created, form_settled, permission_asked, permission_replied,
+    session_deleted,
+};
 use crate::state::State;
 use crate::status::SessionStatus;
 
@@ -28,13 +33,14 @@ pub(crate) fn reduce_event(state: &mut State, event: &Event) {
         return;
     }
     let at = event.created.unwrap_or_default();
-    let permission = |id: &str| PendingRequest::Permission(RequestId::from(id));
-    let form = |id: &str| PendingRequest::Form(RequestId::from(id));
     match &event.data {
         EventData::ServerConnected => {}
         EventData::SessionCreated(created) => add_session(state, created, at),
         EventData::SessionRenamed(renamed) => rename_session(state, renamed),
-        EventData::SessionDeleted(deleted) => remove_session(state, &deleted.session_id),
+        EventData::SessionDeleted(deleted) => {
+            session_deleted(state, &deleted.session_id);
+            remove_session(state, &deleted.session_id);
+        }
         EventData::SessionMetadataUpdated(updated) => update_metadata(state, updated),
         EventData::ExecutionStarted(started) => {
             set_status(state, &started.session_id, SessionStatus::Busy, at);
@@ -45,19 +51,17 @@ pub(crate) fn reduce_event(state: &mut State, event: &Event) {
         EventData::ExecutionInterrupted(interrupted) => interrupt(state, interrupted, at),
         EventData::ExecutionFailed(failed) => {
             set_status(state, &failed.session_id, SessionStatus::Error, at);
+            state.mark_interrupted_turn(&failed.session_id);
         }
         EventData::SessionStatus(status) => apply_status_event(state, event, status, at),
-        EventData::PermissionAsked(asked) => {
-            add_pending(state, &asked.session_id, permission(&asked.id));
+        EventData::PermissionAsked(asked) => permission_asked(state, asked),
+        EventData::PermissionReplied(replied) => permission_replied(state, replied),
+        EventData::FormCreated(created) => form_created(state, created, &event.location.directory),
+        EventData::FormReplied(settled) => {
+            form_settled(state, settled, FormSettlement::Replied);
         }
-        EventData::PermissionReplied(replied) => {
-            remove_pending(state, &replied.session_id, &permission(&replied.request_id));
-        }
-        EventData::FormCreated(created) => {
-            add_pending(state, &created.form.session_id, form(&created.form.id));
-        }
-        EventData::FormReplied(settled) | EventData::FormCancelled(settled) => {
-            remove_pending(state, &settled.session_id, &form(&settled.id));
+        EventData::FormCancelled(settled) => {
+            form_settled(state, settled, FormSettlement::Cancelled);
         }
         EventData::Raw { kind, .. } => drop_unhandled(event, kind),
         _ => reduce_message_event(state, event),
@@ -84,6 +88,16 @@ fn is_foreign(state: &State, event: &Event) -> bool {
 /// The session an event belongs to; `None` for connection notices, unhandled types and
 /// `session.created`, which is admitted by its directory instead.
 fn session_of(data: &EventData) -> Option<&str> {
+    if let EventData::FormCreated(created) = data
+        && created.form.session_id == GLOBAL_SESSION
+    {
+        return None;
+    }
+    if let EventData::FormReplied(form) | EventData::FormCancelled(form) = data
+        && form.session_id == GLOBAL_SESSION
+    {
+        return None;
+    }
     let id = match data {
         EventData::ServerConnected | EventData::SessionCreated(_) | EventData::Raw { .. } => {
             return None;
@@ -139,6 +153,7 @@ fn add_session(state: &mut State, created: &SessionCreated, at: u64) {
     if state.sidebar_admits(directory) {
         state.global.list.insert(entry);
     }
+    state.reflect_requests();
 }
 
 fn rename_session(state: &mut State, renamed: &SessionRenamed) {
@@ -174,6 +189,7 @@ fn remove_session(state: &mut State, session_id: &str) {
 fn interrupt(state: &mut State, interrupted: &ExecutionInterrupted, at: u64) {
     if interrupted.reason.as_deref() != Some(SHUTDOWN_REASON) {
         set_status(state, &interrupted.session_id, SessionStatus::Idle, at);
+        state.mark_interrupted_turn(&interrupted.session_id);
     }
 }
 
@@ -201,24 +217,6 @@ fn apply_status(list: &mut SessionList, session_id: &str, status: SessionStatus,
     entry.record_status(status, at);
     if was_busy != entry.is_busy() {
         list.touch(session_id, at);
-    }
-}
-
-fn add_pending(state: &mut State, session_id: &str, request: PendingRequest) {
-    for list in [&mut state.sessions, &mut state.global.list] {
-        if let Some(entry) = list.get_mut(session_id)
-            && !entry.pending.contains(&request)
-        {
-            entry.pending.push(request.clone());
-        }
-    }
-}
-
-fn remove_pending(state: &mut State, session_id: &str, request: &PendingRequest) {
-    for list in [&mut state.sessions, &mut state.global.list] {
-        if let Some(entry) = list.get_mut(session_id) {
-            entry.pending.retain(|pending| pending != request);
-        }
     }
 }
 

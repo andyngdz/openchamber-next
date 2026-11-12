@@ -5,7 +5,6 @@
 
 use crate::ids::SessionId;
 use crate::session_entry::SessionEntry;
-use crate::status::SessionStatus;
 
 /// The sessions of one view, always in sidebar order.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -55,14 +54,11 @@ impl SessionList {
         self.entries.retain(|entry| entry.id != *id);
     }
 
-    /// Replaces the rows with a fresh list. Pending requests come only from events, so a
-    /// session that stays listed keeps them while a turn runs; a session that is idle after
-    /// the merge drops them, since nothing waits for an answer outside a turn, and a reply
-    /// event missed while disconnected would otherwise keep it waiting for good. Activity
-    /// never moves back. The listed
-    /// status wins only when its turn stamp is newer than the status already held, so a
-    /// reload corrects a status whose ending event was missed, while an older snapshot never
-    /// overrides a newer event.
+    /// Replaces the rows with a fresh list. Pending requests belong to the requests store,
+    /// which re-derives every row's marks after a replace; a session list never settles a
+    /// request on its own. Activity never moves back. The listed status wins only when its
+    /// turn stamp is newer than the status already held, so a reload corrects a status whose
+    /// ending event was missed, while an older snapshot never overrides a newer event.
     pub(crate) fn replace(&mut self, fresh: Vec<SessionEntry>) {
         let previous = std::mem::take(&mut self.entries);
         self.entries = fresh
@@ -72,9 +68,6 @@ impl SessionList {
                     if entry.status_at <= old.status_at {
                         entry.status = old.status;
                         entry.status_at = old.status_at;
-                    }
-                    if entry.status != SessionStatus::Idle {
-                        entry.pending.clone_from(&old.pending);
                     }
                     entry.activity = entry.activity.max(old.activity);
                 }

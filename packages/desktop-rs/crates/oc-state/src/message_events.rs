@@ -17,46 +17,29 @@ use crate::message::{
 };
 use crate::state::State;
 
+mod session;
+
+use session::{is_message_event, message_session};
+
 /// Applies a message event; every other event type changes nothing here.
 pub(crate) fn reduce_message_event(state: &mut State, event: &Event) {
+    if !is_message_event(&event.data) {
+        return;
+    }
     let at = event.created.unwrap_or_default();
-    let session_id = match &event.data {
-        EventData::InboxEnqueued(enqueued) => &enqueued.session_id,
-        EventData::InboxDelivered(delivered) => &delivered.session_id,
-        EventData::InboxCancelled(cancelled) => &cancelled.session_id,
-        EventData::StepStarted(step) => &step.session_id,
-        EventData::StepEnded(step) => &step.session_id,
-        EventData::TextStarted(text) => &text.session_id,
-        EventData::TextDelta(delta) => &delta.session_id,
-        EventData::TextEnded(text) => &text.session_id,
-        EventData::ToolInputStarted(tool) => &tool.session_id,
-        EventData::ToolCalled(tool) => &tool.session_id,
-        EventData::ToolSuccess(tool) => &tool.session_id,
-        EventData::ToolFailed(tool) => &tool.session_id,
-        EventData::ServerConnected
-        | EventData::SessionCreated(_)
-        | EventData::SessionRenamed(_)
-        | EventData::SessionDeleted(_)
-        | EventData::SessionMetadataUpdated(_)
-        | EventData::ExecutionStarted(_)
-        | EventData::ExecutionSucceeded(_)
-        | EventData::ExecutionInterrupted(_)
-        | EventData::ExecutionFailed(_)
-        | EventData::SessionStatus(_)
-        | EventData::SessionIdle(_)
-        | EventData::PermissionAsked(_)
-        | EventData::PermissionReplied(_)
-        | EventData::FormCreated(_)
-        | EventData::FormReplied(_)
-        | EventData::FormCancelled(_)
-        | EventData::Raw { .. } => return,
-    };
+    let transition = crate::tool_events::record(&mut state.recoverable, event);
+    let session_id = message_session(&event.data);
     if let Some(messages) = state.open_messages_mut(session_id) {
-        apply(messages, event, at);
+        apply(messages, event, at, transition);
     }
 }
 
-fn apply(messages: &mut Vec<ChatMessage>, event: &Event, at: u64) {
+fn apply(
+    messages: &mut Vec<ChatMessage>,
+    event: &Event,
+    at: u64,
+    transition: crate::tool_events::ToolTransition,
+) {
     match &event.data {
         EventData::InboxEnqueued(enqueued) => enqueue(messages, enqueued),
         EventData::InboxDelivered(delivered) => deliver(messages, &delivered.inbox_id),
@@ -68,24 +51,22 @@ fn apply(messages: &mut Vec<ChatMessage>, event: &Event, at: u64) {
         EventData::TextEnded(text) => replace_text(messages, event, text),
         EventData::ToolInputStarted(tool) => start_tool(messages, event, tool),
         EventData::ToolCalled(tool) => call_tool(messages, event, tool),
-        EventData::ToolSuccess(tool) => {
-            set_tool(
-                messages,
-                event,
-                &tool.assistant_message_id,
-                &tool.id,
-                ToolStatus::Completed,
-            );
-        }
-        EventData::ToolFailed(tool) => {
-            set_tool(
-                messages,
-                event,
-                &tool.assistant_message_id,
-                &tool.id,
-                ToolStatus::Error,
-            );
-        }
+        EventData::ToolSuccess(tool) => set_tool(
+            messages,
+            event,
+            &tool.assistant_message_id,
+            &tool.id,
+            ToolStatus::Completed,
+            transition,
+        ),
+        EventData::ToolFailed(tool) => set_tool(
+            messages,
+            event,
+            &tool.assistant_message_id,
+            &tool.id,
+            ToolStatus::Error,
+            transition,
+        ),
         _ => {}
     }
 }
@@ -188,19 +169,31 @@ fn call_tool(messages: &mut [ChatMessage], event: &Event, tool: &ToolCalled) {
         }
     });
     let (message_id, call_id) = (&tool.assistant_message_id, &tool.id);
-    set_tool(messages, event, message_id, call_id, ToolStatus::Running);
+    set_tool(
+        messages,
+        event,
+        message_id,
+        call_id,
+        ToolStatus::Running,
+        crate::tool_events::ToolTransition::Authoritative,
+    );
 }
 
 /// A finished call keeps its result: a late or replayed transition does not move it back.
+/// A local interrupt mark is replaced by the authoritative transition.
 fn set_tool(
     messages: &mut [ChatMessage],
     event: &Event,
     message_id: &str,
     call_id: &str,
     status: ToolStatus,
+    transition: crate::tool_events::ToolTransition,
 ) {
     with_step(messages, event, message_id, |step| {
         match step.tool_mut(call_id) {
+            Some(row) if transition == crate::tool_events::ToolTransition::ReplaceLocalMark => {
+                row.status = status;
+            }
             Some(row) if !matches!(row.status, ToolStatus::Completed | ToolStatus::Error) => {
                 row.status = status;
             }
