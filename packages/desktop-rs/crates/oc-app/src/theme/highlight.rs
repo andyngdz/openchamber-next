@@ -16,18 +16,13 @@ use std::sync::{Arc, OnceLock};
 use gpui_kit::component::highlighter::HighlightTheme;
 use serde_json::{Map, Value, json};
 
+use super::DARK_THEME;
 use crate::logging::APP;
 use names::Token;
 use syntax::{ThemeDocument, TokenStyle};
 
 /// The font style name `buildSyntax` writes for an italic role.
 const ITALIC: &str = "italic";
-
-/// The Electron default dark theme, copied from `packages/ui/src/lib/theme/themes/`.
-const DARK_THEME: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/themes/openchamber-dark.json"
-));
 
 /// The dark theme's highlighter, parsed once from the embedded JSON.
 pub(crate) fn dark() -> Arc<HighlightTheme> {

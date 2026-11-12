@@ -12,7 +12,7 @@ use gpui_kit::{App, Div, Entity, InteractiveElement, ParentElement, Styled, Wind
 
 use super::Scene;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::{DARK, card};
+use crate::theme::{self, card};
 
 use controls::{left_group, right_group};
 
@@ -53,7 +53,7 @@ pub(crate) fn composer(
         .rounded(px(12.))
         .border_1()
         .border_color(theme.border)
-        .bg(card(DARK))
+        .bg(card(theme::palette()))
         .pt(px(4.))
         .child(control(registry, text_spec, text).w_full())
         .child(

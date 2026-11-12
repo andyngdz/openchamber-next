@@ -18,7 +18,7 @@ use super::{RESIZE_ATTEMPTS, SETTLE_FRAMES, WINDOW_HEIGHT, WINDOW_WIDTH, window_
 use crate::AppError;
 use crate::layout::LayoutRegistry;
 use crate::root::RootView;
-use crate::theme::{self, DARK};
+use crate::theme;
 use crate::views::PopoverKind;
 
 /// Draws `state` in a headless window until the frame settles, then hands the window and its
@@ -56,7 +56,7 @@ fn open(
     headless
         .update(|cx| {
             init(cx);
-            theme::apply(DARK, cx);
+            theme::apply(theme::palette(), cx);
             let options = WindowOptions {
                 focus: false,
                 show: false,

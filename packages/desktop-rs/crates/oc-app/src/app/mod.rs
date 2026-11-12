@@ -27,7 +27,7 @@ use crate::layout::{LayoutDump, LayoutRegistry};
 use crate::live::ServerLink;
 use crate::root::{RootView, Started};
 use crate::server::ServerProcess;
-use crate::theme::{self, DARK};
+use crate::theme;
 
 /// The content size the parity reference was measured at.
 const WINDOW_WIDTH: f32 = 1440.;
@@ -138,7 +138,7 @@ fn open(
         .with_assets(crate::icons::AppAssets)
         .run(move |cx| {
             init(cx);
-            theme::apply(DARK, cx);
+            theme::apply(theme::palette(), cx);
             let registry = LayoutRegistry::default();
             let view_registry = registry.clone();
             let opened = open_window(window_options(cx), cx, move |window, cx| {

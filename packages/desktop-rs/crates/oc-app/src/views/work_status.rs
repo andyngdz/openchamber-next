@@ -12,7 +12,7 @@ use super::turns::turns;
 use super::{Scene, icon_button, label_button, project_name};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::{DARK, card};
+use crate::theme::{self, card};
 
 /// The card's name; every control in it sits under it.
 const WORK_STATUS: &str = "Work status";
@@ -67,7 +67,7 @@ pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
         .rounded(px(12.))
         .border_1()
         .border_color(theme.border)
-        .bg(card(DARK))
+        .bg(card(theme::palette()))
         .child(
             div()
                 .flex()
