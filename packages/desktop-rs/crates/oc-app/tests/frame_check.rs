@@ -28,13 +28,11 @@ use serde_json::Value;
 const CHANNEL_TOLERANCE: u8 = 1;
 /// The region a popup draws in; it covers the regions under it.
 const POPOVER: &str = "popover";
-/// The floating shadows of the dark theme as `(offset y, blur, spread)`, the values of
-/// `Tokens::floating_shadows` (`--sh-float`). The shadow tints what is drawn within its reach.
-const FLOATING_SHADOWS: [(f64, f64, f64); 2] = [(2., 8., 0.), (28., 64., -12.)];
+include!("shared/floating_shadows.rs");
 /// The edge ring around a floating surface, in logical pixels.
 const EDGE_RING: f64 = 0.5;
 /// How many standard deviations of a shadow's gaussian still tint a pixel. GPUI blurs with
-/// sigma equal to the blur radius (`shaders.wgsl`, `gaussian(y, shadow.blur_radius)`); past
+/// sigma equal to the blur radius (gpui-pre-wgpu `shaders.wgsl:1031`, `gaussian(y, shadow.blur_radius)`); past
 /// 2.5 sigma its alpha is under 1% of the shadow's, below one channel step on a text color.
 const SIGMAS: f64 = 2.5;
 /// The draw kinds a control records, and whether the kind is a mark.

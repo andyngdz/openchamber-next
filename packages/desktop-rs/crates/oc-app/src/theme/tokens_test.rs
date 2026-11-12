@@ -112,3 +112,26 @@ fn the_bundled_light_theme_matches_the_shared_source() {
 
     assert_eq!(LIGHT_THEME, source);
 }
+
+include!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/tests/shared/floating_shadows.rs"
+));
+
+#[test]
+fn the_floating_shadows_are_the_ones_the_frame_check_skips() {
+    let outer: Vec<(f64, f64, f64)> = tokens(Mode::Dark)
+        .floating_shadows()
+        .iter()
+        .filter(|shadow| !shadow.inset && shadow.blur_radius > gpui_kit::px(0.))
+        .map(|shadow| {
+            (
+                f64::from(f32::from(shadow.offset.y)),
+                f64::from(f32::from(shadow.blur_radius)),
+                f64::from(f32::from(shadow.spread_radius)),
+            )
+        })
+        .collect();
+
+    assert_eq!(outer, FLOATING_SHADOWS);
+}

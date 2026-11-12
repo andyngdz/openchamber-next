@@ -124,9 +124,15 @@ fn a_press_on_the_drag_strip_still_closes_an_open_popup(cx: &mut TestAppContext)
                 first_mouse: false,
             });
         }));
+        let payload = moved.expect_err("the strip did not start a window move");
+        let message = payload
+            .downcast_ref::<&str>()
+            .map(|text| (*text).to_owned())
+            .or_else(|| payload.downcast_ref::<String>().cloned())
+            .unwrap_or_default();
         assert!(
-            moved.is_err(),
-            "{:?}: the strip did not start a window move",
+            message.contains("not implemented"),
+            "{:?}: panicked with {message:?}, not the platform's move request",
             case.kind
         );
         let open = cx.read_entity(&root, |root, _| root.popover.is_some());
