@@ -9,7 +9,7 @@ use tokio::task::JoinSet;
 
 use super::protocol::{Closed, Command, Update};
 use super::reconnect::follow_events;
-use super::{catalog, send, startup};
+use super::{catalog, control, send, sending, startup};
 
 /// Checks auth, then serves `commands` and follows the global event stream. Requests run
 /// side by side in a [`JoinSet`] this task owns, so they stop with it.
@@ -34,6 +34,17 @@ pub(crate) async fn run_session(
     let events = follow_events(|| client.events(), tokio::time::sleep, updates.clone());
     tokio::pin!(events);
     let mut requests = JoinSet::new();
+    // The control stream runs next to the event stream; a server without it ends this task
+    // with one update while the session keeps serving requests.
+    let control_client = client.clone();
+    requests.spawn(control::follow(
+        move || {
+            let client = control_client.clone();
+            async move { client.control_events().await }
+        },
+        tokio::time::sleep,
+        updates.clone(),
+    ));
     loop {
         tokio::select! {
             () = &mut events => break,
@@ -95,7 +106,11 @@ async fn dispatch(
             )
             .await
         }
-        Command::SendPrompt(request) => send::prompt(client, request.open(), updates).await,
+        Command::Send(request) => sending::execute(client, *request, updates).await,
+        Command::RefreshControl => control::refresh(client, updates).await,
+        Command::LoadRequests(directory) => {
+            catalog::load_requests(client, &directory, updates).await
+        }
     }
 }
 

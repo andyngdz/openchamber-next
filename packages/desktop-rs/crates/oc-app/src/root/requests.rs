@@ -1,13 +1,23 @@
 //! What an intent turns into: session loads, catalog loads, creation and the send sequence.
 
 use gpui_kit::Context;
-use oc_state::{Action, ComposerStatus, ConnectionStatus, Region, SessionId, SessionStatus};
+use oc_state::{Action, ComposerStatus, ConnectionStatus, Region, SendKey, SessionId, State};
 
 use super::RootView;
-use crate::live::{Command, CreateDraftPrompt, CreateSessionRequest, OpenMessages, SendRequest};
+use crate::live::{
+    Command, CreateDraftPrompt, CreateSessionRequest, DismissCall, OpenMessages, SendExecution,
+};
 
 const NOT_CONNECTED: &str = "Not connected to the server";
 const CHAT_FOLDER_UNKNOWN: &str = "The chat folder is not known yet; retry once the server answers";
+
+/// What one send turns into: nothing, the draft's session, or the open session's plan.
+enum Flow {
+    Nothing,
+    Draft(CreateDraftPrompt),
+    Send(Box<SendExecution>),
+    Failed(String),
+}
 
 impl RootView {
     /// Opening a session loads its messages, record and catalog; Retry sends the region's
@@ -84,56 +94,92 @@ impl RootView {
 
     /// Sends from an open session, or creates the draft's session and sends its first prompt.
     pub(super) fn send_prompt(&mut self, cx: &mut Context<Self>) {
-        let plan = {
+        self.send_with_key(SendKey::Plain, cx);
+    }
+
+    /// Runs the send plan for `key` (`ChatInput.tsx:2101-2113`): create the draft's session,
+    /// queue the text, or dismiss the tree's requests and then queue or send.
+    pub(super) fn send_with_key(&mut self, key: SendKey, cx: &mut Context<Self>) {
+        let flow = {
             let state = self.state.read(cx);
-            let draft = state.composer().draft.clone();
             if *state.connection() != ConnectionStatus::Connected
                 || state.composer().status == ComposerStatus::Sending
-                || draft.trim().is_empty()
             {
                 return;
             }
-            let (agent, model) = super::plan::selection_parts(state.current_selection());
-            match state.open() {
-                Some(open) => {
-                    if state.open_status() == SessionStatus::Busy {
-                        return;
-                    }
-                    let directory = state
-                        .open_entry()
-                        .map(|entry| entry.directory.clone())
-                        .unwrap_or_else(|| state.directory().to_owned());
-                    let record_model = state
-                        .session_record(&open.id)
-                        .and_then(|record| record.model.clone());
-                    Ok(Command::SendPrompt(Box::new(SendRequest {
-                        session: open.id.clone(),
-                        directory,
-                        text: draft,
-                        agent,
-                        model,
-                        record_model,
-                    })))
+            if state.open().is_none() {
+                self.draft_flow(state)
+            } else {
+                // Without a control stream a busy session still takes a plain prompt.
+                let key = if self.control_stream_missing() {
+                    SendKey::Command
+                } else {
+                    key
+                };
+                let plan = state.send_plan(key);
+                let (agent, model) = super::plan::selection_parts(state.current_selection());
+                match crate::live::from_plan(&plan, state, agent, model) {
+                    Some(execution) => Flow::Send(Box::new(execution)),
+                    None => Flow::Nothing,
                 }
-                None => match super::plan::create_target(state) {
-                    Some(target) => Ok(Command::CreateAndPrompt(Box::new(CreateDraftPrompt {
-                        target,
-                        text: draft,
-                        agent,
-                        model,
-                    }))),
-                    None => Err(CHAT_FOLDER_UNKNOWN.to_owned()),
-                },
             }
         };
-        match plan {
-            Ok(command) => {
+        match flow {
+            Flow::Nothing => {}
+            Flow::Draft(request) => {
                 self.dispatch(Action::PromptSent, cx);
-                if self.send(command).is_err() {
+                if self
+                    .send(Command::CreateAndPrompt(Box::new(request)))
+                    .is_err()
+                {
                     self.dispatch(Action::PromptFailed(NOT_CONNECTED.to_owned()), cx);
                 }
             }
-            Err(message) => self.dispatch(Action::PromptFailed(message), cx),
+            Flow::Send(execution) => {
+                self.dispatch(Action::PromptSent, cx);
+                let dismissals = execution.dismiss.clone();
+                if self.send(Command::Send(execution)).is_err() {
+                    self.dispatch(Action::PromptFailed(NOT_CONNECTED.to_owned()), cx);
+                } else {
+                    // The dock empties now; a failed call puts its request back.
+                    for call in &dismissals {
+                        self.dismiss_locally(call, cx);
+                    }
+                }
+            }
+            Flow::Failed(message) => self.dispatch(Action::PromptFailed(message), cx),
+        }
+    }
+
+    /// The send from an empty draft: create its session and prompt.
+    fn draft_flow(&self, state: &State) -> Flow {
+        let draft = state.composer().draft.clone();
+        if draft.trim().is_empty() {
+            return Flow::Nothing;
+        }
+        let (agent, model) = super::plan::selection_parts(state.current_selection());
+        match super::plan::create_target(state) {
+            Some(target) => Flow::Draft(CreateDraftPrompt {
+                target,
+                text: draft,
+                agent,
+                model,
+            }),
+            None => Flow::Failed(CHAT_FOLDER_UNKNOWN.to_owned()),
+        }
+    }
+
+    /// Takes a dismissed request off screen before its call answers.
+    fn dismiss_locally(&mut self, call: &DismissCall, cx: &mut Context<Self>) {
+        if let Some(event) = crate::live::settled_event(call) {
+            self.dispatch(Action::Event(event), cx);
+        }
+    }
+
+    /// Puts a request back after its dismissal failed for a reason other than 404.
+    pub(super) fn restore_dismissed(&mut self, call: &DismissCall, cx: &mut Context<Self>) {
+        if let Some(event) = crate::live::restored_event(call) {
+            self.dispatch(Action::Event(event), cx);
         }
     }
 
