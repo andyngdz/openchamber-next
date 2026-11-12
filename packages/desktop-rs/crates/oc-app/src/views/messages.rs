@@ -1,7 +1,7 @@
 //! The open session's messages: user messages on the right, assistant text as plain text, tool
 //! calls under an Activity row, and a meta row with hover actions under each finished turn.
 
-use gpui_kit::component::ActiveTheme;
+use gpui_kit::component::{ActiveTheme, Icon, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
     AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, ScrollHandle,
@@ -15,11 +15,15 @@ use super::turns::{Block, Turn, TurnMeta, turns};
 use super::{Scene, plain_icon_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Reveal, Role, control};
+use crate::theme::Tokens;
 
 /// The message scroller. React gives it no name, and its text is the whole transcript, so the
 /// reference names it by its role.
 const SCROLLER: &str = "generic";
 const SCROLL_TO_BOTTOM: &str = "Scroll to bottom";
+/// Widest a user bubble grows, and the measure of assistant text (`Session` mockup).
+const USER_BUBBLE_MAX: f32 = 520.;
+const TEXT_MAX: f32 = 680.;
 /// Hover actions of a finished turn's meta row.
 const META_ACTIONS: [(&str, RemixIcon); 4] = [
     ("Copy message text", RemixIcon::FileCopy),
@@ -52,10 +56,11 @@ pub(crate) fn messages(scene: Scene<'_>, scroll: &ScrollHandle, cx: &App) -> Div
     let column = div()
         .w(px(WIDTH))
         .mx_auto()
-        .py(px(16.))
+        .pt(px(8.))
+        .pb(px(16.))
         .flex()
         .flex_col()
-        .gap(px(12.))
+        .gap(px(14.))
         .children(all.iter().enumerate().map(|(index, turn)| {
             // The last turn of a busy session is still running: no meta row yet.
             let meta = turn.meta().filter(|_| !(busy && index + 1 == count));
@@ -151,12 +156,12 @@ fn user_bubble(scene: Scene<'_>, index: usize, text: &str, cx: &App) -> Div {
         })
         .child(
             div()
-                .max_w(px(560.))
-                .px(px(12.))
-                .py(px(8.))
+                .max_w(px(USER_BUBBLE_MAX))
+                .px(px(13.))
+                .py(px(9.))
                 .rounded(px(12.))
-                .bg(cx.theme().secondary)
-                .text_sm()
+                .bg(Tokens::of(cx).depth.tile2)
+                .text_size(px(13.))
                 .child(text.to_owned()),
         )
 }
@@ -168,7 +173,11 @@ fn block_view(
     cx: &App,
 ) -> AnyElement {
     match block {
-        Block::Text(text) => div().text_sm().child(text.to_owned()).into_any_element(),
+        Block::Text(text) => div()
+            .max_w(px(TEXT_MAX))
+            .text_size(px(13.))
+            .child(text.to_owned())
+            .into_any_element(),
         Block::Activity(tools) => activity(scene, tools, tool_specs, cx).into_any_element(),
     }
 }
@@ -180,9 +189,10 @@ fn meta_row(scene: Scene<'_>, index: usize, meta: &TurnMeta, cx: &App) -> Div {
         .group(group.clone())
         .flex()
         .items_center()
-        .gap(px(4.))
-        .text_xs()
+        .gap(px(6.))
+        .text_size(px(12.))
         .text_color(cx.theme().muted_foreground)
+        .child(Icon::new(RemixIcon::Sparkling).with_size(px(13.)))
         .child(format!(
             "{} · {} · {}",
             meta.model, meta.agent, meta.duration

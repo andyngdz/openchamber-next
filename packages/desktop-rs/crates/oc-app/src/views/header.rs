@@ -5,6 +5,7 @@ use gpui_kit::component::ActiveTheme;
 use gpui_kit::{AnyElement, App, Div, Hsla, IntoElement, ParentElement, Styled, div, px};
 use oc_state::{ConnectionStatus, ServerExit};
 
+use super::header_title;
 use super::window_chrome::{
     CONTROLS_WIDTH, STRIP_HEIGHT, WindowAction, drag_region, window_control,
 };
@@ -55,6 +56,7 @@ const WINDOW_CONTROLS: [HeaderItem; 3] = [
 fn items(mode: HeaderMode) -> Vec<HeaderItem> {
     let mut items = match mode {
         HeaderMode::Empty => vec![
+            HeaderItem::Title,
             HeaderItem::Spacer,
             HeaderItem::ServerState,
             HeaderItem::Tool("Open a new Mini Chat window", RemixIcon::PictureInPicture2),
@@ -108,7 +110,7 @@ pub(crate) fn header(scene: Scene<'_>, cx: &App) -> Div {
         .items_center()
         .gap(px(4.))
         .pl(px(16.))
-        .pr(px(8.))
+        .pr(px(10.))
         .children(
             items(mode)
                 .into_iter()
@@ -144,7 +146,7 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
     let registry = scene.registry;
     let theme = cx.theme();
     match item {
-        HeaderItem::Title => title(scene),
+        HeaderItem::Title => header_title::title(scene, cx),
         HeaderItem::Tool(name, icon) => {
             // "Toggle work-status panel" draws the foreground; the rest the muted foreground.
             let color = if name == "Toggle work-status panel" {
@@ -180,16 +182,6 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
         }
         HeaderItem::Window(name, icon, action) => window_control(scene, name, icon, action),
     }
-}
-
-/// The open session's title, or nothing in the empty state.
-fn title(scene: Scene<'_>) -> AnyElement {
-    let title = scene
-        .state
-        .open_entry()
-        .and_then(|entry| entry.title.clone())
-        .unwrap_or_default();
-    div().text_sm().truncate().child(title).into_any_element()
 }
 
 /// The gap between the header's groups.

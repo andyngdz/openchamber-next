@@ -8,6 +8,7 @@ mod chat;
 mod composer;
 mod empty_state;
 mod header;
+mod header_title;
 mod icon_rail;
 mod messages;
 mod model_names;
