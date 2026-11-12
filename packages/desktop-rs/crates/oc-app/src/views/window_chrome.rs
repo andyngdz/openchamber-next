@@ -16,16 +16,20 @@ pub(crate) const STRIP_HEIGHT: f32 = 44.;
 /// Width the window controls take at the top right; the right-hand header ends before it.
 pub(crate) const CONTROLS_WIDTH: f32 = 120.;
 
-/// Makes `zone` move the window when pressed where nothing interactive sits on top of it,
-/// and toggle maximize on a double click.
+/// Makes `zone` move the window when pressed on its empty area, and toggle maximize on a
+/// double click.
 ///
-/// An element with its own handler paints above `zone`, so GPUI never reports the press to
-/// `zone` there.
+/// GPUI reports a press to every hovered element, children first, so a button inside `zone`
+/// is told too. A button marks its press as handled with `prevent_default`; `zone` then
+/// leaves it alone, so pressing Minimize or a header tool never starts a move.
 pub(crate) fn drag_region(zone: Div) -> Div {
     zone.on_mouse_down(MouseButton::Left, drag_or_maximize)
 }
 
 fn drag_or_maximize(event: &MouseDownEvent, window: &mut Window, _: &mut App) {
+    if window.default_prevented() {
+        return;
+    }
     if event.click_count >= 2 {
         window.zoom_window();
     } else {

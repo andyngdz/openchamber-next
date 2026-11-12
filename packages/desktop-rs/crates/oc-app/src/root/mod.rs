@@ -2,6 +2,9 @@
 //! [`State::apply`], so a fixture replay and live events take the same path. With a live
 //! server it also turns intents into requests and applies what the server sends back.
 
+#[cfg(test)]
+#[path = "chrome_test.rs"]
+mod chrome_test;
 mod keys;
 mod live;
 #[cfg(test)]
