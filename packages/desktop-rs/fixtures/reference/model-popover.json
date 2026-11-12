@@ -1021,20 +1021,20 @@
           "key": "header/Main navigation/Window controls/Minimize window",
           "shown": true,
           "bounds": {
-            "x": 1308,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1326,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "subtract",
               "color": "#89867cff",
               "bounds": {
-                "x": 1322,
-                "y": 16,
-                "width": 16,
-                "height": 16
+                "x": 1326,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
@@ -1047,20 +1047,20 @@
           "key": "header/Main navigation/Window controls/Maximize window",
           "shown": true,
           "bounds": {
-            "x": 1352,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1362,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "checkbox-blank",
               "color": "#89867cff",
               "bounds": {
-                "x": 1367,
-                "y": 17,
-                "width": 14,
-                "height": 14
+                "x": 1362,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
@@ -1073,20 +1073,20 @@
           "key": "header/Main navigation/Window controls/Close window",
           "shown": true,
           "bounds": {
-            "x": 1396,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1398,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "close",
               "color": "#89867cff",
               "bounds": {
-                "x": 1410,
-                "y": 16,
-                "width": 16,
-                "height": 16
+                "x": 1398,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
