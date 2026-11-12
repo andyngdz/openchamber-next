@@ -6,28 +6,35 @@ mod controls;
 #[path = "composer_slots.rs"]
 mod slots;
 
-use gpui_kit::component::ActiveTheme;
 use gpui_kit::component::input::{Textarea, TextareaState};
 use gpui_kit::{App, Div, Entity, InteractiveElement, ParentElement, Styled, Window, div, px};
 
 use super::Scene;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::card;
+use crate::theme::{Tokens, mix_oklab};
 
 use controls::{left_group, right_group};
 
 /// The text area's accessible name: its placeholder.
 pub(crate) const PLACEHOLDER: &str =
     "Plan, build, or ask. @ to mention, $ for skills, / for commands";
-/// The composer box size the reference measures (720.5 x 100).
+/// The composer box size: 720.5 wide, 112 high as the mockup draws it.
 pub(crate) const WIDTH: f32 = 720.5;
-const HEIGHT: f32 = 100.;
-/// The footer's `px-2.5 py-1.5` (`ChatInput.tsx:4957`).
-const FOOTER_PADDING: f32 = 10.;
-const FOOTER_VERTICAL: f32 = 6.;
-const FOOTER_HEIGHT: f32 = 44.;
-/// The text area above the footer: 100 - 4 top padding - 44 footer.
-const TEXT_HEIGHT: f32 = 52.;
+const HEIGHT: f32 = 112.;
+/// The mockup's `padding: 12px 10px 8px 14px`.
+const PAD_TOP: f32 = 12.;
+const PAD_RIGHT: f32 = 10.;
+const PAD_BOTTOM: f32 = 8.;
+const PAD_LEFT: f32 = 14.;
+/// The footer row never wraps and stays 32 high.
+const FOOTER_HEIGHT: f32 = 32.;
+/// The composer's radius.
+const RADIUS: f32 = 14.;
+/// The composer fill: the foreground at 4% over the background.
+const FILL_MIX: f32 = 0.04;
+/// The text area above the footer: 112 - 12 top - 8 bottom - 32 footer.
+const TEXT_HEIGHT: f32 = 60.;
+const TEXT_SIZE: f32 = 14.;
 
 /// The composer box, `720.5 x 100`; its caller places it.
 pub(crate) fn composer(
@@ -36,34 +43,42 @@ pub(crate) fn composer(
     window: &mut Window,
     cx: &App,
 ) -> Div {
-    let theme = cx.theme();
+    let tokens = Tokens::of(cx);
     let registry = scene.registry;
     let text_spec = ControlSpec::named(Area::Composer, Role::Textbox, PLACEHOLDER);
     let text = div()
         .id(text_spec.key.clone())
         .w_full()
         .h(px(TEXT_HEIGHT))
-        .px(px(4.))
+        .text_size(px(TEXT_SIZE))
         .child(Textarea::new(draft).appearance(false));
     let tools = slots::toolbar(scene.state);
+    let fill = mix_oklab(
+        scene.palette.foreground.into(),
+        scene.palette.background.into(),
+        FILL_MIX,
+    );
     let frame = div()
         .size_full()
         .flex()
         .flex_col()
-        .rounded(px(12.))
-        .border_1()
-        .border_color(theme.border)
-        .bg(card(scene.palette))
-        .pt(px(4.))
+        .bg(fill)
+        .rounded(px(RADIUS))
+        .shadow(tokens.raised_shadows())
+        .pt(px(PAD_TOP))
+        .pr(px(PAD_RIGHT))
+        .pb(px(PAD_BOTTOM))
+        .pl(px(PAD_LEFT))
         .child(control(registry, text_spec, text).w_full())
         .child(
             div()
                 .h(px(FOOTER_HEIGHT))
+                .flex_none()
                 .flex()
                 .items_center()
                 .justify_between()
-                .px(px(FOOTER_PADDING))
-                .py(px(FOOTER_VERTICAL))
+                .overflow_hidden()
+                .whitespace_nowrap()
                 .child(left_group(scene, &tools[..3], registry))
                 .child(right_group(scene, &tools[3..], registry, window, cx)),
         );
