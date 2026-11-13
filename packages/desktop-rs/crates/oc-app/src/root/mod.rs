@@ -33,7 +33,7 @@ use crate::live::ServerLink;
 use crate::theme::{DepthStyle, Tokens};
 use crate::views::{
     Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, STRIP_HEIGHT, Scene, chat_column,
-    filter_model_list, header, icon_rail, model_search_field, panel_header, sidebar,
+    filter_model_list, header, icon_rail, model_search_field, panel_drag_strip, sidebar,
     window_controls, work_status,
 };
 
@@ -179,7 +179,7 @@ impl Render for RootView {
             .flex_none()
             .flex()
             .flex_col()
-            .child(panel_header("", cx))
+            .child(panel_drag_strip())
             .child(work_status(scene, cx));
         let rail = div()
             .w(px(RAIL_WIDTH))

@@ -47,7 +47,7 @@ pub(crate) use popover::{Pick, PopoverKind, PopoverLists};
 pub(crate) use popover::{filter_model_list, model_search_field};
 pub(crate) use popover::{open_model_picker, thinking_items, thinking_rows};
 pub(crate) use sidebar::sidebar;
-pub(crate) use window_chrome::{STRIP_HEIGHT, panel_header};
+pub(crate) use window_chrome::{STRIP_HEIGHT, panel_drag_strip};
 pub(crate) use work_status::work_status;
 
 use crate::icons::RemixIcon;
