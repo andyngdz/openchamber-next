@@ -58,13 +58,18 @@ pub(crate) fn composer(
         scene.palette.background.into(),
         FILL_MIX,
     );
+    // The far drop shadow of `--sh-raised` reaches 12px past the box and tints the
+    // Choose project and starter chip text above and below it, so keep the edge and
+    // the contact shadow only.
+    let mut shadows = tokens.raised_shadows();
+    shadows.pop();
     let frame = div()
         .size_full()
         .flex()
         .flex_col()
         .bg(fill)
         .rounded(px(RADIUS))
-        .shadow(tokens.raised_shadows())
+        .shadow(shadows)
         .pt(px(PAD_TOP))
         .pr(px(PAD_RIGHT))
         .pb(px(PAD_BOTTOM))
