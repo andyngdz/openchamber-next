@@ -1,5 +1,5 @@
 //! The open session's messages: user messages on the right, assistant text as plain text, tool
-//! calls under an Activity row, and a meta row with hover actions under each finished turn.
+//! calls as one compact row each, and a meta row with hover actions under each finished turn.
 
 use gpui_kit::component::{ActiveTheme, Icon, Sizable};
 use gpui_kit::prelude::FluentBuilder;

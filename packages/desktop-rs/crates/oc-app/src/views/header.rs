@@ -56,7 +56,6 @@ const WINDOW_CONTROLS: [HeaderItem; 3] = [
 fn items(mode: HeaderMode) -> Vec<HeaderItem> {
     let mut items = match mode {
         HeaderMode::Empty => vec![
-            HeaderItem::Title,
             HeaderItem::Spacer,
             HeaderItem::ServerState,
             HeaderItem::Tool("Open a new Mini Chat window", RemixIcon::PictureInPicture2),
