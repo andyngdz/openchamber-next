@@ -5,7 +5,7 @@
 use gpui_kit::component::input::TextareaState;
 use gpui_kit::component::{ActiveTheme, Sizable};
 use gpui_kit::{
-    AnyElement, App, Div, Entity, InteractiveElement, IntoElement, ParentElement,
+    AnyElement, App, Div, Entity, FontWeight, InteractiveElement, IntoElement, ParentElement,
     StatefulInteractiveElement, Styled, Window, div, px,
 };
 use oc_state::{ConnectionStatus, ServerFailure};
@@ -17,6 +17,7 @@ use super::popover::PopoverKind;
 use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control};
+use crate::theme::Tokens;
 
 /// Chat column width minus the composer width, halved: the composer's left edge. The column
 /// is the 804 px chat card.
@@ -73,8 +74,8 @@ fn choose_project(scene: Scene<'_>, cx: &App) -> AnyElement {
         .into_any_element()
 }
 
-/// A quick-action chip: smaller and outlined, so a row holds as many as React's.
-fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
+/// A quick-action chip.
+fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon, cx: &App) -> AnyElement {
     let spec = ControlSpec::named(Area::ChatColumn, Role::Button, name);
     let palette = scene.palette;
     let button = label_button(
@@ -87,7 +88,10 @@ fn chip(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
         name,
         palette.muted_foreground.into(),
     )
-    .outline()
+    // A tile-filled pill with no edge, 28 px tall, its icon 14 px (`.chip` in the Main mockup).
+    .bg(Tokens::of(cx).depth.tile)
+    .rounded(px(8.))
+    .h(px(28.))
     .xsmall();
     control(scene.registry, spec, button).into_any_element()
 }
@@ -113,7 +117,8 @@ pub(crate) fn empty_state(
                 .flex()
                 .items_center()
                 .justify_center()
-                .text_3xl()
+                .text_size(px(28.))
+                .font_weight(FontWeight::MEDIUM)
                 .child("What are we working on?"),
         )
         .child(div().h(px(16.)))
@@ -126,8 +131,8 @@ pub(crate) fn empty_state(
                 .flex()
                 .flex_wrap()
                 .justify_center()
-                .gap(px(6.))
-                .children(CHIPS.map(|(name, icon)| chip(scene, name, icon)))
+                .gap(px(8.))
+                .children(CHIPS.map(|(name, icon)| chip(scene, name, icon, cx)))
                 .child(control(
                     scene.registry,
                     starter.clone(),

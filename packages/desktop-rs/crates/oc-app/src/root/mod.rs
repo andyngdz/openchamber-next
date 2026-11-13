@@ -33,7 +33,7 @@ use crate::live::ServerLink;
 use crate::theme::{DepthStyle, Tokens};
 use crate::views::{
     Dispatch, PLACEHOLDER, PopoverKind, PopoverLists, STRIP_HEIGHT, Scene, chat_column,
-    filter_model_list, header, icon_rail, model_search_field, panel_header, sidebar,
+    filter_model_list, header, icon_rail, model_search_field, panel_drag_strip, sidebar,
     window_controls, work_status,
 };
 
@@ -41,8 +41,6 @@ use crate::views::{
 const CARD_INSET: f32 = 8.;
 /// Width of the right-hand zone, which holds the Work status panel.
 const PANEL_WIDTH: f32 = 320.;
-/// Title of the right-hand zone's header row.
-const PANEL_TITLE: &str = "Session";
 /// Width of the icon rail, and its gap from the panel.
 const RAIL_WIDTH: f32 = 44.;
 const RAIL_GAP: f32 = 8.;
@@ -181,7 +179,7 @@ impl Render for RootView {
             .flex_none()
             .flex()
             .flex_col()
-            .child(panel_header(PANEL_TITLE, cx))
+            .child(panel_drag_strip())
             .child(work_status(scene, cx));
         let rail = div()
             .w(px(RAIL_WIDTH))

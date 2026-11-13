@@ -32,7 +32,7 @@ fn a_section_header_records_its_label_in_the_muted_foreground() {
 }
 
 #[test]
-fn the_favorites_star_is_recorded_in_the_primary_color() {
+fn the_favorites_star_is_recorded_in_the_muted_foreground() {
     let registry = LayoutRegistry::default();
     header(&registry, &a_header(Some(RemixIcon::StarFill)), palette());
 
@@ -40,6 +40,6 @@ fn the_favorites_star_is_recorded_in_the_primary_color() {
     assert_eq!(icons.len(), 1);
     assert_eq!(
         icons[0].0.color(),
-        Some(theme::hex(palette().primary.into()))
+        Some(theme::hex(palette().muted_foreground.into()))
     );
 }

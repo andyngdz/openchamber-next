@@ -5,19 +5,26 @@ use crate::icons::RemixIcon;
 use crate::layout::{
     Area, ControlSpec, DrawSlot, LayoutRegistry, Role, control as control_element, placed,
 };
-use crate::theme::Palette;
+use crate::theme::{Palette, Tokens};
 use crate::views::text_metrics;
 use gpui_kit::{
     AnyElement, Div, FontWeight, Hsla, IntoElement, ParentElement, SharedString, Styled, canvas,
     div, px,
 };
 
-/// The provider mark on a section header, `h-4 w-4` (`ModelPickerList.tsx:1104`).
-const HEADER_ICON: f32 = 16.;
+/// The mark on a section caption, 12 px (`ModelPicker.dc.html` `.cap`).
+const HEADER_ICON: f32 = 12.;
 /// The check after the current model, `h-4 w-4` (`ModelPickerList.tsx:1063`).
 const CHECK_ICON: f32 = 16.;
-/// `font-semibold` on a section label (`ModelPickerList.tsx:942`).
-const HEADER_WEIGHT: f32 = 600.;
+/// A section caption's weight, `font-weight: 500` (`ModelPicker.dc.html` `.cap`).
+const HEADER_WEIGHT: f32 = 500.;
+/// The longest a row's muted context may grow before it truncates, such as an agent's
+/// one-line description.
+const CONTEXT_MAX: f32 = 150.;
+/// A footer chip's text size, `.kbd` of the mockup.
+const KBD_TEXT: f32 = 11.;
+/// The hint row's height.
+pub(super) const FOOTER_HEIGHT: f32 = 32.;
 
 /// A section header, recorded under its group ancestors.
 pub(super) fn header(registry: &LayoutRegistry, header: &Header, palette: Palette) -> Div {
@@ -25,11 +32,8 @@ pub(super) fn header(registry: &LayoutRegistry, header: &Header, palette: Palett
     let spec =
         ControlSpec::named(Area::Popover, Role::Button, header.name.clone()).under(&ancestors);
     let muted_color: Hsla = palette.muted_foreground.into();
-    // The Favorites star is `text-primary` (`ModelPickerList.tsx`), every other mark muted.
-    let icon_color: Hsla = match header.icon {
-        Some(RemixIcon::StarFill) => palette.primary.into(),
-        _ => muted_color,
-    };
+    // Colour carries state only: every caption mark is muted, the Favorites star included.
+    let icon_color = muted_color;
     let icon_slot = record_header_mark(registry, &spec.key, header, icon_color);
     let label_slot = registry.record_text(
         &spec.key,
@@ -131,10 +135,50 @@ pub(super) fn logo_box(id: &str, size: f32, muted: Hsla) -> AnyElement {
 pub(super) fn muted(text: &str, color: Hsla) -> Div {
     div()
         .flex_shrink_0()
+        .max_w(px(CONTEXT_MAX))
+        .truncate()
         .text_size(px(text_metrics::MICRO))
         .line_height(px(text_metrics::line_height(text_metrics::MICRO)))
         .text_color(color)
         .child(text.to_owned())
+}
+
+/// A key of a footer hint: 11 px in the foreground tone. It has no fill: the text-fit check
+/// pairs a row's same-coloured glyphs with one box, so three separate chips would fail it.
+pub(super) fn kbd(tokens: &Tokens, text: &'static str) -> Div {
+    div()
+        .text_size(px(KBD_TEXT))
+        .line_height(px(17.))
+        .text_color(Hsla::from(tokens.palette.foreground))
+        .child(text)
+}
+
+/// The footer hint row of a popup: `hints` as a key and its action, muted, 11.5 px.
+pub(super) fn hint_row(tokens: &Tokens, hints: &[(&'static str, &'static str)]) -> Div {
+    let muted: Hsla = tokens.palette.muted_foreground.into();
+    let mut row = div()
+        .w_full()
+        .h(px(FOOTER_HEIGHT))
+        .flex_shrink_0()
+        .flex()
+        .items_center()
+        .gap(px(10.))
+        .px(px(12.))
+        .text_size(px(11.5))
+        .text_color(muted);
+    for (keys, action) in hints {
+        row = row.child(kbd(tokens, keys)).child(*action);
+    }
+    row
+}
+
+/// The 1 px divider between a popup's search, list and footer, in the `--tile2` tone.
+pub(super) fn divider(tokens: &Tokens) -> Div {
+    div()
+        .w_full()
+        .h(px(1.))
+        .flex_shrink_0()
+        .bg(tokens.depth.tile2)
 }
 
 /// The check after the current model.

@@ -208,12 +208,3 @@ pub(crate) fn agent_color(name: &str, palette: &Palette) -> Color {
     ];
     colors[(hash_name(name) as usize) % colors.len()]
 }
-
-/// The card background of the Work status panel and the composer.
-pub(crate) fn card(palette: Palette) -> Hsla {
-    palette.card.into()
-}
-
-#[cfg(test)]
-#[path = "theme_test.rs"]
-mod theme_test;

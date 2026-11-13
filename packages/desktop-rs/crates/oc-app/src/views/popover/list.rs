@@ -5,12 +5,17 @@ use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, DrawSlot, LayoutRegistry, Role, placed};
 use crate::views::text_metrics;
 use gpui_kit::component::list::ListItem;
-use gpui_kit::{App, Div, FontWeight, Hsla, IntoElement, ParentElement, Styled, div, px};
+use gpui_kit::{
+    App, Div, FontWeight, Hsla, InteractiveElement as _, IntoElement, ParentElement, Styled, div,
+    px,
+};
 
 use super::list_parts::{check_icon, icon_box, logo_box, muted, probe, record_logo};
 
 /// The provider mark on a Favorites or Recent row, `size-3.5` (`ModelPickerList.tsx:1054`).
 const ROW_ICON: f32 = 14.;
+/// A row's corner radius, the 6 px of every control.
+const CONTROL_RADIUS: f32 = 6.;
 /// `gap-1.5` between a row's mark, name, context and check (`ModelPickerList.tsx:1052`).
 pub(super) const GAP: f32 = 6.;
 /// `font-medium` on a model name (`ModelPickerList.tsx:1055`).
@@ -34,8 +39,8 @@ pub(super) struct Row {
     pub(super) icon: Option<RemixIcon>,
     /// A provider logo instead of a Remix icon, as `img:<id>`.
     pub(super) logo: Option<String>,
-    /// An agent's color dot, drawn as a 4 px mark.
-    pub(super) dot: Option<gpui_kit::Hsla>,
+    /// An agent's colour, drawn as a 4 px mark.
+    pub(super) accent: Option<gpui_kit::Hsla>,
     pub(super) context: Option<String>,
     pub(super) selected: bool,
     pub(super) role: Role,
@@ -82,6 +87,8 @@ pub(super) fn row_item(
     let content = row_content(registry, spec, row, paint, &slots);
     let mut list_item = ListItem::new(row.name.clone())
         .accessibility_label(row.name.clone())
+        .group(super::star::row_group(row))
+        .rounded(px(CONTROL_RADIUS))
         .px(px(8.))
         .py(px(6.))
         .text_size(px(text_metrics::META))
@@ -191,7 +198,7 @@ fn row_content(
     slots: &RowSlots,
 ) -> Div {
     let dot = row
-        .dot
+        .accent
         .map(|color| crate::layout::mark(registry, &spec.key, color, px(4.), px(4.)));
     let mark = match (&row.logo, row.icon, slots.icon) {
         (Some(id), _, _) => Some(logo_box(id, ROW_ICON, paint.muted)),
@@ -200,8 +207,8 @@ fn row_content(
         }
         _ => None,
     };
+    // The name keeps its width, the context follows it, and the check sits at the end.
     let label = div()
-        .flex_1()
         .min_w_0()
         .truncate()
         .font_weight(FontWeight(ROW_WEIGHT))
@@ -222,6 +229,7 @@ fn row_content(
                 .zip(slots.context)
                 .map(|(context, slot)| placed(registry, slot, muted(context, paint.muted))),
         )
+        .child(div().flex_1())
         .children(
             slots
                 .check

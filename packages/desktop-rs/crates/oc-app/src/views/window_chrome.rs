@@ -1,14 +1,13 @@
 //! What a client-decorated window draws for itself: the 44 px drag strip every zone starts
-//! with, and the panel header over the right-hand zone.
+//! with, and the window controls over the right-hand zone.
 
 use super::header::MAIN_NAVIGATION;
 use super::{Scene, icon_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control};
-use gpui_kit::component::ActiveTheme;
 use gpui_kit::{
-    AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, MouseDownEvent,
-    ParentElement, Styled, Window, div, px,
+    AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, MouseDownEvent, Styled,
+    Window, div, px,
 };
 
 /// Height of the strip along the top of each zone, which holds its header and moves the window.
@@ -37,22 +36,18 @@ fn drag_or_maximize(event: &MouseDownEvent, window: &mut Window, _: &mut App) {
     }
 }
 
-/// The title row of the right-hand zone. It spans the zone's width but its title stops before
-/// the window controls; the controls draw over the rest.
-pub(crate) fn panel_header(title: &'static str, cx: &App) -> Div {
+/// The empty drag strip on top of the right-hand zone. It spans the zone's width; the window
+/// controls draw over its right end.
+pub(crate) fn panel_drag_strip() -> Div {
     drag_region(
         div()
             .h(px(STRIP_HEIGHT))
             .w_full()
             .flex_none()
-            .flex()
-            .items_center()
-            .pl(px(12.))
-            .pr(px(CONTROLS_WIDTH))
-            .text_color(cx.theme().foreground)
-            .child(div().truncate().child(title)),
+            .pr(px(CONTROLS_WIDTH)),
     )
 }
+
 /// What a window control does when clicked.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum WindowAction {

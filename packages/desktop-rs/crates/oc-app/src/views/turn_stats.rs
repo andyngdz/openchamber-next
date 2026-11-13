@@ -35,7 +35,8 @@ const ROWS: [(&str, Figure); 10] = [
     ("Cache", Figure::Unread),
     ("Cost", Figure::Unread),
 ];
-const NO_FIGURE: &str = "-";
+/// What a row shows when the state holds no figure.
+pub(super) const NO_FIGURE: &str = "-";
 
 /// The rows for an ended turn.
 pub(crate) fn stat_rows(turn: &Turn<'_>) -> Vec<StatRow> {

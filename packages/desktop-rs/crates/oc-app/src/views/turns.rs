@@ -1,5 +1,5 @@
 //! The open session's messages grouped the way the chat column draws them: one turn per user
-//! message, its steps' text in order, runs of tool calls under one Activity row, and a meta
+//! message, its steps' text in order, runs of tool calls drawn together, and a meta
 //! row with model, agent and duration once the turn's last step has ended.
 
 use std::collections::HashMap;

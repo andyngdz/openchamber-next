@@ -2,8 +2,8 @@
 
 use crate::theme::Palette;
 use gpui_kit::{
-    App, Div, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, Window, div,
-    px,
+    App, Div, InteractiveElement, ParentElement, SharedString, StatefulInteractiveElement, Styled,
+    Window, div, px,
 };
 use oc_state::SelectionAction;
 
@@ -45,6 +45,13 @@ impl Star {
     }
 }
 
+/// The hover group a row names, so its unfilled star shows while the pointer is on the row.
+pub(super) fn row_group(row: &Row) -> SharedString {
+    let path = row.ancestors.join("/");
+    let index = row.repeat.unwrap_or_default();
+    format!("pick-row:{path}/{}#{index}", row.name).into()
+}
+
 /// The row's star, recorded under the row so a click keeps its place in the tree.
 pub(super) fn suffix(
     registry: LayoutRegistry,
@@ -67,7 +74,7 @@ pub(super) fn suffix(
     let spec = if star.shown {
         spec
     } else {
-        spec.revealed(Reveal::Hidden)
+        spec.revealed(Reveal::OnHover(row_group(row)))
     };
     move |_, cx| {
         let dispatch = dispatch.clone();
@@ -118,11 +125,11 @@ fn star_glyph(
 /// The star's glyph size, `h-3.5 w-3.5` (`ModelPickerList.tsx`).
 const STAR_SIZE: f32 = 14.;
 
-/// The icon and color a star paints: a filled star in `text-primary`, an outline star in
-/// `text-muted-foreground` (`ModelPickerList.tsx`).
+/// The icon and color a star paints: a filled star when on, an outline star otherwise, both
+/// muted (colour carries state only, `ModelPicker.dc.html`).
 fn star_paint(kind: StarKind, palette: Palette) -> (RemixIcon, gpui_kit::Hsla) {
     match kind {
-        StarKind::Filled => (RemixIcon::StarFill, palette.primary.into()),
+        StarKind::Filled => (RemixIcon::StarFill, palette.muted_foreground.into()),
         StarKind::Outline => (RemixIcon::Star, palette.muted_foreground.into()),
     }
 }
