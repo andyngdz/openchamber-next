@@ -18,13 +18,13 @@ use controls::{left_group, right_group};
 /// The text area's accessible name: its placeholder.
 pub(crate) const PLACEHOLDER: &str =
     "Plan, build, or ask. @ to mention, $ for skills, / for commands";
-/// The composer box size: 720.5 wide, 112 high as the mockup draws it.
+/// The composer box size: 720.5 x 100, the Electron composer's box.
 pub(crate) const WIDTH: f32 = 720.5;
-const HEIGHT: f32 = 112.;
-/// The mockup's `padding: 12px 10px 8px 14px`.
-const PAD_TOP: f32 = 12.;
+const HEIGHT: f32 = 100.;
+/// The mockup's `padding: 10px 10px 6px 14px`.
+const PAD_TOP: f32 = 10.;
 const PAD_RIGHT: f32 = 10.;
-const PAD_BOTTOM: f32 = 8.;
+const PAD_BOTTOM: f32 = 6.;
 const PAD_LEFT: f32 = 14.;
 /// The footer row never wraps and stays 32 high.
 const FOOTER_HEIGHT: f32 = 32.;
@@ -32,8 +32,8 @@ const FOOTER_HEIGHT: f32 = 32.;
 const RADIUS: f32 = 14.;
 /// The composer fill: the foreground at 4% over the background.
 const FILL_MIX: f32 = 0.04;
-/// The text area above the footer: 112 - 12 top - 8 bottom - 32 footer.
-const TEXT_HEIGHT: f32 = 60.;
+/// The text area above the footer: 100 - 10 top - 6 bottom - 32 footer.
+const TEXT_HEIGHT: f32 = 52.;
 const TEXT_SIZE: f32 = 14.;
 
 /// The composer box, `720.5 x 100`; its caller places it.
