@@ -16,9 +16,11 @@ use crate::layout::draw::remix;
 use crate::layout::{Area, ControlSpec, Role, control, region};
 
 /// Title-bar controls, left to right.
+/// The sidebar toggle's name.
+const OPEN_SESSIONS: &str = "Open sessions";
 const TITLE_BAR: [(&str, RemixIcon); 2] = [
     ("Open OpenChamber menu", RemixIcon::Menu2),
-    ("Open sessions", RemixIcon::LayoutLeft),
+    (OPEN_SESSIONS, RemixIcon::LayoutLeft),
 ];
 pub(crate) const NEW_SESSION: &str = "New session";
 const RESIZE: &str = "Resize left panel";
@@ -49,11 +51,16 @@ const CHIP_ICON_SIZE: f32 = 14.;
 /// A 28 px ghost icon button in the muted colour.
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
     let spec = ControlSpec::named(Area::Sidebar, Role::Button, name);
-    let muted = scene.palette.muted_foreground.into();
+    // Electron draws the open-sessions toggle in the foreground, the other buttons muted.
+    let color = if name == OPEN_SESSIONS {
+        scene.palette.foreground.into()
+    } else {
+        scene.palette.muted_foreground.into()
+    };
     control(
         scene.registry,
         spec.clone(),
-        icon_button(scene.registry, &spec, icon, muted)
+        icon_button(scene.registry, &spec, icon, color)
             .w(px(BUTTON_SIZE))
             .h(px(BUTTON_SIZE)),
     )

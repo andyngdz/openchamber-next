@@ -1,6 +1,6 @@
 //! One session row under a section or project group.
 
-use gpui_kit::component::{Icon, Sizable};
+use gpui_kit::component::{Icon, Sizable, spinner::Spinner};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
     AnyElement, Div, Hsla, InteractiveElement, IntoElement, ParentElement, SharedString,
@@ -141,8 +141,7 @@ fn action_overlay(
         .children(buttons)
 }
 
-/// The colour mark at the row's end: the info spinner while running, the warning dot while
-/// waiting. The session list has no unread flag yet, so no done-unread dot is drawn.
+/// The mark at the row's end: the info spinner while running, the warning dot while waiting.
 fn state_mark(
     scene: Scene<'_>,
     state: RowState,
@@ -159,12 +158,13 @@ fn state_mark(
         RowState::Idle => None,
         RowState::Running => {
             let color = Hsla::from(palette.status_info);
-            // Unrecorded: a 2px ring never paints its full color, so the frame check rejects it.
+            // Unrecorded: frame_check wants one pixel equal to the claim; a turning 2px ring has none.
             Some(
                 slot.child(
-                    Icon::new(RemixIcon::Loader4)
+                    Spinner::new()
+                        .icon(Icon::new(RemixIcon::Loader4))
                         .with_size(px(SPINNER_SIZE))
-                        .text_color(color),
+                        .color(color),
                 ),
             )
         }
