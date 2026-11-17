@@ -10,6 +10,7 @@ use oc_state::{Project, State, ranked_projects};
 use super::list::RowAction;
 use super::list::{Row, search};
 use crate::layout::{LayoutRegistry, Role};
+use crate::views::text_metrics;
 use crate::views::{Dispatch, Intent};
 
 /// `w-72` = 18rem at the 16px root (`DraftTargetSelectors.tsx:373`).
@@ -17,7 +18,10 @@ pub(super) const WIDTH: f32 = 288.;
 const SEARCH: &str = "Search projects...";
 const PROJECT_GROUP: &str = "Project";
 const SEARCH_HEIGHT: f32 = 32.;
-const ROW_HEIGHT: f32 = 34.2;
+/// `py-1.5` on the command row (`command.tsx:121-131`): 0.375rem.
+const ROW_PADDING_Y: f32 = 6.;
+/// `size-4` on the project icon (`command.tsx:129`): 1rem.
+const PROJECT_ICON: f32 = 16.;
 
 /// The project picker's rows, filtered by the list's search field.
 pub(crate) struct ProjectList {
@@ -152,6 +156,15 @@ fn label(project: &Project) -> String {
         .unwrap_or_default()
 }
 
+/// The project `CommandItem` height: `px-2 py-1.5 typography-meta` (`command.tsx:121-131`)
+/// around `ProjectLabel`'s `inline-flex` (`DraftTargetSelectors.tsx:131-150`), with the font
+/// metrics GPUI resolves for the UI family.
+fn project_row_height(metrics: text_metrics::UiMetrics) -> f32 {
+    let label_box = text_metrics::line_height(text_metrics::META).max(PROJECT_ICON);
+    let line_box = text_metrics::inline_flex_line_box(metrics, label_box, text_metrics::META);
+    2. * ROW_PADDING_Y + line_box
+}
+
 /// The popped-up list: its search field, then the ranked rows.
 pub(super) fn content(
     _state: &Entity<State>,
@@ -161,7 +174,8 @@ pub(super) fn content(
     cx: &App,
 ) -> AnyElement {
     let rows = list.read(cx).delegate().rows(cx);
-    let height = SEARCH_HEIGHT + rows.len() as f32 * ROW_HEIGHT;
+    let row_height = project_row_height(text_metrics::UiMetrics::ui(cx, text_metrics::META));
+    let height = SEARCH_HEIGHT + rows.len() as f32 * row_height;
     let list = List::new(list).search_placeholder(SEARCH).w_full();
     let panel = search(registry, Role::Combobox, SEARCH, list).h(px(height));
     div().w_full().child(panel).into_any_element()

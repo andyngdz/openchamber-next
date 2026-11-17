@@ -1,6 +1,6 @@
 //! The CSS box arithmetic the picker rows are built from.
 
-use super::{META, MICRO, line_height};
+use super::{META, MICRO, inline_flex_line_box, line_height, resolved_ui_metrics, strut_descent};
 
 #[test]
 fn the_semantic_sizes_use_their_round_up_line_heights() {
@@ -8,6 +8,47 @@ fn the_semantic_sizes_use_their_round_up_line_heights() {
     assert_eq!(line_height(META), 18.);
     // `--text-micro` 12px -> 17 (`typography.css:31-34`).
     assert_eq!(line_height(MICRO), 17.);
+}
+
+#[test]
+fn the_metrics_come_from_the_resolved_ui_font() {
+    let (family, metrics) = resolved_ui_metrics(META);
+
+    if family == "Adwaita Sans" {
+        // The capture's font: ascent 1984, descent 494 at 2048 units per em.
+        assert!(
+            (metrics.ascent - 12.109_375).abs() < 1e-4,
+            "{family}: {metrics:?}"
+        );
+        assert!(
+            (metrics.descent - 3.015_136_7).abs() < 1e-4,
+            "{family}: {metrics:?}"
+        );
+        // (18 - 12.109375 + 3.0151367) / 2.
+        assert!((strut_descent(metrics, META) - 4.452_881).abs() < 1e-4);
+    } else {
+        let expected = (line_height(META) - metrics.ascent + metrics.descent) / 2.;
+        assert!(
+            (strut_descent(metrics, META) - expected).abs() < 1e-4,
+            "{family}: {metrics:?}"
+        );
+    }
+}
+
+#[test]
+fn the_project_label_is_an_inline_flex_box_plus_the_strut() {
+    // `ProjectLabel`'s inline-flex (`DraftTargetSelectors.tsx:131`) with the
+    // `size-4` icon (`command.tsx:129`) in an 18px meta line.
+    let (family, metrics) = resolved_ui_metrics(META);
+    let line_box = inline_flex_line_box(metrics, line_height(META).max(16.), META);
+
+    if family == "Adwaita Sans" {
+        assert!((line_box - 22.452_88).abs() < 1e-4);
+        assert!((12. + line_box - 34.452_88).abs() < 1e-4);
+    } else {
+        let expected = line_height(META).max(16.) + strut_descent(metrics, META);
+        assert!((line_box - expected).abs() < 1e-4, "{family}: {line_box}");
+    }
 }
 
 #[test]
