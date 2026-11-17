@@ -20,8 +20,8 @@ pub(crate) fn logo_path(id: &str) -> SharedString {
 
 /// A `size` box holding the mark. A bundled logo is drawn inverted, as React's `dark:invert`
 /// draws it. A models.dev logo keeps its box empty until the live runtime loads it, as
-/// React's `<img loading="eager">` holds its place. The fallback draws its icon muted.
-pub(crate) fn provider_mark(size: f32, logo: &ProviderLogo) -> AnyElement {
+/// React's `<img loading="eager">` holds its place. The fallback draws its icon in `muted`.
+pub(crate) fn provider_mark(size: f32, logo: &ProviderLogo, muted: Hsla) -> AnyElement {
     let slot = div().flex_shrink_0().w(px(size)).h(px(size));
     match logo {
         ProviderLogo::Bundled { id } => slot
@@ -33,11 +33,7 @@ pub(crate) fn provider_mark(size: f32, logo: &ProviderLogo) -> AnyElement {
             )
             .into_any_element(),
         ProviderLogo::Fallback { icon: Some(icon) } => slot
-            .child(
-                Icon::new(*icon)
-                    .with_size(px(size))
-                    .text_color(crate::theme::palette().muted_foreground),
-            )
+            .child(Icon::new(*icon).with_size(px(size)).text_color(muted))
             .into_any_element(),
         ProviderLogo::Remote { .. } | ProviderLogo::Fallback { icon: None } => {
             slot.into_any_element()

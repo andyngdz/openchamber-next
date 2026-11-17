@@ -9,7 +9,7 @@ fn a_row_keeps_its_accessible_name_apart_from_what_it_draws() {
         label: "Fixture model".to_owned(),
         icon: None,
         logo: None,
-        dot: None,
+        accent: None,
         context: Some("200K".to_owned()),
         selected: false,
         role: crate::layout::Role::Option,

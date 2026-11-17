@@ -83,12 +83,12 @@ The app SHALL reconnect a dropped event stream with backoff from 500 ms doubling
 
 ### Requirement: Layout parity with the current desktop
 
-The app SHALL place every region and control where the current OpenChamber desktop places it: sidebar, header, chat column with composer, Work status panel and icon rail. Regions and controls outside the spike's features SHALL render in place and do nothing when used. Styling MAY differ. UI text SHALL be English.
+The app SHALL draw the shell regions where the OpenChamber mockup places them: a 264 px sidebar, the chat card inset 8 px with its 44 px header row, the Work status panel and the 44 px icon rail, with the window controls at the top right. The current OpenChamber desktop SHALL still decide which controls exist and their order. Regions and controls outside the spike's features SHALL render in place and do nothing when used. UI text SHALL be English.
 
 #### Scenario: Region bounds match
 
 - **WHEN** `oc-app --dump-layout` runs at a 1440x900 window with `--state` set to each reference state (empty, open session, streaming)
-- **THEN** the x, y, width and height of each region equal those in `fixtures/reference/<state>.json`, captured from the Electron desktop window at the same size with the sidebar at 280 px and the Work status panel at its default width
+- **THEN** the x, y, width and height of each region equal those in `fixtures/reference/<state>.json`, where the region bounds follow the mockup geometry at that size (sidebar 264 px, chat card at x 264 and y 8 with its 44 px header, Work status panel at x 1068, icon rail at x 1396 and y 44) and the control names and order come from the Electron desktop
 
 #### Scenario: No control is missing
 

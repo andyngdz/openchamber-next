@@ -1,31 +1,31 @@
-//! The Work status panel: one 300 px card with the Session, Project, Context sources and Turn
-//! stats sections. Everything here is inert; values are placeholders.
+//! The Work status panel: separate tone-step tiles on the glass for Context, Project, Context
+//! sources and Turn stats. Everything here is inert; a figure the state does not hold shows `-`.
 
-use gpui_kit::component::ActiveTheme;
-use gpui_kit::component::Sizable;
-use gpui_kit::component::button::ButtonVariants;
-use gpui_kit::{
-    AnyElement, App, Div, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
-};
+use gpui_kit::{AnyElement, App, Div, IntoElement, ParentElement, Styled, div, px};
 use oc_state::{SessionStatus, State};
 
-use super::turn_stats::{StatRow, stat_rows};
 use super::turns::turns;
-use super::{Scene, icon_button, project_name};
+use super::{Scene, icon_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, Role, control, region};
-use crate::theme::{self, card};
+use crate::theme::Tokens;
+use tiles::{Ink, card, context_sources, session_rows, title_row, turn_stats};
+
+#[path = "work_status_rows.rs"]
+mod rows;
+#[path = "work_status_tiles.rs"]
+mod tiles;
 
 /// The card's name; every control in it sits under it.
-const WORK_STATUS: &str = "Work status";
-const TURN_STATS: &str = "Turn stats";
+pub(super) const WORK_STATUS: &str = "Work status";
+pub(super) const TURN_STATS: &str = "Turn stats";
 /// Name of the Turn stats header once a turn has a rate; the reference normalizes the figure.
-const TURN_STATS_RATE: &str = "Turn stats <rate> tok/s";
-const CONTEXT_SOURCES: &str = "Context sources 3 skills";
+pub(super) const TURN_STATS_RATE: &str = "Turn stats <rate> tok/s";
+pub(super) const CONTEXT_SOURCES: &str = "Context sources 3 skills";
 
 /// Which sections the card shows.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum PanelMode {
+pub(super) enum PanelMode {
     /// No session open: Session and Context sources only.
     Empty,
     /// A turn runs: every section, Turn stats collapsed.
@@ -47,184 +47,45 @@ fn panel_mode(state: &State) -> PanelMode {
     }
 }
 
-/// `(name, icon, label)` of the section buttons above Context sources.
-fn session_rows() -> [(&'static str, RemixIcon, &'static str); 3] {
-    [
-        ("Open context panel", RemixIcon::DonutChart, "Context"),
-        ("Open Git panel", RemixIcon::GitBranch, "Branch"),
-        ("Open changes", RemixIcon::FileEdit, "Changes"),
-    ]
-}
-
-/// The 324 px column holding the card.
+/// The 320 px column holding the card.
 pub(crate) fn work_status(scene: Scene<'_>, cx: &App) -> Div {
-    let theme = cx.theme();
     let mode = panel_mode(scene.state);
-    let card_body = div()
-        .w(px(300.))
-        .flex()
-        .flex_col()
-        .gap(px(6.))
-        .p(px(12.))
-        .rounded(px(12.))
-        .border_1()
-        .border_color(theme.border)
-        .bg(card(theme::palette()))
-        .child(
-            div()
-                .flex()
-                .items_center()
-                .justify_between()
-                .child(section("Session", cx))
-                .child(button(scene, "Choose sections", RemixIcon::Equalizer2)),
-        )
-        .children(project_section(scene, mode, cx))
-        .child(context_sources(scene, cx))
-        .children(turn_stats(scene, mode));
+    let tokens = Tokens::of(cx);
+    let ink = Ink::of(scene);
+    let card = card(tokens)
+        .child(title_row(scene))
+        .children(session_rows(scene, mode, ink, tokens))
+        .child(context_sources(scene, ink))
+        .children(turn_stats(scene, mode, ink));
     let column = div()
-        .w(px(324.))
-        .h_full()
-        .flex_none()
-        .pt(px(16.))
-        .pl(px(8.))
-        .child(card_body);
+        .w(px(320.))
+        .flex_1()
+        .min_h_0()
+        .pt(px(12.))
+        .px(px(8.))
+        .pb(px(8.))
+        .text_size(px(13.))
+        .text_color(ink.foreground)
+        .child(card);
     region(scene.registry, Area::WorkStatusPanel, column)
 }
 
-fn section(label: &'static str, cx: &App) -> Div {
-    div()
-        .text_xs()
-        .text_color(cx.theme().muted_foreground)
-        .child(label)
-}
-
-/// Context, the project and its Git rows, once a session is open.
-fn project_section(scene: Scene<'_>, mode: PanelMode, cx: &App) -> Vec<AnyElement> {
-    match mode {
-        PanelMode::Empty => Vec::new(),
-        PanelMode::Running | PanelMode::Finished => {
-            let [context, git, changes] = session_rows().map(|row| labeled(scene, row));
-            vec![
-                context,
-                section("Project", cx).into_any_element(),
-                div()
-                    .text_sm()
-                    .child(project_name(scene.state).to_owned())
-                    .into_any_element(),
-                git,
-                changes,
-            ]
-        }
-    }
-}
-
-fn context_sources(scene: Scene<'_>, cx: &App) -> Div {
-    div()
-        .flex()
-        .items_center()
-        .justify_between()
-        .child(labeled(
-            scene,
-            (CONTEXT_SOURCES, RemixIcon::Stack, "Context sources"),
-        ))
-        .child(
-            div()
-                .text_xs()
-                .text_color(cx.theme().muted_foreground)
-                .child("3 skills"),
-        )
-}
-
-/// Turn stats: collapsed while a turn runs, open with its rows once it ended.
-fn turn_stats(scene: Scene<'_>, mode: PanelMode) -> Vec<AnyElement> {
-    match mode {
-        PanelMode::Empty => Vec::new(),
-        PanelMode::Running => vec![labeled(
-            scene,
-            (TURN_STATS, RemixIcon::BarChart2, TURN_STATS),
-        )],
-        PanelMode::Finished => std::iter::once(labeled(
-            scene,
-            (TURN_STATS_RATE, RemixIcon::BarChart2, TURN_STATS),
-        ))
-        .chain(finished_turn_rows(scene))
-        .collect(),
-    }
+/// The spec of a button under the Work status card.
+pub(super) fn button_spec(name: &'static str) -> ControlSpec {
+    ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS])
 }
 
 fn button(scene: Scene<'_>, name: &'static str, icon: RemixIcon) -> AnyElement {
-    let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
-    let muted = crate::theme::palette().muted_foreground.into();
+    let spec = button_spec(name);
+    let muted = scene.palette.muted_foreground.into();
     control(
         scene.registry,
         spec.clone(),
-        icon_button(scene.registry, &spec, icon, muted),
+        icon_button(scene.registry, &spec, icon, muted)
+            .w(px(24.))
+            .h(px(24.)),
     )
     .into_any_element()
-}
-
-fn labeled(
-    scene: Scene<'_>,
-    (name, icon, label): (&'static str, RemixIcon, &'static str),
-) -> AnyElement {
-    let spec = ControlSpec::named(Area::WorkStatusPanel, Role::Button, name).under(&[WORK_STATUS]);
-    // These rows are a button stretched under the visible content in React
-    // (`WorkStatusPrimitives.tsx:218-231`), so the capture records neither an icon nor a
-    // text run for them and neither does the dump.
-    control(
-        scene.registry,
-        spec.clone(),
-        label_button_without_draw(&spec, Some(icon), label),
-    )
-    .into_any_element()
-}
-
-/// A ghost label button that registers no draw fields.
-fn label_button_without_draw(
-    spec: &ControlSpec,
-    icon: Option<RemixIcon>,
-    label: &'static str,
-) -> gpui_kit::component::button::Button {
-    let button = gpui_kit::component::button::Button::new(spec.key.clone())
-        .ghost()
-        .small()
-        .label(label);
-    match icon {
-        Some(icon) => button.icon(gpui_kit::component::Icon::new(icon)),
-        None => button,
-    }
-}
-
-/// A Turn stats row; React leaves it unnamed, so it is named by its visible label.
-fn finished_turn_rows(scene: Scene<'_>) -> Vec<AnyElement> {
-    let Some(open) = scene.state.open() else {
-        return Vec::new();
-    };
-    let all = turns(&open.messages);
-    let Some(turn) = all.last() else {
-        return Vec::new();
-    };
-    stat_rows(turn)
-        .into_iter()
-        .map(|row| stat_row(scene, row))
-        .collect()
-}
-
-/// A Turn stats row, named by its label; its figure is data.
-fn stat_row(scene: Scene<'_>, row: StatRow) -> AnyElement {
-    let spec =
-        ControlSpec::named(Area::WorkStatusPanel, Role::Generic, row.label).under(&[WORK_STATUS]);
-    let line = div()
-        .id(spec.key.clone())
-        .w_full()
-        .flex()
-        .justify_between()
-        .text_xs()
-        .child(row.label)
-        .child(row.value);
-    control(scene.registry, spec, line)
-        .w_full()
-        .into_any_element()
 }
 
 #[cfg(test)]

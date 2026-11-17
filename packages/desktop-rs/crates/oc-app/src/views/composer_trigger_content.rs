@@ -27,6 +27,8 @@ pub(super) struct TriggerPaint {
     pub(super) slash: Hsla,
     /// The agent trigger's icon.
     pub(super) icon: Hsla,
+    /// The Model trigger's fallback provider icon.
+    pub(super) muted: Hsla,
 }
 
 /// What a trigger's content row paints, and the recorded draws it reports its bounds for.
@@ -70,7 +72,7 @@ pub(super) fn trigger_content(
         TriggerKind::Model => row
             .hover(|style| style.opacity(HOVER_OPACITY))
             .gap(px(GAP_MODEL))
-            .child(logo_box(LOGO_SIZE, logo))
+            .child(logo_box(LOGO_SIZE, logo, paint.muted))
             .child(label_box),
         TriggerKind::Thinking => row
             .gap(px(GAP_THINKING))
@@ -157,9 +159,9 @@ fn label_box(layout: TriggerKind, label: &str, width: f32) -> Div {
 }
 
 /// The provider mark, 17 px (`ModelControls.tsx:679`); an empty box without a provider.
-fn logo_box(size: f32, logo: Option<&ProviderLogo>) -> AnyElement {
+fn logo_box(size: f32, logo: Option<&ProviderLogo>, muted: Hsla) -> AnyElement {
     match logo {
-        Some(logo) => crate::views::provider_mark::provider_mark(size, logo),
+        Some(logo) => crate::views::provider_mark::provider_mark(size, logo, muted),
         None => div().w(px(size)).h(px(size)).into_any_element(),
     }
 }

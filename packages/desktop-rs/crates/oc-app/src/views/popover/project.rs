@@ -66,7 +66,7 @@ fn project_row(name: String, pick: super::Pick) -> Row {
         label: name,
         icon: None,
         logo: None,
-        dot: None,
+        accent: None,
         context: None,
         selected: false,
         role: Role::Option,

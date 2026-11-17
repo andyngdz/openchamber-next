@@ -16,7 +16,7 @@ use std::sync::{Arc, OnceLock};
 use gpui_kit::component::highlighter::HighlightTheme;
 use serde_json::{Map, Value, json};
 
-use super::DARK_THEME;
+use super::{DARK_THEME, LIGHT_THEME, Mode};
 use crate::logging::APP;
 use names::Token;
 use syntax::{ThemeDocument, TokenStyle};
@@ -24,10 +24,15 @@ use syntax::{ThemeDocument, TokenStyle};
 /// The font style name `buildSyntax` writes for an italic role.
 const ITALIC: &str = "italic";
 
-/// The dark theme's highlighter, parsed once from the embedded JSON.
-pub(crate) fn dark() -> Arc<HighlightTheme> {
+/// The highlighter of the theme `mode` names, parsed once from the embedded JSON.
+pub(crate) fn for_mode(mode: Mode) -> Arc<HighlightTheme> {
     static DARK: OnceLock<Arc<HighlightTheme>> = OnceLock::new();
-    DARK.get_or_init(|| match parse(DARK_THEME) {
+    static LIGHT: OnceLock<Arc<HighlightTheme>> = OnceLock::new();
+    let (cell, source, fallback): (_, _, fn() -> Arc<HighlightTheme>) = match mode {
+        Mode::Dark => (&DARK, DARK_THEME, HighlightTheme::default_dark),
+        Mode::Light => (&LIGHT, LIGHT_THEME, HighlightTheme::default_light),
+    };
+    cell.get_or_init(|| match parse(source) {
         Ok(theme) => Arc::new(theme),
         Err(error) => {
             tracing::warn!(
@@ -35,7 +40,7 @@ pub(crate) fn dark() -> Arc<HighlightTheme> {
                 %error,
                 "[APP] Embedded highlight theme did not parse"
             );
-            HighlightTheme::default_dark()
+            fallback()
         }
     })
     .clone()

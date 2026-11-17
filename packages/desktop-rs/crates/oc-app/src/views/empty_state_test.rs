@@ -12,9 +12,11 @@ fn empty_state_controls_follow_the_reference_order() {
 
 #[test]
 fn the_composer_sits_where_the_reference_measured_it() {
-    // Chat column top 48, then heading 48, gap 16, Choose project 28, gap 6.
-    assert!((48. + TOP + 48. + 16. + 28. + GAP + 100. - 487.6_f32).abs() < 1e-3);
-    assert!((280. + LEFT - 315.75_f32).abs() < f32::EPSILON);
+    // Chat column top 52 (card inset 8 + header 44), then heading 48, gap 16, Choose project
+    // 28, gap 6.
+    assert!((52. + TOP + 48. + 16. + 28. + GAP + 100. - 491.6_f32).abs() < 1e-3);
+    // Chat card left 264, centered in its 804 px.
+    assert!((264. + LEFT - 305.75_f32).abs() < f32::EPSILON);
 }
 
 #[test]

@@ -1,13 +1,14 @@
-//! The 48 px header above the chat column, Work status panel and rail: session title, the
-//! server state where React shows the context percentage, inert tools and window controls.
+//! The 44 px header row of the chat card (session title, the server state where React shows
+//! the context percentage, inert tools) and the window controls drawn over the top right.
 
 use gpui_kit::component::ActiveTheme;
-use gpui_kit::{
-    AnyElement, App, Div, Hsla, InteractiveElement, IntoElement, MouseButton, ParentElement,
-    Styled, div, px,
-};
+use gpui_kit::{AnyElement, App, Div, Hsla, IntoElement, ParentElement, Styled, div, px};
 use oc_state::{ConnectionStatus, ServerExit};
 
+use super::header_title;
+use super::window_chrome::{
+    CONTROLS_WIDTH, STRIP_HEIGHT, WindowAction, drag_region, window_control,
+};
 use super::{Intent, Scene, icon_button, label_button, retry_button};
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control, region};
@@ -19,19 +20,12 @@ enum HeaderMode {
     Session,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum WindowAction {
-    Minimize,
-    Maximize,
-    Close,
-}
-
 /// One slot of the header, left to right.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum HeaderItem {
     Title,
     Tool(&'static str, RemixIcon),
-    /// Drag area; moves the window.
+    /// Space that pushes the items after it to the right.
     Spacer,
     /// Server state as plain text, where the empty state has no context percentage.
     ServerState,
@@ -42,8 +36,7 @@ enum HeaderItem {
 
 const CONTEXT_USAGE: &str = "Context usage";
 /// The named landmarks the header's controls sit in, as the reference keys them.
-const MAIN_NAVIGATION: &str = "Main navigation";
-const WINDOW_CONTROL_GROUP: &str = "Window controls";
+pub(super) const MAIN_NAVIGATION: &str = "Main navigation";
 const TOGGLE_PANEL: HeaderItem =
     HeaderItem::Tool("Toggle work-status panel", RemixIcon::ListIndefinite);
 const WINDOW_CONTROLS: [HeaderItem; 3] = [
@@ -109,27 +102,50 @@ pub(crate) fn header(scene: Scene<'_>, cx: &App) -> Div {
         None => HeaderMode::Empty,
     };
     let row = div()
-        .h(px(48.))
+        .h(px(STRIP_HEIGHT))
         .w_full()
         .flex_none()
         .flex()
         .items_center()
         .gap(px(4.))
         .pl(px(16.))
-        .pr(px(8.))
+        .pr(px(10.))
         .children(
             items(mode)
                 .into_iter()
+                .filter(|item| !matches!(item, HeaderItem::Window(..)))
                 .map(|item| render_item(item, scene, cx)),
         );
-    region(scene.registry, Area::Header, row)
+    region(scene.registry, Area::Header, drag_region(row))
+}
+
+/// The window controls, drawn over the top right of the window above every zone. They belong
+/// to the header region's controls, after its tools.
+pub(crate) fn window_controls(scene: Scene<'_>, cx: &App) -> Div {
+    let controls = WINDOW_CONTROLS
+        .into_iter()
+        .map(|item| render_item(item, scene, cx));
+    drag_region(
+        div()
+            .absolute()
+            .top_0()
+            .right_0()
+            .w(px(CONTROLS_WIDTH))
+            .h(px(STRIP_HEIGHT))
+            .flex()
+            .items_center()
+            .justify_end()
+            .gap(px(2.))
+            .pr(px(8.))
+            .children(controls),
+    )
 }
 
 fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
     let registry = scene.registry;
     let theme = cx.theme();
     match item {
-        HeaderItem::Title => title(scene),
+        HeaderItem::Title => header_title::title(scene, cx),
         HeaderItem::Tool(name, icon) => {
             // "Toggle work-status panel" draws the foreground; the rest the muted foreground.
             let color = if name == "Toggle work-status panel" {
@@ -139,7 +155,7 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
             };
             tool_button(registry, name, icon, color)
         }
-        HeaderItem::Spacer => drag_spacer(),
+        HeaderItem::Spacer => spacer(),
         HeaderItem::ServerState => div()
             .max_w(px(360.))
             .truncate()
@@ -163,27 +179,13 @@ fn render_item(item: HeaderItem, scene: Scene<'_>, cx: &App) -> AnyElement {
                 .children(restart_button(scene))
                 .into_any_element()
         }
-        HeaderItem::Window(name, icon, action) => window_control(registry, name, icon, action),
+        HeaderItem::Window(name, icon, action) => window_control(scene, name, icon, action),
     }
 }
 
-/// The open session's title, or nothing in the empty state.
-fn title(scene: Scene<'_>) -> AnyElement {
-    let title = scene
-        .state
-        .open_entry()
-        .and_then(|entry| entry.title.clone())
-        .unwrap_or_default();
-    div().text_sm().truncate().child(title).into_any_element()
-}
-
-/// The gap between the header's groups; dragging it moves the window.
-fn drag_spacer() -> AnyElement {
-    div()
-        .flex_1()
-        .h_full()
-        .on_mouse_down(MouseButton::Left, |_, window, _| window.start_window_move())
-        .into_any_element()
+/// The gap between the header's groups.
+fn spacer() -> AnyElement {
+    div().flex_1().h_full().into_any_element()
 }
 
 /// Restarts a server that exited or failed; the empty state shows its own Retry instead.
@@ -213,28 +215,6 @@ fn tool_button(
         icon_button(registry, &spec, icon, color),
     )
     .into_any_element()
-}
-
-fn window_control(
-    registry: &LayoutRegistry,
-    name: &'static str,
-    icon: RemixIcon,
-    action: WindowAction,
-) -> AnyElement {
-    let spec = ControlSpec::named(Area::Header, Role::Button, name)
-        .under(&[MAIN_NAVIGATION, WINDOW_CONTROL_GROUP]);
-    let button = icon_button(
-        registry,
-        &spec,
-        icon,
-        crate::theme::palette().muted_foreground.into(),
-    )
-    .on_click(move |_, window, _| match action {
-        WindowAction::Minimize => window.minimize_window(),
-        WindowAction::Maximize => window.zoom_window(),
-        WindowAction::Close => window.remove_window(),
-    });
-    control(registry, spec, button).into_any_element()
 }
 
 #[cfg(test)]

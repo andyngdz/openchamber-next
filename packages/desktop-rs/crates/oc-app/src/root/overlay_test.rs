@@ -1,8 +1,8 @@
 //! Popup interaction through real GPUI dispatch, for every popup kind.
 
 use gpui_kit::{
-    Bounds, Entity, Focusable as _, Modifiers, Pixels, ScrollDelta, ScrollEvent, TestAppContext,
-    VisualTestContext, point, px,
+    AppContext as _, Bounds, Entity, Focusable as _, Modifiers, MouseButton, MouseDownEvent,
+    Pixels, ScrollDelta, ScrollEvent, TestAppContext, VisualTestContext, point, px,
 };
 
 use super::RootView;
@@ -40,7 +40,10 @@ fn open<'a>(
     cx: &'a mut TestAppContext,
     fixture: &str,
 ) -> (Entity<RootView>, &'a mut VisualTestContext) {
-    cx.update(gpui_kit::init);
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        crate::theme::tokens(crate::theme::Mode::Dark).apply(cx);
+    });
     let (state, _) = StateScript::load(&state_path(fixture))
         .expect("fixture loads")
         .into_parts();
@@ -93,11 +96,49 @@ fn every_popup_closes_on_an_outside_press(cx: &mut TestAppContext) {
     for case in &KINDS {
         let (root, cx) = open(cx, case.fixture);
         open_from_trigger(&root, cx, case.kind);
-        cx.simulate_click(point(px(8.), px(8.)), Modifiers::default());
+        cx.simulate_click(point(px(8.), px(880.)), Modifiers::default());
         draw(cx);
         assert!(
             !popup_open(&root, cx),
             "{:?} ignored the outside press",
+            case.kind
+        );
+    }
+}
+
+/// A press on the empty drag strip starts a window move, which the test platform answers with
+/// a panic. The popup's dismissal runs before the strip's handler, so it is read after the
+/// panic is caught.
+#[gpui_kit::test]
+fn a_press_on_the_drag_strip_still_closes_an_open_popup(cx: &mut TestAppContext) {
+    for case in &KINDS {
+        let (root, cx) = open(cx, case.fixture);
+        open_from_trigger(&root, cx, case.kind);
+        let strip = point(px(230.), px(22.));
+        let moved = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            cx.simulate_event(MouseDownEvent {
+                position: strip,
+                modifiers: Modifiers::default(),
+                button: MouseButton::Left,
+                click_count: 1,
+                first_mouse: false,
+            });
+        }));
+        let payload = moved.expect_err("the strip did not start a window move");
+        let message = payload
+            .downcast_ref::<&str>()
+            .map(|text| (*text).to_owned())
+            .or_else(|| payload.downcast_ref::<String>().cloned())
+            .unwrap_or_default();
+        assert!(
+            message.contains("not implemented"),
+            "{:?}: panicked with {message:?}, not the platform's move request",
+            case.kind
+        );
+        let open = cx.read_entity(&root, |root, _| root.popover.is_some());
+        assert!(
+            !open,
+            "{:?} stayed open under a press on the drag strip",
             case.kind
         );
     }

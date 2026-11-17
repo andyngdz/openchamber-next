@@ -13,7 +13,7 @@ use serde::Deserialize;
 
 use super::ITALIC;
 use super::syntax::{ThemeDocument, TokenStyle};
-use crate::theme::{DARK_THEME, palette};
+use crate::theme::DARK_THEME;
 
 /// The repository root, found the way `oc-sidecar` finds the CLI.
 fn repo_root() -> PathBuf {
@@ -156,7 +156,7 @@ fn a_rust_diff_paints_a_keyword_with_the_theme_keyword_color() {
     let window = headless
         .update(|cx| {
             init(cx);
-            crate::theme::apply(palette(), cx);
+            crate::theme::tokens(crate::theme::Mode::Dark).apply(cx);
             let options = WindowOptions {
                 focus: false,
                 show: false,

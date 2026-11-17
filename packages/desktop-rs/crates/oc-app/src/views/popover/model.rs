@@ -1,19 +1,21 @@
 //! The model picker panel: the search row with its action, the leading action, and the list.
 
-use gpui_kit::component::input::{InputGroup, InputGroupAddon, InputGroupInput, InputState};
+use gpui_kit::component::input::{Input, InputState};
 use gpui_kit::component::list::{List, ListState};
-use gpui_kit::component::{ActiveTheme, Icon, Sizable};
+use gpui_kit::component::{ActiveTheme, Icon};
 use gpui_kit::{
     AnyElement, App, Div, Entity, InteractiveElement, IntoElement, ParentElement, Styled, div, px,
 };
 use oc_state::{LoadStatus, State};
 
 use super::list::row_item;
+use super::list_parts::{divider, hint_row};
 use super::model_list::ModelList;
 use super::model_rows;
 use super::model_search;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::theme::Tokens;
 use crate::views::{Dispatch, Intent, RETRY, retry_button};
 
 /// `w-[min(380px,calc(100vw-2rem))]` (`ModelControls.tsx:2407-2409`).
@@ -22,9 +24,12 @@ pub(super) const WIDTH: f32 = 380.;
 pub(super) const MAX_HEIGHT: f32 = 392.6;
 /// The model picker's search field, `labels.searchPlaceholder`.
 pub(super) const SEARCH: &str = "Search models";
-/// `px-2 py-1.5` around the field, then its 28px frame (`ModelPickerList.tsx:2130`).
-const SEARCH_ROW_HEIGHT: f32 = 36.;
-const SEARCH_HEIGHT: f32 = 28.;
+/// The search row of `ModelPicker.dc.html`: 40 px, then a 1 px divider.
+const SEARCH_ROW_HEIGHT: f32 = 40.;
+/// The footer's hints and the divider above it.
+const FOOTER_BLOCK: f32 = super::list_parts::FOOTER_HEIGHT + 1.;
+/// The keys the panel handles while the search field holds focus.
+const HINTS: [(&str, &str); 3] = [("↑↓", "navigate"), ("↵", "select"), ("Esc", "close")];
 /// The leading action's row: `px-2 py-1.5` and the meta line (`ModelPickerList.tsx:960`).
 const LEADING_HEIGHT: f32 = 30.;
 const ROW_HEIGHT: f32 = 30.;
@@ -59,20 +64,39 @@ pub(super) fn content(
         .count();
     let height = panel_height(rows, headers);
     let search = delegate.search();
+    let tokens = *Tokens::of(cx);
     let panel = div()
         .w_full()
         .h(px(height))
         .flex()
         .flex_col()
         .child(search_row(registry, &search, dispatch, list, cx))
-        .child(leading_row(registry, dispatch, cx))
-        .child(div().flex_1().min_h_0().child(List::new(list).w_full()));
+        .child(divider(&tokens))
+        .child(
+            div()
+                .flex()
+                .flex_col()
+                .flex_1()
+                .min_h_0()
+                .py(px(2.))
+                .px(px(4.))
+                .child(leading_row(registry, dispatch, cx))
+                .child(div().flex_1().min_h_0().child(List::new(list).w_full())),
+        )
+        .child(divider(&tokens))
+        .child(hint_row(&tokens, &HINTS));
     div().w_full().child(panel).into_any_element()
 }
 
 /// The panel's height for its rows and headers, capped at the reference's tallest menu.
 fn panel_height(rows: usize, headers: usize) -> f32 {
-    (SEARCH_ROW_HEIGHT + LEADING_HEIGHT + rows as f32 * ROW_HEIGHT + headers as f32 * HEADER_HEIGHT)
+    (SEARCH_ROW_HEIGHT
+        + 1.
+        + 4.
+        + LEADING_HEIGHT
+        + rows as f32 * ROW_HEIGHT
+        + headers as f32 * HEADER_HEIGHT
+        + FOOTER_BLOCK)
         .min(MAX_HEIGHT)
 }
 
@@ -84,14 +108,19 @@ fn search_row(
     cx: &App,
 ) -> Div {
     let spec = ControlSpec::named(Area::Popover, Role::Combobox, SEARCH);
-    let group = InputGroup::new("model-search")
-        .small()
-        .h(px(SEARCH_HEIGHT))
-        .input(InputGroupInput::new(search).aria_label(SEARCH))
-        .addon(
-            InputGroupAddon::new("model-search-icon")
-                .child(Icon::new(RemixIcon::Search).text_color(cx.theme().muted_foreground)),
-        );
+    // A plain field on the popup's own surface: the icon, then the text, no frame.
+    let field = Input::new(search)
+        .aria_label(SEARCH)
+        .appearance(false)
+        .p_0()
+        .w_full();
+    let group = div()
+        .w_full()
+        .flex()
+        .items_center()
+        .gap(px(8.))
+        .child(Icon::new(RemixIcon::Search).text_color(cx.theme().muted_foreground))
+        .child(div().flex_1().min_w_0().h(px(28.)).child(field));
     let keys = list.clone();
     let close = dispatch.clone();
     div()
@@ -99,20 +128,25 @@ fn search_row(
         .flex()
         .items_center()
         .gap(px(8.))
-        .px(px(8.))
-        .py(px(4.))
+        .h(px(SEARCH_ROW_HEIGHT))
+        .flex_shrink_0()
+        .pl(px(12.))
+        .pr(px(8.))
         .child(control(registry, spec, group).flex_1())
-        .child(add_provider(registry, dispatch))
+        .child(add_provider(
+            registry,
+            dispatch,
+            crate::theme::palette(cx).muted_foreground.into(),
+        ))
         .capture_key_down(move |event, window, cx| {
             model_search::search_keys(&keys, &close, event, window, cx)
         })
 }
 
-fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch) -> Div {
+fn add_provider(registry: &LayoutRegistry, dispatch: &Dispatch, muted: gpui_kit::Hsla) -> Div {
     let spec = ControlSpec::named(Area::Popover, Role::Button, model_rows::ADD_PROVIDER);
     let close = dispatch.clone();
     // `text-muted-foreground` on the icon and the label (`ModelPickerList.tsx`).
-    let muted: gpui_kit::Hsla = crate::theme::palette().muted_foreground.into();
     let button = super::super::label_button(
         registry,
         &spec,

@@ -41,7 +41,10 @@ fn open(
     state: State,
     popover: Option<crate::views::PopoverKind>,
 ) -> (Entity<RootView>, &mut VisualTestContext) {
-    cx.update(gpui_kit::init);
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        crate::theme::tokens(crate::theme::Mode::Dark).apply(cx);
+    });
     cx.add_window_view(move |window, cx| {
         RootView::new(state, popover, LayoutRegistry::default(), None, window, cx)
     })

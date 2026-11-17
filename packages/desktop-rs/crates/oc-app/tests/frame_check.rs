@@ -14,7 +14,7 @@
 //! frequent color inside them, since its glyphs cover a small part of the box.
 //!
 //! Only pixels the screen can show are read: a draw is clipped to its region's bounds, and a
-//! draw under the open popup, outside the popup region, is skipped.
+//! draw under the open popup or its floating shadow, outside the popup region, is skipped.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -28,8 +28,43 @@ use serde_json::Value;
 const CHANNEL_TOLERANCE: u8 = 1;
 /// The region a popup draws in; it covers the regions under it.
 const POPOVER: &str = "popover";
+include!("shared/floating_shadows.rs");
+/// The edge ring around a floating surface, in logical pixels.
+const EDGE_RING: f64 = 0.5;
+/// How many standard deviations of a shadow's gaussian still tint a pixel. GPUI blurs with
+/// sigma equal to the blur radius (gpui-pre-wgpu `shaders.wgsl:1031`, `gaussian(y, shadow.blur_radius)`); past
+/// 2.5 sigma its alpha is under 1% of the shadow's, below one channel step on a text color.
+const SIGMAS: f64 = 2.5;
 /// The draw kinds a control records, and whether the kind is a mark.
 const DRAW_KINDS: [(&str, bool); 3] = [("icons", false), ("marks", true), ("texts", false)];
+
+/// How far shadows reach past a box, in logical pixels.
+#[derive(Debug, Clone, Copy)]
+struct Reach {
+    side: f64,
+    top: f64,
+    bottom: f64,
+}
+
+impl Reach {
+    /// The farthest each side of the box is reached by any of the shadows. A shadow with
+    /// offset `y`, `blur` and `spread` reaches `spread + 2.5 * blur` past the sides, that minus
+    /// `y` past the top and that plus `y` past the bottom; the edge ring adds to all three.
+    fn of_floating_shadows() -> Self {
+        let reach = |extra: fn(f64) -> f64| {
+            FLOATING_SHADOWS
+                .iter()
+                .map(|&(offset, blur, spread)| extra(offset) + SIGMAS * blur + spread)
+                .fold(0., f64::max)
+                + EDGE_RING
+        };
+        Self {
+            side: reach(|_| 0.),
+            top: reach(|offset| -offset),
+            bottom: reach(|offset| offset),
+        }
+    }
+}
 
 /// A box in device pixels, right and bottom exclusive.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -68,6 +103,17 @@ impl PixelBox {
             top: self.top.max(other.top),
             right: self.right.min(other.right),
             bottom: self.bottom.min(other.bottom),
+        }
+    }
+
+    /// The box grown by `reach`, each side by its own logical distance.
+    fn grow(self, reach: Reach, scale: f64) -> Self {
+        let by = |logical: f64| (logical * scale).ceil() as i32;
+        Self {
+            left: self.left - by(reach.side),
+            top: self.top - by(reach.top),
+            right: self.right + by(reach.side),
+            bottom: self.bottom + by(reach.bottom),
         }
     }
 
@@ -163,7 +209,13 @@ struct Target {
 fn target(rendered: &Rendered, region: &str, control: &Value, draw: &Value) -> Option<Target> {
     let bounds = PixelBox::read(&draw["bounds"], rendered.scale);
     let popup = rendered.region_box(POPOVER);
-    if region != POPOVER && popup.is_some_and(|popup| popup.overlaps(bounds)) {
+    if region != POPOVER
+        && popup.is_some_and(|popup| {
+            popup
+                .grow(Reach::of_floating_shadows(), rendered.scale)
+                .overlaps(bounds)
+        })
+    {
         return None;
     }
     let clip = rendered.region_box(region)?;

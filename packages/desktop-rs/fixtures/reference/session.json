@@ -51,7 +51,7 @@
       "bounds": {
         "x": 0,
         "y": 0,
-        "width": 280,
+        "width": 264,
         "height": 900
       },
       "controls": [
@@ -957,10 +957,10 @@
     },
     "header": {
       "bounds": {
-        "x": 280,
-        "y": 0,
-        "width": 1160,
-        "height": 48
+        "x": 264,
+        "y": 8,
+        "width": 804,
+        "height": 44
       },
       "controls": [
         {
@@ -1136,20 +1136,20 @@
           "key": "header/Main navigation/Window controls/Minimize window",
           "shown": true,
           "bounds": {
-            "x": 1308,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1326,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "subtract",
               "color": "#89867cff",
               "bounds": {
-                "x": 1322,
-                "y": 16,
-                "width": 16,
-                "height": 16
+                "x": 1326,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
@@ -1162,20 +1162,20 @@
           "key": "header/Main navigation/Window controls/Maximize window",
           "shown": true,
           "bounds": {
-            "x": 1352,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1362,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "checkbox-blank",
               "color": "#89867cff",
               "bounds": {
-                "x": 1367,
-                "y": 17,
-                "width": 14,
-                "height": 14
+                "x": 1362,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
@@ -1188,20 +1188,20 @@
           "key": "header/Main navigation/Window controls/Close window",
           "shown": true,
           "bounds": {
-            "x": 1396,
-            "y": 0,
-            "width": 44,
-            "height": 48
+            "x": 1398,
+            "y": 8,
+            "width": 34,
+            "height": 28
           },
           "icons": [
             {
               "name": "close",
               "color": "#89867cff",
               "bounds": {
-                "x": 1410,
-                "y": 16,
-                "width": 16,
-                "height": 16
+                "x": 1398,
+                "y": 8,
+                "width": 34,
+                "height": 28
               }
             }
           ],
@@ -1212,10 +1212,10 @@
     },
     "chatColumn": {
       "bounds": {
-        "x": 280,
-        "y": 48,
-        "width": 792,
-        "height": 852
+        "x": 264,
+        "y": 52,
+        "width": 804,
+        "height": 840
       },
       "controls": [
         {
@@ -7943,7 +7943,7 @@
               }
             },
             {
-              "text": "·",
+              "text": "\u00b7",
               "color": "#89867c99",
               "bounds": {
                 "x": 624.45,
@@ -7963,7 +7963,7 @@
               }
             },
             {
-              "text": "·",
+              "text": "\u00b7",
               "color": "#89867c99",
               "bounds": {
                 "x": 669.38,
@@ -9329,8 +9329,8 @@
     },
     "composer": {
       "bounds": {
-        "x": 315.75,
-        "y": 784,
+        "x": 305.5,
+        "y": 776,
         "width": 720.5,
         "height": 100
       },
@@ -9593,10 +9593,10 @@
     },
     "workStatusPanel": {
       "bounds": {
-        "x": 1072,
-        "y": 48,
-        "width": 324,
-        "height": 852
+        "x": 1068,
+        "y": 44,
+        "width": 320,
+        "height": 856
       },
       "controls": [
         {
@@ -9981,7 +9981,7 @@
           "marks": [],
           "texts": [
             {
-              "text": "Tokens21 ↑ · 1.8K ↓",
+              "text": "Tokens21 \u2191 \u00b7 1.8K \u2193",
               "color": "#89867cff",
               "bounds": {
                 "x": 1092,
@@ -10049,9 +10049,9 @@
     "iconRail": {
       "bounds": {
         "x": 1396,
-        "y": 48,
+        "y": 44,
         "width": 44,
-        "height": 852
+        "height": 856
       },
       "controls": [
         {

@@ -8,6 +8,7 @@ mod chat;
 mod composer;
 mod empty_state;
 mod header;
+mod header_title;
 mod icon_rail;
 mod messages;
 mod model_names;
@@ -19,6 +20,7 @@ mod text_metrics;
 mod tool_rows;
 mod turn_stats;
 mod turns;
+mod window_chrome;
 mod work_status;
 
 #[cfg(test)]
@@ -38,7 +40,7 @@ use oc_state::{Action, SidebarAction, State};
 
 pub(crate) use chat::chat_column;
 pub(crate) use composer::PLACEHOLDER;
-pub(crate) use header::header;
+pub(crate) use header::{header, window_controls};
 pub(crate) use icon_rail::icon_rail;
 #[cfg(test)]
 pub(crate) use popover::trigger_spec;
@@ -46,11 +48,13 @@ pub(crate) use popover::{Pick, PopoverKind, PopoverLists};
 pub(crate) use popover::{filter_model_list, model_search_field};
 pub(crate) use popover::{open_model_picker, thinking_items, thinking_rows};
 pub(crate) use sidebar::sidebar;
+pub(crate) use window_chrome::{STRIP_HEIGHT, panel_drag_strip};
 pub(crate) use work_status::work_status;
 
 use crate::icons::RemixIcon;
 use crate::layout::draw::{TextDraw, image, remix};
 use crate::layout::{ControlSpec, LayoutRegistry};
+use crate::theme::Palette;
 
 /// What a control asks the root view to do.
 #[derive(Debug, Clone, PartialEq)]
@@ -92,6 +96,8 @@ pub(crate) struct Scene<'a> {
     pub(crate) state_entity: &'a Entity<State>,
     /// The popup lists and menu, owned by the root view.
     pub(crate) lists: &'a PopoverLists,
+    /// The palette of the mode the window shows now.
+    pub(crate) palette: Palette,
 }
 
 impl Scene<'_> {

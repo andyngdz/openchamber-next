@@ -155,7 +155,7 @@ impl ListDelegate for ModelList {
     ) -> Option<impl IntoElement> {
         let sections = self.sections(cx);
         let wanted = sections.get(section)?.header.as_ref()?;
-        Some(header(&self.registry, wanted).into_any_element())
+        Some(header(&self.registry, wanted, crate::theme::palette(cx)).into_any_element())
     }
 
     fn set_selected_index(

@@ -1,8 +1,9 @@
 //! The star toggle a picker row carries.
 
+use crate::theme::Palette;
 use gpui_kit::{
-    App, Div, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, Window, div,
-    px,
+    App, Div, InteractiveElement, ParentElement, SharedString, StatefulInteractiveElement, Styled,
+    Window, div, px,
 };
 use oc_state::SelectionAction;
 
@@ -44,6 +45,13 @@ impl Star {
     }
 }
 
+/// The hover group a row names, so its unfilled star shows while the pointer is on the row.
+pub(super) fn row_group(row: &Row) -> SharedString {
+    let path = row.ancestors.join("/");
+    let index = row.repeat.unwrap_or_default();
+    format!("pick-row:{path}/{}#{index}", row.name).into()
+}
+
 /// The row's star, recorded under the row so a click keeps its place in the tree.
 pub(super) fn suffix(
     registry: LayoutRegistry,
@@ -66,12 +74,12 @@ pub(super) fn suffix(
     let spec = if star.shown {
         spec
     } else {
-        spec.revealed(Reveal::Hidden)
+        spec.revealed(Reveal::OnHover(row_group(row)))
     };
-    move |_, _| {
+    move |_, cx| {
         let dispatch = dispatch.clone();
         let action = action.clone();
-        let glyph = star_glyph(&registry, &spec, kind);
+        let glyph = star_glyph(&registry, &spec, kind, crate::theme::palette(cx));
         control_element(
             &registry,
             spec.clone(),
@@ -92,8 +100,13 @@ pub(super) fn suffix(
 
 /// The star's glyph, recorded under its control while it shows. A hidden star is left out of
 /// the capture, as React's `opacity-0` toggle is.
-fn star_glyph(registry: &LayoutRegistry, spec: &ControlSpec, kind: StarKind) -> Div {
-    let (icon, color) = star_paint(kind);
+fn star_glyph(
+    registry: &LayoutRegistry,
+    spec: &ControlSpec,
+    kind: StarKind,
+    palette: Palette,
+) -> Div {
+    let (icon, color) = star_paint(kind, palette);
     registry.begin_draws(&spec.key);
     let glyph = div()
         .size_full()
@@ -112,12 +125,11 @@ fn star_glyph(registry: &LayoutRegistry, spec: &ControlSpec, kind: StarKind) -> 
 /// The star's glyph size, `h-3.5 w-3.5` (`ModelPickerList.tsx`).
 const STAR_SIZE: f32 = 14.;
 
-/// The icon and color a star paints: a filled star in `text-primary`, an outline star in
-/// `text-muted-foreground` (`ModelPickerList.tsx`).
-fn star_paint(kind: StarKind) -> (RemixIcon, gpui_kit::Hsla) {
-    let palette = crate::theme::palette();
+/// The icon and color a star paints: a filled star when on, an outline star otherwise, both
+/// muted (colour carries state only, `ModelPicker.dc.html`).
+fn star_paint(kind: StarKind, palette: Palette) -> (RemixIcon, gpui_kit::Hsla) {
     match kind {
-        StarKind::Filled => (RemixIcon::StarFill, palette.primary.into()),
+        StarKind::Filled => (RemixIcon::StarFill, palette.muted_foreground.into()),
         StarKind::Outline => (RemixIcon::Star, palette.muted_foreground.into()),
     }
 }

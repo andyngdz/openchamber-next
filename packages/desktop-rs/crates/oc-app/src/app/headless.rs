@@ -56,7 +56,7 @@ fn open(
     headless
         .update(|cx| {
             init(cx);
-            theme::apply(theme::palette(), cx);
+            theme::tokens(theme::Mode::Dark).apply(cx);
             let options = WindowOptions {
                 focus: false,
                 show: false,

@@ -14,6 +14,7 @@ use trigger_content::{content_selector, label_selector};
 mod trigger_content;
 use crate::icons::RemixIcon;
 use crate::layout::{Area, ControlSpec, LayoutRegistry, Role, control};
+use crate::theme::{DepthStyle, Palette, Tokens};
 use crate::views::popover::trigger_control;
 use crate::views::{Intent, Scene, icon_button};
 
@@ -32,7 +33,10 @@ const GAP_AGENT: f32 = 6.;
 /// `gap-x-3` between the footer's flex children (`ComposerFooter.tsx:284-288`): 0.75rem.
 const GAP_GROUP: f32 = 12.;
 /// The first footer group's `gap-x-1.5` (`ComposerFooter.tsx:264`): 0.375rem.
-const GAP_LEFT: f32 = 6.;
+const GAP_LEFT: f32 = 2.;
+/// The icon buttons are 28 square (the mockup's footer), the send button round.
+const BUTTON_SIZE: f32 = 28.;
+const SEND_RADIUS: f32 = 14.;
 /// `font-medium` on the trigger label (`ModelControls.tsx:2358,2739,2855`).
 const LABEL_WEIGHT: f32 = 500.;
 /// The slash is an unstyled span, so it inherits the interface base size and 1.5 leading:
@@ -46,13 +50,13 @@ const MODEL_LABEL_MAX: f32 = 260.;
 const HOVER_OPACITY: f32 = 0.7;
 
 /// The left icon group.
-pub(super) fn left_group(tools: &[Tool], registry: &LayoutRegistry) -> Div {
+pub(super) fn left_group(scene: Scene<'_>, tools: &[Tool], registry: &LayoutRegistry) -> Div {
     div()
         .flex()
         .items_center()
         .gap(px(GAP_LEFT))
         .children(tools.iter().map(|tool| match tool {
-            Tool::Icon(name, icon) => icon_control(name, *icon, registry),
+            Tool::Icon(name, icon) => icon_control(scene, name, *icon, registry),
             _ => div().into_any_element(),
         }))
 }
@@ -69,8 +73,8 @@ pub(super) fn right_group(
     for (index, tool) in tools.iter().enumerate() {
         let slot = match tool {
             Tool::Trigger { .. } => trigger(scene, tool, window, cx),
-            Tool::Icon(name, icon) => icon_control(name, *icon, registry),
-            Tool::Send | Tool::Stop => action_control(scene, tool, registry),
+            Tool::Icon(name, icon) => icon_control(scene, name, *icon, registry),
+            Tool::Send | Tool::Stop => action_control(scene, tool, registry, cx),
         };
         let gap = if index == 0 {
             0.
@@ -88,54 +92,72 @@ pub(super) fn right_group(
     group
 }
 
-fn icon_control(name: &str, icon: RemixIcon, registry: &LayoutRegistry) -> AnyElement {
+fn icon_control(
+    scene: Scene<'_>,
+    name: &str,
+    icon: RemixIcon,
+    registry: &LayoutRegistry,
+) -> AnyElement {
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
-    let foreground = crate::theme::palette().foreground.into();
+    let muted = scene.palette.muted_foreground.into();
     control(
         registry,
         spec.clone(),
-        icon_button(registry, &spec, icon, foreground),
+        icon_button(registry, &spec, icon, muted)
+            .w(px(BUTTON_SIZE))
+            .h(px(BUTTON_SIZE)),
     )
     .into_any_element()
 }
 
-fn action_control(scene: Scene<'_>, tool: &Tool, registry: &LayoutRegistry) -> AnyElement {
+fn action_control(
+    scene: Scene<'_>,
+    tool: &Tool,
+    registry: &LayoutRegistry,
+    cx: &App,
+) -> AnyElement {
     let name = tool_name(tool).unwrap_or_default();
     let spec = ControlSpec::named(Area::Composer, Role::Button, name);
-    let palette = crate::theme::palette();
+    let palette = scene.palette;
+    let tokens = Tokens::of(cx);
+    let enabled = can_send(scene.state);
     let button = match tool {
-        // React's own `StopIcon` (`components/icons/StopIcon.tsx`), in the error color.
+        // React's own `StopIcon` (`components/icons/StopIcon.tsx`), in the foreground on the
+        // strong tile while a turn runs.
         Tool::Stop => {
-            registry.record_icon(
-                &spec.key,
-                crate::layout::draw::IconDraw::Custom {
-                    color: palette.destructive.into(),
-                },
-            );
-            let danger: gpui_kit::Hsla = palette.destructive.into();
+            let color: gpui_kit::Hsla = palette.foreground.into();
+            registry.record_icon(&spec.key, crate::layout::draw::IconDraw::Custom { color });
             Button::new(spec.key.clone())
                 .ghost()
                 .small()
-                .text_color(danger)
+                .text_color(color)
                 .icon(gpui_kit::component::Icon::new(
                     crate::icons::CustomIcon::Stop,
                 ))
                 .tooltip(spec.name.clone())
+                .bg(tokens.depth.tile2)
         }
-        // `text-primary` while sending is possible, else the foreground at 30% (`opacity-30`)
-        // (`ComposerActionButtons.tsx:77-82`).
+        // Primary fill when there is text to send, the strong tile otherwise.
         _ => {
-            let enabled = can_send(scene.state);
             let color = if enabled {
-                palette.primary.into()
+                palette.primary_foreground.into()
             } else {
-                crate::theme::faded(palette.foreground.into(), 0.3)
+                palette.muted_foreground.into()
             };
-            icon_button(registry, &spec, RemixIcon::SendPlane2, color)
+            let send = icon_button(registry, &spec, RemixIcon::SendPlane2, color)
                 .disabled(!enabled)
-                .on_click(scene.on_click_intent(Intent::SendPrompt))
+                .on_click(scene.on_click_intent(Intent::SendPrompt));
+            if enabled {
+                send.raised_control(tokens)
+                    .bg(gpui_kit::Hsla::from(palette.primary))
+            } else {
+                send.bg(tokens.depth.tile2)
+            }
         }
-    };
+    }
+    .w(px(BUTTON_SIZE))
+    .h(px(BUTTON_SIZE))
+    .rounded(px(SEND_RADIUS));
     control(registry, spec, button).into_any_element()
 }
 
@@ -150,7 +172,7 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
         return div().into_any_element();
     };
     let spec = ControlSpec::named(Area::Composer, Role::Button, name.clone());
-    let paint = trigger_paint(scene.state, *layout);
+    let paint = trigger_paint(scene.state, scene.palette, *layout);
     let logo = match layout {
         TriggerKind::Model => crate::views::popover::selected_model(scene.state)
             .map(|(provider_id, _)| crate::icons::provider::provider_logo(&provider_id)),
@@ -183,22 +205,23 @@ fn trigger(scene: Scene<'_>, tool: &Tool, window: &mut Window, cx: &App) -> AnyE
     trigger_control(scene, *kind, button, cx).into_any_element()
 }
 
-/// The colors a trigger paints: `text-foreground` labels, the Thinking slash in
-/// `text-muted-foreground/60` and its label in `text-status-warning/75`, and the agent icon
-/// in the agent's color (`ModelControls.tsx:2358,2739,2855`).
-fn trigger_paint(state: &State, layout: TriggerKind) -> TriggerPaint {
-    let palette = crate::theme::palette();
+/// The colors a trigger paints: foreground labels, the Thinking slash and effort in the muted
+/// foreground, and the agent icon in the agent's color (`ModelControls.tsx:2358,2739,2855`).
+fn trigger_paint(state: &State, palette: Palette, layout: TriggerKind) -> TriggerPaint {
     let foreground = palette.foreground.into();
+    let muted = palette.muted_foreground.into();
     match layout {
         TriggerKind::Model => TriggerPaint {
             label: foreground,
             slash: foreground,
             icon: foreground,
+            muted,
         },
         TriggerKind::Thinking => TriggerPaint {
-            label: crate::theme::faded(palette.status_warning.into(), 0.75),
-            slash: crate::theme::faded(palette.muted_foreground.into(), 0.6),
+            label: muted,
+            slash: muted,
             icon: foreground,
+            muted,
         },
         TriggerKind::Agent => TriggerPaint {
             label: foreground,
@@ -208,6 +231,7 @@ fn trigger_paint(state: &State, layout: TriggerKind) -> TriggerPaint {
                 &palette,
             )
             .into(),
+            muted,
         },
     }
 }

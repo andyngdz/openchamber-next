@@ -33,13 +33,12 @@ pub(crate) fn session_list(scene: Scene<'_>, cx: &App) -> Div {
         .overflow_y_scroll()
         .flex()
         .flex_col()
-        .px(px(8.))
         .children(status_lines(&model, scene, cx))
         .children(
             model
                 .sections
                 .iter()
-                .filter_map(|section| sections::render(section, scene, cx)),
+                .filter_map(|section| sections::render(section, scene)),
         );
     div().flex_1().min_h_0().child(list)
 }
